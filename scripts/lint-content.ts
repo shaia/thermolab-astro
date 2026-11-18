@@ -1,22 +1,18 @@
 /**
- * Content lint: the rules a schema cannot express, checked across lessons, question banks,
- * the misconception register, the glossary and the video list. Reports every problem, then
- * exits 1 if there were any.
+ * Content lint: the rules a schema cannot express, across lessons, question banks and the glossary,
+ * in both languages, plus the parity between them. Reports every problem, then exits 1 if any.
  *
  *   npm run lint:content                       # the whole course (CI)
- *   npx tsx scripts/lint-content.ts --file <p> # problems in one file only (the edit hook)
+ *   npx tsx scripts/lint-content.ts --file <p> # problems in one file only (an edit hook)
  *
- * --file skips completeness checks ("≥ 3 questions per objective", "every misconception is
- * detected", "every template part is present", "10 + 2 workbook problems"): a lesson being written
- * is incomplete by design, and the hook must not block each save. CI runs the full lint.
+ * --file skips completeness checks ("≥ 3 questions per objective", "every template part is
+ * present"): a lesson being written is incomplete by design.
  *
- * A chapter counts as finished once its summary (src/content/summaries/ch<N>.mdx) exists: from then
- * on every lesson in it must have 6 worked examples and a workbook. Unfinished chapters are listed.
- *
- * Objectives are declared in the course map (src/course.ts), not by the lessons, so a chapter's
- * question banks can exist before its lessons do. A written lesson must declare the map's objectives.
- * Every bank is validated against the zod schema and every student-facing string is rendered with
- * KaTeX here, so `--file` catches what the build would, without a build.
+ * PARITY. English is written first and Hebrew mirrors it, as in the original ThermoLab, whose
+ * check_parity.py compared equations and code cells byte for byte. Here the two lessons of one id
+ * must share their objectives, figures and figure settings, every step and the state it sets, every
+ * display formula, the prediction's answer, the questions they ask and the worked examples they
+ * hold; the two banks must hold the same questions with the same answers. Only the prose differs.
  */
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
@@ -25,6 +21,7 @@ import { parse } from 'yaml';
 import { chapters, chapterObjectives, lessonOrder, objectiveById } from '../src/course.ts';
 import { questionBank } from '../src/assessment/schema.ts';
 import { tex } from '../src/lib/tex.ts';
+import { LANGS, type Lang } from '../src/i18n.ts';
 
 const ROOT = join(import.meta.dirname, '..');
 const CONTENT = join(ROOT, 'src/content');
@@ -37,21 +34,28 @@ const fail = (where: string, msg: string, completeness = false) => {
 };
 
 const walk = (dir: string): string[] =>
-  readdirSync(dir).flatMap((f) => {
-    const p = join(dir, f);
-    return statSync(p).isDirectory() ? walk(p) : [p];
-  });
+  statSync(dir, { throwIfNoEntry: false })
+    ? readdirSync(dir).flatMap((f) => {
+        const p = join(dir, f);
+        return statSync(p).isDirectory() ? walk(p) : [p];
+      })
+    : [];
 const rel = (p: string) => relative(ROOT, p).replaceAll('\\', '/');
-/** Parse a YAML file; a syntax error is reported against the file (and lint goes on) instead of crashing. */
 const yamlFile = <T>(p: string): T => {
   try {
     return parse(readFileSync(p, 'utf8')) as T;
   } catch (e) {
-    // the most common cause in Hebrew text: a plain scalar with ": " inside it. Quote it, or use >-
+    // the usual cause: a plain scalar with ": " inside it. Use a folded block (>-) for prose.
     fail(rel(p), `YAML: ${(e as Error).message.split(/\r?\n/)[0]}`);
     return undefined as T;
   }
 };
+const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+/** Words that mark the limit check every worked example shows, per language. */
+const LIMIT_CHECK: Record<Lang, string> = { en: '**Limit check:**', he: '**בדיקת גבולות:**' };
+/** A lettered part of an example: (a) in English, (א) in Hebrew. */
+const PART: Record<Lang, RegExp> = { en: /^\s*\([a-h]\)\s/, he: /^\s*(\([א-ח]\)|[א-ח]\.)\s/ };
 
 /* ------------------------------------------------------------------ load */
 
@@ -59,114 +63,71 @@ interface Choice {
   text: string;
   correct?: boolean;
   feedback: string;
-  misconception?: string;
 }
 interface Question {
   id: string;
   type: string;
   objectives: string[];
+  level?: string;
   qualitative?: boolean;
   prompt: string;
   choices?: Choice[];
-  reasons?: Choice[];
-  commonWrong?: { misconception?: string; feedback: string }[];
-  wrong?: { misconception?: string; feedback: string }[];
-  /** Bagrut questions: lettered parts, each a question-like object */
-  parts?: Part[];
-  diagram?: string;
-  diagramAlt?: string;
+  answer?: unknown;
+  unit?: string;
+  tolerance?: number;
   [k: string]: unknown;
-}
-interface Part extends Omit<Question, 'id' | 'parts' | 'prompt'> {
-  label: string;
-  prompt: string;
-  points: number;
-  pendingObjectives?: string[];
-  rubric?: { text: string; weight?: number }[];
-  solution?: { kind: string; text: string }[];
 }
 interface Lesson {
   file: string;
+  lang: Lang;
   id: string;
-  objectives: string[];
-  videos: string[];
+  objectives: { id: string; text: string }[];
   figures: string[];
-  minutes: number;
   order: number;
   body: string;
-  raw: string;
 }
 
 const lessons: Lesson[] = walk(join(CONTENT, 'lessons'))
   .filter((f) => f.endsWith('.mdx'))
-  .map((file) => {
+  .flatMap((file) => {
     const raw = readFileSync(file, 'utf8');
     const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
     if (!m) {
       fail(rel(file), 'no frontmatter');
-      return null;
+      return [];
     }
-    const fm = parse(m[1]) as { id: string; objectives: { id: string }[]; videos?: string[]; figures?: string[]; minutes: number; order: number };
-    return {
-      file: rel(file),
-      id: fm.id,
-      objectives: fm.objectives.map((o) => o.id),
-      videos: fm.videos ?? [],
-      figures: fm.figures ?? [],
-      minutes: fm.minutes,
-      order: fm.order,
-      body: m[2],
-      raw,
-    };
-  })
-  .filter((l): l is Lesson => l !== null);
+    const fm = parse(m[1]) as Omit<Lesson, 'file' | 'body'>;
+    const folder = rel(file).match(/lessons\/(en|he)\/ch(\d+)\//);
+    if (!folder) fail(rel(file), 'a lesson lives in src/content/lessons/<en|he>/ch<N>/');
+    else if (folder[1] !== fm.lang) fail(rel(file), `lang: ${fm.lang} does not match the folder ${folder[1]}/`);
+    return [{ file: rel(file), lang: fm.lang, id: fm.id, objectives: fm.objectives ?? [], figures: fm.figures ?? [], order: fm.order, body: m[2] }];
+  });
 
 const banks = walk(join(CONTENT, 'questions'))
   .filter((f) => f.endsWith('.yaml'))
-  .map((f) => ({ file: rel(f), data: yamlFile<{ chapter: number; questions: Question[] }>(f) }));
-const questions = banks.flatMap((b) => (b.data?.questions ?? []).map((q) => ({ q, file: b.file })));
+  .map((f) => ({ file: rel(f), data: yamlFile<{ lang: Lang; chapter: number; questions: Question[] }>(f) }));
 
-/** A per-lesson YAML folder (`misconceptions/1-5.yaml`, …): every entry, tagged with its file. */
-const yamlDir = <T>(name: string): (T & { file: string })[] =>
-  readdirSync(join(CONTENT, name))
-    .filter((f) => f.endsWith('.yaml'))
-    .flatMap((f) => (yamlFile<T[]>(join(CONTENT, name, f)) ?? []).map((e) => ({ ...e, file: `src/content/${name}/${f}` })));
-
-interface WorkbookItem {
+interface Term {
   id: string;
-  objectives?: string[];
-  qualitative?: boolean;
-  level?: string;
-  prompt: string;
-  diagram?: string;
-  diagramAlt?: string;
-  answer: string;
-  solution?: { kind: string; text: string }[];
-  source?: { name: string; year: number; problem: string; url: string };
+  term: { en: string; he: string };
+  reject?: string[];
+  file: string;
 }
-const workbookDir = join(CONTENT, 'workbook');
-const workbooks = (statSync(workbookDir, { throwIfNoEntry: false }) ? walk(workbookDir) : [])
+const glossary: Term[] = walk(join(CONTENT, 'glossary'))
   .filter((f) => f.endsWith('.yaml'))
-  .map((f) => ({ file: rel(f), data: yamlFile<{ lesson: string; practice?: WorkbookItem[]; challenge?: WorkbookItem[] }>(f) }));
-const summaryDir = join(CONTENT, 'summaries');
-const summaries = (statSync(summaryDir, { throwIfNoEntry: false }) ? readdirSync(summaryDir) : [])
-  .filter((f) => /^ch\d+\.mdx$/.test(f))
-  .map((f) => ({ file: `src/content/summaries/${f}`, chapter: Number(f.match(/\d+/)![0]), body: readFileSync(join(summaryDir, f), 'utf8') }));
-
-const misconceptions = yamlDir<{ id: string; remedy: { lesson: string; anchor?: string } }>('misconceptions');
-const glossary = yamlDir<{ id: string; term: string; reject?: string[] }>('glossary');
-const videos = yamlDir<{ id: string }>('videos');
-for (const [name, list] of [['misconceptions', misconceptions], ['glossary', glossary], ['videos', videos]] as const) {
+  .flatMap((f) => (yamlFile<Omit<Term, 'file'>[]>(f) ?? []).map((e) => ({ ...e, file: rel(f) })));
+const glossaryIds = new Set(glossary.map((g) => g.id));
+{
   const seen = new Map<string, string>();
-  for (const e of list) {
-    if (seen.has(e.id)) fail(e.file, `${name} id ${e.id} is also defined in ${seen.get(e.id)}`);
-    seen.set(e.id, e.file);
+  for (const g of glossary) {
+    if (seen.has(g.id)) fail(g.file, `glossary id ${g.id} is also defined in ${seen.get(g.id)}`);
+    seen.set(g.id, g.file);
   }
 }
 
-const lessonById = new Map(lessons.map((l) => [l.id, l]));
 const plannedById = new Map(lessonOrder.map((l) => [l.id, l]));
 const objectiveIds = new Set(objectiveById.keys());
+const questionsOf = (lang: Lang) => banks.filter((b) => b.data?.lang === lang).flatMap((b) => (b.data?.questions ?? []).map((q) => ({ q, file: b.file })));
 
 /* ------------------------------------------------------- lessons ↔ course map */
 
@@ -176,14 +137,19 @@ for (const l of lessons) {
     fail(l.file, `lesson ${l.id} is not in the course map (src/course.ts)`);
     continue;
   }
-  const want = planned.objectives.map((o) => o.id).join(', ');
-  if (l.objectives.join(', ') !== want) fail(l.file, `objectives [${l.objectives.join(', ')}] differ from the course map's [${want}]`);
+  if (!same(l.objectives.map((o) => o.id), planned.objectives.map((o) => o.id))) {
+    fail(l.file, `objectives [${l.objectives.map((o) => o.id).join(', ')}] differ from the course map's`);
+  }
+  for (const o of l.objectives) {
+    const want = planned.objectives.find((p) => p.id === o.id)?.text[l.lang];
+    if (want !== undefined && want !== o.text) fail(l.file, `${o.id}: the text differs from the course map's ${l.lang} text`);
+  }
+  if (l.order !== Number(l.id.split('.')[1])) fail(l.file, `order: ${l.order} does not match the lesson number ${l.id}`);
 }
 
-/* ------------------------------------------------------- bank schema, placement, TeX */
+/* ------------------------------------------------------- banks: schema, placement, TeX */
 
-/** Keys whose string values are data, not student-facing text. */
-const NOT_TEXT = new Set(['id', 'type', 'objectives', 'pendingObjectives', 'misconception', 'level', 'dir', 'answer', 'order', 'diagram', 'diagramAlt', 'kind']);
+const NOT_TEXT = new Set(['id', 'type', 'objectives', 'level', 'answer', 'unit', 'value']);
 const texStrings = (v: unknown, path: string, out: [string, string][] = []): [string, string][] => {
   if (typeof v === 'string') out.push([path, v]);
   else if (Array.isArray(v)) v.forEach((x, i) => texStrings(x, `${path}[${i}]`, out));
@@ -192,167 +158,96 @@ const texStrings = (v: unknown, path: string, out: [string, string][] = []): [st
 };
 for (const { file, data } of banks) {
   const parsed = questionBank.safeParse(data);
-  if (!parsed.success) {
-    for (const issue of parsed.error.issues.slice(0, 8)) fail(file, `schema: ${issue.path.join('.')}: ${issue.message}`);
+  if (!parsed.success) for (const issue of parsed.error.issues.slice(0, 8)) fail(file, `schema: ${issue.path.join('.')}: ${issue.message}`);
+  const folder = file.match(/questions\/(en|he)\/ch(\d+)\/(\d+-\d+)\.yaml$/);
+  if (!folder) {
+    fail(file, 'a bank lives in src/content/questions/<en|he>/ch<N>/<chapter>-<lesson>.yaml');
+    continue;
   }
-  const folder = file.match(/questions\/ch(\d+)\//)?.[1];
-  if (folder === undefined) fail(file, 'a bank lives in src/content/questions/ch<N>/');
-  else if (data?.chapter !== Number(folder)) fail(file, `chapter: ${data?.chapter} does not match the folder ch${folder}`);
-  const base = file.split('/').pop()!.replace(/\.yaml$/, '');
+  if (data?.lang !== folder[1]) fail(file, `lang: ${data?.lang} does not match the folder ${folder[1]}/`);
+  if (data?.chapter !== Number(folder[2])) fail(file, `chapter: ${data?.chapter} does not match the folder ch${folder[2]}`);
+  const prefix = `Q-${folder[3].replace('-', '.')}-`;
   for (const q of data?.questions ?? []) {
-    if (base === 'bagrut') {
-      if (q.type !== 'bagrut') fail(`${file} ${q.id}`, 'bagrut.yaml holds the review problems only; single questions go in the lesson bank');
-      else if (!q.id.startsWith(`Q-${folder}-bagrut-`)) fail(`${file} ${q.id}`, `a review problem of chapter ${folder} is Q-${folder}-bagrut-<n>`);
-    } else if (!q.id.startsWith(`Q-${base.replace('-', '.')}-`)) {
-      fail(`${file} ${q.id}`, `a question in ${base}.yaml has an id Q-${base.replace('-', '.')}-…`);
+    const w = `${file} ${q.id}`;
+    if (!q.id.startsWith(prefix)) fail(w, `a question in ${folder[3]}.yaml has an id ${prefix}…`);
+    for (const o of q.objectives ?? []) {
+      if (!objectiveIds.has(o)) fail(w, `objective ${o} is not in the course map`);
+      else if (!o.startsWith(`OBJ-${folder[3].replace('-', '.')}-`)) fail(w, `objective ${o} belongs to another lesson`);
     }
+    if ((q.objectives ?? []).length === 0) fail(w, 'no objectives');
+    if (q.type === 'mc' && (q.choices ?? []).filter((c) => c.correct).length !== 1) fail(w, 'needs exactly one correct choice');
+    for (const c of q.choices ?? []) if (!c.feedback?.trim()) fail(w, `choice "${c.text}" has no feedback`);
     for (const [path, text] of texStrings(q, '')) {
       try {
         tex(text, path);
       } catch (e) {
-        fail(`${file} ${q.id}`, (e as Error).message);
+        fail(w, (e as Error).message);
       }
     }
   }
 }
-const mcIds = new Set(misconceptions.map((m) => m.id));
-const videoIds = new Set(videos.map((v) => v.id));
-const glossaryIds = new Set(glossary.map((g) => g.id));
-
-/* ------------------------------------------------------------- questions */
-
-const REVIEW_POINTS = 25;
-/** the exam asks for derivations (src/content/exam-map.yaml: 39 of 51 parts), so open parts carry over half */
-const MIN_OPEN_POINTS = 13;
-const seenQ = new Set<string>();
-const detected = new Set<string>();
-const pending: string[] = [];
-/** Every gradable unit: a question, or one part of a Bagrut question. */
-const units = questions.flatMap(({ q, file }) =>
-  q.type === 'bagrut'
-    ? (q.parts ?? []).map((p) => ({ q: { ...p, id: `${q.id}/${p.label}`, type: p.type } as unknown as Question, file, part: p, parent: q }))
-    : [{ q, file, part: null as Part | null, parent: null as Question | null }],
-);
-for (const { q, file } of questions) {
-  if (seenQ.has(q.id)) fail(`${file} ${q.id}`, 'duplicate question id');
-  seenQ.add(q.id);
-}
-for (const { q: bq, file } of questions.filter(({ q }) => q.type === 'bagrut')) {
-  const w = `${file} ${bq.id}`;
-  const parts = bq.parts ?? [];
-  if (parts.length < 2) fail(w, 'a Bagrut question needs at least 2 parts');
-  const labels = parts.map((p) => p.label);
-  if (new Set(labels).size !== labels.length) fail(w, 'two parts share a label');
-  if (bq.diagram && !bq.diagramAlt?.trim()) fail(w, 'a diagram needs diagramAlt (its accessible description)');
-  if (bq.diagram && /<script|on\w+=/i.test(bq.diagram)) fail(w, 'the diagram SVG must not contain scripts or event handlers');
-  if (parts.length && !parts.some((p) => p.type === 'open')) fail(w, 'a Bagrut question should have an open part (full written solution)', true);
-  // the 77101 exam format is not verified yet; until /exam-map reads one, a review problem is worth 25
-  const total = parts.reduce((n, p) => n + (p.points ?? 0), 0);
-  if (total !== REVIEW_POINTS) fail(w, `parts add up to ${total} points; a review problem is worth ${REVIEW_POINTS}`, true);
-  const open = parts.filter((p) => p.type === 'open').reduce((n, p) => n + (p.points ?? 0), 0);
-  if (open < MIN_OPEN_POINTS) fail(w, `open parts carry ${open} points; a review problem gives derivations ≥ ${MIN_OPEN_POINTS}`, true);
-  const last = parts.at(-1);
-  if (last && (last.type !== 'open' || !last.solution?.some((s) => s.kind === 'limit')))
-    fail(w, 'the last part is a symbolic result: an open part whose solution has a limit step', true);
-}
-for (const { q, file, part, parent } of units) {
-  const w = `${file} ${q.id}`;
-  const lessonOfId = q.id.match(/^Q-(\d+\.\d+)-/)?.[1];
-  for (const o of q.objectives ?? []) {
-    if (!objectiveIds.has(o)) fail(w, `objective ${o} is not in the course map (src/course.ts)`);
-    if (lessonOfId && !o.startsWith(`OBJ-${lessonOfId}-`)) fail(w, `objective ${o} belongs to another lesson than the id prefix ${lessonOfId}`);
-  }
-  if (part) {
-    const waiting = part.pendingObjectives ?? [];
-    if ((q.objectives ?? []).length === 0 && waiting.length === 0) fail(w, 'a part needs objectives, or pendingObjectives naming the lesson it waits for');
-    for (const x of waiting) pending.push(`${parent?.id}/${part.label}: ${x}`);
-    if (part.type === 'open') {
-      if (!part.solution?.length) fail(w, 'an open part needs a model solution');
-      else if (!part.solution.some((s) => s.kind === 'result')) fail(w, 'the model solution must end in a result step (value or conclusion, with units)');
-      if ((part.rubric ?? []).length < 2) fail(w, 'an open part needs a rubric of at least 2 lines');
-    }
-  } else if ((q.objectives ?? []).length === 0) {
-    fail(w, 'no objectives');
-  }
-  const tags = [
-    ...(q.choices ?? []),
-    ...(q.reasons ?? []),
-    ...(q.commonWrong ?? []),
-    ...(q.wrong ?? []),
-  ].flatMap((c) => (c.misconception ? [c.misconception] : []));
-  for (const t of tags) {
-    if (!mcIds.has(t)) fail(w, `misconception ${t} is not in the misconception register (src/content/misconceptions/)`);
-    detected.add(t);
-  }
-  const correctCount = (cs?: Choice[]) => (cs ?? []).filter((c) => c.correct).length;
-  if ((q.type === 'mc' || q.type === 'twotier') && correctCount(q.choices) !== 1) fail(w, 'needs exactly one correct choice');
-  if (q.type === 'twotier' && correctCount(q.reasons) !== 1) fail(w, 'needs exactly one correct reason');
-  if (q.type === 'multi' && correctCount(q.choices) < 1) fail(w, 'needs at least one correct choice');
-  for (const c of [...(q.choices ?? []), ...(q.reasons ?? [])]) {
-    if (!c.feedback?.trim()) fail(w, `choice "${c.text}" has no feedback`);
+for (const lang of LANGS) {
+  const seen = new Map<string, string>();
+  for (const { q, file } of questionsOf(lang)) {
+    if (seen.has(q.id)) fail(`${file} ${q.id}`, `duplicate question id (also in ${seen.get(q.id)})`);
+    seen.set(q.id, file);
   }
 }
 
-/* ------------------------------------------------- objectives coverage */
+/* ------------------------------------------------- objectives coverage (completeness) */
 
-// A chapter with any bank is held to the full ladder: every objective ≥ 3 questions with one qualitative, every
-// lesson a basic, a mid and an exam-level question, and the chapter at least 3 review problems.
 const LADDER = ['basic', 'mid', 'bagrut'];
-const MIN_REVIEW = 3;
-const chaptersWithBanks = [...new Set(banks.map((b) => b.data?.chapter))].filter((n): n is number => typeof n === 'number');
-for (const n of chaptersWithBanks) {
-  const where = `src/content/questions/ch${n}`;
-  for (const o of chapterObjectives(n)) {
-    const qs = questions.filter(({ q }) => q.type !== 'bagrut' && q.objectives.includes(o.id)).map(({ q }) => q);
-    if (qs.length < 3) fail(where, `objective ${o.id} has ${qs.length} questions (needs ≥ 3)`, true);
-    else if (!qs.some((q) => q.qualitative)) fail(where, `objective ${o.id} has no qualitative question`, true);
-  }
-  for (const l of chapters.find((c) => c.n === n)?.lessons ?? []) {
-    const levels = new Set(questions.filter(({ q }) => q.type !== 'bagrut' && q.id.startsWith(`Q-${l.id}-`)).map(({ q }) => q.level ?? 'basic'));
-    const missing = LADDER.filter((x) => !levels.has(x));
-    if (missing.length) fail(where, `lesson ${l.id} has no question at level ${missing.join(', ')}: the ladder needs basic, mid and bagrut`, true);
-  }
-  const reviews = questions.filter(({ q }) => q.type === 'bagrut' && q.id.startsWith(`Q-${n}-bagrut-`)).length;
-  if (reviews < MIN_REVIEW) fail(where, `${reviews} review problem(s) in bagrut.yaml (a chapter has ≥ ${MIN_REVIEW})`, true);
-}
-
-/* ------------------------------------------------------- misconceptions */
-
-/**
- * Whether a lesson renders an element with this HTML id. <Term id> and <Watch id> name a glossary entry or a
- * video and render no id, so they don't count. <Spread fig="…"> renders its figure with that id.
- */
-const hasAnchor = (body: string, id: string) =>
-  [...body.matchAll(/<(\w+)\b[^>]*?\sid="([^"]+)"/g)].some((m) => m[2] === id && m[1] !== 'Term' && m[1] !== 'Watch') ||
-  [...body.matchAll(/<Spread\b[^>]*?\sfig="([^"]+)"/g)].some((m) => m[1] === id);
-
-for (const m of misconceptions) {
-  if (!detected.has(m.id)) fail(m.file, `${m.id} is not detected by any distractor`, true);
-  const target = lessonById.get(m.remedy.lesson);
-  // a remedy may point at a planned lesson: until it is written the link goes to the lesson's practice section
-  if (!target) {
-    if (!plannedById.has(m.remedy.lesson)) fail(m.file, `${m.id} remedy points at lesson ${m.remedy.lesson}, which is not in the course map`);
-  } else if (m.remedy.anchor && !target.figures.includes(m.remedy.anchor) && !hasAnchor(target.body, m.remedy.anchor)) {
-    fail(m.file, `${m.id} remedy anchor #${m.remedy.anchor} is not in lesson ${m.remedy.lesson}`, true);
+for (const lang of LANGS) {
+  const qs = questionsOf(lang).map(({ q }) => q);
+  const chaptersWithBanks = [...new Set(banks.filter((b) => b.data?.lang === lang).map((b) => b.data?.chapter))];
+  for (const n of chaptersWithBanks) {
+    const where = `src/content/questions/${lang}/ch${n}`;
+    for (const o of chapterObjectives(n as number)) {
+      const mine = qs.filter((q) => q.objectives.includes(o.id));
+      if (mine.length < 3) fail(where, `objective ${o.id} has ${mine.length} question(s) (needs ≥ 3)`, true);
+      else if (!mine.some((q) => q.qualitative)) fail(where, `objective ${o.id} has no qualitative question`, true);
+    }
+    for (const l of chapters.find((c) => c.n === n)?.lessons ?? []) {
+      const levels = new Set(qs.filter((q) => q.id.startsWith(`Q-${l.id}-`)).map((q) => q.level ?? 'basic'));
+      const missing = LADDER.filter((x) => !levels.has(x));
+      if (levels.size && missing.length) fail(where, `lesson ${l.id} has no question at level ${missing.join(', ')}`, true);
+    }
   }
 }
 
 /* -------------------------------------------------------------- lessons */
 
-const TEMPLATE = ['Hook', 'Predict', 'Explore', 'Explain', 'Example', 'Check', 'Watch', 'Summary'];
-/** A prose line of MDX: Markdown joins it with its neighbours into one paragraph. */
+const TEMPLATE = ['Hook', 'Predict', 'Explore', 'Explain', 'Example', 'Check', 'Summary'];
 const prose = (s: string) => s.trim() !== '' && !/^\s*(<|\$\$|\||-|\*|#)/.test(s) && !s.includes('="') && !s.includes('$$');
+
+/** Everything about a lesson that must not differ between its two languages. */
+function skeleton(l: Lesson) {
+  const b = l.body;
+  const attr = (tag: string, name: string) => [...b.matchAll(new RegExp(`<${tag}\\b[\\s\\S]*?\\b${name}=("[^"]*"|\\{\\{[\\s\\S]*?\\}\\}|\\{[^}]*\\})`, 'g'))].map((m) => m[1].replace(/\s+/g, ' '));
+  return {
+    objectives: l.objectives.map((o) => o.id),
+    figures: l.figures,
+    spreads: attr('Spread', 'fig'),
+    figureProps: attr('Spread', 'figureProps'),
+    blocks: [...b.matchAll(/<(Hook|Predict|Explore|Explain|Example|Check|Summary)\b(?:[^>]*?\bid="([^"]+)")?/g)].map((m) => `${m[1]}${m[2] ? `#${m[2]}` : ''}`),
+    steps: [...b.matchAll(/<Step\s+fig="([^"]+)"\s+set=\{\{([\s\S]*?)\}\}(?:\s+id="([^"]+)")?/g)].map((m) => `${m[1]} {${m[2].replace(/\s+/g, ' ').trim()}}${m[3] ? ` #${m[3]}` : ''}`),
+    display: [...b.matchAll(/\$\$([\s\S]+?)\$\$/g)].map((m) => m[1].trim()),
+    formulas: [...b.matchAll(/<Formula\s+tex="([^"]+)"/g)].map((m) => m[1]),
+    predict: [...b.matchAll(/<Predict[\s\S]*?id="([^"]+)"[\s\S]*?choices=\{\[([\s\S]*?)\]\}[\s\S]*?answer=\{(\d+)\}/g)].map((m) => `${m[1]}: ${(m[2].match(/^\s*'/gm) ?? []).length} choices, answer ${m[3]}`),
+    checks: [...b.matchAll(/<Check[\s\S]*?ids=\{\[([^\]]*)\]\}/g)].map((m) => (m[1].match(/'([^']+)'/g) ?? []).join(',')),
+    revisits: [...b.matchAll(/<Revisit\s+id="([^"]+)"/g)].map((m) => m[1]),
+    terms: [...new Set([...b.matchAll(/<Term\s+id="([^"]+)"/g)].map((m) => m[1]))].sort(),
+  };
+}
+
 for (const l of lessons) {
-  // Markdown joins consecutive lines, so a part "(ב)" right after a text line, or after a sentence on the same line,
-  // renders inside the previous paragraph. Twenty lessons shipped that way before this check.
   let inMath = false;
   l.body.split('\n').forEach((line, i, all) => {
     if (line.trim() === '$$') inMath = !inMath;
     if (inMath || !prose(line)) return;
-    const joined = /^\s*(\([א-ח]\)|[א-ח]\.)\s/.test(line) && i > 0 && prose(all[i - 1]);
-    if (joined || /[.?!:]\s+\([א-ח]\)\s/.test(line)) fail(l.file, `body line ${i + 1}: a part (א)/(ב) joins the previous paragraph; start it on its own line after a blank line`);
+    if (PART[l.lang]?.test(line) && i > 0 && prose(all[i - 1])) fail(l.file, `body line ${i + 1}: a lettered part joins the previous paragraph; put a blank line before it`);
   });
-  const blocks =[...l.body.matchAll(/<(Hook|Predict|Explore|Explain|Example|Check|Watch|Summary)\b/g)].map((m) => m[1]);
+  const blocks = [...l.body.matchAll(/<(Hook|Predict|Explore|Explain|Example|Check|Summary)\b/g)].map((m) => m[1]);
   for (const b of TEMPLATE) if (!blocks.includes(b)) fail(l.file, `lesson template: missing <${b}>`, true);
   let last = -1;
   for (const b of blocks) {
@@ -360,208 +255,99 @@ for (const l of lessons) {
     if (i < last) fail(l.file, `lesson template: <${b}> comes after <${TEMPLATE[last]}>`);
     last = Math.max(last, i);
   }
-
-  const spreadFigs = [...l.body.matchAll(/<Spread[\s\S]*?\bfig="([^"]+)"/g)].map((m) => m[1]);
-  for (const f of spreadFigs) if (!l.figures.includes(f)) fail(l.file, `figure ${f} is not listed in frontmatter figures`);
-  for (const f of l.figures) if (!spreadFigs.includes(f)) fail(l.file, `frontmatter figure ${f} has no <Spread>`, true);
-  for (const m of l.body.matchAll(/<Step\s+fig="([^"]+)"/g)) {
-    if (!spreadFigs.includes(m[1])) fail(l.file, `<Step fig="${m[1]}"> drives a figure that is not in this lesson`);
-  }
-
-  for (const m of l.body.matchAll(/<Watch\s+id="([^"]+)"/g)) {
-    if (!videoIds.has(m[1])) fail(l.file, `<Watch id="${m[1]}">: not in videos.yaml`);
-    if (!l.videos.includes(m[1])) fail(l.file, `<Watch id="${m[1]}"> is not listed in frontmatter videos`);
-  }
-  for (const v of l.videos) if (!videoIds.has(v)) fail(l.file, `frontmatter video ${v} is not in videos.yaml`);
-
-  for (const m of l.body.matchAll(/<Check[\s\S]*?ids=\{\[([^\]]*)\]\}/g)) {
-    for (const id of m[1].match(/'([^']+)'/g) ?? []) {
-      const qid = id.slice(1, -1);
-      if (!seenQ.has(qid)) fail(l.file, `<Check> asks for unknown question ${qid}`, true);
-    }
-  }
-  // No time cap: a university lesson records its honest reading time (CLAUDE.md, "Time").
-  const n = Number(l.id.split('.')[1]);
-  // Lessons sort by `order`; a renumbering once changed ids and left the old orders behind.
-  if (l.order !== n) fail(l.file, `order: ${l.order} does not match the lesson number ${l.id}`);
-  // The course builds the limit-check habit, so every worked example shows one.
+  const sk = skeleton(l);
+  for (const f of sk.spreads.map((s) => s.slice(1, -1))) if (!l.figures.includes(f)) fail(l.file, `figure ${f} is not listed in frontmatter figures`);
+  for (const f of l.figures) if (!sk.spreads.includes(`"${f}"`)) fail(l.file, `frontmatter figure ${f} has no <Spread>`, true);
+  for (const m of l.body.matchAll(/<Step\s+fig="([^"]+)"/g)) if (!l.figures.includes(m[1])) fail(l.file, `<Step fig="${m[1]}"> drives a figure that is not in this lesson`);
+  const asked = new Set(questionsOf(l.lang).map(({ q }) => q.id));
+  for (const ids of sk.checks) for (const id of ids.split(',').filter(Boolean)) if (!asked.has(id.slice(1, -1))) fail(l.file, `<Check> asks for ${id}, which is not in the ${l.lang} banks`, true);
   for (const m of l.body.matchAll(/<Example\s+id="([^"]+)"[\s\S]*?<\/Example>/g)) {
-    if (!m[0].includes('בדיקת גבולות')) fail(l.file, `${m[1]}: every worked example shows a **בדיקת גבולות**`);
+    if (!m[0].includes(LIMIT_CHECK[l.lang])) fail(l.file, `${m[1]}: every worked example shows a ${LIMIT_CHECK[l.lang]}`);
   }
-  for (const m of l.body.matchAll(/<Term\s+id="([^"]+)"/g)) {
-    if (!glossaryIds.has(m[1])) fail(l.file, `<Term id="${m[1]}"> is not in glossary.yaml`);
-  }
-
+  for (const t of sk.terms) if (!glossaryIds.has(t)) fail(l.file, `<Term id="${t}"> is not in the glossary`);
   // JS strings in MDX props turn "\f", "\v", "\t"… into control characters: TeX there must be doubled.
-  // Only an unescaped backslash before a letter is a problem; "\\sqrt" is the doubled form.
   for (const m of l.body.matchAll(/=\{[\s\S]*?\}\}?/g)) {
     if (/'[^']*?(?<!\\)\\[a-z][^']*'/.test(m[0])) fail(l.file, `TeX backslash inside a JS string prop (${m[0].slice(0, 40)}…): use a "..." attribute or \\\\`);
   }
 }
 
-/* ------------------------------------------------------------- workbooks */
+/* -------------------------------------------------------------- parity */
 
-const seenW = new Set<string>();
-const seenSource = new Map<string, string>(); // "<url> <problem number>" or "@<page url>" -> the challenge id that uses it
-const workbookOf = new Map<string, string>();
-for (const { file, data } of workbooks) {
-  const lesson = lessonById.get(data.lesson);
-  if (!lesson) {
-    fail(file, `lesson ${data.lesson} is not written`);
+const byId = new Map<string, Partial<Record<Lang, Lesson>>>();
+for (const l of lessons) byId.set(l.id, { ...byId.get(l.id), [l.lang]: l });
+for (const [id, pair] of byId) {
+  const missing = LANGS.filter((lang) => !pair[lang]);
+  if (missing.length) {
+    fail((pair.en ?? pair.he)!.file, `lesson ${id} has no ${missing.join(', ')} version`, true);
     continue;
   }
-  if (!file.endsWith(`/${data.lesson.replace('.', '-')}.yaml`)) fail(file, `the workbook of lesson ${data.lesson} belongs in a file named ${data.lesson.replace('.', '-')}.yaml`);
-  workbookOf.set(data.lesson, file);
-  const practice = data.practice ?? [];
-  const challenge = data.challenge ?? [];
-  if (practice.length !== 10) fail(file, `${practice.length} practice problems (a workbook has 10)`, true);
-  if (challenge.length !== 2) fail(file, `${challenge.length} challenge problems (a workbook has 2)`, true);
-  for (const level of ['basic', 'mid', 'bagrut']) {
-    const k = practice.filter((p) => p.level === level).length;
-    if (k < 2) fail(file, `only ${k} practice problem(s) at level ${level} (aim for 3 basic, 4 mid, 3 bagrut)`, true);
-  }
-  if (practice.filter((p) => p.qualitative).length < 3) fail(file, 'fewer than 3 qualitative practice problems', true);
-  for (const o of lesson.objectives) {
-    if (!practice.some((p) => p.objectives?.includes(o))) fail(file, `objective ${o} has no practice problem`, true);
-  }
-  for (const item of [...practice, ...challenge]) {
-    const w = `${file} ${item.id}`;
-    if (seenW.has(item.id)) fail(w, 'duplicate workbook id');
-    seenW.add(item.id);
-    if (!item.id.startsWith(`W-${data.lesson}-`)) fail(w, `the id does not match lesson ${data.lesson}`);
-    for (const o of item.objectives ?? []) {
-      if (!lesson.objectives.includes(o)) fail(w, `objective ${o} is not an objective of lesson ${data.lesson}`);
-    }
-    if (item.solution?.at(-1)?.kind !== 'result') fail(w, 'the full solution must end in a result step');
-    // the build renders these with the same strictness; checking here lets the edit hook catch a bad formula
-    const fields: [string, unknown][] = [['prompt', item.prompt], ['answer', item.answer], ...(item.solution ?? []).map((st, i): [string, unknown] => [`solution step ${i + 1}`, st.text])];
-    for (const [k, v] of fields) {
-      try {
-        tex(String(v ?? ''), k);
-      } catch (e) {
-        fail(w, (e as Error).message);
-      }
-    }
-    if (item.source) {
-      // two agents writing lessons in parallel once picked the same olympiad problem
-      // In one paper, "Q27", "Question 27" and "Section 2, Q.9 and Q.10" are compared by their question numbers;
-      // a dotted number ("Problem 2.3") is one number, not problem 2
-      const bare = /^\s*\d+(?:\.\d+)*[a-z]?\s*$/i.test(item.source.problem) ? [item.source.problem.trim().toLowerCase()] : [];
-      const numbers = [
-        ...bare,
-        ...[...item.source.problem.matchAll(/\b(?:question|problem|q)\.?\s*(\d+(?:\.\d+)*[a-z]?(?:\([a-z0-9]+\))*)/gi)].map((m) => m[1].toLowerCase()),
-      ];
-      // one host serves a file with and without "www." (7.2 and 7.3 cited one 8.012 problem set both ways)
-      const url = item.source.url.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '');
-      const keys = (numbers.length ? numbers : [item.source.problem.toLowerCase().replace(/[^a-z0-9()]/g, '')]).map((n) => `${url} ${n}`);
-      // one exam is often hosted at several URLs (4.4 and 4.10 cited two PDFs of PhysicsBowl 2018 for Q37):
-      // also key on the competition, the year and the question number
-      const exam = item.source.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-      for (const n of numbers) keys.push(`#${exam} ${item.source.year} ${n}`);
-      // a web page usually holds one problem, so a shared page URL is the same problem; a PDF holds a whole paper
-      if (!/\.pdf$/i.test(url)) keys.push(`@${url}`);
-      const other = keys.map((k) => seenSource.get(k)).find(Boolean);
-      if (other) fail(w, `the same source problem as ${other}; a challenge problem is used once in the course`);
-      for (const k of keys) seenSource.set(k, item.id);
-    }
-    if (item.diagram && !item.diagramAlt?.trim()) fail(w, 'a diagram needs diagramAlt (its accessible description)');
-    if (item.diagram && /<script|on\w+=/i.test(item.diagram)) fail(w, 'the diagram SVG must not contain scripts or event handlers');
+  const en = skeleton(pair.en!);
+  const he = skeleton(pair.he!);
+  for (const key of Object.keys(en) as (keyof typeof en)[]) {
+    if (same(en[key], he[key])) continue;
+    const a = en[key];
+    const b = he[key];
+    const i = a.findIndex((x, k) => x !== b[k]);
+    fail(pair.he!.file, `parity with ${pair.en!.file}: ${key} differ (${a.length} vs ${b.length}; first difference at #${i + 1}: ${JSON.stringify(a[i])?.slice(0, 80)} vs ${JSON.stringify(b[i])?.slice(0, 80)})`);
   }
 }
 
-/* ------------------------------------------------------------- chapter summaries */
-
-const SUMMARY_SECTIONS = ['הרעיון הגדול', 'מה חייבים לזכור', 'טעויות נפוצות', 'איך פותרים', 'רשימת בדיקה לפני מבחן'];
-const unfinished: string[] = [];
-const chaptersWithLessons = [...new Set(lessons.map((l) => Number(l.id.split('.')[0])))].sort((a, b) => a - b);
-for (const sm of summaries) {
-  if (!chaptersWithLessons.includes(sm.chapter)) fail(sm.file, `chapter ${sm.chapter} has no written lessons`);
-  const headings = [...sm.body.matchAll(/^## (.+)$/gm)].map((m) => m[1].trim());
-  SUMMARY_SECTIONS.forEach((h, i) => {
-    const at = headings.indexOf(h);
-    if (at < 0) fail(sm.file, `missing the section "## ${h}"`);
-    else if (at < headings.indexOf(SUMMARY_SECTIONS[i - 1] ?? h)) fail(sm.file, `"## ${h}" is out of order`);
-  });
-  for (const m of sm.body.matchAll(/<LessonLink\s+id="([^"]+)"(?:\s+anchor="([^"]+)")?/g)) {
-    const target = lessonById.get(m[1]);
-    if (!target) fail(sm.file, `<LessonLink id="${m[1]}">: lesson not written`);
-    else if (m[2] && !hasAnchor(target.body, m[2])) fail(sm.file, `<LessonLink id="${m[1]}" anchor="${m[2]}">: no such id in the lesson`);
+/** What a question must share with its translation: everything but the words. */
+const answerKey = (q: Question) => ({
+  type: q.type,
+  objectives: q.objectives,
+  level: q.level ?? 'basic',
+  qualitative: q.qualitative ?? false,
+  correct: (q.choices ?? []).map((c) => !!c.correct),
+  answer: q.answer,
+  unit: q.unit,
+  tolerance: q.tolerance,
+  commonWrong: ((q.commonWrong as { value: number }[] | undefined) ?? []).map((w) => w.value),
+});
+const enQ = new Map(questionsOf('en').map(({ q, file }) => [q.id, { q, file }]));
+const heQ = new Map(questionsOf('he').map(({ q, file }) => [q.id, { q, file }]));
+for (const [qid, { q, file }] of enQ) {
+  const other = heQ.get(qid);
+  if (!other) {
+    fail(file, `${qid} has no Hebrew version`, true);
+    continue;
   }
+  if (!same(answerKey(q), answerKey(other.q))) fail(other.file, `${qid}: answer key differs from the English (${JSON.stringify(answerKey(q))} vs ${JSON.stringify(answerKey(other.q))})`);
 }
-for (const ch of chaptersWithLessons) {
-  const done = summaries.some((sm) => sm.chapter === ch);
-  for (const l of lessons.filter((x) => x.id.startsWith(`${ch}.`))) {
-    const examples = (l.body.match(/<Example\b/g) ?? []).length;
-    const missing = [examples < 6 && `${examples}/6 worked examples`, !workbookOf.has(l.id) && 'no workbook'].filter(Boolean);
-    if (!missing.length) continue;
-    if (done) fail(l.file, `chapter ${ch} has a summary, so the lesson needs 6 worked examples and a workbook: ${missing.join(', ')}`, true);
-    else unfinished.push(`${l.id}: ${missing.join(', ')}`);
-  }
-}
+for (const [qid, { file }] of heQ) if (!enQ.has(qid)) fail(file, `${qid} has no English version`, true);
 
-/* ------------------------------------------------------------- glossary */
+/* ------------------------------------------------------------- glossary spellings */
 
-const texts = [
-  ...lessons.map((l) => ({ where: l.file, text: l.body })),
-  ...questions.map(({ q, file }) => ({ where: `${file} ${q.id}`, text: JSON.stringify(q) })),
-  ...workbooks.map(({ file, data }) => ({ where: file, text: JSON.stringify(data) })),
-  ...summaries.map((sm) => ({ where: sm.file, text: sm.body })),
-];
-/** A rejected phrase also matches in the definite form, where every word may take ה ("המטען האלמנטרי"). */
-const rejectPattern = (bad: string) =>
-  new RegExp(bad.trim().split(/\s+/).map((w) => `ה?${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`).join('\\s+'));
 for (const g of glossary) {
   for (const bad of g.reject ?? []) {
-    const re = rejectPattern(bad);
-    for (const t of texts) if (re.test(t.text)) fail(t.where, `"${bad}": the course spells this "${g.term}"`);
+    const re = new RegExp(bad.trim().split(/\s+/).map((w) => `ה?${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`).join('\\s+'));
+    for (const l of lessons.filter((x) => x.lang === 'he')) if (re.test(l.body)) fail(l.file, `"${bad}": the course spells this "${g.term.he}"`);
+    for (const { q, file } of questionsOf('he')) if (re.test(JSON.stringify(q))) fail(`${file} ${q.id}`, `"${bad}": the course spells this "${g.term.he}"`);
   }
 }
 
-/* -------------------------------------------------- KaTeX in MDX and in glossary symbols */
-// The build renders these too, but parallel authors only lint: a bad formula must fail here, not at build time.
-// Chapter 1's five lessons were written in parallel, and a glossary symbol in Unicode (2ṙθ̇) failed only the build.
+/* -------------------------------------------------- KaTeX in MDX */
+
 const DD = '$$';
-const mdxFormulas = (body: string): string[] => {
-  const display = [...body.matchAll(/\$\$([\s\S]+?)\$\$/g)].map((m) => DD + m[1] + DD);
-  const inline = [...body.replace(/\$\$[\s\S]+?\$\$/g, '').matchAll(/\$([^$\n]+)\$/g)].map((m) => '$' + m[1] + '$');
-  const props = [...body.matchAll(/\btex="([^"]+)"/g)].map((m) => DD + m[1] + DD);
-  return [...display, ...inline, ...props];
-};
-for (const doc of [...lessons, ...summaries]) {
-  for (const f of mdxFormulas(doc.body)) {
+for (const l of lessons) {
+  const display = [...l.body.matchAll(/\$\$([\s\S]+?)\$\$/g)].map((m) => DD + m[1] + DD);
+  const inline = [...l.body.replace(/\$\$[\s\S]+?\$\$/g, '').matchAll(/\$([^$\n]+)\$/g)].map((m) => '$' + m[1] + '$');
+  const props = [...l.body.matchAll(/\btex="([^"]+)"/g)].map((m) => DD + m[1] + DD);
+  for (const f of [...display, ...inline, ...props]) {
     try {
-      tex(f, doc.file);
+      tex(f, l.file);
     } catch (e) {
-      fail(doc.file, (e as Error).message);
+      fail(l.file, (e as Error).message);
     }
-  }
-}
-for (const g of glossary as (typeof glossary[number] & { symbol?: string })[]) {
-  if (!g.symbol) continue;
-  try {
-    tex('$' + g.symbol + '$', `glossary ${g.id}.symbol`);
-  } catch (e) {
-    fail(g.file, (e as Error).message);
   }
 }
 
 /* --------------------------------------------------------------- report */
 
-if (pending.length) {
-  console.log(`lint-content: ${pending.length} Bagrut part(s) wait for objectives of lessons not written yet:
-`);
-  for (const p of pending) console.log(`  • ${p}`);
-  console.log('');
-}
-if (unfinished.length && !onlyFile) {
-  console.log(`lint-content: ${unfinished.length} lesson(s) in chapters without a summary still lack worked examples or a workbook:
-`);
-  for (const u of unfinished) console.log(`  • ${u}`);
-  console.log('');
-}
 if (problems.length) {
   console.error(`lint-content: ${problems.length} problem(s)\n`);
   for (const p of problems) console.error(`  ✗ ${p}`);
   process.exit(1);
 }
-console.log(`lint-content: ok${onlyFile ? ` for ${onlyFile}` : ''} (${lessons.length} lessons, ${questions.length} questions, ${misconceptions.length} misconceptions, ${glossary.length} terms, ${videos.length} videos, ${workbooks.length} workbooks, ${summaries.length} chapter summaries)`);
+const count = (lang: Lang) => `${lessons.filter((l) => l.lang === lang).length} ${lang}`;
+console.log(`lint-content: ok${onlyFile ? ` for ${onlyFile}` : ''} (lessons: ${count('en')}, ${count('he')}; questions: ${enQ.size} en, ${heQ.size} he; ${glossary.length} terms; parity checked for ${byId.size} lesson(s))`);
