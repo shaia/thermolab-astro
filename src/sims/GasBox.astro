@@ -1,0 +1,7 @@
+---
+/** The gas-in-a-box figure for lesson MDX: <Spread figure={GasBox} figureProps={{ n: 60, tasks: […] }}>. */
+import GasBox, { type GasBoxProps } from './GasBox';
+type Props = GasBoxProps;
+---
+
+<GasBox client:visible {...Astro.props} />

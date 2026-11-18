@@ -1,0 +1,7 @@
+---
+/** The pressure-spread figure for lesson MDX: <Spread figure={PressureSpread} figureProps={{ n: 100, tasks: […] }}>. */
+import PressureSpread, { type PressureSpreadProps } from './PressureSpread';
+type Props = PressureSpreadProps;
+---
+
+<PressureSpread client:visible {...Astro.props} />
