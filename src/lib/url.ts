@@ -1,10 +1,4 @@
-const PAGES = Object.keys(import.meta.glob('/src/pages/**/*.astro'));
-
-/** True when a page exists for this site path ('me/' → src/pages/me/index.astro or me.astro). */
-export function pageExists(path: string): boolean {
-  const p = path.replace(/^\/|\/$/g, '');
-  return PAGES.includes(`/src/pages/${p}/index.astro`) || PAGES.includes(`/src/pages/${p}.astro`);
-}
+import type { Lang } from '~/i18n';
 
 /** Site-relative link that respects the GitHub Pages base path ('/' locally, '/<repo>/' in CI). */
 export function url(path = ''): string {
@@ -12,3 +6,6 @@ export function url(path = ''): string {
   const p = path.replace(/^\//, '');
   return `${base}/${p}`;
 }
+
+/** A link inside one language's half of the site: langUrl('he', 'lessons/4-1/') → '/he/lessons/4-1/'. */
+export const langUrl = (lang: Lang, path = '') => url(`${lang}/${path.replace(/^\//, '')}`);

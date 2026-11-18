@@ -1,9 +1,11 @@
 ---
 /**
  * The floating navigation capsule: contents · previous · lesson · section dots · next.
- * In a Hebrew book "next" is to the left (←). Section dots are built from [data-block].
+ * "Previous" points back along the reading direction: → in Hebrew, ← in English.
+ * Section dots are built from [data-block]; their names come from the page's language.
  */
-import { url } from '~/lib/url';
+import { langUrl } from '~/lib/url';
+import { langOf, ui } from '~/i18n';
 
 interface Link {
   href: string;
@@ -17,46 +19,40 @@ interface Props {
   next?: Link | null;
 }
 const { id, title, prev, next } = Astro.props;
+const lang = langOf(Astro.url.pathname);
+const s = ui(lang);
 ---
 
-<nav class="capsule glass" aria-label="ניווט בשיעור">
-  <a class="cap-btn" href={url('')} title="תוכן העניינים" aria-label="תוכן העניינים">☰</a>
+<nav class="capsule glass" aria-label={s.nav.lesson} data-kickers={JSON.stringify(s.blockShort)}>
+  <a class="cap-btn" href={langUrl(lang)} title={s.nav.contents} aria-label={s.nav.contents}>☰</a>
   {
     prev ? (
-      <a class="cap-btn" href={prev.href} title={`הקודם: ${prev.id} ${prev.title}`} aria-label={`השיעור הקודם: ${prev.title}`}>
-        →
+      <a class="cap-btn" href={prev.href} title={s.nav.prev(prev.id, prev.title)} aria-label={s.nav.prevLesson(prev.title)}>
+        {s.nav.backArrow}
       </a>
     ) : (
-      <span class="cap-btn off" aria-hidden="true">→</span>
+      <span class="cap-btn off" aria-hidden="true">{s.nav.backArrow}</span>
     )
   }
   <span class="cap-title">
     <b class="ltr">{id}</b>
     <span>{title}</span>
   </span>
-  <ol class="cap-dots" aria-label="חלקי השיעור"></ol>
+  <ol class="cap-dots" aria-label={s.nav.sections}></ol>
   {
     next ? (
-      <a class="cap-btn" href={next.href} title={`הבא: ${next.id} ${next.title}`} aria-label={`השיעור הבא: ${next.title}`}>
-        ←
+      <a class="cap-btn" href={next.href} title={s.nav.next(next.id, next.title)} aria-label={s.nav.nextLesson(next.title)}>
+        {s.nav.fwdArrow}
       </a>
     ) : (
-      <span class="cap-btn off" aria-hidden="true">←</span>
+      <span class="cap-btn off" aria-hidden="true">{s.nav.fwdArrow}</span>
     )
   }
 </nav>
 
 <script>
-  const KICK: Record<string, string> = {
-    hook: 'תופעה',
-    predict: 'חזו',
-    explore: 'חקרו',
-    explain: 'הסבר',
-    example: 'דוגמה',
-    check: 'בדקו',
-    watch: 'צפו',
-    summary: 'סיכום',
-  };
+  const nav = document.querySelector<HTMLElement>('.capsule');
+  const KICK: Record<string, string> = JSON.parse(nav?.dataset.kickers ?? '{}');
   const dots = document.querySelector<HTMLOListElement>('.cap-dots');
   const blocks = Array.from(document.querySelectorAll<HTMLElement>('[data-block]'));
   if (dots && blocks.length) {

@@ -73,7 +73,8 @@ const bodies = {
   twotier: {
     type: z.literal('twotier'),
     choices: z.array(choice).min(2),
-    reasonPrompt: z.string().default('ומה הנימוק?'),
+    /** the question card falls back to the interface's "And the reason?" in the page language */
+    reasonPrompt: z.string().optional(),
     reasons: z.array(choice).min(2),
   },
 };
@@ -153,4 +154,4 @@ export type Part = BagrutQuestion['parts'][number];
 export type OpenPart = Extract<Part, { type: 'open' }>;
 export type AutoPart = Exclude<Part, OpenPart>;
 
-export const questionBank = z.object({ chapter: z.number().int(), questions: z.array(question) });
+export const questionBank = z.object({ lang: z.enum(['en', 'he']), chapter: z.number().int(), questions: z.array(question) });

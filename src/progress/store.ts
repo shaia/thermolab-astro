@@ -41,7 +41,7 @@ export interface ProgressState {
   tasks: Record<string, number>;
 }
 
-const KEY = 'unimech:v1';
+const KEY = 'thermolab:v1';
 
 export function emptyProgress(): ProgressState {
   return { version: 1, createdAt: Date.now(), predictions: {}, attempts: [], lessons: {}, tasks: {} };
@@ -129,7 +129,7 @@ export function markTask(id: string) {
 }
 
 export function exportProgress(): string {
-  return JSON.stringify({ ...progress.value, exportedAt: new Date().toISOString(), app: 'unimech' }, null, 2);
+  return JSON.stringify({ ...progress.value, exportedAt: new Date().toISOString(), app: 'thermolab' }, null, 2);
 }
 
 /** Merge an imported file into the current progress; attempts are de-duplicated by (qid, at). */

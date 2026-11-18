@@ -1,0 +1,178 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import CoverArt from '~/ui/CoverArt.astro';
+import { chapters, lessonSlug, moduleNumber, PARTS, type Part } from '~/course';
+import { langUrl } from '~/lib/url';
+import { LANGS, ui, type Lang } from '~/i18n';
+import '~/styles/lesson.css';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const s = ui(lang);
+const written = new Set(
+  (await getCollection('lessons', (e) => e.data.lang === lang && (!e.data.draft || import.meta.env.DEV))).map((e) => e.data.id),
+);
+const firstLesson = chapters.flatMap((c) => c.lessons).find((l) => written.has(l.id));
+const parts = (Object.keys(PARTS) as Part[]).map((p) => ({ part: p, chapters: chapters.filter((c) => c.part === p) }));
+---
+
+<BaseLayout title={s.siteName}>
+  <div class="lesson home">
+    <section class="sheet cover">
+      <div class="cover-text">
+        <p class="kicker">{s.home.kicker}</p>
+        <h1>{s.siteName}</h1>
+        <p class="cover-sub">{s.home.sub}</p>
+        <p class="hand cover-note">{s.home.note}</p>
+        <div class="cover-actions">
+          {firstLesson && <a class="btn primary" href={langUrl(lang, `lessons/${lessonSlug(firstLesson.id)}/`)}>{s.home.open}</a>}
+        </div>
+      </div>
+      <div class="cover-figure">
+        <CoverArt />
+      </div>
+    </section>
+
+    <section class="sheet toc" aria-labelledby="toc-h">
+      <h2 id="toc-h">{s.home.contents}</h2>
+      {
+        parts.map(({ part, chapters: cs }) => (
+          <section class="part">
+            <h3 class="kicker">{PARTS[part][lang]}</h3>
+            <ol class="lessons">
+              {cs.flatMap((c) =>
+                c.lessons.map((l) => (
+                  <li data-lesson-id={l.id} class={written.has(l.id) ? 'written' : 'planned'}>
+                    {written.has(l.id) ? (
+                      <a href={langUrl(lang, `lessons/${lessonSlug(l.id)}/`)}>
+                        <span class="l-id ltr">{moduleNumber(c.n)}</span>
+                        <span class="l-title">{l.title[lang]}</span>
+                        <span class="l-mark" aria-hidden="true" />
+                      </a>
+                    ) : (
+                      <span class="soon">
+                        <span class="l-id ltr">{moduleNumber(c.n)}</span>
+                        <span class="l-title">{l.title[lang]}</span>
+                        <span class="chip">{s.home.soon}</span>
+                      </span>
+                    )}
+                  </li>
+                )),
+              )}
+            </ol>
+          </section>
+        ))
+      }
+    </section>
+  </div>
+  <script type="application/json" id="home-strings" set:html={JSON.stringify({ visited: s.home.visited, completed: s.home.completed })} />
+</BaseLayout>
+
+<script>
+  import { progress } from '~/progress/store';
+  // mark visited and completed lessons in the contents
+  const t = JSON.parse(document.getElementById('home-strings')?.textContent ?? '{}') as { visited: string; completed: string };
+  const p = progress.value;
+  document.querySelectorAll<HTMLElement>('[data-lesson-id]').forEach((li) => {
+    const rec = p.lessons[li.dataset.lessonId ?? ''];
+    const mark = li.querySelector('.l-mark');
+    if (!rec || !mark) return;
+    li.classList.add(rec.completed ? 'completed' : 'visited');
+    mark.textContent = rec.completed ? '✓' : '•';
+    mark.setAttribute('aria-hidden', 'false');
+    mark.setAttribute('aria-label', rec.completed ? t.completed : t.visited);
+  });
+</script>
+
+<style>
+  .cover {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 24px;
+    align-items: center;
+    min-height: 420px;
+  }
+  .cover h1 {
+    font-size: clamp(2.6rem, 6vw, 4rem);
+    margin: 0.1em 0 0.2em;
+  }
+  .cover-sub {
+    font-size: 1.15rem;
+    color: var(--ink-2);
+    max-width: 34em;
+  }
+  .cover-note {
+    font-size: 1.05rem;
+  }
+  .cover-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  @media (max-width: 860px) {
+    .cover {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .cover-figure {
+      order: -1;
+    }
+  }
+  .toc h2 {
+    margin-top: 0;
+  }
+  .toc {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 8px 36px;
+  }
+  .toc h2 {
+    grid-column: 1 / -1;
+  }
+  .part h3 {
+    margin: 0.4em 0 0.2em;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .lessons {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+  }
+  .lessons a,
+  .lessons .soon {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    padding: 5px 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .lessons a:hover {
+    background: var(--paper-2);
+  }
+  .lessons .soon {
+    color: var(--ink-3);
+  }
+  .l-id {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    text-align: start;
+  }
+  .l-mark {
+    font-family: var(--font-ui);
+    color: var(--ok);
+    font-weight: 700;
+  }
+  .visited .l-mark {
+    color: var(--accent);
+  }
+</style>

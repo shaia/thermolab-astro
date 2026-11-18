@@ -1,7 +1,7 @@
-/* "Living book" design tokens: paper, ink, a rust accent and a handwriting blue.
-   Physics colour code is fixed course-wide: velocity = teal, acceleration = orange, force = green,
-   momentum = magenta, and the energy forms (kinetic gold, gravitational blue, elastic lime, thermal brown).
-   A sign is never colour-only: every signed quantity also carries a + / − glyph or an arrow. */
+/* "Living book" design tokens: paper, ink, a rust accent and a handwriting blue, copied from unimech.
+   ThermoLab's colour code is fixed course-wide and matches its figures: hot = red, cold = blue,
+   work = green, heat = orange, entropy = violet, energy = gold, and particle velocity = teal.
+   A meaning is never colour-only: every coloured mark also carries a label or a glyph. */
 
 :root {
   color-scheme: light;
@@ -24,18 +24,14 @@
   --bad: #b3362a;
   --bad-soft: rgba(179, 54, 42, 0.1);
 
-  /* physics colour code */
-  --pos: #c8372d;
-  --neg: #2f55b4;
+  /* thermal colour code */
+  --hot: #c8372d;
+  --cold: #2f55b4;
   --velocity: #1f7fa6;
-  --accel: #d9622a;
-  --momentum: #a8336e;
-  --energy-k: #d99a12;
-  --energy-p: #2f6fc1;
-  --energy-el: #5e9a2a;
-  --energy-th: #9a5a3c;
-  --equip: #7a5aa6;
-  --force: #1f8a5b;
+  --heat: #d9622a;
+  --energy: #d99a12;
+  --entropy: #7a5aa6;
+  --work: #1f8a5b;
 
   --glass: rgba(251, 247, 238, 0.78);
   --glass-edge: rgba(255, 255, 255, 0.55);
@@ -73,17 +69,13 @@
     --ok-soft: rgba(108, 194, 140, 0.14);
     --bad: #ef7d6e;
     --bad-soft: rgba(239, 125, 110, 0.13);
-    --pos: #ff6b5c;
-    --neg: #7c9dff;
+    --hot: #ff6b5c;
+    --cold: #7c9dff;
     --velocity: #5cc8ec;
-    --accel: #ff9a52;
-    --momentum: #f07aae;
-    --energy-k: #ffcc4d;
-    --energy-p: #6db8ff;
-    --energy-el: #a6d96a;
-    --energy-th: #d9a07a;
-    --equip: #b89be0;
-    --force: #5fd39a;
+    --heat: #ff9a52;
+    --energy: #ffcc4d;
+    --entropy: #b89be0;
+    --work: #5fd39a;
     --glass: rgba(34, 31, 27, 0.8);
     --glass-edge: rgba(255, 255, 255, 0.08);
     --shadow-page: 0 18px 40px -18px rgba(0, 0, 0, 0.8);
@@ -110,17 +102,13 @@
   --ok-soft: rgba(108, 194, 140, 0.14);
   --bad: #ef7d6e;
   --bad-soft: rgba(239, 125, 110, 0.13);
-  --pos: #ff6b5c;
-  --neg: #7c9dff;
+  --hot: #ff6b5c;
+  --cold: #7c9dff;
   --velocity: #5cc8ec;
-  --accel: #ff9a52;
-  --momentum: #f07aae;
-  --energy-k: #ffcc4d;
-  --energy-p: #6db8ff;
-  --energy-el: #a6d96a;
-  --energy-th: #d9a07a;
-  --equip: #b89be0;
-  --force: #5fd39a;
+  --heat: #ff9a52;
+  --energy: #ffcc4d;
+  --entropy: #b89be0;
+  --work: #5fd39a;
   --glass: rgba(34, 31, 27, 0.8);
   --glass-edge: rgba(255, 255, 255, 0.08);
   --shadow-page: 0 18px 40px -18px rgba(0, 0, 0, 0.8);

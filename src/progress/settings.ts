@@ -7,7 +7,7 @@ export interface Settings {
   theme: 'auto' | 'light' | 'dark';
 }
 
-const KEY = 'unimech:settings';
+const KEY = 'thermolab:settings';
 const defaults: Settings = { still: false, theme: 'auto' };
 
 function load(): Settings {
@@ -34,7 +34,7 @@ export function updateSettings(patch: Partial<Settings>) {
   settings.value = { ...settings.value, ...patch };
   writeItem(KEY, JSON.stringify(settings.value));
   apply(settings.value);
-  window.dispatchEvent(new CustomEvent('unimech:settings', { detail: settings.value }));
+  window.dispatchEvent(new CustomEvent('thermolab:settings', { detail: settings.value }));
 }
 
 /** True when nothing should move: the reader's still mode or the OS reduced-motion setting. */
@@ -45,7 +45,7 @@ export function motionAllowed(): boolean {
 }
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('unimech:settings', (e) => {
+  window.addEventListener('thermolab:settings', (e) => {
     const detail = (e as CustomEvent<Settings>).detail;
     if (detail !== settings.value) settings.value = detail;
   });

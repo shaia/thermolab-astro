@@ -1,18 +1,23 @@
 ---
-/** A glossary term: one spelling course-wide, with its definition on hover or focus. */
+/**
+ * A glossary term: one spelling course-wide, with its definition on hover or focus. In Hebrew the
+ * card also shows the English term, which is what a student meets in every other textbook.
+ */
 import { getEntry } from 'astro:content';
+import { langOf } from '~/i18n';
 interface Props {
   id: string;
 }
 const { id } = Astro.props;
+const lang = langOf(Astro.url.pathname);
 const entry = await getEntry('glossary', id);
-if (!entry) throw new Error(`<Term id="${id}">: no such entry in src/content/glossary.yaml`);
+if (!entry) throw new Error(`<Term id="${id}">: no such entry in src/content/glossary/`);
 const g = entry.data;
 ---
 
 <span class="term" tabindex="0"
   ><slot /><span class="term-card" role="tooltip"
-    ><b>{g.term}</b> <span class="term-en ltr">{g.en}</span>
-    <span class="term-def">{g.definition}</span></span
+    ><b>{g.term[lang]}</b>{lang === 'he' && <span class="term-en ltr">{g.term.en}</span>}
+    <span class="term-def">{g.definition[lang]}</span></span
   ></span
 >

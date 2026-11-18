@@ -31,7 +31,7 @@ screens/
 # rendered tour videos (not built yet), generated from the figures and src/physics
 public/media/
 
-# project-local Claude tooling: a junction to ../claude/unimech, never committed
+# project-local Claude tooling: never committed
 .claude/
 
 # build mutex used by parallel lesson agents
