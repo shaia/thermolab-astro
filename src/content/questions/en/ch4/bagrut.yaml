@@ -234,14 +234,14 @@ questions:
     title: >-
       How steady is steady?
     prompt: >-
-      The relative fluctuation of the pressure of an ideal gas is $\sigma_P/\langle P\rangle \simeq N^{-1/2}$. Air at room temperature is at $1.013\cdot10^5\,\text{Pa}$ and $300\,\text{K}$; take $k_B = 1.381\cdot10^{-23}\,\text{J/K}$.
+      The relative spread of the pressure of a sample of $N$ molecules of an ideal gas is $\sigma_P/\langle P\rangle \simeq N^{-1/2}$. Air at room temperature is at $1.013\cdot10^5\,\text{Pa}$ and $300\,\text{K}$; take $k_B = 1.381\cdot10^{-23}\,\text{J/K}$.
     parts:
       - label: a
         type: numeric
         points: 5
         objectives: [OBJ-4.1-4]
         prompt: >-
-          A pressure gauge resolves one part in $10^4$. Above what number of molecules does it read a perfectly steady pressure?
+          A pressure gauge resolves one part in $10^4$. Above what number of molecules is the spread of a sample's pressure too small for the gauge to see?
         answer: 1.0e8
         unit: ''
         tolerance: 0.05
