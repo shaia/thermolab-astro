@@ -55,11 +55,13 @@ for (const L of LANGS) {
       await freezeSteps(page);
       await fig.locator('canvas').scrollIntoViewIfNeeded();
       await expect(fig.locator('.slider output').first()).toHaveText('2000');
-      // the running average settles within a few percent of N k_B T / A
+      // the running average settles within a few percent of N k_B T / A; early on it can still sit
+      // just outside the band on either side, so wait for it to land inside rather than read it once
       await expect
-        .poll(async () => Number((await fig.locator('.gas-readout b').nth(2).textContent()) ?? 0), { timeout: 15_000 })
-        .toBeGreaterThan(0.95);
-      expect(Number(await fig.locator('.gas-readout b').nth(2).textContent())).toBeLessThan(1.05);
+        .poll(async () => Math.abs(Number((await fig.locator('.gas-readout b').nth(2).textContent()) ?? 0) - 1), {
+          timeout: 15_000,
+        })
+        .toBeLessThan(0.05);
     });
 
     test('a prediction opens its flap and comes back in the summary', async ({ page }) => {
