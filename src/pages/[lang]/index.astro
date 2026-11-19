@@ -4,6 +4,8 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import CoverArt from '~/ui/CoverArt.astro';
 import { chapters, lessonSlug, moduleNumber, PARTS, type Part } from '~/course';
 import { langUrl } from '~/lib/url';
+import { chaptersWithQuestions } from '~/assessment/bank';
+import { chaptersWithSummary } from '~/lib/companions';
 import { LANGS, ui, type Lang } from '~/i18n';
 import '~/styles/lesson.css';
 
@@ -17,6 +19,8 @@ const written = new Set(
   (await getCollection('lessons', (e) => e.data.lang === lang && (!e.data.draft || import.meta.env.DEV))).map((e) => e.data.id),
 );
 const firstLesson = chapters.flatMap((c) => c.lessons).find((l) => written.has(l.id));
+const withPractice = new Set(await chaptersWithQuestions(lang));
+const withSummary = await chaptersWithSummary(lang);
 const parts = (Object.keys(PARTS) as Part[]).map((p) => ({ part: p, chapters: chapters.filter((c) => c.part === p) }));
 ---
 
@@ -48,11 +52,20 @@ const parts = (Object.keys(PARTS) as Part[]).map((p) => ({ part: p, chapters: ch
                 c.lessons.map((l) => (
                   <li data-lesson-id={l.id} class={written.has(l.id) ? 'written' : 'planned'}>
                     {written.has(l.id) ? (
-                      <a href={langUrl(lang, `lessons/${lessonSlug(l.id)}/`)}>
-                        <span class="l-id ltr">{moduleNumber(c.n)}</span>
-                        <span class="l-title">{l.title[lang]}</span>
-                        <span class="l-mark" aria-hidden="true" />
-                      </a>
+                      <>
+                        <a href={langUrl(lang, `lessons/${lessonSlug(l.id)}/`)}>
+                          <span class="l-id ltr">{moduleNumber(c.n)}</span>
+                          <span class="l-title">{l.title[lang]}</span>
+                          <span class="l-mark" aria-hidden="true" />
+                        </a>
+                        {withPractice.has(c.n) && (
+                          <p class="chapter-tools">
+                            <a href={langUrl(lang, `practice/ch${c.n}/`)}>{s.home.practice}</a>
+                            <a href={langUrl(lang, `test/ch${c.n}/`)}>{s.home.test}</a>
+                            {withSummary.has(c.n) && <a href={langUrl(lang, `summary/ch${c.n}/`)}>{s.home.summary}</a>}
+                          </p>
+                        )}
+                      </>
                     ) : (
                       <span class="soon">
                         <span class="l-id ltr">{moduleNumber(c.n)}</span>
@@ -166,6 +179,15 @@ const parts = (Object.keys(PARTS) as Part[]).map((p) => ({ part: p, chapters: ch
     font-weight: 600;
     color: var(--ink-2);
     text-align: start;
+  }
+  .chapter-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin: 0 0 6px;
+    padding-inline-start: 50px;
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
   }
   .l-mark {
     font-family: var(--font-ui);

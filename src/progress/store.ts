@@ -133,14 +133,19 @@ export function exportProgress(): string {
 }
 
 /** Merge an imported file into the current progress; attempts are de-duplicated by (qid, at). */
-export function importProgress(text: string): { ok: true } | { ok: false; error: string } {
+const IMPORT_ERRORS = {
+  en: { json: 'The file is not valid JSON.', course: 'The file is not a progress file of this course.' },
+  he: { json: 'הקובץ אינו JSON תקין.', course: 'הקובץ אינו קובץ התקדמות של הקורס.' },
+};
+
+export function importProgress(text: string, lang: 'en' | 'he' = 'he'): { ok: true } | { ok: false; error: string } {
   let parsed: ProgressState | null = null;
   try {
     parsed = parseProgress(JSON.parse(text));
   } catch {
-    return { ok: false, error: 'הקובץ אינו JSON תקין.' };
+    return { ok: false, error: IMPORT_ERRORS[lang].json };
   }
-  if (!parsed) return { ok: false, error: 'הקובץ אינו קובץ התקדמות של הקורס.' };
+  if (!parsed) return { ok: false, error: IMPORT_ERRORS[lang].course };
   const cur = progress.value;
   const seen = new Set(cur.attempts.map((a) => `${a.qid}@${a.at}`));
   const attempts = [...cur.attempts, ...parsed.attempts.filter((a) => !seen.has(`${a.qid}@${a.at}`))].sort(

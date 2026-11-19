@@ -12,6 +12,12 @@ const lang = langOf(path);
 const other = otherLang(lang);
 const s = ui(lang);
 const contents = langUrl(lang);
+const links = [
+  { href: contents, label: s.nav.contents },
+  { href: langUrl(lang, 'me/'), label: s.nav.me },
+  { href: langUrl(lang, 'formulas/'), label: s.nav.formulas },
+  { href: langUrl(lang, 'glossary/'), label: s.nav.glossary },
+];
 ---
 
 <header class="site-header">
@@ -29,7 +35,13 @@ const contents = langUrl(lang);
     <span>{s.siteName}</span>
   </a>
   <nav aria-label={s.nav.main}>
-    <a href={contents} aria-current={path === contents ? 'page' : undefined}>{s.nav.contents}</a>
+    {
+      links.map((l) => (
+        <a href={l.href} aria-current={path === l.href ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))
+    }
   </nav>
   <a class="lang-switch" href={swapLang(path, other)} hreflang={other} lang={other} title={ui(other).readIn}>
     {ui(other).langName}
