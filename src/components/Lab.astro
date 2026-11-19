@@ -1,0 +1,60 @@
+---
+/**
+ * The lesson's laboratory: a card that opens ThermoLab's notebook for the lesson in JupyterLite, in
+ * the page's language, running in the browser with nothing to install. The bundle is ThermoLab's own
+ * (see src/lib/lite.ts for where it is served from); the notebook is named as ThermoLab names it, e.g. "04-pressure".
+ */
+import { langOf } from '~/i18n';
+import { labHref } from '~/lib/lite';
+
+interface Props {
+  notebook: string;
+}
+const { notebook } = Astro.props;
+const lang = langOf(Astro.url.pathname);
+const href = labHref(lang, notebook);
+const n = notebook.slice(0, 2);
+const T = {
+  en: {
+    kicker: 'Laboratory',
+    title: `Laboratory ${n}`,
+    body: 'Run the same model in Python, change anything, and check every claim of this lesson yourself. It runs in your browser with nothing to install; Python takes a few seconds to start the first time.',
+    open: 'Open the laboratory',
+  },
+  he: {
+    kicker: 'מעבדה',
+    title: `מעבדה ${n}`,
+    body: 'הריצו את אותו מודל בפייתון, שנו כל דבר, ובדקו בעצמכם כל טענה של השיעור. הוא רץ בדפדפן בלי שום התקנה; לפייתון לוקח כמה שניות לעלות בפעם הראשונה.',
+    open: 'פתחו את המעבדה',
+  },
+}[lang];
+---
+
+<aside class="lab-card" data-lab={notebook}>
+  <p class="kicker">{T.kicker}</p>
+  <p class="lab-title">{T.title}</p>
+  <p>{T.body}</p>
+  <a class="btn primary" href={href} target="_blank" rel="noopener">{T.open}</a>
+</aside>
+
+<style>
+  .lab-card {
+    margin: 1.4em 0;
+    padding: 16px 20px;
+    border: 1px solid var(--rule);
+    border-inline-start: 4px solid var(--work);
+    border-radius: 12px;
+    background: var(--paper-2);
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+  }
+  .lab-card .kicker {
+    margin: 0;
+  }
+  .lab-title {
+    margin: 2px 0 6px;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+</style>

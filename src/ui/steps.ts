@@ -17,15 +17,15 @@ interface StepDetail {
 
 declare global {
   interface Window {
-    __unimechSteps?: Record<string, StepDetail>;
+    __thermolabSteps?: Record<string, StepDetail>;
   }
 }
 
-const EVENT = 'unimech:step';
+const EVENT = 'thermolab:step';
 
 export function announceStep(detail: StepDetail) {
-  window.__unimechSteps ??= {};
-  window.__unimechSteps[detail.fig] = detail;
+  window.__thermolabSteps ??= {};
+  window.__thermolabSteps[detail.fig] = detail;
   window.dispatchEvent(new CustomEvent<StepDetail>(EVENT, { detail }));
 }
 
@@ -36,7 +36,7 @@ export function subscribeSteps(fig: string, cb: (state: StepState, id: string) =
     if (d.fig === fig) cb(d.state, d.id);
   };
   window.addEventListener(EVENT, handler);
-  const last = window.__unimechSteps?.[fig];
+  const last = window.__thermolabSteps?.[fig];
   if (last) cb(last.state, last.id);
   return () => window.removeEventListener(EVENT, handler);
 }

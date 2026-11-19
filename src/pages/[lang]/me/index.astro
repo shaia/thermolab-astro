@@ -1,0 +1,64 @@
+---
+/** My path: mastery map, misconceptions, stamp passport, what next, export / import. */
+import { chaptersWithQuestions } from '~/assessment/bank';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { chapters } from '~/course';
+import { lessonHref, misconceptionsFor, writtenLessons } from '~/lib/companions';
+import { langUrl } from '~/lib/url';
+import { LANGS, type Lang } from '~/i18n';
+import MyPath from '~/ui/MyPath';
+import '~/styles/lesson.css';
+import '~/styles/platform.css';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const T = {
+  en: {
+    title: 'My path',
+    description: 'Your mastery map, your stamps and your next step in the course',
+    heading: 'Where you stand',
+    lede: 'Everything you have done in the course is recorded here: what you have mastered, which mistakes keep coming back, and what to do now.',
+    local: 'Progress is saved only in this browser. Further down the page you can export it to a file and import it on another device.',
+  },
+  he: {
+    title: 'המסלול שלי',
+    description: 'מפת השליטה, החותמות והצעד הבא שלכם בקורס',
+    heading: 'איפה אתם עומדים',
+    lede: 'כל מה שעשיתם בקורס מתועד כאן: מה כבר שלטתם בו, אילו טעויות חוזרות, ומה כדאי לעשות עכשיו.',
+    local: 'ההתקדמות נשמרת רק בדפדפן הזה. אפשר לייצא אותה לקובץ ולייבא אותה במכשיר אחר, בהמשך הדף.',
+  },
+}[lang];
+
+// a module appears once it has a lesson or a question bank; its lessons and objectives come from the course map
+const written = await writtenLessons(lang);
+const withQuestions = new Set(await chaptersWithQuestions(lang));
+const href = await lessonHref(lang);
+const course = chapters
+  .filter((c) => withQuestions.has(c.n) || c.lessons.some((l) => written.has(l.id)))
+  .map((c) => ({
+    n: c.n,
+    title: c.title[lang],
+    lessons: c.lessons.map((l) => ({ id: l.id, title: l.title[lang], href: href(l.id), objectives: l.objectives.map((o) => ({ id: o.id, text: o.text[lang] })) })),
+  }));
+const misconceptions = await misconceptionsFor(lang);
+const practice = [...withQuestions]
+  .filter((n) => course.some((c) => c.n === n))
+  .map((n) => ({ n, title: chapters.find((c) => c.n === n)?.title[lang] ?? '', practiceHref: langUrl(lang, `practice/ch${n}/`), testHref: langUrl(lang, `test/ch${n}/`) }));
+---
+
+<BaseLayout title={T.title} description={T.description}>
+  <div class="platform">
+    <section class="sheet sheet-narrow">
+      <p class="kicker">{T.title}</p>
+      <h1>{T.heading}</h1>
+      <p class="p-lede">{T.lede}</p>
+      <p class="local-note" role="note">{T.local}</p>
+    </section>
+    <section class="sheet sheet-narrow">
+      <MyPath client:load lang={lang} chapters={course} misconceptions={misconceptions} practice={practice} />
+    </section>
+  </div>
+</BaseLayout>

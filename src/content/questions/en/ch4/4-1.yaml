@@ -1,0 +1,309 @@
+# Lesson 4.1 check questions. Converted from ThermoLab's assessment/quizzes/04-pressure.en.yml (Q-04-1 … Q-04-6);
+# ids are shared with the Hebrew bank, which must hold the same questions with the same answers.
+lang: en
+chapter: 4
+questions:
+  - id: Q-4.1-motion
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-4.1-1]
+    prompt: >-
+      A gas sits at equilibrium in a sealed container, its pressure gauge perfectly steady. What are the molecules doing?
+    choices:
+      - text: >-
+          Moving as fast as ever and colliding constantly; only the averages have settled.
+        correct: true
+        feedback: >-
+          Right. Equilibrium is a statement about macroscopic averages, not about the microscopic motion. At $300\,\text{K}$ nitrogen molecules move at about $500\,\text{m/s}$ whether or not the gauge is moving.
+      - text: >-
+          They have come to rest, which is why the pressure no longer changes.
+        feedback: >-
+          That would need zero kinetic energy, which is absolute zero. It also contradicts itself: motionless molecules exert no pressure at all, so the gauge would read zero, not a steady value.
+        misconception: MC-equilibrium-motion-stops
+      - text: >-
+          They move, but no longer strike the walls, so no more momentum is transferred.
+        feedback: >-
+          Wall collisions are what the pressure is. They go on at an enormous rate; what is steady is the rate, not their absence.
+      - text: >-
+          They oscillate in place about fixed positions, as in a solid.
+        feedback: >-
+          That describes a solid, whose atoms are bound to lattice sites. In a gas the molecules fly freely between collisions and explore the whole container.
+
+  - id: Q-4.1-two-containers
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-4.1-2, OBJ-4.1-3]
+    prompt: >-
+      Container A holds $1$ mole of helium at $300\,\text{K}$. Container B holds $2$ moles of helium at $300\,\text{K}$, in twice the volume. Which statement is correct?
+    choices:
+      - text: >-
+          Both have the same pressure and the same mean energy per atom; B has twice the internal energy.
+        correct: true
+        feedback: >-
+          Correct, and this is the distinction to carry forward. Temperature measures energy **per particle**, internal energy the **total**. Doubling $N$ and $V$ together leaves $P = Nk_BT/V$ unchanged.
+      - text: >-
+          B has twice the pressure, because it holds twice as many atoms.
+        feedback: >-
+          The number of atoms alone does not set the pressure; the density does. B has twice the atoms in twice the volume, so $N/V$, and with it $P$, is unchanged.
+        misconception: MC-doubling-doubles-everything
+      - text: >-
+          B has twice the temperature, because it has twice the internal energy.
+        feedback: >-
+          The most common confusion in the subject. Temperature tracks the mean energy per particle; twice the energy spread over twice the particles leaves the mean, and so the temperature, where it was.
+        misconception: MC-temperature-total-energy
+      - text: >-
+          A has the higher pressure, because its atoms are more crowded.
+        feedback: >-
+          They are not more crowded. Both containers have the same number density $N/V$, which is what crowded means here.
+
+  - id: Q-4.1-double-mass
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-4.1-2]
+    prompt: >-
+      You double the mass of every particle while holding the temperature and the density fixed. What happens to the pressure?
+    choices:
+      - text: >-
+          It is unchanged, because the heavier particles move more slowly by exactly the compensating factor.
+        correct: true
+        feedback: >-
+          Exactly. $P = Nm\langle v_x^2\rangle/V$, and equipartition fixes $m\langle v_x^2\rangle = k_BT$, so the mass cancels. Heavier particles hit harder but less often, and the two effects cancel exactly, not approximately.
+      - text: >-
+          It doubles, because each collision delivers twice the momentum.
+        feedback: >-
+          Each collision does deliver more momentum, but at fixed temperature the heavier particles are slower, $\langle v_x^2\rangle = k_BT/m$, so they reach the wall less often. Work through $P = Nm\langle v_x^2\rangle/V$ and watch $m$ cancel.
+        misconception: MC-heavier-pushes-harder
+      - text: >-
+          It halves, because the heavier particles move more slowly.
+        feedback: >-
+          You kept the slowing and dropped the heavier punch. Both effects are present, and they cancel.
+      - text: >-
+          It is unchanged, because pressure never depends on what the gas is made of.
+        feedback: >-
+          The conclusion is right but the reason is not. The pressure is independent of mass only for an **ideal** gas; dense real gases differ from one another because their molecules have different sizes and attractions.
+
+  - id: Q-4.1-ten-thousand
+    type: numeric
+    level: mid
+    objectives: [OBJ-4.1-4]
+    prompt: >-
+      A box holds $10\,000$ non-interacting particles in thermal equilibrium. Estimate the relative fluctuation of its pressure, $\sigma_P/\langle P\rangle$, as a decimal fraction.
+    answer: 0.01
+    unit: ''
+    tolerance: 0.05
+    correctFeedback: >-
+      $\sigma_P/\langle P\rangle = N^{-1/2} = 1/100 = 0.01$, one percent. Notice how fast this becomes unmeasurable; for a mole it is about $1.3\cdot10^{-12}$.
+    wrongFeedback: >-
+      The relative fluctuation of a sum of $N$ independent contributions falls as $N^{-1/2}$.
+    commonWrong:
+      - value: 0.0001
+        feedback: >-
+          That is $1/N$. The absolute spread of the sum grows as $\sqrt N$ while the mean grows as $N$, so the ratio falls as $1/\sqrt N$, not $1/N$.
+      - value: 100
+        feedback: >-
+          That is $\sqrt N$, the growth of the absolute spread. Divide by the mean, which grows as $N$.
+
+  - id: Q-4.1-detect
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-4.1-1, OBJ-4.1-4]
+    prompt: >-
+      Which single change would make a gas's pressure fluctuations easiest to detect?
+    choices:
+      - text: >-
+          Measuring a very small sample, so that $N$ is small.
+        correct: true
+        feedback: >-
+          Yes. The relative fluctuation depends on $N$ and essentially nothing else; not on the temperature, the species or the pressure itself. A small $N$ is the only lever.
+      - text: >-
+          Raising the temperature, so the collisions are more violent.
+        feedback: >-
+          Hotter collisions are more violent, but the mean pressure rises in proportion. The **relative** fluctuation is $N^{-1/2}$, whatever the temperature.
+        misconception: MC-violence-sets-fluctuation
+      - text: >-
+          Using heavier molecules, so each impact is larger.
+        feedback: >-
+          The mass cancels out of the pressure at fixed temperature, and out of its relative fluctuation too.
+        misconception: MC-violence-sets-fluctuation
+      - text: >-
+          Compressing the gas, so collisions happen more often.
+        feedback: >-
+          Compression raises both the mean pressure and the absolute fluctuation, and leaves their ratio at $N^{-1/2}$.
+
+  - id: Q-4.1-trust
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-4.1-5]
+    prompt: >-
+      In which situation is the kinetic model of this lesson least trustworthy?
+    choices:
+      - text: >-
+          Helium at $4\,\text{K}$ and high density, close to liquefying.
+        correct: true
+        feedback: >-
+          Right on both counts. High density makes the molecules' size and their mutual forces matter, and low temperature brings in quantum statistics; those are the two failure modes in the model specification.
+      - text: >-
+          Nitrogen at room temperature and atmospheric pressure.
+        feedback: >-
+          This is the model's home ground. The molecules fill about a thousandth of the volume, and quantum effects are utterly negligible.
+      - text: >-
+          Argon in a vacuum chamber at very low density.
+        feedback: >-
+          Low density makes the model **better**. It is exactly the dilute limit in which non-interacting is an excellent description.
+      - text: >-
+          Air in a very large room rather than a small flask.
+        feedback: >-
+          The size of the container does not affect the model's validity; density and temperature do. If anything, a larger $N$ makes the macroscopic description sharper.
+
+  - id: Q-4.1-twenty
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-4.1-1, OBJ-4.1-4]
+    prompt: >-
+      In figure 4.1a with $N = 20$, the pressure measured over short windows sometimes drops to zero. Why?
+    choices:
+      - text: >-
+          During that window no particle happened to strike a wall.
+        correct: true
+        feedback: >-
+          Right. Pressure is momentum delivered to the walls; a window with no bounce delivers none. With few particles that happens often. With thousands, every window catches many bounces, and their total varies little.
+      - text: >-
+          The particles briefly stopped moving.
+        feedback: >-
+          Elastic bounces conserve the kinetic energy exactly, so the particles never slow down. They were moving; they just were not at a wall.
+        misconception: MC-equilibrium-motion-stops
+      - text: >-
+          Some energy was lost in the collisions with the walls.
+        feedback: >-
+          The collisions are elastic: the energy stays fixed to machine precision, which the tests of this model check.
+      - text: >-
+          The simulation step was too long to record the bounces.
+        feedback: >-
+          The reflection is exact and every bounce is counted, whatever the step. The zeros are real: a few particles really do leave the walls alone for a while.
+
+  - id: Q-4.1-box-side
+    type: numeric
+    level: basic
+    objectives: [OBJ-4.1-2]
+    prompt: >-
+      At fixed $N$ and $T$, the side of the two-dimensional box is reduced from $1.0\,\mu\text{m}$ to $0.70\,\mu\text{m}$. By what factor does the pressure change?
+    answer: 2.04
+    unit: ''
+    tolerance: 0.03
+    correctFeedback: >-
+      $PA = Nk_BT$, so $P \propto 1/A = 1/L^2$, and $(1.0/0.70)^2 = 2.04$. Shorter trips between walls and a shorter wall to push on both count.
+    wrongFeedback: >-
+      The pressure goes as $1/A$, and the area of a square box is the side squared.
+    commonWrong:
+      - value: 1.43
+        feedback: >-
+          That is $1/0.70$, one factor of the side. The particles return more often (one factor) and push on a shorter wall (another).
+      - value: 0.49
+        feedback: >-
+          That is how the area changed. The pressure goes the other way: a smaller box, a higher pressure.
+
+  - id: Q-4.1-per-particle
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-4.1-3]
+    prompt: >-
+      Two boxes of helium are at the same temperature. The big one holds ten times as many atoms. Which quantity is ten times larger in the big box?
+    choices:
+      - text: >-
+          The internal energy.
+        correct: true
+        feedback: >-
+          Yes. The internal energy is the total, $U = N\langle E\rangle$, and $\langle E\rangle$ is set by the temperature, which is the same. Ten times the atoms, ten times the energy.
+      - text: >-
+          The mean kinetic energy per atom.
+        feedback: >-
+          That is fixed by the temperature alone: $\tfrac32 k_BT$ in three dimensions, the same in both boxes.
+      - text: >-
+          The temperature.
+        feedback: >-
+          The temperature is the same by assumption. It measures the energy per particle, not the total.
+        misconception: MC-temperature-total-energy
+      - text: >-
+          The mean speed of an atom.
+        feedback: >-
+          The speeds follow from the temperature and the mass, both the same, so the speed distributions are identical.
+
+  - id: Q-4.1-internal-energy
+    type: numeric
+    level: mid
+    objectives: [OBJ-4.1-3]
+    prompt: >-
+      Find the internal energy of $2.00\,\text{mol}$ of helium, a monatomic ideal gas, at $300\,\text{K}$. Take $R = 8.314\,\text{J/(mol·K)}$.
+    answer: 7483
+    unit: J
+    tolerance: 0.02
+    correctFeedback: >-
+      $U = \tfrac32 nRT = 1.5\cdot2.00\cdot8.314\cdot300 = 7.48\cdot10^3\,\text{J}$: three quadratic terms per atom, $\tfrac12 k_BT$ each.
+    wrongFeedback: >-
+      Each atom carries $\tfrac32 k_BT$ (three directions of motion), and there are $nN_A$ atoms: $U = \tfrac32 nRT$.
+    commonWrong:
+      - value: 4988
+        feedback: >-
+          That is $nRT$. Each atom has three quadratic terms, so the factor is $\tfrac32$.
+      - value: 3741
+        feedback: >-
+          That is one mole. The container holds two.
+
+  - id: Q-4.1-dense
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-4.1-5]
+    prompt: >-
+      Why does the ideal gas law fail for a dense gas?
+    choices:
+      - text: >-
+          The molecules' own volume and their mutual attraction start to matter.
+        correct: true
+        feedback: >-
+          Right. The model assumed point particles that never feel one another. In a dense gas both assumptions break, and the law needs corrections (module 14).
+      - text: >-
+          Collisions between molecules change the total momentum delivered to the walls.
+        feedback: >-
+          Collisions between molecules conserve momentum and energy, so on their own they do not change the pressure. What breaks is the size of the molecules and the forces between them.
+      - text: >-
+          Equipartition stops holding at high density.
+        feedback: >-
+          Equipartition fails when quantum effects freeze out motion, which is a matter of low temperature, not of density.
+      - text: >-
+          A dense gas has no well-defined temperature.
+        feedback: >-
+          A dense gas in equilibrium has a perfectly good temperature. Its equation of state is what changes.
+
+  - id: Q-4.1-what-it-shows
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-4.1-5]
+    prompt: >-
+      The simulation of this lesson never lets two particles collide. Which claim can it **not** support?
+    choices:
+      - text: >-
+          That a real gas reaches the Maxwell-Boltzmann distribution by itself.
+        correct: true
+        feedback: >-
+          Right. Without collisions between particles the velocities never change except in sign, so the distribution imposed at the start is preserved, never reached. Whether a gas gets there is a separate claim.
+      - text: >-
+          That a gas with Maxwell-Boltzmann velocities exerts the pressure $Nk_BT/A$.
+        feedback: >-
+          This the simulation does support: impose the distribution, measure the wall impulses, and the pressure lands on $Nk_BT/A$.
+      - text: >-
+          That the mass of the particles cancels out of the pressure.
+        feedback: >-
+          This too it supports: four times the mass at the same temperature gives the same measured pressure.
+      - text: >-
+          That the relative fluctuation of the pressure falls as $N^{-1/2}$.
+        feedback: >-
+          Supported as well, for gases drawn at a given temperature; figure 4.1b measures exactly that.

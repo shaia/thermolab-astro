@@ -1,0 +1,416 @@
+# Module 04 review problems, from ThermoLab's problem set (content/en/thermodynamics/04-pressure-problems.md,
+# problems 2–5). ThermoLab kept their solutions with the instructor; this platform publishes worked solutions and
+# rubrics, by the author's decision. Ids are shared with the Hebrew file.
+lang: en
+chapter: 4
+questions:
+  - id: Q-4-bagrut-1
+    type: bagrut
+    title: >-
+      Argon in a sealed vessel
+    prompt: >-
+      A sealed rigid vessel of volume $2.0\,\text{L}$ holds $N = 5.0\cdot10^{22}$ argon atoms at $300\,\text{K}$. Take $k_B = 1.381\cdot10^{-23}\,\text{J/K}$ and the atomic mass unit $u = 1.661\cdot10^{-27}\,\text{kg}$.
+    parts:
+      - label: a
+        type: numeric
+        points: 5
+        objectives: [OBJ-4.1-2]
+        prompt: >-
+          Find the pressure in the vessel.
+        answer: 1.036e5
+        unit: Pa
+        tolerance: 0.03
+        correctFeedback: >-
+          $P = Nk_BT/V = 5.0\cdot10^{22}\cdot1.381\cdot10^{-23}\cdot300/2.0\cdot10^{-3} = 1.04\cdot10^5\,\text{Pa}$, about one atmosphere.
+        wrongFeedback: >-
+          Use $PV = Nk_BT$ with the volume in cubic metres.
+        commonWrong:
+          - value: 103.6
+            feedback: >-
+              That is the volume in litres. $2.0\,\text{L} = 2.0\cdot10^{-3}\,\text{m}^3$.
+      - label: b
+        type: open
+        points: 8
+        objectives: [OBJ-4.1-2, OBJ-4.1-3]
+        prompt: >-
+          The gas is heated to $600\,\text{K}$. Find the new pressure, the new mean kinetic energy per atom and the new internal energy. Which of the three doubled, and why?
+        solution:
+          - kind: law
+            text: >-
+              $PV = Nk_BT$; equipartition for three directions of motion, $\langle E\rangle = \tfrac32 k_BT$; the internal energy is the total, $U = N\langle E\rangle$.
+          - kind: manipulation
+            text: >-
+              The vessel is rigid and sealed, so $N$ and $V$ are fixed, and each of $P$, $\langle E\rangle$ and $U$ is proportional to $T$. Doubling $T$ doubles all three.
+          - kind: substitution
+            text: >-
+              $P = 2\cdot1.04\cdot10^5 = 2.07\cdot10^5\,\text{Pa}$; $\langle E\rangle = 1.5\cdot1.381\cdot10^{-23}\cdot600 = 1.24\cdot10^{-20}\,\text{J}$ (it was $6.21\cdot10^{-21}\,\text{J}$); $U = 5.0\cdot10^{22}\cdot1.24\cdot10^{-20} = 621\,\text{J}$ (it was $311\,\text{J}$).
+          - kind: units
+            text: >-
+              $\text{J/K}\cdot\text{K} = \text{J}$ for the energies; $\text{J/m}^3 = \text{Pa}$ for the pressure.
+          - kind: result
+            text: >-
+              $P = 2.07\cdot10^5\,\text{Pa}$, $\langle E\rangle = 1.24\cdot10^{-20}\,\text{J}$, $U = 621\,\text{J}$. All three doubled, because at fixed $N$ and $V$ each is proportional to the temperature.
+        rubric:
+          - text: >-
+              The pressure doubles to $2.07\cdot10^5\,\text{Pa}$.
+          - text: >-
+              $\langle E\rangle = \tfrac32 k_BT = 1.24\cdot10^{-20}\,\text{J}$.
+          - text: >-
+              $U = N\langle E\rangle = 621\,\text{J}$.
+          - text: >-
+              The reason: at fixed $N$ and $V$, all three are proportional to $T$.
+            weight: 2
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-4.1-2, OBJ-4.1-3]
+        prompt: >-
+          The argon is replaced by the same number of helium atoms, at $600\,\text{K}$, in the same vessel. Which of the quantities in (b) change?
+        choices:
+          - text: >-
+              None of them; only the speeds of the atoms change.
+            correct: true
+            feedback: >-
+              Right. $P$, $\langle E\rangle$ and $U$ depend on $N$, $V$ and $T$, not on the mass. The lighter helium atoms are faster, by exactly enough.
+          - text: >-
+              The pressure falls, because helium atoms are lighter.
+            feedback: >-
+              Lighter atoms deliver less momentum per bounce, but they bounce more often, and the two effects cancel.
+            misconception: MC-heavier-pushes-harder
+          - text: >-
+              The mean kinetic energy per atom falls, because helium atoms are lighter.
+            feedback: >-
+              The mean kinetic energy per atom is $\tfrac32 k_BT$, fixed by the temperature alone.
+          - text: >-
+              All three fall, by the ratio of the masses.
+            feedback: >-
+              None of the three depends on the mass, only on $N$, $V$ and $T$.
+            misconception: MC-heavier-pushes-harder
+      - label: d
+        type: open
+        points: 8
+        objectives: [OBJ-4.1-2]
+        prompt: >-
+          Find the root-mean-square speeds of helium ($4.00\,u$) and argon ($39.95\,u$) atoms at $600\,\text{K}$, and show from $P = Nm\langle v_x^2\rangle/V$ that the two gases exert the same pressure. Check your result in a limit.
+        solution:
+          - kind: law
+            text: >-
+              $P = Nm\langle v_x^2\rangle/V$, and equipartition, $\tfrac12 m\langle v^2\rangle = \tfrac32 k_BT$, so $v_{\text{rms}} = \sqrt{3k_BT/m}$.
+          - kind: manipulation
+            text: >-
+              $m\langle v_x^2\rangle = k_BT$ whatever the mass, so $P = Nk_BT/V$ is the same for both gases. The speeds scale as $m^{-1/2}$: $v_{\text{He}}/v_{\text{Ar}} = \sqrt{m_{\text{Ar}}/m_{\text{He}}}$.
+          - kind: substitution
+            text: >-
+              $v_{\text{He}} = \sqrt{3\cdot1.381\cdot10^{-23}\cdot600/(4.00\cdot1.661\cdot10^{-27})} = 1.93\cdot10^3\,\text{m/s}$, $v_{\text{Ar}} = 612\,\text{m/s}$; the ratio is $\sqrt{39.95/4.00} = 3.16$.
+          - kind: limit
+            text: >-
+              As $m \to \infty$ at fixed $T$, $v_{\text{rms}} \to 0$ but $m\langle v_x^2\rangle$ stays $k_BT$: infinitely heavy atoms standing almost still still exert the full pressure. As $T \to 0$, both the speeds and the pressure go to zero, where the model fails anyway.
+          - kind: units
+            text: >-
+              $\sqrt{\text{J}/\text{kg}} = \sqrt{\text{m}^2/\text{s}^2} = \text{m/s}$.
+          - kind: result
+            text: >-
+              $v_{\text{He}} = 1.93\cdot10^3\,\text{m/s}$, $v_{\text{Ar}} = 612\,\text{m/s}$, a ratio of $3.16$; the pressures are equal, $2.07\cdot10^5\,\text{Pa}$.
+        rubric:
+          - text: >-
+              $v_{\text{rms}} = \sqrt{3k_BT/m}$, with both values correct.
+          - text: >-
+              Shows that $m\langle v_x^2\rangle = k_BT$ makes the pressure independent of the mass.
+            weight: 2
+          - text: >-
+              A limit check, for example $m \to \infty$ at fixed $T$.
+
+  - id: Q-4-bagrut-2
+    type: bagrut
+    title: >-
+      The mass paradox
+    prompt: >-
+      Two identical containers hold the same number of particles at the same temperature. The particles in container B are four times as massive as those in container A.
+    parts:
+      - label: a
+        type: mc
+        points: 4
+        objectives: [OBJ-4.1-2]
+        prompt: >-
+          What is the ratio of the root-mean-square speeds, $v_B/v_A$?
+        choices:
+          - text: >-
+              $1/2$
+            correct: true
+            feedback: >-
+              Right. At equal temperature, $m\langle v^2\rangle$ is equal, so $v \propto m^{-1/2}$ and four times the mass halves the speed.
+          - text: >-
+              $1/4$
+            feedback: >-
+              That would make $m v$ equal. Equipartition fixes $m\langle v^2\rangle$, so the speed scales as $m^{-1/2}$.
+          - text: >-
+              $1$
+            feedback: >-
+              Equal temperature means equal mean kinetic energy, not equal speed.
+          - text: >-
+              $2$
+            feedback: >-
+              Heavier particles are slower at the same temperature, not faster.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-4.1-2]
+        prompt: >-
+          By what factor does the momentum a particle delivers to a wall in one bounce, on average, differ between B and A?
+        answer: 2
+        unit: ''
+        tolerance: 0.03
+        correctFeedback: >-
+          A bounce delivers $2m|v_x|$: four times the mass at half the speed, so twice the momentum.
+        wrongFeedback: >-
+          Multiply the mass ratio by the speed ratio.
+        commonWrong:
+          - value: 4
+            feedback: >-
+              That is only the mass ratio. The heavier particles are also slower, by a factor of two.
+          - value: 1
+            feedback: >-
+              The momentum per bounce does change: it is the bounce rate that compensates.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-4.1-2]
+        prompt: >-
+          By what factor does the number of bounces per second on a given wall differ between B and A?
+        answer: 0.5
+        unit: ''
+        tolerance: 0.03
+        correctFeedback: >-
+          A particle returns to the same wall every $2L_x/|v_x|$, so the rate goes as the speed: half.
+        wrongFeedback: >-
+          The time between two bounces on the same wall is $2L_x/|v_x|$.
+        commonWrong:
+          - value: 0.25
+            feedback: >-
+              The rate goes as the speed, $m^{-1/2}$, not as $1/m$.
+          - value: 2
+            feedback: >-
+              Slower particles return less often, not more.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-4.1-2, OBJ-4.1-3]
+        prompt: >-
+          Show that the pressures in A and B are equal, and name the two effects that cancel. Then compare the containers at equal particle **speeds** instead of equal temperature: what is $P_B/P_A$, and what does that say about the quantity pressure really tracks? Check a limit.
+        solution:
+          - kind: law
+            text: >-
+              $P = Nm\langle v_x^2\rangle/V$, from the momentum each bounce delivers times the rate of bounces.
+          - kind: manipulation
+            text: >-
+              At equal $T$: each bounce delivers twice the momentum (b) and bounces come half as often (c), so the product, and $P$, is unchanged; equivalently $m\langle v_x^2\rangle = k_BT$ for both. At equal speeds: $P \propto m$, so $P_B/P_A = 4$.
+          - kind: manipulation
+            text: >-
+              In both cases $P$ follows $m\langle v_x^2\rangle$, the kinetic energy per particle: for a monatomic gas $P = \tfrac23 U/V$. Pressure tracks the kinetic-energy density, which at fixed $N/V$ is the temperature.
+          - kind: limit
+            text: >-
+              For equal masses both comparisons give $P_B/P_A = 1$, as they must. At fixed speed, as $m \to 0$ the momentum per bounce vanishes and $P \to 0$; at fixed temperature it does not, because the speeds grow as $m^{-1/2}$.
+          - kind: units
+            text: >-
+              $Nm\langle v_x^2\rangle/V$: $\text{kg}\cdot\text{m}^2\text{s}^{-2}/\text{m}^3 = \text{J/m}^3 = \text{Pa}$.
+          - kind: result
+            text: >-
+              At equal temperature $P_A = P_B$ (twice the momentum per bounce, half as many bounces); at equal speed $P_B = 4P_A$. Pressure tracks the kinetic energy per unit volume, $P = \tfrac23 U/V$.
+        rubric:
+          - text: >-
+              Equal pressures at equal temperature, from $m\langle v_x^2\rangle = k_BT$ or from the two factors of (b) and (c).
+            weight: 2
+          - text: >-
+              Names the two effects: more momentum per bounce, fewer bounces.
+          - text: >-
+              $P_B/P_A = 4$ at equal speeds.
+          - text: >-
+              Concludes that pressure tracks the kinetic-energy density.
+          - text: >-
+              A limit check, for example equal masses or $m \to 0$ at fixed speed.
+
+  - id: Q-4-bagrut-3
+    type: bagrut
+    title: >-
+      How steady is steady?
+    prompt: >-
+      The relative fluctuation of the pressure of an ideal gas is $\sigma_P/\langle P\rangle \simeq N^{-1/2}$. Air at room temperature is at $1.013\cdot10^5\,\text{Pa}$ and $300\,\text{K}$; take $k_B = 1.381\cdot10^{-23}\,\text{J/K}$.
+    parts:
+      - label: a
+        type: numeric
+        points: 5
+        objectives: [OBJ-4.1-4]
+        prompt: >-
+          A pressure gauge resolves one part in $10^4$. Above what number of molecules does it read a perfectly steady pressure?
+        answer: 1.0e8
+        unit: ''
+        tolerance: 0.05
+        correctFeedback: >-
+          $N^{-1/2} < 10^{-4}$ gives $N > 10^8$.
+        wrongFeedback: >-
+          Set $N^{-1/2}$ equal to the resolution and solve for $N$.
+        commonWrong:
+          - value: 1.0e4
+            feedback: >-
+              That makes $1/N$ equal to the resolution. The fluctuation is $1/\sqrt N$, so $N$ is the resolution to the power $-2$.
+      - label: b
+        type: numeric
+        points: 5
+        objectives: [OBJ-4.1-4]
+        prompt: >-
+          A cubic micrometre of air holds about $2.5\cdot10^7$ molecules. Estimate its relative pressure fluctuation.
+        answer: 2.0e-4
+        unit: ''
+        tolerance: 0.05
+        correctFeedback: >-
+          $1/\sqrt{2.5\cdot10^7} = 2.0\cdot10^{-4}$: two parts in ten thousand, at the edge of what the gauge in (a) could see.
+        wrongFeedback: >-
+          Take $N^{-1/2}$.
+        commonWrong:
+          - value: 4.0e-8
+            feedback: >-
+              That is $1/N$. The spread of a sum of $N$ terms grows as $\sqrt N$ while the mean grows as $N$.
+      - label: c
+        type: open
+        points: 8
+        objectives: [OBJ-4.1-1, OBJ-4.1-4]
+        prompt: >-
+          Take the smallest sample in which pressure is still a useful notion to be the one whose fluctuation reaches $1\%$. Estimate its volume for room air, and compare with a bacterium, about $1\,\mu\text{m}$ across.
+        solution:
+          - kind: law
+            text: >-
+              $\sigma_P/\langle P\rangle = N^{-1/2}$, and $V = Nk_BT/P$ for the volume that holds $N$ molecules.
+          - kind: manipulation
+            text: >-
+              $N = (0.01)^{-2} = 10^4$, then $V = Nk_BT/P$ and the side of the cube $\ell = V^{1/3}$.
+          - kind: substitution
+            text: >-
+              $V = 10^4\cdot1.381\cdot10^{-23}\cdot300/1.013\cdot10^5 = 4.1\cdot10^{-22}\,\text{m}^3$, so $\ell = 74\,\text{nm}$. A bacterium's volume, about $10^{-18}\,\text{m}^3$, is about $2.4\cdot10^3$ times larger and holds $2.4\cdot10^7$ molecules: a fluctuation of $2\cdot10^{-4}$.
+          - kind: units
+            text: >-
+              $\text{J/K}\cdot\text{K}/\text{Pa} = \text{m}^3$.
+          - kind: result
+            text: >-
+              About $4\cdot10^{-22}\,\text{m}^3$, a cube $74\,\text{nm}$ across, some two thousand times smaller than a bacterium. On a bacterium's scale the air pressure is already steady to $0.02\%$.
+        rubric:
+          - text: >-
+              $N = 10^4$ from the $1\%$ condition.
+          - text: >-
+              $V \approx 4\cdot10^{-22}\,\text{m}^3$, a cube of about $74\,\text{nm}$.
+          - text: >-
+              A sensible comparison with the bacterium (a factor of about $10^3$ in volume).
+      - label: d
+        type: open
+        points: 7
+        objectives: [OBJ-4.1-1, OBJ-4.1-4]
+        prompt: >-
+          Explain why the answer to (c) is a statement about $N$ rather than about length. Support it with argon at ten atmospheres and $300\,\text{K}$, and check the law in a limit.
+        solution:
+          - kind: law
+            text: >-
+              The fluctuation depends on $N$ alone; a length enters only through the number density, $N = nV$.
+          - kind: manipulation
+            text: >-
+              At ten times the density, the same $N = 10^4$ fits in a tenth of the volume, so the "smallest useful sample" shrinks by $10^{1/3} = 2.15$ in length.
+          - kind: substitution
+            text: >-
+              $V = 10^4\cdot1.381\cdot10^{-23}\cdot300/1.013\cdot10^6 = 4.1\cdot10^{-23}\,\text{m}^3$, a cube $34\,\text{nm}$ across, against $74\,\text{nm}$ at one atmosphere.
+          - kind: limit
+            text: >-
+              As $N \to \infty$ the fluctuation vanishes: the thermodynamic limit, in which pressure is a sharp property. At $N = 1$ it is $100\%$: a single molecule has no steady pressure at all.
+          - kind: result
+            text: >-
+              "Macroscopic" means a large $N$, not a large size: denser argon reaches $1\%$ steadiness in a cube $34\,\text{nm}$ across instead of $74\,\text{nm}$.
+        rubric:
+          - text: >-
+              States that only $N$ enters the fluctuation, length only through the density.
+            weight: 2
+          - text: >-
+              The argon example, about $34\,\text{nm}$.
+          - text: >-
+              A limit check: $N \to \infty$ or $N = 1$.
+
+  - id: Q-4-bagrut-4
+    type: bagrut
+    title: >-
+      Where the model breaks
+    prompt: >-
+      The derivation of the ideal gas law assumed point particles that never interact. Consider argon at $300\,\text{K}$ and $1.013\cdot10^5\,\text{Pa}$; an argon atom is about $0.34\,\text{nm}$ across. Take $k_B = 1.381\cdot10^{-23}\,\text{J/K}$, $h = 6.626\cdot10^{-34}\,\text{J·s}$ and an argon atom's mass $6.64\cdot10^{-26}\,\text{kg}$.
+    parts:
+      - label: a
+        type: numeric
+        points: 6
+        objectives: [OBJ-4.1-5]
+        prompt: >-
+          Estimate the fraction of the volume the atoms themselves occupy.
+        answer: 5.0e-4
+        unit: ''
+        tolerance: 0.06
+        correctFeedback: >-
+          $n = P/k_BT = 2.45\cdot10^{25}\,\text{m}^{-3}$ and one atom fills $\tfrac{\pi}{6}d^3 = 2.06\cdot10^{-29}\,\text{m}^3$, so the fraction is $5.0\cdot10^{-4}$: neglecting the atoms' size is an excellent approximation here.
+        wrongFeedback: >-
+          Multiply the number density $n = P/k_BT$ by the volume of one atom, $\tfrac{\pi}{6}d^3$.
+        commonWrong:
+          - value: 4.0e-3
+            feedback: >-
+              That uses the diameter as the radius: the volume of a sphere of diameter $d$ is $\tfrac{\pi}{6}d^3$.
+      - label: b
+        type: mc
+        points: 5
+        objectives: [OBJ-4.1-5]
+        prompt: >-
+          At fixed $N$, $V$ and $T$, does the attraction between atoms raise or lower the pressure compared with the ideal value?
+        choices:
+          - text: >-
+              Lowers it: an atom about to hit the wall is pulled back by the atoms behind it.
+            correct: true
+            feedback: >-
+              Right. The atoms near the wall are pulled inward by their neighbours, so they deliver less momentum: this is the $a$ term of the van der Waals equation (module 14).
+          - text: >-
+              Raises it: attraction pulls the atoms together and the gas pushes harder.
+            feedback: >-
+              Pulling the atoms together is the opposite of pushing on the wall: the attraction acts against the momentum delivered.
+          - text: >-
+              Has no effect: only the collisions with the wall matter.
+            feedback: >-
+              The forces between atoms change the momentum with which atoms reach the wall, so they matter.
+          - text: >-
+              Raises it: the atoms speed up as they approach one another.
+            feedback: >-
+              At a given temperature the mean kinetic energy is fixed; near the wall, the net pull of the other atoms points inward.
+      - label: c
+        type: open
+        points: 14
+        objectives: [OBJ-4.1-5]
+        prompt: >-
+          Two students disagree. One says the ideal gas law fails at low temperature because the atoms move too slowly to hit the walls often. The other says it fails because attraction and quantum statistics become important. Decide between them, estimate how far room-temperature argon is from the quantum regime, and say what happens to the model's validity as $T \to \infty$ at fixed density and as the density $\to 0$ at fixed $T$.
+        solution:
+          - kind: law
+            text: >-
+              In the model $P = Nk_BT/V$ holds at any speed; the model fails when its assumptions do: no forces between atoms (compare the attraction energy with $k_BT$), and classical particles (compare the thermal wavelength $\lambda = h/\sqrt{2\pi m k_BT}$ with the spacing $n^{-1/3}$).
+          - kind: manipulation
+            text: >-
+              The first student is wrong: slower atoms hit less often and more softly, and the pressure falls in proportion to $T$, which is exactly what the ideal gas law says. The second is right: at low $T$ the attraction is no longer small against $k_BT$, and $\lambda$ grows as $T^{-1/2}$ until it reaches the spacing.
+          - kind: substitution
+            text: >-
+              $\lambda = 6.626\cdot10^{-34}/\sqrt{2\pi\cdot6.64\cdot10^{-26}\cdot1.381\cdot10^{-23}\cdot300} = 1.6\cdot10^{-11}\,\text{m}$, against a spacing $n^{-1/3} = 3.4\cdot10^{-9}\,\text{m}$: a ratio of $5\cdot10^{-3}$, deep in the classical regime.
+          - kind: limit
+            text: >-
+              $T \to \infty$ at fixed density: $k_BT$ dwarfs the attraction and $\lambda \to 0$, so the gas becomes ever more ideal. Density $\to 0$ at fixed $T$: the atoms are ever farther apart, their size and attraction stop mattering and the spacing dwarfs $\lambda$; ideal again. The law fails only toward low $T$ and high density.
+          - kind: units
+            text: >-
+              $\lambda$: $\text{J·s}/\sqrt{\text{kg}\cdot\text{J}} = \text{J·s}/(\text{kg}\cdot\text{m/s}) = \text{m}$.
+          - kind: result
+            text: >-
+              The second student is right. Room-temperature argon has $\lambda/n^{-1/3} \approx 5\cdot10^{-3}$, far from quantum effects; the ideal gas law improves as $T \to \infty$ and as the density $\to 0$, and fails toward low $T$ and high density.
+        rubric:
+          - text: >-
+              Rejects the first argument: slowness alone does not break $P = Nk_BT/V$.
+            weight: 2
+          - text: >-
+              Names attraction (against $k_BT$) and quantum statistics ($\lambda$ against the spacing).
+            weight: 2
+          - text: >-
+              $\lambda \approx 1.6\cdot10^{-11}\,\text{m}$ against a spacing of about $3.4\,\text{nm}$.
+          - text: >-
+              Both limits: ideal as $T \to \infty$ and as the density $\to 0$.

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
+import { ui, type Lang } from '~/i18n';
 import { progress } from '~/progress/store';
 
 interface PredictData {
@@ -13,7 +14,8 @@ const endSentence = (html: string) => (/[.?!]\s*$/.test(html) ? html : `${html}.
  * "Your prediction vs what you found": closes the loop the lesson's <Predict> opened.
  * Reads the choices from the JSON the matching <Predict> left on the page.
  */
-export default function Revisit({ id }: { id: string }) {
+export default function Revisit({ id, lang }: { id: string; lang: Lang }) {
+  const s = ui(lang).revisit;
   const [data, setData] = useState<PredictData | null>(null);
   useEffect(() => {
     const el = document.querySelector(`script[data-predict="${CSS.escape(id)}"]`);
@@ -23,22 +25,19 @@ export default function Revisit({ id }: { id: string }) {
   // would never hydrate. This empty box is what the server sends and what it observes.
   if (!data) return <div class="revisit" aria-hidden="true" />;
   const saved = progress.value.predictions[id];
-  if (!saved) {
-    return <p class="revisit hand">בתחילת השיעור לא נרשם חיזוי. אפשר לחזור למעלה ולנסות, גם עכשיו.</p>;
-  }
+  if (!saved) return <p class="revisit hand">{s.none}</p>;
   const mine = Number(saved.choice);
   const right = mine === data.answer;
   return (
     <div class={`revisit ${right ? 'right' : 'wrong'}`}>
       <p class="hand">
-        החיזוי שלכם בתחילת השיעור: <span dangerouslySetInnerHTML={{ __html: data.choices[mine] ?? '' }} />
+        {s.yours} <span dangerouslySetInnerHTML={{ __html: data.choices[mine] ?? '' }} />
       </p>
       {right ? (
-        <p>והאינטואיציה צדקה. עכשיו יש לכם גם את ההסבר.</p>
+        <p>{s.right}</p>
       ) : (
         <p>
-          מה שגיליתם: <span dangerouslySetInnerHTML={{ __html: endSentence(data.choices[data.answer]) }} /> חיזוי שגוי הוא חלק מהלמידה:
-          טעות שמתגלה בניסוי נזכרת הרבה יותר טוב מכלל שנאמר בהרצאה.
+          {s.found} <span dangerouslySetInnerHTML={{ __html: endSentence(data.choices[data.answer]) }} /> {s.wrongNote}
         </p>
       )}
     </div>

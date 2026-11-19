@@ -33,7 +33,7 @@ export function renderQuestion(q: Question): Question {
         type: 'twotier',
         choices: choices(q.choices, 'choices'),
         reasons: choices(q.reasons, 'reasons'),
-        reasonPrompt: t(q.reasonPrompt, 'reasonPrompt'),
+        reasonPrompt: q.reasonPrompt === undefined ? undefined : t(q.reasonPrompt, 'reasonPrompt'),
       } as Question;
     case 'numeric':
       return {

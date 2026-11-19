@@ -11,10 +11,13 @@ import '@fontsource/heebo/latin-400.css';
 import '@fontsource/heebo/latin-500.css';
 import '@fontsource/playpen-sans-hebrew/hebrew-400.css';
 import '@fontsource/playpen-sans-hebrew/hebrew-500.css';
+import '@fontsource/playpen-sans-hebrew/latin-400.css';
+import '@fontsource/playpen-sans-hebrew/latin-500.css';
 import 'katex/dist/katex.min.css';
 import '~/styles/global.css';
 import SiteHeader from '~/ui/SiteHeader.astro';
 import { url } from '~/lib/url';
+import { dirOf, langOf, otherLang, swapLang, ui } from '~/i18n';
 
 interface Props {
   title: string;
@@ -23,24 +26,27 @@ interface Props {
   bare?: boolean;
 }
 
-const { title, description = 'קורס אינטראקטיבי במכניקה וביחסות פרטית, שנה א׳ באוניברסיטה', bare = false } = Astro.props;
-const siteName = 'מכניקה ויחסות פרטית';
-const fullTitle = title === siteName ? title : `${title} · ${siteName}`;
+const lang = langOf(Astro.url.pathname);
+const s = ui(lang);
+const { title, description = s.siteDescription, bare = false } = Astro.props;
+const fullTitle = title === s.siteName ? title : `${title} · ${s.siteName}`;
+const other = otherLang(lang);
 ---
 
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang={lang} dir={dirOf(lang)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <link rel="alternate" hreflang={other} href={swapLang(Astro.url.pathname, other)} />
     <title>{fullTitle}</title>
     <script is:inline>
       // Apply the reader's theme and still mode before first paint, so nothing flashes.
       // Storage can throw (private windows, blocked site data): the defaults then stand.
       try {
-        var s = JSON.parse(localStorage.getItem('unimech:settings') || '{}');
+        var s = JSON.parse(localStorage.getItem('thermolab:settings') || '{}');
         var r = document.documentElement;
         if (s.theme === 'light' || s.theme === 'dark') r.dataset.theme = s.theme;
         r.dataset.still = s.still ? '1' : '0';
@@ -48,9 +54,10 @@ const fullTitle = title === siteName ? title : `${title} · ${siteName}`;
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#main">דלגו לתוכן</a>
+    <a class="skip-link" href="#main">{s.skip}</a>
     {!bare && <SiteHeader />}
-    <main id="main">
+    <!-- data-pagefind-body: the search index reads page content only, never the header or settings -->
+    <main id="main" data-pagefind-body>
       <slot />
     </main>
   </body>

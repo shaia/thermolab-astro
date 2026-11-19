@@ -41,7 +41,7 @@ export interface ProgressState {
   tasks: Record<string, number>;
 }
 
-const KEY = 'unimech:v1';
+const KEY = 'thermolab:v1';
 
 export function emptyProgress(): ProgressState {
   return { version: 1, createdAt: Date.now(), predictions: {}, attempts: [], lessons: {}, tasks: {} };
@@ -129,18 +129,23 @@ export function markTask(id: string) {
 }
 
 export function exportProgress(): string {
-  return JSON.stringify({ ...progress.value, exportedAt: new Date().toISOString(), app: 'unimech' }, null, 2);
+  return JSON.stringify({ ...progress.value, exportedAt: new Date().toISOString(), app: 'thermolab' }, null, 2);
 }
 
 /** Merge an imported file into the current progress; attempts are de-duplicated by (qid, at). */
-export function importProgress(text: string): { ok: true } | { ok: false; error: string } {
+const IMPORT_ERRORS = {
+  en: { json: 'The file is not valid JSON.', course: 'The file is not a progress file of this course.' },
+  he: { json: 'הקובץ אינו JSON תקין.', course: 'הקובץ אינו קובץ התקדמות של הקורס.' },
+};
+
+export function importProgress(text: string, lang: 'en' | 'he' = 'he'): { ok: true } | { ok: false; error: string } {
   let parsed: ProgressState | null = null;
   try {
     parsed = parseProgress(JSON.parse(text));
   } catch {
-    return { ok: false, error: 'הקובץ אינו JSON תקין.' };
+    return { ok: false, error: IMPORT_ERRORS[lang].json };
   }
-  if (!parsed) return { ok: false, error: 'הקובץ אינו קובץ התקדמות של הקורס.' };
+  if (!parsed) return { ok: false, error: IMPORT_ERRORS[lang].course };
   const cur = progress.value;
   const seen = new Set(cur.attempts.map((a) => `${a.qid}@${a.at}`));
   const attempts = [...cur.attempts, ...parsed.attempts.filter((a) => !seen.has(`${a.qid}@${a.at}`))].sort(

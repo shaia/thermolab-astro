@@ -1,20 +1,22 @@
 ---
 /**
- * A book spread: text on the right page, a live figure on the left page that stays in view
- * while the text scrolls. Steps in the text drive the figure (src/ui/steps.ts).
- * On narrow screens the figure comes first and the text follows.
+ * A book spread: text on one page, a live figure on the facing page that stays in view while the
+ * text scrolls. Steps in the text drive the figure (src/ui/steps.ts). The text page is the one a
+ * reader meets first, so it is on the right in Hebrew and on the left in English; the grid follows
+ * the page direction. On narrow screens the figure comes first and the text follows.
  *
  * The figure is an .astro wrapper the lesson imports (it hydrates its own island), e.g.
- *   import LinearizeLab from '~/sims/LinearizeLab.astro';
- *   <Spread fig="fig-0-4a" n="0.4א" caption="…" figure={LinearizeLab} figureProps={{ dataset: 'fall' }}>
- * Spread passes `id={fig}` to it. Without `figure`, the named slot "figure" is used.
+ *   import GasBox from '~/sims/GasBox.astro';
+ *   <Spread fig="fig-4-1a" n="4.1a" caption="…" figure={GasBox} figureProps={{ n: 60 }}>
+ * Spread passes `id={fig}` and `lang` to it. Without `figure`, the named slot "figure" is used.
  */
 import { tex } from '~/lib/tex';
+import { langOf, ui } from '~/i18n';
 
 interface Props {
   /** figure id: the step bus key, also the anchor */
   fig: string;
-  /** figure number as printed, e.g. "1.5א" */
+  /** figure number as printed, e.g. "4.1a" / "4.1א" */
   n: string;
   caption: string;
   // an Astro component; typed loosely because each figure has its own props
@@ -23,6 +25,7 @@ interface Props {
 }
 
 const { fig, n, caption, figure: Figure, figureProps = {} } = Astro.props;
+const lang = langOf(Astro.url.pathname);
 const captionHtml = tex(caption, `figure ${n} caption`);
 ---
 
@@ -33,10 +36,10 @@ const captionHtml = tex(caption, `figure ${n} caption`);
   <div class="page page-figure">
     <figure class="fig" id={fig}>
       <div class="fig-body">
-        {Figure ? <Figure {...figureProps} id={fig} /> : <slot name="figure" />}
+        {Figure ? <Figure {...figureProps} id={fig} lang={lang} /> : <slot name="figure" />}
       </div>
       <figcaption>
-        <span class="fig-n">איור {n}</span>
+        <span class="fig-n">{ui(lang).lesson.figure} {n}</span>
         <span set:html={captionHtml} />
       </figcaption>
     </figure>

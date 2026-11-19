@@ -1,0 +1,417 @@
+---
+lang: en
+id: '4.1'
+chapter: 4
+order: 1
+title: The microscopic origin of pressure
+subtitle: How a hail of violent, random impacts adds up to a number steady enough to build instruments on
+minutes: 80
+objectives:
+  - id: OBJ-4.1-1
+    text: Explain how a steady macroscopic pressure arises from discrete, irregular molecular impacts.
+  - id: OBJ-4.1-2
+    text: Derive P = N k_B T / V from the momentum that particles transfer to a wall.
+  - id: OBJ-4.1-3
+    text: Distinguish temperature (mean energy per particle) from internal energy (total energy).
+  - id: OBJ-4.1-4
+    text: Predict how relative pressure fluctuations scale with particle number, and justify N^(-1/2).
+  - id: OBJ-4.1-5
+    text: State the assumptions of the ideal-gas kinetic model and the conditions under which it fails.
+prerequisites: ['3.1']
+figures: [fig-4-1a, fig-4-1b]
+---
+
+import GasBox from '~/sims/GasBox.astro';
+import PressureSpread from '~/sims/PressureSpread.astro';
+import Lab from '~/components/Lab.astro';
+
+<Spread
+  fig="fig-4-1a"
+  n="4.1a"
+  caption="A gas of $N$ point particles in a two-dimensional box of side $L$, drawn to scale. Each particle flies straight until it meets a wall and bounces off elastically, and every bounce flashes red on the wall it strikes. With thirty particles or fewer, a teal tail shows each velocity. On the right, the pressure on the walls: the momentum they receive per unit time per unit wall length. The pale jagged line is that pressure over short windows of time; the bold line is its running average since the start; the dashed red line is the ideal-gas value $N k_B T / A$, with $A = L^2$. The readout keeps the result of the previous run for comparison. Simulated time runs about a billion times slower than real time: an argon atom at $300\,\text{K}$ crosses a $1\,\mu\text{m}$ box in about $1.5\,\text{s}$."
+  figure={GasBox}
+  figureProps={{ n: 60, temperature: 300, mass: 1, side: 1, tasks: ['converge', 'few', 'heavy', 'small-box'] }}
+>
+
+<Hook title="Violence underneath, calm on top">
+
+Press your palm against a table and the force you feel is steady. Now press it against the air: the atmosphere pushes back on every square centimetre of your skin with about ten newtons, and that push is steady too, steady enough that a barometer built in 1643 still works today.
+
+But the air is not a smooth fluid. It is about $2.5 \times 10^{19}$ molecules in every cubic centimetre, each moving at hundreds of metres per second, each striking your skin, rebounding and flying off. Nothing about a single collision is gentle or regular: a molecule arrives at a random moment, from a random direction, with a random speed. Every event is violent, random and discrete. How does their sum become a number so steady that we can build instruments on it, and treat it as a *property of the gas*?
+
+The answer has nothing to do with the collisions becoming gentler. It has to do with how *many* of them there are, and it gives the course its first quantitative law of large numbers. This lesson builds the <Term id="kinetic-theory">kinetic theory</Term> of <Term id="pressure">pressure</Term> from one bouncing particle up.
+
+</Hook>
+
+<Predict
+  id="pred-4-1"
+  prompt="You double the mass of every particle in a gas, and keep the temperature, the number of particles and the box the same. Each particle now carries more momentum into every bounce. What happens to the pressure?"
+  choices={[
+    'It doubles: each bounce delivers twice the momentum.',
+    'It rises, but by less than double.',
+    'It stays the same.',
+    'It falls: heavier particles move more slowly.',
+  ]}
+  answer={2}
+>
+
+Check it in figure 4.1a: let the gas run until the bold line settles, then switch to 4× argon at the same temperature and compare the new measurement with the previous run in the readout.
+
+</Predict>
+
+<Explore title="Watch the gauge">
+
+<Step fig="fig-4-1a" set={{ n: 60, temperature: 300, mass: 1, side: 1 }}>
+
+Figure 4.1a holds sixty argon atoms at $300\,\text{K}$ in a box $1\,\mu\text{m}$ across. Watch the left page first: nothing there ever settles. Atoms reach the walls at random moments with random speeds, and every bounce flashes. Now the gauge. The pale trace, the pressure over short windows, jumps by tens of percent from one window to the next. The bold running average wanders at first, then creeps onto the dashed line and stays there.
+
+</Step>
+
+<Step fig="fig-4-1a" set={{ n: 20, temperature: 300, mass: 1, side: 1 }} id="few">
+
+Now twenty atoms. The pale trace swings wildly, sometimes to zero when no atom happens to be at a wall, and the running average takes much longer to find the line. A gauge watching twenty molecules would be a nervous gauge.
+
+</Step>
+
+<Step fig="fig-4-1a" set={{ n: 2000, temperature: 300, mass: 1, side: 1 }} id="many">
+
+Two thousand. Each collision is exactly as violent as before: same atoms, same temperature, same speeds. Yet the pale trace now hugs the dashed line. Nothing about a collision changed; there are simply more of them in every window, and their irregularities cancel. Hold on to that: it is the whole answer to the puzzle, and the second spread makes it quantitative.
+
+</Step>
+
+<Step fig="fig-4-1a" set={{ n: 60, temperature: 300, mass: 4, side: 1 }} id="heavy">
+
+Back to sixty atoms, now four times as heavy, at the same temperature. They visibly slow down, to half the speed. Let the gas run and compare the measurement with the previous run in the readout. **Your prediction gets its answer here:** the pressure is the same. Each heavier atom hits harder, and it hits less often, and the two effects cancel exactly. The derivation will show why exactly, and not approximately.
+
+</Step>
+
+<Step fig="fig-4-1a" set={{ n: 60, temperature: 300, mass: 1, side: 0.7 }} id="small-box">
+
+Finally, shrink the box to a side of $0.7\,\mu\text{m}$, about half the area, at the same $N$ and $T$. The atoms are as fast as before but have less far to go between walls, so they bounce more often, and the wall they push on is shorter. The pressure roughly doubles, as the dashed line says it should.
+
+</Step>
+
+<Lab notebook="04-pressure" />
+
+</Explore>
+
+<Explain title="From one bounce to the ideal gas law" id="derive">
+
+<Step fig="fig-4-1a" set={{ n: 10, temperature: 300, mass: 1, side: 1 }}>
+
+**The model.** $N$ point particles of mass $m$ in a rectangular box with sides $L_x$ and $L_y$. They fly freely and bounce off rigid walls in <Term id="elastic-collision">elastic collisions</Term>, and they never collide with each other. Their velocities are drawn at the start from the <Term id="maxwell-boltzmann">Maxwell-Boltzmann distribution</Term> at temperature $T$. The figure works in two dimensions, so the box's "volume" is its area $A = L_x L_y$ and the "area" of a wall is its length; in three dimensions every step below goes through unchanged, with $V$ in place of $A$.
+
+**One particle, one wall.** Take the wall at $x = L_x$. A particle with velocity component $v_x$ hits it and rebounds with $-v_x$, so its momentum changed by $-2mv_x$, and by momentum conservation the wall received the <Term id="impulse">impulse</Term>
+
+$$
+\Delta p = 2m|v_x|
+$$
+
+</Step>
+
+<Step fig="fig-4-1a" set={{ n: 10, temperature: 300, mass: 1, side: 1 }}>
+
+Before the particle hits the same wall again it must cross the box and come back, a round trip of length $2L_x$, which takes $\Delta t = 2L_x/|v_x|$. So this one particle hands this one wall momentum at the average rate
+
+$$
+F_1 = \frac{\Delta p}{\Delta t} = \frac{2m|v_x|}{2L_x/|v_x|} = \frac{mv_x^2}{L_x}
+$$
+
+Notice what happened: the awkward $|v_x|$ became $v_x^2$. A faster particle hits harder *and* more often, so its speed enters twice. The direction dropped out, and only an energy-like quantity survived: the first hint that pressure is about energy, not about impacts.
+
+</Step>
+
+<Step fig="fig-4-1a" set={{ n: 200, temperature: 300, mass: 1, side: 1 }}>
+
+**All the particles.** Add up the average forces of all $N$ particles on the wall and divide by its length $L_y$:
+
+$$
+P = \frac{1}{L_y}\sum_{i=1}^{N}\frac{mv_{x,i}^2}{L_x} = \frac{m}{A}\sum_{i=1}^{N}v_{x,i}^2 = \frac{Nm\langle v_x^2\rangle}{A}
+$$
+
+where $\langle v_x^2\rangle$ is the average over the particles. This is exact for the model, and it is pure mechanics: no temperature has entered, and it would hold for any distribution of speeds.
+
+</Step>
+
+<Step fig="fig-4-1a" set={{ n: 200, temperature: 300, mass: 4, side: 1 }}>
+
+**Bringing in temperature.** Temperature enters through one more statement, the <Term id="equipartition">equipartition theorem</Term>: in classical thermal equilibrium each quadratic term in the energy carries a mean energy $\tfrac12 k_B T$. For the motion along $x$,
+
+$$
+\tfrac12 m\langle v_x^2\rangle = \tfrac12 k_B T \qquad\Longrightarrow\qquad m\langle v_x^2\rangle = k_B T
+$$
+
+This is a theorem of classical statistical mechanics, not a definition, and it fails when quantum effects freeze a degree of freedom out (module 16). Substituting:
+
+<Formula tex="PA = Nk_BT \qquad PV = Nk_BT" label="The ideal gas law, in two dimensions and in three" />
+
+The mass cancelled. At fixed $T$, a particle four times as heavy has $\langle v_x^2\rangle = k_BT/m$ four times smaller: half the speed. Each bounce delivers $2m|v_x|$, four times the mass at half the speed, so twice the punch; but at half the speed the particle returns half as often. Twice the punch, half as often: the same pressure, which is what figure 4.1a showed. This is the <Term id="ideal-gas-law">ideal gas law</Term>, and every symbol in it is now a statement about molecules.
+
+</Step>
+
+<Step fig="fig-4-1a" set={{ n: 200, temperature: 300, mass: 1, side: 1 }}>
+
+**Temperature is not energy.** The derivation draws a line worth keeping sharp. Temperature fixes the mean energy *per particle*: in two dimensions $\langle E\rangle = k_BT$, in three $\tfrac32 k_BT$. The <Term id="internal-energy">internal energy</Term> is the *total*, $U = N\langle E\rangle$. Two containers at the same temperature have the same mean energy per particle whatever their size; the bigger one simply has more particles, and more internal energy.
+
+<Note kind="warn">
+
+What we have and have not shown. We derived the ideal gas law from mechanics **plus** equipartition, for point particles that never interact. We did not derive it for real gases: at high density the particles' own volume and their mutual attraction both matter, and the law acquires corrections (module 14). Historically the ideal gas law is an empirical law; it is a theorem only inside this model.
+
+</Note>
+
+</Step>
+
+</Explain>
+
+</Spread>
+
+<Spread
+  fig="fig-4-1b"
+  n="4.1b"
+  caption="Three hundred gases, each drawn afresh at $300\,\text{K}$ with $N$ particles in the same box. The energy of each draw differs slightly, as it would for a gas in contact with surroundings at that temperature. Left: how their long-time pressures are spread, as a fraction of the ideal value $N k_B T / A$ (dashed). Right: the relative spread $\sigma_P/\langle P\rangle$ measured at seven particle numbers, on logarithmic axes, against the dashed line $1/\sqrt{N}$; the larger dot is the $N$ shown on the left. The button draws three hundred new gases."
+  figure={PressureSpread}
+  figureProps={{ n: 100, tasks: ['few', 'many'] }}
+>
+
+<Explain title="Why the gauge is steady" id="steady">
+
+<Step fig="fig-4-1b" set={{ n: 10 }}>
+
+Figure 4.1a showed one gas over time. Figure 4.1b asks a sharper question: if you prepare many gases at the same temperature, how much do their pressures differ? Each bar counts gases whose long-time pressure lands in that range. With ten particles, single gases land anywhere from half to one and a half times the ideal value: a <Term id="fluctuation">fluctuation</Term> of about thirty percent.
+
+</Step>
+
+<Step fig="fig-4-1b" set={{ n: 1000 }}>
+
+**Where the $N^{-1/2}$ comes from.** The derivation gave $P = Nm\langle v_x^2\rangle/A$ for one wall. Averaging over all four walls of a square box, the long-time pressure of one gas is
+
+$$
+P = \frac{m}{2A}\sum_{i=1}^{N}\left(v_{x,i}^2 + v_{y,i}^2\right)
+$$
+
+a sum of $2N$ squared velocity components. Each component is an independent Gaussian, so the sum has mean $2N$ times the mean of one square, while its standard deviation grows only as $\sqrt{2N}$: for squared Gaussians the relative spread of the sum is $\sqrt{2/(2N)}$. Therefore
+
+<Formula tex="\frac{\sigma_P}{\langle P\rangle} = \frac{1}{\sqrt{N}}" label="Relative pressure fluctuation, N independent particles" />
+
+Measured in figure 4.1b, the points fall on the line: with a thousand particles the spread is about three percent.
+
+</Step>
+
+<Step fig="fig-4-1b" set={{ n: 10000 }} id="mole">
+
+Ten thousand particles: one percent. The law does not stop. A mole holds $6\times10^{23}$ particles, and $N^{-1/2} \approx 1.3\times10^{-12}$: a jitter in the twelfth decimal place, far below anything an instrument has ever resolved. That is the resolution of the puzzle. The collisions never became gentle; there are simply so many of them that the relative jitter fell below the noise floor of reality.
+
+A quantity is **macroscopic** when its relative fluctuation is negligible for the system at hand. That makes "macroscopic" a statement about $N$, not about size in metres: a droplet of $10^9$ molecules has a perfectly well-defined pressure, while ten molecules in a trap do not.
+
+<Note kind="warn">
+
+What the simulation proves, and what it does not. Numerical agreement supports the derivation; it does not establish it. These particles never collide with each other, so the model cannot *reach* a Maxwell-Boltzmann distribution, only preserve one that was imposed at the start. The figures show that *if* a gas has that distribution, its pressure follows. Whether a real gas gets there is a separate claim, for modules 8 and 11.
+
+</Note>
+
+</Step>
+
+</Explain>
+
+</Spread>
+
+<Page>
+
+<Example id="ex-4-1-1" title="Two containers at the same temperature">
+
+Container A holds $1.00\,\text{mol}$ of helium at $300\,\text{K}$ in $24.9\,\text{L}$. Container B holds $2.00\,\text{mol}$ of helium at $300\,\text{K}$ in $49.8\,\text{L}$.
+
+(a) Find the pressure in each container.
+
+(b) Find the mean kinetic energy per atom, and the internal energy, of each.
+
+<Solution>
+
+**Given:** $N_A = 6.022\cdot10^{23}\,\text{mol}^{-1}$, $k_B = 1.381\cdot10^{-23}\,\text{J/K}$, $T = 300\,\text{K}$; A: $n = 1.00\,\text{mol}$, $V = 2.49\cdot10^{-2}\,\text{m}^3$; B: $n = 2.00\,\text{mol}$, $V = 4.98\cdot10^{-2}\,\text{m}^3$.
+
+**General law:** the ideal gas law in three dimensions, $PV = Nk_BT$, and equipartition: three quadratic terms per atom, so $\langle E\rangle = \tfrac32 k_BT$ and $U = \tfrac32 Nk_BT$.
+
+**Symbolic result:**
+
+$$
+P = \frac{Nk_BT}{V} \qquad \langle E\rangle = \tfrac32 k_BT \qquad U = \tfrac32 Nk_BT
+$$
+
+**Limit check:** as $V \to \infty$ at fixed $N$ the pressure goes to zero, as it must for a gas spread infinitely thin. At fixed $N/V$ the pressure does not depend on the size of the container, which is why doubling $N$ and $V$ together changes nothing. $\langle E\rangle$ depends on $T$ only, so it cannot tell a large container from a small one.
+
+**Units:** $\text{J/K}\cdot\text{K}/\text{m}^3 = \text{J}/\text{m}^3 = \text{N}/\text{m}^2 = \text{Pa}$.
+
+**Substitution:** A: $N = 6.022\cdot10^{23}$, $P = 6.022\cdot10^{23}\cdot1.381\cdot10^{-23}\cdot300/2.49\cdot10^{-2} = 1.00\cdot10^5\,\text{Pa}$. B: twice the atoms in twice the volume, the same $1.00\cdot10^5\,\text{Pa}$. In both, $\langle E\rangle = 1.5\cdot1.381\cdot10^{-23}\cdot300 = 6.21\cdot10^{-21}\,\text{J}$. $U_A = 6.022\cdot10^{23}\cdot6.21\cdot10^{-21} = 3.74\cdot10^3\,\text{J}$ and $U_B = 7.48\cdot10^3\,\text{J}$.
+
+**Result:** (a) $1.00\cdot10^5\,\text{Pa}$ in both. (b) The same mean energy per atom, $6.21\cdot10^{-21}\,\text{J}$, because the temperature is the same; B has twice the internal energy, $7.48\,\text{kJ}$ against $3.74\,\text{kJ}$, because it has twice the atoms.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-4-1-2" title="How small before the gauge twitches?">
+
+A pressure sensor can resolve a relative change of $1\%$. How many molecules must a sample of air hold for its pressure to fluctuate by that much? How large is that sample, at $1.013\cdot10^5\,\text{Pa}$ and $300\,\text{K}$?
+
+<Solution>
+
+**Given:** $\sigma_P/\langle P\rangle = 0.01$, $P = 1.013\cdot10^5\,\text{Pa}$, $T = 300\,\text{K}$, $k_B = 1.381\cdot10^{-23}\,\text{J/K}$.
+
+**General law:** $\sigma_P/\langle P\rangle = N^{-1/2}$, and the ideal gas law $PV = Nk_BT$ for the volume that holds $N$ molecules.
+
+**Symbolic result:**
+
+$$
+N = \left(\frac{\sigma_P}{\langle P\rangle}\right)^{-2} \qquad V = \frac{Nk_BT}{P} \qquad \ell = V^{1/3}
+$$
+
+**Limit check:** as the resolution demanded goes to zero, $N$ grows without bound: any finite sample fluctuates, but the fluctuation vanishes only for an infinite one. At the other end, $N = 1$ gives a $100\%$ fluctuation: one molecule exerts no steady pressure at all, which is exactly the puzzle this lesson started from.
+
+**Units:** $\text{J/K}\cdot\text{K}/\text{Pa} = \text{J}/(\text{N}/\text{m}^2) = \text{m}^3$.
+
+**Substitution:** $N = 0.01^{-2} = 1.0\cdot10^4$ molecules. $V = 1.0\cdot10^4\cdot1.381\cdot10^{-23}\cdot300/1.013\cdot10^5 = 4.09\cdot10^{-22}\,\text{m}^3$, a cube of side $\ell = 7.4\cdot10^{-8}\,\text{m}$.
+
+**Result:** about $10^4$ molecules, a cube of air about $74\,\text{nm}$ across. Any sample a person can see is enormously larger, which is why no one has ever watched the air pressure twitch.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-4-1-3" title="A hail on every square centimetre">
+
+Air at $300\,\text{K}$ and $1.013\cdot10^5\,\text{Pa}$ is mostly nitrogen ($28.0\,u$, with $u = 1.661\cdot10^{-27}\,\text{kg}$). The number of molecules striking a wall per unit area per second is $\Phi = \tfrac14 n\bar v$, where $\bar v = \sqrt{8k_BT/(\pi m)}$ is the mean speed.
+
+(a) How many molecules strike one square centimetre of your skin each second?
+
+(b) What momentum does one impact deliver, on average? Why is it larger than $2m\sqrt{\langle v_x^2\rangle}$?
+
+<Solution>
+
+**Given:** $T = 300\,\text{K}$, $P = 1.013\cdot10^5\,\text{Pa}$, $m = 28.0\cdot1.661\cdot10^{-27} = 4.65\cdot10^{-26}\,\text{kg}$, $k_B = 1.381\cdot10^{-23}\,\text{J/K}$.
+
+**General law:** $n = P/(k_BT)$ from the ideal gas law; the force per area is the impact rate per area times the mean momentum per impact, so $\overline{\Delta p} = P/\Phi$.
+
+**Symbolic result:**
+
+$$
+\Phi = \frac14\,\frac{P}{k_BT}\sqrt{\frac{8k_BT}{\pi m}} \qquad \overline{\Delta p} = \frac{P}{\Phi} = \sqrt{2\pi m k_BT}
+$$
+
+**Limit check:** as $T \to 0$ at fixed $P$, $\Phi \propto T^{-1/2}$ grows while $\overline{\Delta p} \propto T^{1/2}$ shrinks: a cold gas at the same pressure pushes with more, gentler impacts. As $m \to \infty$ at fixed $T$, each impact carries more momentum and they come more rarely, with $P$ unchanged.
+
+**Units:** $\Phi$: $\text{m}^{-3}\cdot\text{m/s} = \text{m}^{-2}\text{s}^{-1}$; $\overline{\Delta p}$: $\sqrt{\text{kg}\cdot\text{J}} = \text{kg}\cdot\text{m/s}$.
+
+**Substitution:** $n = 2.45\cdot10^{25}\,\text{m}^{-3}$, $\bar v = 476\,\text{m/s}$, $\Phi = 2.91\cdot10^{27}\,\text{m}^{-2}\text{s}^{-1} = 2.91\cdot10^{23}\,\text{cm}^{-2}\text{s}^{-1}$. $\overline{\Delta p} = 3.48\cdot10^{-23}\,\text{kg·m/s}$, against $2m\sqrt{\langle v_x^2\rangle} = 2.78\cdot10^{-23}\,\text{kg·m/s}$.
+
+**Result:** (a) About $3\cdot10^{23}$ impacts per square centimetre per second. (b) $3.48\cdot10^{-23}\,\text{kg·m/s}$ per impact. It is larger because fast molecules reach the wall more often, so the molecules that do strike are faster than the average one.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-4-1-4" title="A balloon in the freezer">
+
+A party balloon holds $5.0\,\text{L}$ of helium at $300\,\text{K}$, at atmospheric pressure. It is put in a freezer at $255\,\text{K}$; its skin keeps the pressure close to atmospheric.
+
+(a) What is its volume once it has cooled?
+
+(b) By what fraction has the mean kinetic energy per atom fallen? Has the number of atoms changed?
+
+<Solution>
+
+**Given:** $V_1 = 5.0\,\text{L}$, $T_1 = 300\,\text{K}$, $T_2 = 255\,\text{K}$, $P$ and $N$ fixed.
+
+**General law:** $PV = Nk_BT$ and $\langle E\rangle = \tfrac32 k_BT$.
+
+**Symbolic result:**
+
+$$
+V_2 = V_1\,\frac{T_2}{T_1} \qquad \frac{\langle E\rangle_2}{\langle E\rangle_1} = \frac{T_2}{T_1}
+$$
+
+**Limit check:** $T_2 = T_1$ leaves everything unchanged; as $T_2 \to 0$ the volume would shrink to zero, but long before that the helium stops being an ideal gas (see the last example, on quantum helium).
+
+**Units:** a ratio of temperatures is dimensionless, so $V_2$ is in litres like $V_1$.
+
+**Substitution:** $V_2 = 5.0\cdot255/300 = 4.25\,\text{L}$. $\langle E\rangle$ falls from $6.21\cdot10^{-21}\,\text{J}$ to $5.28\cdot10^{-21}\,\text{J}$, by $15\%$.
+
+**Result:** (a) $4.25\,\text{L}$. (b) $15\%$ less energy per atom; the number of atoms is unchanged. The balloon shrinks because each atom pushes more gently and less often, not because any atoms left.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-4-1-5" title="One big sample or a hundred small ones?">
+
+Sensor A samples the pressure of $10^4$ molecules and averages a hundred independent readings. Sensor B takes a single reading of $10^6$ molecules. Which reading is steadier?
+
+<Solution>
+
+**Given:** A: $N_A = 10^4$, $k = 100$ independent readings averaged; B: $N_B = 10^6$, one reading.
+
+**General law:** one reading of $N$ independent molecules has $\sigma_P/\langle P\rangle = N^{-1/2}$; the average of $k$ independent readings has a spread $k^{-1/2}$ times that of one.
+
+**Symbolic result:**
+
+$$
+\left(\frac{\sigma_P}{\langle P\rangle}\right)_A = \frac{1}{\sqrt{N_A}}\,\frac{1}{\sqrt k} = \frac{1}{\sqrt{kN_A}} \qquad \left(\frac{\sigma_P}{\langle P\rangle}\right)_B = \frac{1}{\sqrt{N_B}}
+$$
+
+**Limit check:** $k = 1$ gives back a single reading of $N_A$. In both cases what counts is the total number of independent contributions, $kN_A$ or $N_B$: the $N^{-1/2}$ law does not care whether they come at once or one sample after another.
+
+**Units:** both are pure numbers.
+
+**Substitution:** A: $1/\sqrt{100\cdot10^4} = 10^{-3}$. B: $1/\sqrt{10^6} = 10^{-3}$.
+
+**Result:** they are equally steady, $10^{-3}$, because both average over $10^6$ independent contributions.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-4-1-6" title="When is helium a quantum gas?">
+
+The model fails when the thermal wavelength $\lambda = h/\sqrt{2\pi m k_BT}$ of the atoms becomes comparable with their spacing $n^{-1/3}$. Compare helium gas ($4.003\,u$) at atmospheric pressure at $300\,\text{K}$ and at its boiling point, $4.2\,\text{K}$. Take $h = 6.626\cdot10^{-34}\,\text{J·s}$.
+
+<Solution>
+
+**Given:** $m = 4.003\cdot1.661\cdot10^{-27} = 6.65\cdot10^{-27}\,\text{kg}$, $P = 1.013\cdot10^5\,\text{Pa}$, $T = 300\,\text{K}$ and $4.2\,\text{K}$.
+
+**General law:** $n = P/(k_BT)$, so the spacing is $(k_BT/P)^{1/3}$, and $\lambda = h/\sqrt{2\pi mk_BT}$.
+
+**Symbolic result:**
+
+$$
+\frac{\lambda}{n^{-1/3}} = \frac{h}{\sqrt{2\pi mk_BT}}\left(\frac{P}{k_BT}\right)^{1/3} \propto T^{-5/6}
+$$
+
+**Limit check:** as $T \to \infty$ the ratio goes to zero and the gas is classical; cooling at fixed pressure makes the atoms both slower (longer $\lambda$) and closer, so the ratio grows fast.
+
+**Units:** $\text{J·s}/\sqrt{\text{kg}\cdot\text{J}} = \text{m}$, and $(\text{J}/\text{Pa})^{1/3} = (\text{m}^3)^{1/3} = \text{m}$: the ratio is a pure number.
+
+**Substitution:** at $300\,\text{K}$ the ratio is $1.5\cdot10^{-2}$. At $4.2\,\text{K}$: $n = 1.75\cdot10^{27}\,\text{m}^{-3}$, spacing $8.3\cdot10^{-10}\,\text{m}$, $\lambda = 4.3\cdot10^{-10}\,\text{m}$, a ratio of $0.51$.
+
+**Result:** at room temperature helium is safely classical ($\lambda$ is $1.5\%$ of the spacing); at its boiling point $\lambda$ is half the spacing, and quantum statistics can no longer be ignored (module 17).
+
+</Solution>
+
+</Example>
+
+<Check
+  title="Twelve questions on the lesson"
+  ids={['Q-4.1-motion', 'Q-4.1-two-containers', 'Q-4.1-double-mass', 'Q-4.1-ten-thousand', 'Q-4.1-detect', 'Q-4.1-twenty', 'Q-4.1-box-side', 'Q-4.1-per-particle', 'Q-4.1-internal-energy', 'Q-4.1-dense', 'Q-4.1-trust', 'Q-4.1-what-it-shows']}
+/>
+
+<Summary title="What we learned">
+
+- **Pressure is momentum transfer.** A bounce hands the wall $2m|v_x|$; a particle returns every $2L_x/|v_x|$; so it pushes with an average force $mv_x^2/L_x$. Summed over the particles, $PA = Nm\langle v_x^2\rangle$, exactly, for any distribution of speeds.
+- **Temperature enters through equipartition**, $m\langle v_x^2\rangle = k_BT$, which turns that into the ideal gas law, $PA = Nk_BT$ in two dimensions and $PV = Nk_BT$ in three. The mass cancels: heavier particles hit harder and less often.
+- **Temperature is energy per particle; internal energy is the total.** Same temperature, same mean energy per particle, whatever the size of the container.
+- **The pressure is steady because $N$ is large**, not because collisions are gentle. Its relative fluctuation is $N^{-1/2}$: thirty percent for ten particles, one percent for ten thousand, $10^{-12}$ for a mole.
+- **When the model fails:** at high density (particle size and attraction matter, module 14), at low temperature (quantum statistics, module 17), and wherever the particles interact strongly. The simulation preserves a Maxwell-Boltzmann distribution; it cannot show that a real gas reaches one.
+
+<Revisit id="pred-4-1" />
+
+</Summary>
+
+</Page>

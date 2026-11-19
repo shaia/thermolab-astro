@@ -6,10 +6,11 @@
  *   2. a lesson started but not finished → continue it;
  *   3. the first lesson not started → start it;
  *   4. every lesson done but an objective not yet mastered → practice;
- *   5. everything mastered, no chapter test taken → the test;
+ *   5. everything mastered, no module test taken → the test;
  *   6. otherwise → the test again.
  */
 
+import type { Lang } from '~/i18n';
 import { objectiveMastery, misconceptionStatus } from './mastery';
 import type { ProgressState } from './store';
 
@@ -28,6 +29,8 @@ export interface NextInput {
   remedies: Record<string, { title: string; href: string }>;
   practiceHref: string;
   testHref: string;
+  /** the language of the label and the reason (default Hebrew, as the platform was) */
+  lang?: Lang;
 }
 
 export interface NextStep {
@@ -38,27 +41,47 @@ export interface NextStep {
   reason: string;
 }
 
-export function nextStep({ lessons, state, remedies, practiceHref, testHref }: NextInput): NextStep {
+const TEXT = {
+  en: {
+    remedy: 'A misconception that keeps coming back. This experiment refutes it.',
+    continue: 'You started this lesson and have not finished it.',
+    start: 'The next lesson on your path.',
+    practiceLabel: 'The module’s practice page',
+    practice: 'Some objectives are not mastered yet.',
+    retestLabel: 'A new module test',
+    retest: 'Everything is mastered. A new test keeps it sharp.',
+    testLabel: 'The module test',
+    test: 'You have finished every lesson and mastered the objectives. Time to test yourself.',
+  },
+  he: {
+    remedy: 'טעות מושגית שחוזרת אצלכם. הניסוי הזה מפריך אותה.',
+    continue: 'התחלתם את השיעור ולא סיימתם אותו.',
+    start: 'השיעור הבא במסלול.',
+    practiceLabel: 'דף התרגול של המודול',
+    practice: 'יש מטרות שעוד לא הגעתם בהן לשליטה.',
+    retestLabel: 'מבחן מודול חדש',
+    retest: 'הכול נשלט. מבחן חדש ישמור על הידע חד.',
+    testLabel: 'מבחן המודול',
+    test: 'סיימתם את כל השיעורים ושלטתם במטרות. הגיע הזמן לבחון את עצמכם.',
+  },
+} satisfies Record<Lang, Record<string, string>>;
+
+export function nextStep({ lessons, state, remedies, practiceHref, testHref, lang = 'he' }: NextInput): NextStep {
+  const t = TEXT[lang];
   const active = misconceptionStatus(state.attempts).find((m) => m.active && remedies[m.id]);
   if (active) {
     const r = remedies[active.id];
-    return { kind: 'remedy', label: r.title, href: r.href, reason: 'טעות מושגית שחוזרת אצלכם. הניסוי הזה מפריך אותה.' };
+    return { kind: 'remedy', label: r.title, href: r.href, reason: t.remedy };
   }
   const started = lessons.find((l) => state.lessons[l.id]?.visited && !state.lessons[l.id]?.completed);
-  if (started) {
-    return { kind: 'continue', label: `${started.id} ${started.title}`, href: started.href, reason: 'התחלתם את השיעור ולא סיימתם אותו.' };
-  }
+  if (started) return { kind: 'continue', label: `${started.id} ${started.title}`, href: started.href, reason: t.continue };
   const fresh = lessons.find((l) => !state.lessons[l.id]?.visited && !state.lessons[l.id]?.completed);
-  if (fresh) {
-    return { kind: 'start', label: `${fresh.id} ${fresh.title}`, href: fresh.href, reason: 'השיעור הבא במסלול.' };
-  }
+  if (fresh) return { kind: 'start', label: `${fresh.id} ${fresh.title}`, href: fresh.href, reason: t.start };
   const objectives = lessons.flatMap((l) => l.objectives);
   const unmastered = objectives.some((o) => objectiveMastery(state.attempts, o).level !== 'mastered');
-  if (unmastered) {
-    return { kind: 'practice', label: 'דף התרגול של הפרק', href: practiceHref, reason: 'יש מטרות שעוד לא הגעתם בהן לשליטה.' };
-  }
+  if (unmastered) return { kind: 'practice', label: t.practiceLabel, href: practiceHref, reason: t.practice };
   const tested = state.attempts.some((a) => a.kind === 'test');
   return tested
-    ? { kind: 'retest', label: 'מבחן פרק חדש', href: testHref, reason: 'הכול נשלט. מבחן חדש ישמור על הידע חד.' }
-    : { kind: 'test', label: 'מבחן הפרק', href: testHref, reason: 'סיימתם את כל השיעורים ושלטתם במטרות. הגיע הזמן לבחון את עצמכם.' };
+    ? { kind: 'retest', label: t.retestLabel, href: testHref, reason: t.retest }
+    : { kind: 'test', label: t.testLabel, href: testHref, reason: t.test };
 }

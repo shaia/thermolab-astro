@@ -7,6 +7,7 @@
  */
 
 import type { Question } from '~/content.config';
+import { ui, type Lang } from '~/i18n';
 import { isOpen, partQuestion } from './bagrut';
 
 export type Dir = 'e' | 'ne' | 'n' | 'nw' | 'w' | 'sw' | 's' | 'se' | 'out' | 'in' | 'zero';
@@ -55,7 +56,9 @@ export function probesOf(q: Question): string[] {
   return [...tags];
 }
 
-export function grade(q: Question, a: Answer): Verdict {
+/** `lang` is the language of the platform's own feedback lines; the question's feedback is already in its language. */
+export function grade(q: Question, a: Answer, lang: Lang = 'he'): Verdict {
+  const s = ui(lang).q;
   if (q.type === 'bagrut') throw new Error(`${q.id}: grade its parts, not the whole Bagrut question`);
   if (q.type !== a.type) throw new Error(`answer type ${a.type} does not match question ${q.id} (${q.type})`);
   switch (q.type) {
@@ -78,7 +81,7 @@ export function grade(q: Question, a: Answer): Verdict {
         }
       });
       const missed = q.choices.some((c, i) => c.correct && !picked.has(i));
-      if (missed) feedback.push('יש עוד תשובה נכונה שלא סימנתם.');
+      if (missed) feedback.push(s.missedOne);
       return { correct, feedback, misconception: correct ? null : misconception };
     }
     case 'twotier': {
@@ -99,7 +102,7 @@ export function grade(q: Question, a: Answer): Verdict {
       const known = q.commonWrong.find((w) => withinTolerance(v, w.value, q.tolerance));
       if (known) return { correct: false, feedback: [known.feedback, q.wrongFeedback], misconception: known.misconception ?? null };
       const off = orderOfMagnitudeSlip(v, q.answer);
-      const feedback = off ? [`התוצאה שלכם רחוקה פי ${off} מהתשובה. בדקו קידומות ויחידות (למשל cm ו-m, או ms ו-s).`, q.wrongFeedback] : [q.wrongFeedback];
+      const feedback = off ? [s.offBy(off), q.wrongFeedback] : [q.wrongFeedback];
       return { correct: false, feedback, misconception: null };
     }
     case 'vector': {

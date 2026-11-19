@@ -1,0 +1,84 @@
+---
+/** Formula sheet: every <Formula> card of every lesson in this language, by module and lesson, collected from the MDX sources. */
+import { getCollection } from 'astro:content';
+import Formula from '~/components/Formula.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { chapters, lessonOrder, lessonSlug, moduleNumber } from '~/course';
+import { formulasIn } from '~/lib/formulas';
+import { langUrl } from '~/lib/url';
+import { LANGS, type Lang } from '~/i18n';
+import '~/styles/lesson.css';
+import '~/styles/platform.css';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const T = {
+  en: {
+    title: 'Formula sheet',
+    description: 'Every formula of the course, by module and lesson',
+    heading: 'Every formula in one place',
+    lede: (n: number) => `The formulas the lessons build to, by module and lesson, each linked to the lesson that explains where it comes from. The page updates itself as lessons are added. ${n} formulas so far.`,
+    jump: 'Jump to a module',
+    module: (n: string) => `Module ${n}`,
+    toLesson: 'To the lesson',
+  },
+  he: {
+    title: 'דף נוסחאות',
+    description: 'כל הנוסחאות של הקורס, לפי מודול ושיעור',
+    heading: 'כל הנוסחאות במקום אחד',
+    lede: (n: number) => `הנוסחאות שהשיעורים בונים אליהן, לפי מודול ולפי שיעור, ועם קישור אל השיעור שמסביר מאיפה הן באות. הדף מתעדכן לבד כשנוספים שיעורים. עד עכשיו ${n} נוסחאות.`,
+    jump: 'קפיצה למודול',
+    module: (n: string) => `מודול ${n}`,
+    toLesson: 'לשיעור',
+  },
+}[lang];
+
+const entries = (await getCollection('lessons', (e) => e.data.lang === lang && (!e.data.draft || import.meta.env.DEV))).sort(
+  (a, b) => lessonOrder.findIndex((l) => l.id === a.data.id) - lessonOrder.findIndex((l) => l.id === b.data.id),
+);
+const groups = chapters
+  .map((c) => ({
+    chapter: c,
+    lessons: entries
+      .filter((e) => e.data.chapter === c.n)
+      .map((e) => ({ id: e.data.id, title: e.data.title, formulas: formulasIn(e.body ?? '', e.id) }))
+      .filter((l) => l.formulas.length > 0),
+  }))
+  .filter((g) => g.lessons.length > 0);
+const total = groups.reduce((s, g) => s + g.lessons.reduce((t, l) => t + l.formulas.length, 0), 0);
+---
+
+<BaseLayout title={T.title} description={T.description}>
+  <div class="platform">
+    <header class="sheet sheet-narrow">
+      <p class="kicker">{T.title}</p>
+      <h1>{T.heading}</h1>
+      <p class="p-lede">{T.lede(total)}</p>
+      <ul class="toc-line" aria-label={T.jump}>
+        {groups.map((g) => <li><a href={`#ch-${g.chapter.n}`}>{T.module(moduleNumber(g.chapter.n))}</a></li>)}
+      </ul>
+    </header>
+
+    {
+      groups.map((g) => (
+        <section class="sheet sheet-narrow" aria-labelledby={`ch-${g.chapter.n}`}>
+          <h2 id={`ch-${g.chapter.n}`}>
+            {T.module(moduleNumber(g.chapter.n))}: {g.chapter.title[lang]}
+          </h2>
+          {g.lessons.map((l) => (
+            <div class="formula-lesson" data-lesson={l.id}>
+              <h3>
+                <span class="ltr">{l.id}</span> {l.title}
+                <a href={langUrl(lang, `lessons/${lessonSlug(l.id)}/`)}>{T.toLesson}</a>
+              </h3>
+              {l.formulas.map((f) => <Formula tex={f.tex} label={f.label} />)}
+            </div>
+          ))}
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

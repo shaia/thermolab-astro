@@ -2,7 +2,8 @@
 import BaseLayout from './BaseLayout.astro';
 import Capsule from '~/ui/Capsule.astro';
 import LessonEnd from '~/ui/LessonEnd';
-import { chapterOf } from '~/course';
+import { chapterOf, moduleNumber } from '~/course';
+import { langOf, ui } from '~/i18n';
 import '~/styles/lesson.css';
 
 interface Link {
@@ -16,32 +17,33 @@ interface Props {
   subtitle?: string;
   minutes: number;
   objectives: { id: string; text: string }[];
-  enrichment: boolean;
   prev: Link | null;
   next: Link | null;
   /** the lesson's workbook page, when it has one */
   workbook?: string | null;
 }
 
-const { id, title, subtitle, minutes, objectives, enrichment, prev, next, workbook = null } = Astro.props;
+const { id, title, subtitle, minutes, objectives, prev, next, workbook = null } = Astro.props;
+const lang = langOf(Astro.url.pathname);
+const s = ui(lang);
 const chapter = chapterOf(id);
-const [ch, n] = id.split('.');
+const [, n] = id.split('.');
 ---
 
 <BaseLayout title={`${id} ${title}`} description={subtitle ?? title}>
   <article class="lesson" data-lesson={id}>
     <header class="sheet lesson-head">
       <div>
-        <p class="kicker">פרק {ch} · {chapter?.title} · שיעור {n}</p>
+        <p class="kicker">{s.lesson.kicker(moduleNumber(chapter?.n ?? 0), chapter?.title[lang] ?? '', n)}</p>
         <h1>{title}</h1>
         {subtitle && <p class="lesson-sub">{subtitle}</p>}
         <p class="lesson-meta">
-          <span class="chip">כ-{minutes} דקות</span>
-          {enrichment && <span class="chip">העשרה</span>}
+          <span class="chip">{s.lesson.minutes(minutes)}</span>
+          <button type="button" class="btn ghost no-print print-btn" onclick="window.print()">{s.lesson.print}</button>
         </p>
       </div>
       <section class="objectives" aria-labelledby="obj-h">
-        <h2 id="obj-h">בסוף השיעור תוכלו:</h2>
+        <h2 id="obj-h">{s.lesson.objectives}</h2>
         <ul>
           {objectives.map((o) => <li data-objective={o.id}>{o.text}</li>)}
         </ul>
@@ -51,18 +53,18 @@ const [ch, n] = id.split('.');
     <slot />
 
     <footer class="sheet sheet-narrow">
-      <LessonEnd client:visible id={id} title={title} />
+      <LessonEnd client:visible id={id} title={title} lang={lang} />
       {
         workbook && (
           <p class="lesson-workbook">
-            <a class="btn primary" href={workbook}>תרגול נוסף ושאלות אתגר</a>
-            <span>עשר שאלות עם תשובות ופתרונות מלאים, ושתי שאלות ממבחני קבלה ומתחרויות.</span>
+            <a class="btn primary" href={workbook}>{s.lesson.workbook}</a>
+            <span>{s.lesson.workbookNote}</span>
           </p>
         )
       }
       <p class="lesson-nav">
-        {prev && <a href={prev.href}>→ {prev.id} {prev.title}</a>}
-        {next && <a href={next.href}>{next.id} {next.title} ←</a>}
+        {prev && <a href={prev.href}>{s.nav.backArrow} {prev.id} {prev.title}</a>}
+        {next && <a href={next.href}>{next.id} {next.title} {s.nav.fwdArrow}</a>}
       </p>
     </footer>
   </article>

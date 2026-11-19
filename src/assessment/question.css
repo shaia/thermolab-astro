@@ -120,7 +120,8 @@
 }
 .q-numeric-help {
   flex-basis: 100%;
-  direction: rtl;
+  /* the help line is prose in the page's language, inside a left-to-right number row */
+  direction: var(--page-dir, rtl);
   margin: 0;
   font-family: var(--font-ui);
   font-size: 0.82rem;

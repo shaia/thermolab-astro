@@ -1,9 +1,10 @@
 ---
-/** Lesson self-check: questions from the YAML banks, by id, rendered at build time. */
+/** Lesson self-check: questions from the YAML banks of the page's language, by id, rendered at build time. */
 import Block from './Block.astro';
 import AnyQuestion from '~/assessment/AnyQuestion';
 import { getQuestion, lessonFromPath } from '~/assessment/bank';
 import { renderQuestion } from '~/assessment/render';
+import { langOf, ui } from '~/i18n';
 
 interface Props {
   ids: string[];
@@ -11,10 +12,11 @@ interface Props {
 }
 
 const { ids, title } = Astro.props;
+const lang = langOf(Astro.url.pathname);
 const lesson = lessonFromPath(Astro.url.pathname);
-const questions = await Promise.all(ids.map(async (id) => renderQuestion(await getQuestion(id, '<Check>'))));
+const questions = await Promise.all(ids.map(async (id) => renderQuestion(await getQuestion(id, lang, '<Check>'))));
 ---
 
 <Block kind="check" title={title}>
-  {questions.map((q, i) => <AnyQuestion client:visible q={q} lesson={lesson} kind="check" label={`שאלה ${i + 1}`} />)}
+  {questions.map((q, i) => <AnyQuestion client:visible q={q} lang={lang} lesson={lesson} kind="check" label={ui(lang).lesson.question(i + 1)} />)}
 </Block>

@@ -9,7 +9,7 @@ const memory = new Map<string, string>();
 export function storageAvailable(): boolean {
   if (available !== null) return available;
   try {
-    const k = '__unimech_probe__';
+    const k = '__thermolab_probe__';
     window.localStorage.setItem(k, '1');
     window.localStorage.removeItem(k);
     available = true;

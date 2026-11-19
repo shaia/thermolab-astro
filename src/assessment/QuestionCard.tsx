@@ -4,9 +4,12 @@
  *
  * Confidence is asked in the same click as checking ("check — I'm sure" / "check — not sure"),
  * before the verdict is visible, so it reflects what the student believed.
+ *
+ * The question text arrives in its own language; `lang` is the language of the card's chrome.
  */
 
 import { useState } from 'preact/hooks';
+import { ui, type Lang } from '~/i18n';
 import { recordAttempt, type AttemptKind } from '~/progress/store';
 import type { Simple } from './bagrut';
 import { grade, parseNumber, probesOf, type Answer, type Dir, type Verdict } from './check';
@@ -21,10 +24,11 @@ export interface GradedInfo {
 
 interface Props {
   q: Question;
+  lang: Lang;
   /** lesson the question is embedded in, for the attempt record */
   lesson?: string | null;
   kind?: AttemptKind;
-  /** shown in the header, e.g. "שאלה 2" */
+  /** shown in the header, e.g. "Question 2" */
   label?: string;
   /** called after every graded attempt (tests use it to tally scores) */
   onGraded?: (v: Verdict, info: GradedInfo) => void;
@@ -58,7 +62,7 @@ export function emptyDraft(q: Question): Draft {
 }
 
 /** The draft as a gradable answer, or a reason it is not ready yet. */
-export function toAnswer(d: Draft): Answer | { error: string } | null {
+export function toAnswer(d: Draft, lang: Lang): Answer | { error: string } | null {
   switch (d.type) {
     case 'mc':
       return d.choice === null ? null : { type: 'mc', choice: d.choice };
@@ -67,7 +71,7 @@ export function toAnswer(d: Draft): Answer | { error: string } | null {
     case 'numeric': {
       if (d.text.trim() === '') return null;
       const v = parseNumber(d.text);
-      return v === null ? { error: 'לא הצלחנו לקרוא את המספר. כתבו למשל 3.6e4 או 3.6*10^4.' } : { type: 'numeric', value: v };
+      return v === null ? { error: ui(lang).q.unreadable } : { type: 'numeric', value: v };
     }
     case 'vector':
       return d.dir === null ? null : { type: 'vector', dir: d.dir };
@@ -78,16 +82,8 @@ export function toAnswer(d: Draft): Answer | { error: string } | null {
   }
 }
 
-const TYPE_LABEL: Record<Question['type'], string> = {
-  mc: 'בחירה',
-  multi: 'כמה תשובות נכונות',
-  numeric: 'חישוב',
-  vector: 'כיוון',
-  rank: 'דירוג',
-  twotier: 'תשובה ונימוק',
-};
-
-export default function QuestionCard({ q, lesson = null, kind = 'check', label, onGraded, hintCost = false }: Props) {
+export default function QuestionCard({ q, lang, lesson = null, kind = 'check', label, onGraded, hintCost = false }: Props) {
+  const s = ui(lang).q;
   const [draft, setDraft] = useState<Draft>(() => emptyDraft(q));
   const [verdict, setVerdict] = useState<Verdict | null>(null);
   const [tries, setTries] = useState(0);
@@ -95,19 +91,19 @@ export default function QuestionCard({ q, lesson = null, kind = 'check', label, 
   const [showSolution, setShowSolution] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const answer = toAnswer(draft);
+  const answer = toAnswer(draft, lang);
   const locked = verdict !== null;
   const solved = verdict?.correct === true;
 
   const check = (confident: boolean | null) => {
-    const a = toAnswer(draft);
+    const a = toAnswer(draft, lang);
     if (!a) return;
     if ('error' in a) {
       setError(a.error);
       return;
     }
     setError(null);
-    const v = grade(q, a);
+    const v = grade(q, a, lang);
     setVerdict(v);
     setTries((n) => n + 1);
     recordAttempt({
@@ -134,13 +130,13 @@ export default function QuestionCard({ q, lesson = null, kind = 'check', label, 
     <div class={`qcard ${verdict ? (verdict.correct ? 'is-right' : 'is-wrong') : ''}`} data-qid={q.id} data-type={q.type}>
       <div class="q-meta">
         {label && <span class="q-num">{label}</span>}
-        <span class="chip">{TYPE_LABEL[q.type]}</span>
-        {q.qualitative && <span class="chip">איכותית</span>}
-        {q.level === 'bagrut' && <span class="chip">רמת מבחן</span>}
+        <span class="chip">{s.kind[q.type]}</span>
+        {q.qualitative && <span class="chip">{s.qualitative}</span>}
+        {q.level === 'bagrut' && <span class="chip">{s.examLevel}</span>}
       </div>
       <div class="q-prompt" dangerouslySetInnerHTML={{ __html: q.prompt }} />
 
-      <AnswerArea q={q} draft={draft} setDraft={(d) => (setError(null), setDraft(d))} locked={locked} verdict={verdict} />
+      <AnswerArea q={q} lang={lang} draft={draft} setDraft={(d) => (setError(null), setDraft(d))} locked={locked} verdict={verdict} />
 
       {hints > 0 && (
         <ol class="q-hints">
@@ -161,20 +157,21 @@ export default function QuestionCard({ q, lesson = null, kind = 'check', label, 
           {q.confidence ? (
             <>
               <button type="button" class="btn primary" disabled={!answer} onClick={() => check(true)}>
-                בדיקה · בטוחים
+                {s.checkSure}
               </button>
               <button type="button" class="btn" disabled={!answer} onClick={() => check(false)}>
-                בדיקה · לא בטוחים
+                {s.checkUnsure}
               </button>
             </>
           ) : (
             <button type="button" class="btn primary" disabled={!answer} onClick={() => check(null)}>
-              בדיקה
+              {s.check}
             </button>
           )}
           {hints < q.hints.length && (
             <button type="button" class="btn ghost" onClick={() => setHints((n) => n + 1)}>
-              רמז {q.hints.length > 1 ? `(${hints + 1}/${q.hints.length})` : ''}{hintCost ? ' · עולה בנקודות' : ''}
+              {s.hint} {q.hints.length > 1 ? `(${hints + 1}/${q.hints.length})` : ''}
+              {hintCost ? s.hintCost : ''}
             </button>
           )}
         </div>
@@ -182,19 +179,19 @@ export default function QuestionCard({ q, lesson = null, kind = 'check', label, 
 
       {verdict && (
         <div class={`q-feedback ${verdict.correct ? 'ok' : 'bad'}`} role="status">
-          <p class="q-verdict">{verdict.correct ? 'נכון!' : 'לא בדיוק.'}</p>
+          <p class="q-verdict">{verdict.correct ? s.correct : s.notQuite}</p>
           {verdict.feedback.filter(Boolean).map((f, i) => (
             <p key={i} dangerouslySetInnerHTML={{ __html: f }} />
           ))}
           <div class="q-actions">
             {!solved && (
               <button type="button" class="btn primary" onClick={retry}>
-                נסו שוב
+                {s.tryAgain}
               </button>
             )}
             {!solved && q.explanation && !showSolution && (
               <button type="button" class="btn ghost" onClick={() => setShowSolution(true)}>
-                הראו לי את הפתרון
+                {s.showSolution}
               </button>
             )}
           </div>
@@ -203,7 +200,7 @@ export default function QuestionCard({ q, lesson = null, kind = 'check', label, 
 
       {q.explanation && (solved || showSolution || tries >= 3) && (
         <div class="q-explanation">
-          <p class="kicker">הסבר</p>
+          <p class="kicker">{s.explanation}</p>
           <div dangerouslySetInnerHTML={{ __html: q.explanation }} />
         </div>
       )}
@@ -213,13 +210,15 @@ export default function QuestionCard({ q, lesson = null, kind = 'check', label, 
 
 interface AreaProps {
   q: Question;
+  lang: Lang;
   draft: Draft;
   setDraft: (d: Draft) => void;
   locked: boolean;
   verdict: Verdict | null;
 }
 
-export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
+export function AnswerArea({ q, lang, draft, setDraft, locked, verdict }: AreaProps) {
+  const s = ui(lang).q;
   const name = `${q.id}-ans`;
   switch (q.type) {
     case 'mc':
@@ -229,7 +228,7 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
       const isOn = (i: number) => (d.type === 'mc' ? d.choice === i : d.choices.includes(i));
       return (
         <fieldset class="q-choices">
-          <legend class="sr-only">{multi ? 'סמנו את כל התשובות הנכונות' : 'בחרו תשובה'}</legend>
+          <legend class="sr-only">{multi ? s.pickAll : s.pickOne}</legend>
           {q.choices.map((c, i) => (
             <label key={i} class={`q-choice ${isOn(i) ? 'on' : ''} ${locked && isOn(i) ? (c.correct ? 'right' : 'wrong') : ''}`}>
               <input
@@ -254,7 +253,7 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
       return (
         <div class="q-twotier">
           <fieldset class="q-choices">
-            <legend class="sr-only">בחרו תשובה</legend>
+            <legend class="sr-only">{s.pickOne}</legend>
             {q.choices.map((c, i) => (
               <label key={i} class={`q-choice ${d.choice === i ? 'on' : ''} ${locked && d.choice === i ? (c.correct ? 'right' : 'wrong') : ''}`}>
                 <input type="radio" name={`${name}-a`} checked={d.choice === i} disabled={locked} onChange={() => setDraft({ ...d, choice: i })} />
@@ -263,7 +262,7 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
             ))}
           </fieldset>
           <fieldset class="q-choices reasons">
-            <legend class="q-subprompt" dangerouslySetInnerHTML={{ __html: q.reasonPrompt }} />
+            <legend class="q-subprompt" dangerouslySetInnerHTML={{ __html: q.reasonPrompt ?? s.reasonPrompt }} />
             {q.reasons.map((c, i) => (
               <label key={i} class={`q-choice ${d.reason === i ? 'on' : ''} ${locked && d.reason === i ? (c.correct ? 'right' : 'wrong') : ''}`}>
                 <input type="radio" name={`${name}-r`} checked={d.reason === i} disabled={locked} onChange={() => setDraft({ ...d, reason: i })} />
@@ -279,7 +278,7 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
       return (
         <div class={`q-numeric ${verdict ? (verdict.correct ? 'right' : 'wrong') : ''}`}>
           <label>
-            <span class="sr-only">{q.unit ? `התשובה, ב-${q.unit}` : 'התשובה, מספר בלי יחידות'}</span>
+            <span class="sr-only">{q.unit ? s.answerIn(q.unit) : s.answerNoUnit}</span>
             <input
               type="text"
               inputMode="decimal"
@@ -292,13 +291,15 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
             />
           </label>
           <span class="q-unit q">{q.unit}</span>
-          <p class="q-numeric-help">אפשר לכתוב חזקות של 10 כך: <bdi dir="ltr">1.5*10^-3</bdi> או <bdi dir="ltr">1.5e-3</bdi></p>
+          <p class="q-numeric-help">
+            {s.numericHelpBefore} <bdi dir="ltr">1.5*10^-3</bdi> {s.numericHelpOr} <bdi dir="ltr">1.5e-3</bdi>
+          </p>
         </div>
       );
     }
     case 'vector': {
       const d = draft as Extract<Draft, { type: 'vector' }>;
-      return <Rose value={d.dir} allowOutIn={q.allowOutIn} locked={locked} verdict={verdict} onPick={(dir) => setDraft({ type: 'vector', dir })} />;
+      return <Rose lang={lang} value={d.dir} allowOutIn={q.allowOutIn} locked={locked} verdict={verdict} onPick={(dir) => setDraft({ type: 'vector', dir })} />;
     }
     case 'rank': {
       const d = draft as Extract<Draft, { type: 'rank' }>;
@@ -312,7 +313,7 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
       };
       return (
         <div class="q-rank">
-          <p class="q-rank-help">סדרו מהגדול לקטן. אם שניים שווים, לחצו על „=” ביניהם.</p>
+          <p class="q-rank-help">{s.rankHelp}</p>
           <ol>
             {d.order.map((id, i) => (
               <li key={id}>
@@ -320,10 +321,10 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
                   <span class="q-rank-pos">{i + 1}</span>
                   <span class="q-rank-label" dangerouslySetInnerHTML={{ __html: labelOf(id) }} />
                   <span class="q-rank-moves">
-                    <button type="button" class="btn ghost" disabled={locked || i === 0} aria-label="למעלה" onClick={() => move(i, -1)}>
+                    <button type="button" class="btn ghost" disabled={locked || i === 0} aria-label={s.up} onClick={() => move(i, -1)}>
                       ▲
                     </button>
-                    <button type="button" class="btn ghost" disabled={locked || i === d.order.length - 1} aria-label="למטה" onClick={() => move(i, 1)}>
+                    <button type="button" class="btn ghost" disabled={locked || i === d.order.length - 1} aria-label={s.down} onClick={() => move(i, 1)}>
                       ▼
                     </button>
                   </span>
@@ -334,7 +335,7 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
                     class={`q-rank-rel ${d.tied[i] ? 'tied' : ''}`}
                     aria-pressed={d.tied[i]}
                     disabled={locked}
-                    title={d.tied[i] ? 'שווים' : 'גדול מ-'}
+                    title={d.tied[i] ? s.tied : s.greater}
                     onClick={() => setDraft({ ...d, tied: d.tied.map((t, k) => (k === i ? !t : t)) })}
                   >
                     {d.tied[i] ? '=' : '>'}
@@ -349,22 +350,23 @@ export function AnswerArea({ q, draft, setDraft, locked, verdict }: AreaProps) {
   }
 }
 
-const ROSE: { dir: Dir; label: string; glyph: string; angle: number }[] = [
-  { dir: 'e', label: 'ימינה', glyph: '→', angle: 0 },
-  { dir: 'ne', label: 'ימינה ולמעלה', glyph: '↗', angle: 45 },
-  { dir: 'n', label: 'למעלה', glyph: '↑', angle: 90 },
-  { dir: 'nw', label: 'שמאלה ולמעלה', glyph: '↖', angle: 135 },
-  { dir: 'w', label: 'שמאלה', glyph: '←', angle: 180 },
-  { dir: 'sw', label: 'שמאלה ולמטה', glyph: '↙', angle: 225 },
-  { dir: 's', label: 'למטה', glyph: '↓', angle: 270 },
-  { dir: 'se', label: 'ימינה ולמטה', glyph: '↘', angle: 315 },
+const ROSE: { dir: Exclude<Dir, 'out' | 'in' | 'zero'>; glyph: string; angle: number }[] = [
+  { dir: 'e', glyph: '→', angle: 0 },
+  { dir: 'ne', glyph: '↗', angle: 45 },
+  { dir: 'n', glyph: '↑', angle: 90 },
+  { dir: 'nw', glyph: '↖', angle: 135 },
+  { dir: 'w', glyph: '←', angle: 180 },
+  { dir: 'sw', glyph: '↙', angle: 225 },
+  { dir: 's', glyph: '↓', angle: 270 },
+  { dir: 'se', glyph: '↘', angle: 315 },
 ];
 
-function Rose(p: { value: Dir | null; allowOutIn: boolean; locked: boolean; verdict: Verdict | null; onPick: (d: Dir) => void }) {
+function Rose(p: { lang: Lang; value: Dir | null; allowOutIn: boolean; locked: boolean; verdict: Verdict | null; onPick: (d: Dir) => void }) {
+  const s = ui(p.lang).q.dir;
   const cls = (d: Dir) => `rose-btn ${p.value === d ? 'on' : ''} ${p.locked && p.value === d ? (p.verdict?.correct ? 'right' : 'wrong') : ''}`;
   return (
     <div class="q-rose-wrap">
-      <div class="q-rose ltr-space" role="radiogroup" aria-label="בחרו כיוון">
+      <div class="q-rose ltr-space" role="radiogroup" aria-label={s.pick}>
         {ROSE.map((r) => {
           const a = (r.angle * Math.PI) / 180;
           return (
@@ -373,7 +375,7 @@ function Rose(p: { value: Dir | null; allowOutIn: boolean; locked: boolean; verd
               type="button"
               role="radio"
               aria-checked={p.value === r.dir}
-              aria-label={r.label}
+              aria-label={s[r.dir]}
               class={cls(r.dir)}
               disabled={p.locked}
               style={{ left: `${50 + 38 * Math.cos(a)}%`, top: `${50 - 38 * Math.sin(a)}%` }}
@@ -387,7 +389,7 @@ function Rose(p: { value: Dir | null; allowOutIn: boolean; locked: boolean; verd
           type="button"
           role="radio"
           aria-checked={p.value === 'zero'}
-          aria-label="אפס: אין כיוון"
+          aria-label={s.zero}
           class={`${cls('zero')} zero`}
           disabled={p.locked}
           style={{ left: '50%', top: '50%' }}
@@ -397,12 +399,12 @@ function Rose(p: { value: Dir | null; allowOutIn: boolean; locked: boolean; verd
         </button>
       </div>
       {p.allowOutIn && (
-        <div class="q-outin" role="radiogroup" aria-label="ניצב לדף">
+        <div class="q-outin" role="radiogroup" aria-label={s.perp}>
           <button type="button" role="radio" aria-checked={p.value === 'out'} class={cls('out')} disabled={p.locked} onClick={() => p.onPick('out')}>
-            <span class="ltr">⊙</span> החוצה מהדף
+            <span class="ltr">⊙</span> {s.out}
           </button>
           <button type="button" role="radio" aria-checked={p.value === 'in'} class={cls('in')} disabled={p.locked} onClick={() => p.onPick('in')}>
-            <span class="ltr">⊗</span> לתוך הדף
+            <span class="ltr">⊗</span> {s.in}
           </button>
         </div>
       )}

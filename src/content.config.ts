@@ -6,7 +6,7 @@ import { parse } from 'yaml';
 import { questionBank } from './assessment/schema';
 
 /**
- * A collection kept as one YAML list per lesson (`<dir>/1-5.yaml`, …), merged into one collection.
+ * A collection kept as one YAML list per lesson (`<dir>/4-1.yaml`, …), merged into one collection.
  * Per-lesson files let lessons be written in parallel without editing a shared file; a duplicate id
  * across files fails the build.
  */
@@ -27,24 +27,26 @@ function yamlDir(dir: string) {
   };
 }
 
+const lang = z.enum(['en', 'he']);
 const objective = z.object({ id: z.string().regex(/^OBJ-\d+\.\d+-\d+$/), text: z.string() });
 
+/**
+ * Lessons live in src/content/lessons/<lang>/ch<N>/. Each language is a full lesson file: the two
+ * share ids, figures, steps and formulas (lint-content checks the parity), and differ in prose.
+ */
 const lessons = defineCollection({
   loader: glob({ base: './src/content/lessons', pattern: '**/*.mdx' }),
   schema: z.object({
+    lang,
     id: z.string().regex(/^\d+\.\d+$/),
-    chapter: z.number().int().min(0).max(10),
+    chapter: z.number().int().min(0).max(18),
     order: z.number().int().min(1),
     title: z.string(),
     subtitle: z.string().optional(),
-    // a university lesson has no time cap: `minutes` is its honest reading time (see CLAUDE.md)
     minutes: z.number().int().min(5).max(180),
     objectives: z.array(objective).min(1),
     prerequisites: z.array(z.string()).default([]),
-    videos: z.array(z.string()).default([]),
     figures: z.array(z.string()).default([]),
-    /** lessons whose place in the 77101 syllabus is unverified are marked enrichment (as in src/course.ts) */
-    enrichment: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
 });
@@ -52,60 +54,56 @@ const lessons = defineCollection({
 export { question } from './assessment/schema';
 export type { Question, BagrutQuestion, Part, OpenPart, AutoPart } from './assessment/schema';
 
+/** Question banks live in src/content/questions/<lang>/ch<N>/<lesson>.yaml; ids are shared across languages. */
 const questions = defineCollection({
   loader: glob({ base: './src/content/questions', pattern: '**/*.yaml' }),
   schema: questionBank,
 });
 
-const misconceptions = defineCollection({
-  loader: yamlDir('src/content/misconceptions'),
-  schema: z.object({
-    id: z.string().regex(/^MC-[\w-]+$/),
-    title: z.string(),
-    belief: z.string(),
-    truth: z.string(),
-    /** where to go to unlearn it: a lesson id plus an anchor or figure */
-    remedy: z.object({ lesson: z.string(), anchor: z.string().optional(), label: z.string() }),
-  }),
-});
-
+/** One entry per term, both languages side by side, so a term cannot exist in one language only. */
 const glossary = defineCollection({
   loader: yamlDir('src/content/glossary'),
   schema: z.object({
     id: z.string(),
-    term: z.string(),
-    en: z.string(),
-    definition: z.string(),
+    term: z.object({ en: z.string(), he: z.string() }),
+    definition: z.object({ en: z.string(), he: z.string() }),
     symbol: z.string().optional(),
-    unit: z.string().optional(),
-    /** spellings that must not appear in course text */
+    /** Hebrew spellings that must not appear in course text */
     reject: z.array(z.string()).default([]),
     lesson: z.string().optional(),
   }),
 });
 
-const videos = defineCollection({
-  loader: yamlDir('src/content/videos'),
+const text = z.object({ en: z.string(), he: z.string() });
+
+/**
+ * The misconception register: beliefs the questions are built to catch, both languages side by
+ * side. A wrong answer may name one; two such answers make it active on the learner's page, with
+ * a link to the place in a lesson that refutes it. Converted from ThermoLab's assessment/misconceptions.yml.
+ */
+const misconceptions = defineCollection({
+  loader: yamlDir('src/content/misconceptions'),
   schema: z.object({
-    id: z.string(),
-    youtubeId: z.string().regex(/^[\w-]{11}$/),
-    title: z.string(),
-    channel: z.string(),
-    lang: z.enum(['he', 'en']),
-    captions: z.array(z.enum(['he', 'en'])).default([]),
-    start: z.number().int().min(0).default(0),
-    end: z.number().int().optional(),
-    minutes: z.number(),
-    why: z.string(),
-    verified: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    id: z.string().regex(/^MC-[\w-]+$/),
+    title: text,
+    belief: text,
+    truth: text,
+    /** where to go to unlearn it: a lesson id plus an anchor or figure */
+    remedy: z.object({ lesson: z.string(), anchor: z.string().optional(), label: text }),
   }),
 });
 
-/* ---- Lesson workbook: open practice problems and sourced challenge problems, answers hidden ---- */
+/** End-of-module summary, one file per language: what to remember and how to solve the module's problems. */
+const summaries = defineCollection({
+  loader: glob({ base: './src/content/summaries', pattern: '**/*.mdx' }),
+  schema: z.object({ lang, chapter: z.number().int().min(0).max(18), title: z.string() }),
+});
+
+/* ---- Lesson workbook: written practice problems and sourced challenge problems, answers hidden ---- */
 
 /**
- * One step of a written solution; the last one is the `result`. The course format is general law (`law`) →
- * derivation (`manipulation`) → symbolic result → limit check (`limit`) → unit check (`units`) → numbers.
+ * One step of a written solution; the last one is the `result`. The course format is general law →
+ * derivation → symbolic result → limit check → unit check → numbers.
  */
 const solutionStep = z.object({
   kind: z.enum(['given', 'formula', 'law', 'manipulation', 'substitution', 'reasoning', 'limit', 'units', 'result']),
@@ -114,17 +112,15 @@ const solutionStep = z.object({
 const workbookItem = {
   objectives: z.array(z.string()).min(1),
   prompt: z.string(),
-  /** inline SVG markup drawn under the prompt (physics space, LTR) */
-  diagram: z.string().optional(),
-  /** accessible description of the diagram: required when there is one */
-  diagramAlt: z.string().optional(),
-  /** the short final answer: value with units and direction, or a one-line decision */
+  /** the short final answer: value with units, or a one-line decision */
   answer: z.string(),
   solution: z.array(solutionStep).min(1),
 };
+/** One file per lesson and language: src/content/workbook/<lang>/<chapter>-<lesson>.yaml. */
 const workbook = defineCollection({
   loader: glob({ base: './src/content/workbook', pattern: '**/*.yaml' }),
   schema: z.object({
+    lang,
     lesson: z.string().regex(/^\d+\.\d+$/),
     practice: z.array(
       z.object({
@@ -134,35 +130,26 @@ const workbook = defineCollection({
         ...workbookItem,
       }),
     ),
-    challenge: z.array(
-      z.object({
-        id: z.string().regex(/^W-\d+\.\d+-c\d$/),
-        /** 1 = hard (entrance-exam level), 2 = very hard (olympiad level) */
-        stars: z.union([z.literal(1), z.literal(2)]),
-        ...workbookItem,
-        /** where the problem comes from; only a source actually opened and read is cited */
-        source: z.object({
-          name: z.string(),
-          year: z.number().int().min(1900),
-          problem: z.string(),
-          url: z.string().url(),
-          /** the day the source was opened; an unquoted YAML date arrives as a Date */
-          verified: z.union([
-            z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-            z.date().transform((d) => d.toISOString().slice(0, 10)),
-          ]),
-          /** numbers or constants changed (to the formula sheet's), wording paraphrased */
-          adapted: z.boolean().default(true),
+    challenge: z
+      .array(
+        z.object({
+          id: z.string().regex(/^W-\d+\.\d+-c\d$/),
+          /** 1 = hard, 2 = very hard */
+          stars: z.union([z.literal(1), z.literal(2)]),
+          ...workbookItem,
+          /** where the problem comes from; only a source actually opened and read is cited */
+          source: z.object({
+            name: z.string(),
+            year: z.number().int().min(1900),
+            problem: z.string(),
+            url: z.string().url(),
+            verified: z.union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/), z.date().transform((d) => d.toISOString().slice(0, 10))]),
+            adapted: z.boolean().default(true),
+          }),
         }),
-      }),
-    ),
+      )
+      .default([]),
   }),
 });
 
-/** End-of-chapter summary: what to remember and how to solve the chapter's problems. */
-const summaries = defineCollection({
-  loader: glob({ base: './src/content/summaries', pattern: '*.mdx' }),
-  schema: z.object({ chapter: z.number().int().min(0).max(10), title: z.string() }),
-});
-
-export const collections = { lessons, questions, misconceptions, glossary, videos, workbook, summaries };
+export const collections = { lessons, questions, glossary, misconceptions, summaries, workbook };

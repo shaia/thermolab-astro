@@ -1,16 +1,21 @@
 ---
 /**
- * A link to a lesson, or to an anchor inside it (a worked example's id), that respects the base path.
- * A lesson not yet written links to its comprehension ladder on the practice page (`lessonHref`), so a
- * lesson may name any lesson of the map without leaving a dead link while the course is being written.
+ * A link to a lesson, or to an anchor inside it, in the page's language, respecting the base path.
+ * A lesson not yet moved to this platform has no page here, so the link goes to the contents page
+ * instead of a dead end.
  */
-import { lessonHref } from '~/lib/companions';
+import { getCollection } from 'astro:content';
+import { lessonSlug } from '~/course';
+import { langOf } from '~/i18n';
+import { langUrl } from '~/lib/url';
 interface Props {
   id: string;
   anchor?: string;
 }
 const { id, anchor } = Astro.props;
-const href = (await lessonHref())(id, anchor);
+const lang = langOf(Astro.url.pathname);
+const written = (await getCollection('lessons', (e) => e.data.lang === lang && e.data.id === id)).length > 0;
+const href = written ? langUrl(lang, `lessons/${lessonSlug(id)}/${anchor ? `#${anchor}` : ''}`) : langUrl(lang);
 ---
 
 <a href={href}><slot /></a>

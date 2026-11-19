@@ -1,0 +1,53 @@
+---
+/** Module test: drawn from the module's questions so that every objective is covered. */
+import { chapterQuestions, chaptersWithQuestions, testPool } from '~/assessment/bank';
+import TestRunner from '~/assessment/TestRunner';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { chapterObjectives, chapters, moduleNumber } from '~/course';
+import { lessonHref, misconceptionsFor } from '~/lib/companions';
+import { langUrl } from '~/lib/url';
+import { LANGS, type Lang } from '~/i18n';
+import '~/styles/lesson.css';
+import '~/styles/platform.css';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of LANGS) for (const n of await chaptersWithQuestions(lang)) paths.push({ params: { lang, chapter: `ch${n}` }, props: { n } });
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const { n } = Astro.props;
+const chapter = chapters.find((c) => c.n === n);
+const mod = moduleNumber(n);
+const T = {
+  en: { title: `Module ${mod} test`, description: `A test covering every objective of module ${mod}, with a report after you submit`, kicker: `Module ${mod} · ${chapter?.title.en}`, heading: 'Module test' },
+  he: { title: `מבחן מודול ${mod}`, description: `מבחן שמכסה את כל המטרות של מודול ${mod}, עם דוח אחרי ההגשה`, kicker: `מודול ${mod} · ${chapter?.title.he}`, heading: 'מבחן מודול' },
+}[lang];
+
+const pool = testPool(await chapterQuestions(n, lang));
+// objectives come from the course map, so a module can be tested before its lessons are written
+const objectives = chapterObjectives(n).map((o) => ({ id: o.id, text: o.text[lang] }));
+const href = await lessonHref(lang);
+const lessons = Object.fromEntries((chapter?.lessons ?? []).map((l) => [l.id, { title: l.title[lang], href: href(l.id) }]));
+const misconceptions = await misconceptionsFor(lang);
+---
+
+<BaseLayout title={T.title} description={T.description}>
+  <div class="platform">
+    <section class="sheet sheet-narrow">
+      <p class="kicker">{T.kicker}</p>
+      <h1>{T.heading}</h1>
+      <TestRunner
+        client:load
+        lang={lang}
+        pool={pool}
+        objectives={objectives}
+        lessons={lessons}
+        misconceptions={misconceptions}
+        practiceHref={langUrl(lang, `practice/ch${n}/`)}
+        meHref={langUrl(lang, 'me/')}
+      />
+    </section>
+  </div>
+</BaseLayout>

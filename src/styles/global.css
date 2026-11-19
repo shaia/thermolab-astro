@@ -245,3 +245,12 @@ canvas,
     display: none !important;
   }
 }
+
+/* the page's reading direction, for boxes that must be LTR inside but hold prose */
+:root[dir='rtl'] {
+  --page-dir: rtl;
+}
+:root[dir='ltr'] {
+  --page-dir: ltr;
+}
+

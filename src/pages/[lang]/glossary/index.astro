@@ -1,0 +1,92 @@
+---
+/** Glossary: every term, alphabetical in the page's language, with the other language's term and the lesson that introduces it. */
+import { getCollection } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { lessonOrder, lessonSlug } from '~/course';
+import { tex } from '~/lib/tex';
+import { langUrl } from '~/lib/url';
+import { writtenLessons } from '~/lib/companions';
+import { LANGS, locale, otherLang, type Lang } from '~/i18n';
+import '~/styles/lesson.css';
+import '~/styles/platform.css';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const other = otherLang(lang);
+const T = {
+  en: {
+    title: 'Glossary',
+    description: 'The course’s terms in English and Hebrew, with the lesson that defines each',
+    lede: (n: number) => `${n} terms in alphabetical order, each with its Hebrew name and a link to the lesson that defines it. The course spells every term one way, in every lesson and every question.`,
+    jump: 'Jump to a letter',
+    terms: 'The terms',
+    symbol: 'Symbol:',
+    defined: (id: string) => `Defined in lesson ${id}`,
+    planned: (id: string, title: string) => `To be defined in lesson ${id}, ${title}`,
+  },
+  he: {
+    title: 'מילון מונחים',
+    description: 'מונחי הקורס בעברית ובאנגלית, עם השיעור שבו הם מוגדרים',
+    lede: (n: number) => `${n} מונחים בסדר אלפביתי, עם המונח באנגלית וקישור אל השיעור שמגדיר אותם. הקורס כותב כל מונח באיות אחד, בכל השיעורים ובכל השאלות.`,
+    jump: 'קפיצה לאות',
+    terms: 'המונחים',
+    symbol: 'סמל:',
+    defined: (id: string) => `מוגדר בשיעור ${id}`,
+    planned: (id: string, title: string) => `יוגדר בשיעור ${id}, ${title}`,
+  },
+}[lang];
+
+const written = await writtenLessons(lang);
+const terms = (await getCollection('glossary')).map((e) => e.data).sort((a, b) => a.term[lang].localeCompare(b.term[lang], locale(lang)));
+const planned = (id: string) => lessonOrder.find((l) => l.id === id)?.title[lang] ?? '';
+
+const letters: { letter: string; terms: typeof terms }[] = [];
+for (const t of terms) {
+  const letter = (t.term[lang].trim()[0] ?? '?').toLocaleUpperCase(locale(lang));
+  const last = letters[letters.length - 1];
+  if (last?.letter === letter) last.terms.push(t);
+  else letters.push({ letter, terms: [t] });
+}
+---
+
+<BaseLayout title={T.title} description={T.description}>
+  <div class="platform">
+    <header class="sheet sheet-narrow">
+      <p class="kicker">{T.title}</p>
+      <h1>{T.title}</h1>
+      <p class="p-lede">{T.lede(terms.length)}</p>
+      <ul class="toc-line" aria-label={T.jump}>
+        {letters.map((l) => <li><a href={`#letter-${l.letter}`}>{l.letter}</a></li>)}
+      </ul>
+    </header>
+
+    <section class="sheet sheet-narrow" aria-label={T.terms}>
+      {
+        letters.map((l) => (
+          <>
+            <h2 class="gloss-letter" id={`letter-${l.letter}`}>{l.letter}</h2>
+            <dl class="gloss-list">
+              {l.terms.map((t) => (
+                <div class="gloss-entry" id={`term-${t.id}`} data-term={t.id}>
+                  <dt>
+                    <span>{t.term[lang]}</span>
+                    <span class={`gloss-en ${other === 'en' ? 'ltr' : ''}`} lang={other} dir={other === 'he' ? 'rtl' : 'ltr'}>{t.term[other]}</span>
+                  </dt>
+                  <dd set:html={tex(t.definition[lang], `glossary ${t.id}`)} />
+                  <dd class="gloss-meta">
+                    {t.symbol && <span>{T.symbol} <span class="q"><Fragment set:html={tex(`$${t.symbol}$`, `glossary ${t.id}.symbol`)} /></span></span>}
+                    {t.lesson && written.has(t.lesson) && <a href={langUrl(lang, `lessons/${lessonSlug(t.lesson)}/`)}>{T.defined(t.lesson)}</a>}
+                    {t.lesson && !written.has(t.lesson) && <span>{T.planned(t.lesson, planned(t.lesson))}</span>}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </>
+        ))
+      }
+    </section>
+  </div>
+</BaseLayout>

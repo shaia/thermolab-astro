@@ -1,9 +1,10 @@
 ---
 import RevisitIsland from '~/ui/Revisit';
+import { langOf } from '~/i18n';
 interface Props {
   /** the id of this lesson's <Predict> */
   id: string;
 }
 ---
 
-<RevisitIsland client:visible id={Astro.props.id} />
+<RevisitIsland client:visible id={Astro.props.id} lang={langOf(Astro.url.pathname)} />

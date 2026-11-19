@@ -1,5 +1,5 @@
 /**
- * The chapter test. Three phases in one island:
+ * The module test. Three phases in one island:
  *   intro   - what the test is, an optional timer;
  *   running - questions drawn by buildTest (every objective at least once), no feedback;
  *   report  - score, per-objective mastery, misconceptions with their remedies, what to review.
@@ -9,6 +9,7 @@
  */
 
 import { useEffect, useRef, useState } from 'preact/hooks';
+import type { Lang } from '~/i18n';
 import { objectiveMastery, type Level } from '~/progress/mastery';
 import { progress, recordAttempt } from '~/progress/store';
 import { grade, probesOf, type Verdict } from './check';
@@ -19,6 +20,7 @@ import { buildTest } from './test-builder';
 import './question.css';
 
 interface Props {
+  lang: Lang;
   pool: Simple[];
   objectives: { id: string; text: string }[];
   lessons: Record<string, { title: string; href: string }>;
@@ -34,7 +36,71 @@ interface Result {
   correct: boolean;
 }
 
-const LEVEL_LABEL: Record<Level, string> = { none: '○ עוד לא נבחנתם', learning: '◐ בלמידה', mastered: '● שליטה' };
+const TEXT = {
+  en: {
+    level: { none: '○ not tested yet', learning: '◐ learning', mastered: '● mastered' } satisfies Record<Level, string>,
+    intro: (n: number) => `The test is drawn from the module’s questions and covers all ${n} objectives at least once. There is no feedback until you submit: answer, submit, and only then see the report. The questions run from easy to hard.`,
+    timed: 'Test with a clock',
+    minutes: 'Length of the test in minutes',
+    clockNote: 'Without a clock you can take as long as you like. An exam is written against the clock, so try it with one too.',
+    start: 'Start the test',
+    practiceFirst: 'Practise first',
+    answered: (a: number, n: number) => `Answered ${a} of ${n}`,
+    left: 'Time left',
+    submit: 'Submit and see the report',
+    question: (i: number) => `Question ${i}`,
+    sure: 'Sure of the answer',
+    score: (pct: number, seed: number) => `correct (${pct}%). Test number: ${seed}`,
+    byObjective: 'Mastery by objective',
+    objective: 'Objective',
+    inTest: 'In the test',
+    overall: 'Overall',
+    mcFound: 'Misconceptions found',
+    noMc: 'No known misconception showed up in your answers.',
+    review: 'What to go back to',
+    allRight: 'You answered every objective tested correctly. Keep practising to keep it.',
+    lesson: (id: string, title: string) => `Lesson ${id} ${title}`,
+    questions: 'The questions',
+    right: 'correct',
+    wrong: 'wrong',
+    blank: 'not answered',
+    again: 'A new test',
+    toPractice: 'To the practice page',
+    me: 'My path',
+  },
+  he: {
+    level: { none: '○ עוד לא נבחנתם', learning: '◐ בלמידה', mastered: '● שליטה' } satisfies Record<Level, string>,
+    intro: (n: number) => `המבחן נבחר מתוך שאלות המודול, ומכסה את כל ${n} המטרות לפחות פעם אחת. אין משוב עד ההגשה: עונים, מגישים, ורק אז רואים את הדוח. השאלות מסודרות מהקל לקשה.`,
+    timed: 'מבחן עם שעון',
+    minutes: 'משך המבחן בדקות',
+    clockNote: 'בלי שעון אפשר לקחת כמה זמן שרוצים. במבחן עובדים מול שעון, ולכן כדאי לנסות גם עם שעון.',
+    start: 'התחלת המבחן',
+    practiceFirst: 'קודם לתרגל',
+    answered: (a: number, n: number) => `ענו על ${a} מתוך ${n}`,
+    left: 'הזמן שנשאר',
+    submit: 'הגשה וקבלת דוח',
+    question: (i: number) => `שאלה ${i}`,
+    sure: 'בטוחים בתשובה',
+    score: (pct: number, seed: number) => `תשובות נכונות (${pct}%). מספר המבחן: ${seed}`,
+    byObjective: 'שליטה לפי מטרה',
+    objective: 'מטרה',
+    inTest: 'במבחן',
+    overall: 'מצב כולל',
+    mcFound: 'טעויות מושגיות שזוהו',
+    noMc: 'לא זוהתה בתשובות טעות מושגית מוכרת.',
+    review: 'מה כדאי לחזור עליו',
+    allRight: 'ענו נכון על כל המטרות שנבחנו. המשיכו לדף התרגול כדי לשמור על הידע.',
+    lesson: (id: string, title: string) => `שיעור ${id} ${title}`,
+    questions: 'סקירת השאלות',
+    right: 'נכון',
+    wrong: 'לא נכון',
+    blank: 'לא נענתה',
+    again: 'מבחן חדש',
+    toPractice: 'לדף התרגול',
+    me: 'המסלול שלי',
+  },
+} satisfies Record<Lang, unknown>;
+
 const DEFAULT_MINUTES = 30;
 
 const mmss = (ms: number) => {
@@ -42,7 +108,8 @@ const mmss = (ms: number) => {
   return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 };
 
-export default function TestRunner({ pool, objectives, lessons, misconceptions, practiceHref, meHref }: Props) {
+export default function TestRunner({ lang, pool, objectives, lessons, misconceptions, practiceHref, meHref }: Props) {
+  const t = TEXT[lang];
   const [phase, setPhase] = useState<'intro' | 'running' | 'report'>('intro');
   const [timed, setTimed] = useState(false);
   const [minutes, setMinutes] = useState(DEFAULT_MINUTES);
@@ -64,18 +131,18 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
     setQuestions(picked);
     setDrafts(Object.fromEntries(picked.map((q) => [q.id, emptyDraft(q)])));
     setSure({});
-    const t = Date.now();
-    setNow(t);
-    setDeadline(timed ? t + minutes * 60_000 : null);
+    const time = Date.now();
+    setNow(time);
+    setDeadline(timed ? time + minutes * 60_000 : null);
     setPhase('running');
     window.scrollTo(0, 0);
   };
 
   const submit = () => {
     const rs: Result[] = questions.map((q) => {
-      const a = toAnswer(drafts[q.id]);
+      const a = toAnswer(drafts[q.id], lang);
       const ready = a !== null && !('error' in a);
-      const verdict = ready ? grade(q, a) : null;
+      const verdict = ready ? grade(q, a, lang) : null;
       const correct = verdict?.correct === true;
       recordAttempt({
         qid: q.id,
@@ -101,9 +168,9 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
   useEffect(() => {
     if (phase !== 'running' || deadline === null) return;
     const id = setInterval(() => {
-      const t = Date.now();
-      setNow(t);
-      if (t >= deadline) submitRef.current();
+      const time = Date.now();
+      setNow(time);
+      if (time >= deadline) submitRef.current();
     }, 1000);
     return () => clearInterval(id);
   }, [phase, deadline]);
@@ -111,18 +178,15 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
   if (phase === 'intro') {
     return (
       <div class="test-intro" data-phase="intro">
-        <p class="p-lede">
-          המבחן נבחר מתוך שאלות הפרק, ומכסה את כל <span class="ltr">{objectives.length}</span> המטרות לפחות פעם אחת. אין משוב עד ההגשה: עונים, מגישים,
-          ורק אז רואים את הדוח. השאלות מסודרות מהקל לקשה.
-        </p>
+        <p class="p-lede">{t.intro(objectives.length)}</p>
         <div class="test-options">
           <label>
             <input type="checkbox" checked={timed} onChange={(e) => setTimed((e.target as HTMLInputElement).checked)} />
-            מבחן עם שעון
+            {t.timed}
           </label>
           {timed && (
             <label>
-              משך המבחן בדקות
+              {t.minutes}
               <input
                 type="number"
                 min={5}
@@ -132,14 +196,14 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
               />
             </label>
           )}
-          <p class="p-note">בלי שעון אפשר לקחת כמה זמן שרוצים. במבחן של הקורס עובדים מול שעון, ולכן כדאי לנסות גם עם שעון.</p>
+          <p class="p-note">{t.clockNote}</p>
         </div>
         <div class="p-links">
           <button type="button" class="btn primary" onClick={() => start()}>
-            התחלת המבחן
+            {t.start}
           </button>
           <a class="btn" href={practiceHref}>
-            קודם לתרגל
+            {t.practiceFirst}
           </a>
         </div>
       </div>
@@ -148,47 +212,41 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
 
   if (phase === 'running') {
     const answered = questions.filter((q) => {
-      const a = toAnswer(drafts[q.id]);
+      const a = toAnswer(drafts[q.id], lang);
       return a !== null && !('error' in a);
     }).length;
     const left = deadline === null ? null : deadline - now;
     return (
       <div class="test-run" data-phase="running">
         <div class="test-bar">
-          <span>
-            ענו על <strong class="ltr">{answered}</strong> מתוך <span class="ltr">{questions.length}</span>
-          </span>
+          <span>{t.answered(answered, questions.length)}</span>
           {left !== null && (
-            <span class={`test-timer ${left < 60_000 ? 'low' : ''}`} role="timer" aria-label="הזמן שנשאר">
+            <span class={`test-timer ${left < 60_000 ? 'low' : ''}`} role="timer" aria-label={t.left}>
               <span class="ltr">{mmss(left)}</span>
             </span>
           )}
           <button type="button" class="btn primary" onClick={submit}>
-            הגשה וקבלת דוח
+            {t.submit}
           </button>
         </div>
         {questions.map((q, i) => (
           <div key={q.id} class="test-q" data-qid={q.id} data-type={q.type}>
             <div class="test-q-head">
-              <span class="q-num">שאלה {i + 1}</span>
+              <span class="q-num">{t.question(i + 1)}</span>
             </div>
             <div class="q-prompt" dangerouslySetInnerHTML={{ __html: q.prompt }} />
-            <AnswerArea q={q} draft={drafts[q.id]} setDraft={(d) => setDrafts({ ...drafts, [q.id]: d })} locked={false} verdict={null} />
+            <AnswerArea q={q} lang={lang} draft={drafts[q.id]} setDraft={(d) => setDrafts({ ...drafts, [q.id]: d })} locked={false} verdict={null} />
             {q.confidence && (
               <label class="test-sure">
-                <input
-                  type="checkbox"
-                  checked={sure[q.id] ?? false}
-                  onChange={(e) => setSure({ ...sure, [q.id]: (e.target as HTMLInputElement).checked })}
-                />
-                בטוחים בתשובה
+                <input type="checkbox" checked={sure[q.id] ?? false} onChange={(e) => setSure({ ...sure, [q.id]: (e.target as HTMLInputElement).checked })} />
+                {t.sure}
               </label>
             )}
           </div>
         ))}
         <div class="p-links">
           <button type="button" class="btn primary" onClick={submit}>
-            הגשה וקבלת דוח
+            {t.submit}
           </button>
         </div>
       </div>
@@ -221,20 +279,18 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
         <strong class="ltr" data-testid="score">
           {right}/{results.length}
         </strong>
-        <span>
-          תשובות נכונות ({pct}%). מספר המבחן: <span class="ltr">{seed}</span>
-        </span>
+        <span>{t.score(pct, seed)}</span>
       </div>
 
       <section>
-        <h2>שליטה לפי מטרה</h2>
+        <h2>{t.byObjective}</h2>
         <div class="table-scroll">
           <table class="report-table">
             <thead>
               <tr>
-                <th scope="col">מטרה</th>
-                <th scope="col">במבחן</th>
-                <th scope="col">מצב כולל</th>
+                <th scope="col">{t.objective}</th>
+                <th scope="col">{t.inTest}</th>
+                <th scope="col">{t.overall}</th>
               </tr>
             </thead>
             <tbody>
@@ -249,7 +305,7 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
                     </span>
                   </td>
                   <td>
-                    <span class={`level ${r.level}`}>{LEVEL_LABEL[r.level]}</span>
+                    <span class={`level ${r.level}`}>{t.level[r.level]}</span>
                   </td>
                 </tr>
               ))}
@@ -259,9 +315,9 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
       </section>
 
       <section>
-        <h2>טעויות מושגיות שזוהו</h2>
+        <h2>{t.mcFound}</h2>
         {found.length === 0 ? (
-          <p>לא זוהתה בתשובות טעות מושגית מוכרת.</p>
+          <p>{t.noMc}</p>
         ) : (
           <ul class="report-list">
             {found.map((id) => {
@@ -283,16 +339,14 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
       </section>
 
       <section>
-        <h2>מה כדאי לחזור עליו</h2>
+        <h2>{t.review}</h2>
         {review.length === 0 ? (
-          <p>ענו נכון על כל המטרות שנבחנו. המשיכו לדף התרגול כדי לשמור על הידע.</p>
+          <p>{t.allRight}</p>
         ) : (
           <ul class="report-list">
             {review.map((l) => (
               <li key={l}>
-                <a href={lessons[l].href}>
-                  שיעור <span class="ltr">{l}</span> {lessons[l].title}
-                </a>
+                <a href={lessons[l].href}>{t.lesson(l, lessons[l].title)}</a>
               </li>
             ))}
           </ul>
@@ -300,12 +354,11 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
       </section>
 
       <section class="report-review">
-        <h2>סקירת השאלות</h2>
+        <h2>{t.questions}</h2>
         {results.map((r, i) => (
           <details key={r.q.id} data-qid={r.q.id}>
             <summary>
-              שאלה {i + 1}:{' '}
-              <span class={`verdict-mark ${r.correct ? 'ok' : 'bad'}`}>{r.correct ? 'נכון' : r.answered ? 'לא נכון' : 'לא נענתה'}</span>
+              {t.question(i + 1)}: <span class={`verdict-mark ${r.correct ? 'ok' : 'bad'}`}>{r.correct ? t.right : r.answered ? t.wrong : t.blank}</span>
             </summary>
             <div class="q-prompt" dangerouslySetInnerHTML={{ __html: r.q.prompt }} />
             {r.verdict?.feedback.filter(Boolean).map((f, k) => <p key={k} dangerouslySetInnerHTML={{ __html: f }} />)}
@@ -316,13 +369,13 @@ export default function TestRunner({ pool, objectives, lessons, misconceptions, 
 
       <div class="p-links">
         <button type="button" class="btn primary" onClick={() => start(Math.floor(Math.random() * 1_000_000))}>
-          מבחן חדש
+          {t.again}
         </button>
         <a class="btn" href={practiceHref}>
-          לדף התרגול
+          {t.toPractice}
         </a>
         <a class="btn" href={meHref}>
-          המסלול שלי
+          {t.me}
         </a>
       </div>
     </div>

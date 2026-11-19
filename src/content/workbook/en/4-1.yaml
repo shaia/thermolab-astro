@@ -1,0 +1,296 @@
+# Lesson 4.1 workbook. Problems 02 and 04 are ThermoLab's problem 1, problem 09 its problem 6(c); the rest are
+# new. ThermoLab kept its solutions with the instructor; this platform publishes them, by the author's decision.
+# Take k_B = 1.381e-23 J/K, R = 8.314 J/(mol K), N_A = 6.022e23 /mol.
+lang: en
+lesson: '4.1'
+practice:
+  - id: W-4.1-01
+    level: basic
+    qualitative: true
+    objectives: [OBJ-4.1-1]
+    prompt: >-
+      A tyre gauge reads a perfectly steady $2.2\cdot10^5\,\text{Pa}$. Are air molecules striking the gauge's membrane at a steady rate, one after another? What, exactly, is steady?
+    answer: >-
+      No. Molecules arrive at random moments with random momenta. What is steady is the total momentum delivered per second, an average over an enormous number of impacts.
+    solution:
+      - kind: reasoning
+        text: >-
+          Each molecule arrives when its own random flight happens to bring it to the membrane, with a random speed and direction; nothing about a single arrival is regular.
+      - kind: reasoning
+        text: >-
+          The gauge responds to the force, the momentum delivered per unit time. In any short interval it receives so many impacts that their sum fluctuates by a fraction $N^{-1/2}$ of its mean, far too little to see.
+      - kind: result
+        text: >-
+          The impacts are irregular; their rate of momentum delivery, averaged over very many of them, is what is steady.
+
+  - id: W-4.1-02
+    level: basic
+    objectives: [OBJ-4.1-2]
+    prompt: >-
+      A particle of mass $m$ with velocity $(v_x, v_y)$ strikes a rigid wall perpendicular to the $x$ axis and rebounds elastically.
+      (a) What momentum does it transfer to the wall, and why does $v_y$ not appear?
+      (b) The particle is in a box of side $L_x$ in the $x$ direction. Show that its time-averaged force on that wall is $mv_x^2/L_x$, and say where you used the assumption that it hits nothing else on the way.
+    answer: >-
+      (a) $2m|v_x|$, normal to the wall; the wall exerts no force along $y$, so $v_y$ is unchanged.
+      (b) $F = 2m|v_x|\cdot|v_x|/(2L_x) = mv_x^2/L_x$; the round-trip time $2L_x/|v_x|$ assumes straight flight with nothing in the way.
+    solution:
+      - kind: law
+        text: >-
+          Momentum conservation: the wall receives the particle's change of momentum with the sign reversed. A rigid, frictionless wall pushes only along its normal.
+      - kind: manipulation
+        text: >-
+          $v_x \to -v_x$, $v_y$ unchanged: the particle's momentum changes by $-2mv_x\,\hat x$, so the wall receives $2m|v_x|$ along $x$.
+      - kind: manipulation
+        text: >-
+          Between two hits on the same wall the particle crosses the box and back, $2L_x$ at speed $|v_x|$: $\Delta t = 2L_x/|v_x|$. This uses straight, uninterrupted flight. The average force is $\Delta p/\Delta t = 2m|v_x|\cdot|v_x|/(2L_x) = mv_x^2/L_x$.
+      - kind: units
+        text: >-
+          $\text{kg}\cdot\text{m}^2\text{s}^{-2}/\text{m} = \text{N}$.
+      - kind: result
+        text: >-
+          (a) $2m|v_x|$; $v_y$ is untouched by a force normal to the wall. (b) $mv_x^2/L_x$, using a free round trip of $2L_x$.
+
+  - id: W-4.1-03
+    level: basic
+    qualitative: true
+    objectives: [OBJ-4.1-3]
+    prompt: >-
+      A container of argon at $300\,\text{K}$ is emptied and refilled with the same number of helium atoms, also at $300\,\text{K}$. Which of these change: the pressure, the mean kinetic energy per atom, the internal energy, the root-mean-square speed?
+    answer: >-
+      Only the root-mean-square speed, which rises by $\sqrt{39.95/4.00} = 3.16$. The other three depend on $N$, $V$ and $T$ only.
+    solution:
+      - kind: law
+        text: >-
+          $PV = Nk_BT$, $\langle E\rangle = \tfrac32 k_BT$, $U = N\langle E\rangle$, $v_{\text{rms}} = \sqrt{3k_BT/m}$.
+      - kind: reasoning
+        text: >-
+          $N$, $V$ and $T$ are unchanged, so $P$, $\langle E\rangle$ and $U$ are too. Only $v_{\text{rms}}$ contains the mass, as $m^{-1/2}$.
+      - kind: result
+        text: >-
+          Only the speed changes: helium atoms are $3.16$ times faster.
+
+  - id: W-4.1-04
+    level: mid
+    objectives: [OBJ-4.1-2]
+    prompt: >-
+      A student writes the force of one particle on one wall as $2m|v_x|\,\nu$, with $\nu$ the rate of collisions, takes $\nu = |v_x|/L_x$, and gets $2mv_x^2/L_x$, twice the lesson's result. Find the error.
+    answer: >-
+      $|v_x|/L_x$ is the rate of collisions with both $x$ walls together. With one wall the particle collides once per round trip, $|v_x|/(2L_x)$, which gives $mv_x^2/L_x$.
+    solution:
+      - kind: reasoning
+        text: >-
+          A particle crossing the box once takes $L_x/|v_x|$ and then hits a wall, but alternately the left and the right one.
+      - kind: manipulation
+        text: >-
+          Returning to the same wall takes a round trip, $2L_x/|v_x|$, so the rate on one wall is $|v_x|/(2L_x)$ and $F = 2m|v_x|\cdot|v_x|/(2L_x) = mv_x^2/L_x$.
+      - kind: limit
+        text: >-
+          Check: the two walls together then receive $2mv_x^2/L_x$, which is the student's number. It is the total on both walls, not the force on one.
+      - kind: result
+        text: >-
+          The student counted the bounces on both $x$ walls; the force on one wall is $mv_x^2/L_x$.
+
+  - id: W-4.1-05
+    level: mid
+    objectives: [OBJ-4.1-2, OBJ-4.1-3]
+    prompt: >-
+      A $1.5\,\text{L}$ flask holds $3.0\cdot10^{22}$ nitrogen molecules at $350\,\text{K}$.
+      (a) Find the pressure.
+      (b) Find the mean translational kinetic energy per molecule and the total translational kinetic energy.
+    answer: >-
+      (a) $9.67\cdot10^4\,\text{Pa}$. (b) $7.25\cdot10^{-21}\,\text{J}$ per molecule, $218\,\text{J}$ in all.
+    solution:
+      - kind: law
+        text: >-
+          $PV = Nk_BT$; equipartition over the three directions of motion, $\langle E_{\text{tr}}\rangle = \tfrac32 k_BT$. (Nitrogen also rotates; the question asks for translation only, which is all the pressure depends on.)
+      - kind: substitution
+        text: >-
+          $P = 3.0\cdot10^{22}\cdot1.381\cdot10^{-23}\cdot350/1.5\cdot10^{-3} = 9.67\cdot10^4\,\text{Pa}$. $\langle E_{\text{tr}}\rangle = 1.5\cdot1.381\cdot10^{-23}\cdot350 = 7.25\cdot10^{-21}\,\text{J}$, and $N\langle E_{\text{tr}}\rangle = 218\,\text{J}$.
+      - kind: limit
+        text: >-
+          Doubling $N$ in the same flask doubles $P$ and the total, and leaves the energy per molecule alone: the per-particle quantity is set by $T$ only.
+      - kind: units
+        text: >-
+          $\text{J/m}^3 = \text{Pa}$; $\text{J/K}\cdot\text{K} = \text{J}$.
+      - kind: result
+        text: >-
+          (a) $9.67\cdot10^4\,\text{Pa}$; (b) $7.25\cdot10^{-21}\,\text{J}$ per molecule, $218\,\text{J}$ in total.
+
+  - id: W-4.1-06
+    level: mid
+    objectives: [OBJ-4.1-4]
+    prompt: >-
+      (a) A nanoscale sensor samples the pressure of $10^6$ molecules. What relative fluctuation does it see?
+      (b) How many molecules would bring the fluctuation down to one part per million?
+    answer: >-
+      (a) $10^{-3}$, a tenth of a percent. (b) $10^{12}$.
+    solution:
+      - kind: law
+        text: >-
+          $\sigma_P/\langle P\rangle = N^{-1/2}$, so $N = (\sigma_P/\langle P\rangle)^{-2}$.
+      - kind: substitution
+        text: >-
+          (a) $(10^6)^{-1/2} = 10^{-3}$. (b) $(10^{-6})^{-2} = 10^{12}$.
+      - kind: limit
+        text: >-
+          A thousand times smaller fluctuation needs a million times more molecules: that steep price is the $N^{-1/2}$ law.
+      - kind: result
+        text: >-
+          (a) $10^{-3}$; (b) $10^{12}$ molecules.
+
+  - id: W-4.1-07
+    level: mid
+    qualitative: true
+    objectives: [OBJ-4.1-1, OBJ-4.1-4]
+    prompt: >-
+      You double the number of particles in a box at fixed $T$ and $V$. What happens to (a) the mean pressure, (b) the absolute size of its fluctuations, (c) their relative size?
+    answer: >-
+      (a) It doubles. (b) It grows by $\sqrt2$. (c) It shrinks by $\sqrt2$.
+    solution:
+      - kind: law
+        text: >-
+          $\langle P\rangle = Nk_BT/V \propto N$; a sum of $N$ independent contributions has a spread $\propto \sqrt N$.
+      - kind: reasoning
+        text: >-
+          Twice the particles: twice the mean, $\sqrt2$ times the spread, so the ratio falls by $\sqrt2$. The gauge gets noisier in absolute terms and steadier in relative terms.
+      - kind: result
+        text: >-
+          (a) $\times 2$; (b) $\times\sqrt2$; (c) $\div\sqrt2$.
+
+  - id: W-4.1-08
+    level: bagrut
+    objectives: [OBJ-4.1-5]
+    prompt: >-
+      At $300\,\text{K}$ and one atmosphere, argon atoms ($0.34\,\text{nm}$ across) fill about $5.0\cdot10^{-4}$ of the volume. At what pressure, at the same temperature, would they fill $1\%$ of it? Is the ideal gas law still trustworthy there?
+    answer: >-
+      About $2.0\cdot10^6\,\text{Pa}$, twenty atmospheres. The size correction is then about $1\%$, and the attraction correction is of the same order: the law is still a good first estimate, but no longer exact to the percent.
+    solution:
+      - kind: law
+        text: >-
+          The occupied fraction is $n\cdot\tfrac{\pi}{6}d^3$ with $n = P/k_BT$, so at fixed $T$ it is proportional to $P$.
+      - kind: manipulation
+        text: >-
+          $P_2 = P_1\cdot(0.01/5.0\cdot10^{-4}) = 20\,P_1$.
+      - kind: substitution
+        text: >-
+          $P_2 = 20\cdot1.013\cdot10^5 = 2.0\cdot10^6\,\text{Pa}$.
+      - kind: limit
+        text: >-
+          As $P \to 0$ the fraction goes to zero and the gas becomes ideal; the fraction would reach order one only near liquid densities, where the model fails completely.
+      - kind: result
+        text: >-
+          About $2.0\cdot10^6\,\text{Pa}$; corrections of order one percent, so the ideal gas law is still a fair estimate but not exact.
+
+  - id: W-4.1-09
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-4.1-4, OBJ-4.1-5]
+    prompt: >-
+      In figure 4.1b each gas is drawn at temperature $T$, and its energy differs a little from draw to draw. Suppose instead every gas were given exactly the energy $Nk_BT$, in the same square box. How large would the spread of their long-time pressures be, and which of the two settings describes a gas in contact with surroundings at temperature $T$?
+    answer: >-
+      Zero: in a square box the long-time pressure is exactly $E/A$, so equal energies give equal pressures. A gas exchanging energy with surroundings at $T$ has a fluctuating energy, which is the setting of figure 4.1b.
+    solution:
+      - kind: law
+        text: >-
+          For a square box the long-time pressure of a microstate is $P = \frac{m}{2A}\sum_i (v_{x,i}^2 + v_{y,i}^2) = E/A$.
+      - kind: reasoning
+        text: >-
+          Fixing the energy fixes $P$ exactly, so the spread vanishes. The $N^{-1/2}$ spread of figure 4.1b is the spread of the energy itself, drawn at temperature $T$.
+      - kind: reasoning
+        text: >-
+          A gas in a container that exchanges energy with its surroundings does not have a sharp energy: its energy fluctuates. That is the drawn-at-$T$ setting (the canonical ensemble, module 11).
+      - kind: result
+        text: >-
+          Zero spread at fixed energy; the gas in contact with surroundings is the one drawn at temperature $T$, with the $N^{-1/2}$ spread.
+
+  - id: W-4.1-10
+    level: bagrut
+    objectives: [OBJ-4.1-2, OBJ-4.1-3]
+    prompt: >-
+      A $49.8\,\text{L}$ tank holds $1.00\,\text{mol}$ of helium and $1.00\,\text{mol}$ of argon at $300\,\text{K}$.
+      (a) Find the total pressure and the share each gas contributes.
+      (b) Which atoms deliver more momentum per bounce, and which bounce more often? By what factors?
+    answer: >-
+      (a) $1.00\cdot10^5\,\text{Pa}$ in total, $5.01\cdot10^4\,\text{Pa}$ from each gas. (b) An argon atom delivers $3.16$ times more momentum per bounce; helium atoms bounce $3.16$ times more often.
+    solution:
+      - kind: law
+        text: >-
+          Non-interacting particles contribute independently: $P = \sum_j N_jk_BT/V$ (Dalton's law). Per bounce $2m|v_x|$, with $|v_x| \propto m^{-1/2}$ at fixed $T$; bounce rate $\propto |v_x|$.
+      - kind: substitution
+        text: >-
+          Each gas: $nRT/V = 1.00\cdot8.314\cdot300/4.98\cdot10^{-2} = 5.01\cdot10^4\,\text{Pa}$; together $1.00\cdot10^5\,\text{Pa}$. Momentum per bounce $\propto m\cdot m^{-1/2} = m^{1/2}$, so argon over helium is $\sqrt{39.95/4.00} = 3.16$; the bounce rate is in the inverse ratio.
+      - kind: limit
+        text: >-
+          For equal masses both factors are one. For any mass ratio they still multiply to one, which is why equal amounts at equal $T$ contribute equal shares.
+      - kind: units
+        text: >-
+          $\text{J}/\text{m}^3 = \text{Pa}$.
+      - kind: result
+        text: >-
+          (a) $1.00\cdot10^5\,\text{Pa}$, half from each gas. (b) Argon: $3.16\times$ the momentum per bounce; helium: $3.16\times$ the bounces.
+challenge:
+  - id: W-4.1-c1
+    stars: 1
+    objectives: [OBJ-4.1-4]
+    prompt: >-
+      One cubic centimetre of a dilute monatomic gas is at $0\,^\circ\text{C}$ and atmospheric pressure, where it holds $2.69\cdot10^{25}$ atoms per cubic metre (Loschmidt's number). Each velocity component of an atom is Gaussian with mean zero and variance $k_BT/m$, so $\langle v_x^2\rangle = k_BT/m$ and $\langle v_x^4\rangle = 3(k_BT/m)^2$.
+      (a) For the kinetic energy of a single atom, find the ratio of the standard deviation to the mean.
+      (b) Find the same ratio for the total kinetic energy of the gas.
+    answer: >-
+      (a) $\sqrt{2/3} = 0.82$. (b) $\sqrt{2/(3N)} = 1.6\cdot10^{-10}$, with $N = 2.69\cdot10^{19}$.
+    solution:
+      - kind: law
+        text: >-
+          $E_1 = \tfrac{m}{2}(v_x^2 + v_y^2 + v_z^2)$, a sum of three independent terms. For one term, $\langle \tfrac{m}{2}v_x^2\rangle = \tfrac12 k_BT$ and $\operatorname{Var}(\tfrac{m}{2}v_x^2) = \tfrac{m^2}{4}\left(\langle v_x^4\rangle - \langle v_x^2\rangle^2\right) = \tfrac12 (k_BT)^2$.
+      - kind: manipulation
+        text: >-
+          Means and variances of independent terms add. One atom: mean $\tfrac32 k_BT$, variance $\tfrac32 (k_BT)^2$, ratio $\sqrt{3/2}/(3/2) = \sqrt{2/3}$. $N$ atoms: mean $\tfrac32 Nk_BT$, variance $\tfrac32 N(k_BT)^2$, ratio $\sqrt{2/(3N)}$.
+      - kind: substitution
+        text: >-
+          $N = 2.69\cdot10^{25}\cdot10^{-6} = 2.69\cdot10^{19}$, so $\sqrt{2/(3\cdot2.69\cdot10^{19})} = 1.57\cdot10^{-10}$.
+      - kind: limit
+        text: >-
+          $N = 1$ gives back (a); as $N \to \infty$ the ratio vanishes as $N^{-1/2}$, the same law as the pressure's, because the long-time pressure of a gas is its kinetic energy divided by the volume, times a constant.
+      - kind: result
+        text: >-
+          (a) $0.82$: a single atom's energy is as uncertain as it is large. (b) $1.6\cdot10^{-10}$: the energy of a cubic centimetre is sharp to ten decimal places.
+    source:
+      name: 'MIT 8.044 Statistical Physics I (OpenCourseWare)'
+      year: 2013
+      problem: 'Problem Set 3, Problem 2'
+      url: 'https://ocw.mit.edu/courses/8-044-statistical-physics-i-spring-2013/e116907e0d1ad4e928e129bea7694a4e_MIT8_044S13_ps3.pdf'
+      verified: '2026-11-19'
+      adapted: true
+
+  - id: W-4.1-c2
+    stars: 2
+    objectives: [OBJ-4.1-5]
+    prompt: >-
+      A classical monatomic gas that is not ideal obeys $P = \dfrac{Nk_BT}{V - bN} - a\dfrac{N^2}{V^2}$, with $a, b > 0$: $b$ accounts for the atoms' own volume, $a$ for their mutual attraction, which also gives the gas a potential energy $-aN^2/V$. Neither correction changes the heat capacity at constant volume. The gas sits in an isolated container of negligible mass, held by a partition in a third of the volume $V_0$ at temperature $T_i$. A hole is opened in the partition and the gas expands into the whole container.
+      (a) Which thermodynamic quantity is conserved?
+      (b) What is the temperature once equilibrium is restored?
+    answer: >-
+      (a) The internal energy: no heat flows in and no work is done. (b) $T_f = T_i - \dfrac{4aN}{3k_BV_0}$: the gas cools. An ideal gas ($a = 0$) would not.
+    solution:
+      - kind: law
+        text: >-
+          Isolated, rigid and massless container: $Q = 0$ and $W = 0$, so $U$ is conserved. $U = \tfrac32 Nk_BT - aN^2/V$: the kinetic part, unchanged by the corrections, plus the potential energy of the attraction.
+      - kind: manipulation
+        text: >-
+          $\tfrac32 Nk_BT_f - \dfrac{aN^2}{V_0} = \tfrac32 Nk_BT_i - \dfrac{aN^2}{V_0/3}$, so $\tfrac32 Nk_B(T_f - T_i) = aN^2\left(\dfrac{1}{V_0} - \dfrac{3}{V_0}\right) = -\dfrac{2aN^2}{V_0}$.
+      - kind: limit
+        text: >-
+          $a \to 0$: $T_f = T_i$, the familiar result that an ideal gas does not change temperature in a free expansion; its energy has no part that depends on the volume. The excluded volume $b$ does not enter $U$, so it does not change the answer.
+      - kind: units
+        text: >-
+          $aN^2/V$ is an energy, so $aN/(k_BV)$ is a temperature.
+      - kind: result
+        text: >-
+          (a) $U$. (b) $T_f = T_i - 4aN/(3k_BV_0)$: spreading out against their own attraction, the atoms trade kinetic energy for potential energy.
+    source:
+      name: 'MIT 8.044 Statistical Physics I (OpenCourseWare)'
+      year: 2013
+      problem: 'Problem Set 7, Problem 1'
+      url: 'https://www.ocw.mit.edu/courses/8-044-statistical-physics-i-spring-2013/4b8216d85ee237ced6a506e854798507_MIT8_044S13_ps7.pdf'
+      verified: '2026-11-19'
+      adapted: true

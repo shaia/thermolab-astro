@@ -1,5 +1,6 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { ui, type Lang } from '~/i18n';
 import { progress, recordPrediction } from '~/progress/store';
 import '~/assessment/question.css';
 import './flap.css';
@@ -7,13 +8,15 @@ import { useMounted } from './useMounted';
 
 interface Props {
   id: string;
+  lang: Lang;
   prompt: string;
   choices: string[];
   children?: ComponentChildren;
 }
 
 /** The "lift the flap" prediction: choose, commit, and only then see what is under the flap. */
-export default function PredictIsland({ id, prompt, choices, children }: Props) {
+export default function PredictIsland({ id, lang, prompt, choices, children }: Props) {
+  const s = ui(lang).predict;
   const mounted = useMounted();
   const saved = mounted ? progress.value.predictions[id] : undefined;
   const [pick, setPick] = useState<number | null>(null);
@@ -27,7 +30,7 @@ export default function PredictIsland({ id, prompt, choices, children }: Props) 
     <div class={`predict ${committed ? 'is-open' : ''}`} data-predict-id={id}>
       <div class="predict-prompt" dangerouslySetInnerHTML={{ __html: prompt }} />
       <fieldset class="q-choices predict-choices">
-        <legend class="sr-only">החיזוי שלכם</legend>
+        <legend class="sr-only">{s.legend}</legend>
         {choices.map((c, i) => (
           <label key={i} class={`q-choice ${pick === i ? 'on' : ''}`}>
             <input type="radio" name={`predict-${id}`} checked={pick === i} disabled={committed} onChange={() => setPick(i)} />
@@ -38,19 +41,19 @@ export default function PredictIsland({ id, prompt, choices, children }: Props) 
       {!committed && (
         <div class="predict-actions">
           <button type="button" class="btn primary" disabled={pick === null} onClick={() => pick !== null && recordPrediction(id, String(pick))}>
-            זה החיזוי שלי
+            {s.commit}
           </button>
-          <span class="hand predict-why">אין כאן ציון. מתחייבים כדי לגלות אם האינטואיציה צדקה.</span>
+          <span class="hand predict-why">{s.why}</span>
         </div>
       )}
       <div class="flap" aria-hidden={!committed}>
         <div class="flap-cover" aria-hidden="true">
-          <span class="hand">הרימו את הדש אחרי שתחזו ↑</span>
+          <span class="hand">{s.cover}</span>
         </div>
         <div class="flap-inner" inert={!committed}>
           {committed && pick !== null && (
             <p class="hand flap-yours">
-              חזיתם: <span dangerouslySetInnerHTML={{ __html: choices[pick] }} />
+              {s.yours} <span dangerouslySetInnerHTML={{ __html: choices[pick] }} />
             </p>
           )}
           {children}

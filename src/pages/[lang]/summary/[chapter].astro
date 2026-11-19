@@ -1,0 +1,46 @@
+---
+/** End-of-module summary: what to remember, the common mistakes, and how to solve the module's problems. */
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Formula from '~/components/Formula.astro';
+import LessonLink from '~/components/LessonLink.astro';
+import Note from '~/components/Note.astro';
+import { chapters, moduleNumber } from '~/course';
+import { langUrl } from '~/lib/url';
+import type { Lang } from '~/i18n';
+import '~/styles/lesson.css';
+import '~/styles/platform.css';
+
+export async function getStaticPaths() {
+  return (await getCollection('summaries')).map((entry) => ({ params: { lang: entry.data.lang, chapter: `ch${entry.data.chapter}` }, props: { entry } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const { entry } = Astro.props;
+const n = entry.data.chapter;
+const mod = moduleNumber(n);
+const chapter = chapters.find((c) => c.n === n);
+const { Content } = await render(entry);
+const T = {
+  en: { title: `Module ${mod} summary`, kicker: `Module ${mod} · ${chapter?.title.en}`, practice: 'The module’s practice page', test: 'The module test', formulas: 'Formula sheet', contents: 'To the contents' },
+  he: { title: `סיכום מודול ${mod}`, kicker: `מודול ${mod} · ${chapter?.title.he}`, practice: 'דף התרגול של המודול', test: 'מבחן המודול', formulas: 'דף הנוסחאות', contents: 'לתוכן העניינים' },
+}[lang];
+---
+
+<BaseLayout title={T.title} description={entry.data.title}>
+  <div class="platform chapter-summary">
+    <header class="sheet sheet-narrow">
+      <p class="kicker">{T.kicker}</p>
+      <h1>{entry.data.title}</h1>
+      <div class="p-links">
+        <a class="btn primary" href={langUrl(lang, `practice/ch${n}/`)}>{T.practice}</a>
+        <a class="btn" href={langUrl(lang, `test/ch${n}/`)}>{T.test}</a>
+        <a class="btn" href={langUrl(lang, 'formulas/')}>{T.formulas}</a>
+        <a class="btn" href={langUrl(lang)}>{T.contents}</a>
+      </div>
+    </header>
+    <article class="sheet sheet-narrow summary-body">
+      <Content components={{ Formula, LessonLink, Note }} />
+    </article>
+  </div>
+</BaseLayout>

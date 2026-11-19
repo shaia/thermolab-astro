@@ -1,0 +1,156 @@
+---
+/**
+ * Module practice sheet. Each lesson gets its comprehension ladder: its objectives on top and its
+ * questions from basic to exam level. Multi-part review problems would come last.
+ */
+import AnyQuestion from '~/assessment/AnyQuestion';
+import { chapterQuestions, chaptersWithQuestions } from '~/assessment/bank';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { chapters, lessonSlug, moduleNumber } from '~/course';
+import { langUrl } from '~/lib/url';
+import { chaptersWithSummary, writtenLessons } from '~/lib/companions';
+import { LANGS, ui, type Lang } from '~/i18n';
+import '~/styles/lesson.css';
+import '~/styles/platform.css';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of LANGS) for (const n of await chaptersWithQuestions(lang)) paths.push({ params: { lang, chapter: `ch${n}` }, props: { n } });
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const { n } = Astro.props;
+const chapter = chapters.find((c) => c.n === n);
+const mod = moduleNumber(n);
+const T = {
+  en: {
+    kicker: `Module ${mod} · ${chapter?.title.en}`,
+    title: `Practice · module ${mod}`,
+    description: `Practice questions for module ${mod}, by lesson and level`,
+    heading: 'Practice',
+    lede: 'Each lesson has comprehension questions on three rungs: basic, to check you have the definitions and the idea; intermediate, for a calculation or a two-step argument; exam level, for questions as an exam asks them. Climb the rungs in order, and do not move up before the one below holds.',
+    filter: 'Filter by level',
+    all: 'All',
+    levels: { basic: 'Basic', mid: 'Intermediate', bagrut: 'Exam level' },
+    test: 'To the module test',
+    summary: 'Module summary',
+    contents: 'To the contents',
+    toLesson: 'To the lesson',
+    objectives: 'The lesson’s questions check that you can:',
+    review: 'Review problems',
+    reviewLede: 'Each review problem is one scenario with several parts, from easy to hard, across the module. In the open parts you write a solution on paper, compare it with the model solution, and tick on the rubric what you did right.',
+  },
+  he: {
+    kicker: `מודול ${mod} · ${chapter?.title.he}`,
+    title: `דף תרגול · מודול ${mod}`,
+    description: `שאלות תרגול למודול ${mod}, לפי שיעור ורמה`,
+    heading: 'דף תרגול',
+    lede: 'לכל שיעור יש שאלות הבנה בשלוש מדרגות: בסיס, לבדיקה שהבנתם את ההגדרות והרעיון; בינוני, לחישוב ולנימוק בשני צעדים; רמת מבחן, לשאלות כמו במבחן. עלו במדרגות לפי הסדר, ואל תעברו מדרגה לפני שהקודמת יושבת.',
+    filter: 'סינון לפי רמה',
+    all: 'הכול',
+    levels: { basic: 'בסיס', mid: 'בינוני', bagrut: 'רמת מבחן' },
+    test: 'למבחן המודול',
+    summary: 'סיכום המודול',
+    contents: 'לתוכן העניינים',
+    toLesson: 'לשיעור',
+    objectives: 'שאלות ההבנה של השיעור בודקות שאתם יודעים:',
+    review: 'שאלות חזרה',
+    reviewLede: 'כל שאלת חזרה היא תרחיש אחד עם כמה סעיפים, מהקל אל הקשה, על פני המודול. בסעיפים הפתוחים כותבים פתרון על דף, משווים לפתרון לדוגמה ומסמנים במחוון את מה שעשיתם נכון.',
+  },
+}[lang];
+
+const { byLesson, bagrut } = await chapterQuestions(n, lang);
+const written = await writtenLessons(lang);
+const hasSummary = (await chaptersWithSummary(lang)).has(n);
+const lessonTitle = (id: string) => chapter?.lessons.find((l) => l.id === id)?.title[lang] ?? '';
+const LEVELS = ['basic', 'mid', 'bagrut'] as const;
+const objectivesOf = (id: string) => chapter?.lessons.find((l) => l.id === id)?.objectives ?? [];
+const countOf = (key: string) => byLesson.flatMap((g) => g.questions).filter((q) => q.level === key).length;
+const total = byLesson.reduce((s, g) => s + g.questions.length, 0);
+let counter = 0;
+---
+
+<BaseLayout title={T.title} description={T.description}>
+  <div class="platform">
+    <header class="sheet sheet-narrow">
+      <p class="kicker">{T.kicker}</p>
+      <h1>{T.heading}</h1>
+      <p class="p-lede">{T.lede}</p>
+      <div class="level-filter" role="group" aria-label={T.filter}>
+        <button type="button" class="btn" data-filter="all" aria-pressed="true">{T.all} ({total})</button>
+        {LEVELS.map((l) => <button type="button" class="btn" data-filter={l} aria-pressed="false">{T.levels[l]} ({countOf(l)})</button>)}
+        {bagrut.length > 0 && <button type="button" class="btn" data-filter="bagrut-full" aria-pressed="false">{T.review} ({bagrut.length})</button>}
+      </div>
+      <div class="p-links">
+        <a class="btn primary" href={langUrl(lang, `test/ch${n}/`)}>{T.test}</a>
+        {hasSummary && <a class="btn" href={langUrl(lang, `summary/ch${n}/`)}>{T.summary}</a>}
+        <a class="btn" href={langUrl(lang)}>{T.contents}</a>
+      </div>
+    </header>
+
+    {
+      byLesson.map((g) => (
+        <section class="sheet sheet-narrow practice-lesson" data-lesson-group={g.lesson} aria-labelledby={`pl-${lessonSlug(g.lesson || 'x')}`}>
+          <h2 id={`pl-${lessonSlug(g.lesson || 'x')}`}>
+            <span class="ltr">{g.lesson}</span> {lessonTitle(g.lesson)}
+            {written.has(g.lesson) && <a href={langUrl(lang, `lessons/${lessonSlug(g.lesson)}/`)}>{T.toLesson}</a>}
+          </h2>
+          {objectivesOf(g.lesson).length > 0 && (
+            <div class="practice-objectives">
+              <p>{T.objectives}</p>
+              <ul>
+                {objectivesOf(g.lesson).map((o) => <li data-objective={o.id}>{o.text[lang]}</li>)}
+              </ul>
+            </div>
+          )}
+          {LEVELS.map((l) => {
+            const qs = g.questions.filter((q) => q.level === l);
+            return (
+              qs.length > 0 && (
+                <div class="level-group" data-level-group={l}>
+                  <h3>
+                    {T.levels[l]} <span class="chip">{qs.length}</span>
+                  </h3>
+                  {qs.map((q) => {
+                    counter += 1;
+                    return <AnyQuestion client:visible q={q} lang={lang} lesson={g.lesson} kind="practice" label={ui(lang).lesson.question(counter)} />;
+                  })}
+                </div>
+              )
+            );
+          })}
+        </section>
+      ))
+    }
+
+    {
+      bagrut.length > 0 && (
+        <section class="sheet sheet-narrow practice-bagrut" data-bagrut-group aria-labelledby="pl-bagrut">
+          <h2 id="pl-bagrut">{T.review}</h2>
+          <p class="p-lede">{T.reviewLede}</p>
+          {bagrut.map((q, i) => (
+            <AnyQuestion client:visible q={q} lang={lang} kind="practice" label={ui(lang).lesson.question(i + 1)} />
+          ))}
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  // level filter: show only the groups of one level
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.level-filter button');
+  const apply = (key: string) => {
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === key)));
+    document.querySelectorAll<HTMLElement>('[data-level-group]').forEach((g) => {
+      g.hidden = !(key === 'all' || g.dataset.levelGroup === key);
+    });
+    document.querySelectorAll<HTMLElement>('[data-lesson-group]').forEach((s) => {
+      s.hidden = key === 'bagrut-full' || !s.querySelector('[data-level-group]:not([hidden])');
+    });
+    const full = document.querySelector<HTMLElement>('[data-bagrut-group]');
+    if (full) full.hidden = !(key === 'all' || key === 'bagrut-full');
+  };
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter ?? 'all')));
+</script>
