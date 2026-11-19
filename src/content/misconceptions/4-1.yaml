@@ -76,8 +76,8 @@
     en: A hotter gas, or heavier molecules, make the pressure jitter more in relative terms.
     he: גז חם יותר, או מולקולות כבדות יותר, גורמים ללחץ לרעוד יותר באופן יחסי.
   truth:
-    en: The relative fluctuation of the pressure is N^(-1/2), whatever the temperature or the mass. Only the number of particles sets it.
-    he: הפלוקטואציה היחסית של הלחץ היא N^(-1/2), בכל טמפרטורה ובכל מסה. רק מספר החלקיקים קובע אותה.
+    en: The relative spread of a sample's pressure is about N^(-1/2), whatever the temperature or the mass; only the number of particles sets it. A gauge's short-term jitter is set the same way by the number of impacts it averages, which for any real gauge is astronomically large.
+    he: הפיזור היחסי של הלחץ של מדגם הוא בערך N^(-1/2), בכל טמפרטורה ובכל מסה; רק מספר החלקיקים קובע אותו. הרעד לטווח קצר של מד לחץ נקבע באותו אופן על ידי מספר הפגיעות שהוא ממצע, ובכל מד אמיתי המספר הזה אסטרונומי.
   remedy:
     lesson: '4.1'
     anchor: steady

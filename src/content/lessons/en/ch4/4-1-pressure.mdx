@@ -28,7 +28,7 @@ import Lab from '~/components/Lab.astro';
 <Spread
   fig="fig-4-1a"
   n="4.1a"
-  caption="A gas of $N$ point particles in a two-dimensional box of side $L$, drawn to scale. Each particle flies straight until it meets a wall and bounces off elastically, and every bounce flashes red on the wall it strikes. With thirty particles or fewer, a teal tail shows each velocity. On the right, the pressure on the walls: the momentum they receive per unit time per unit wall length. The pale jagged line is that pressure over short windows of time; the bold line is its running average since the start; the dashed red line is the ideal-gas value $N k_B T / A$, with $A = L^2$. The readout keeps the result of the previous run for comparison. Simulated time runs about a billion times slower than real time: an argon atom at $300\,\text{K}$ crosses a $1\,\mu\text{m}$ box in about $1.5\,\text{s}$."
+  caption="A gas of $N$ point particles in a two-dimensional box of side $L$, drawn to scale. Each particle flies straight until it meets a wall and bounces off elastically, and every bounce flashes red on the wall it strikes. With thirty particles or fewer, a teal tail shows each velocity. On the right, the pressure on the walls: the momentum they receive per unit time per unit wall length. The pale jagged line is that pressure over short windows of time; the bold line is its running average since the start; the dashed red line is the ideal-gas value $N k_B T / A$, with $A = L^2$. The readout keeps the result of the previous run for comparison. Simulated time runs about half a billion times slower than real time: an argon atom at $300\,\text{K}$ crosses a $1\,\mu\text{m}$ box in about $1.5\,\text{s}$."
   figure={GasBox}
   figureProps={{ n: 60, temperature: 300, mass: 1, side: 1, tasks: ['converge', 'few', 'heavy', 'small-box'] }}
 >
@@ -99,7 +99,7 @@ Finally, shrink the box to a side of $0.7\,\mu\text{m}$, about half the area, at
 
 <Step fig="fig-4-1a" set={{ n: 10, temperature: 300, mass: 1, side: 1 }}>
 
-**The model.** $N$ point particles of mass $m$ in a rectangular box with sides $L_x$ and $L_y$. They fly freely and bounce off rigid walls in <Term id="elastic-collision">elastic collisions</Term>, and they never collide with each other. Their velocities are drawn at the start from the <Term id="maxwell-boltzmann">Maxwell-Boltzmann distribution</Term> at temperature $T$. The figure works in two dimensions, so the box's "volume" is its area $A = L_x L_y$ and the "area" of a wall is its length; in three dimensions every step below goes through unchanged, with $V$ in place of $A$.
+**The model.** $N$ point particles of mass $m$ in a rectangular box with sides $L_x$ and $L_y$. They fly freely and bounce off rigid walls in <Term id="elastic-collision">elastic collisions</Term>, and they never collide with each other. Their velocities are drawn at the start from the <Term id="maxwell-boltzmann">Maxwell-Boltzmann distribution</Term> at temperature $T$, then shifted so the gas as a whole is at rest and scaled so its total energy is exactly $Nk_BT$, the two-dimensional equipartition value. That is why the running average in figure 4.1a settles on the dashed line, not merely near it. The figure works in two dimensions, so the box's "volume" is its area $A = L_x L_y$ and the "area" of a wall is its length; in three dimensions every step below goes through unchanged, with $V$ in place of $A$.
 
 **One particle, one wall.** Take the wall at $x = L_x$. A particle with velocity component $v_x$ hits it and rebounds with $-v_x$, so its momentum changed by $-2mv_x$, and by momentum conservation the wall received the <Term id="impulse">impulse</Term>
 
@@ -177,7 +177,9 @@ What we have and have not shown. We derived the ideal gas law from mechanics **p
 
 <Step fig="fig-4-1b" set={{ n: 10 }}>
 
-Figure 4.1a showed one gas over time. Figure 4.1b asks a sharper question: if you prepare many gases at the same temperature, how much do their pressures differ? Each bar counts gases whose long-time pressure lands in that range. With ten particles, single gases land anywhere from half to one and a half times the ideal value: a <Term id="fluctuation">fluctuation</Term> of about thirty percent.
+**Two kinds of jitter.** The pale line in figure 4.1a jitters because a short window of time catches only a handful of impacts. More particles, or a longer window, put more impacts in each window, and the jitter of an average over $M$ independent impacts shrinks in proportion to $M^{-1/2}$. A real gauge averages an astronomical number of them: air strikes each square centimetre about $3\cdot10^{23}$ times a second (example 3 below), so a gauge of that size reading once a millisecond averages some $3\cdot10^{20}$ impacts, and its jitter is of order $10^{-10}$. That is why the gauge is steady.
+
+Figure 4.1b asks a second question, about the gas rather than the gauge. Average each gas for so long that the window jitter is gone, and prepare many gases at the same temperature: do their pressures agree? Each bar counts gases whose long-time pressure lands in that range. With ten particles, most land between half and one and a half times the ideal value: a <Term id="fluctuation">fluctuation</Term> of about thirty percent.
 
 </Step>
 
@@ -191,15 +193,15 @@ $$
 
 a sum of $2N$ squared velocity components. Each component is an independent Gaussian, so the sum has mean $2N$ times the mean of one square, while its standard deviation grows only as $\sqrt{2N}$: for squared Gaussians the relative spread of the sum is $\sqrt{2/(2N)}$. Therefore
 
-<Formula tex="\frac{\sigma_P}{\langle P\rangle} = \frac{1}{\sqrt{N}}" label="Relative pressure fluctuation, N independent particles" />
+<Formula tex="\frac{\sigma_P}{\langle P\rangle} = \frac{1}{\sqrt{N}}" label="Spread of the long-time pressure, N particles in two dimensions" />
 
-Measured in figure 4.1b, the points fall on the line: with a thousand particles the spread is about three percent.
+Measured in figure 4.1b, the points fall on the line: with a thousand particles the spread is about three percent. In three dimensions the same count gives $\sqrt{2/(3N)}$, and a sample that also trades molecules with its surroundings has yet another factor of order one; what never changes is the $N^{-1/2}$. The spread depends on how many particles share the energy, not on the temperature or on their mass.
 
 </Step>
 
 <Step fig="fig-4-1b" set={{ n: 10000 }} id="mole">
 
-Ten thousand particles: one percent. The law does not stop. A mole holds $6\times10^{23}$ particles, and $N^{-1/2} \approx 1.3\times10^{-12}$: a jitter in the twelfth decimal place, far below anything an instrument has ever resolved. That is the resolution of the puzzle. The collisions never became gentle; there are simply so many of them that the relative jitter fell below the noise floor of reality.
+Ten thousand particles: one percent. The law does not stop. A mole holds $6\times10^{23}$ particles, and $N^{-1/2} \approx 1.3\times10^{-12}$: a spread in the twelfth decimal place, far below anything an instrument has ever resolved. Both answers to the puzzle have the same shape: a sum of very many independent random contributions, whose relative spread falls as one over the square root of their number. For the gauge's reading the contributions are impacts; for the pressure of the gas itself they are molecules. Either way the collisions never became gentle; there are simply so many of them that the relative jitter fell below the noise floor of reality.
 
 A quantity is **macroscopic** when its relative fluctuation is negligible for the system at hand. That makes "macroscopic" a statement about $N$, not about size in metres: a droplet of $10^9$ molecules has a perfectly well-defined pressure, while ten molecules in a trap do not.
 
@@ -249,7 +251,7 @@ $$
 
 </Example>
 
-<Example id="ex-4-1-2" title="How small before the gauge twitches?">
+<Example id="ex-4-1-2" title="How small before the pressure wavers?">
 
 A pressure sensor can resolve a relative change of $1\%$. How many molecules must a sample of air hold for its pressure to fluctuate by that much? How large is that sample, at $1.013\cdot10^5\,\text{Pa}$ and $300\,\text{K}$?
 
@@ -257,7 +259,7 @@ A pressure sensor can resolve a relative change of $1\%$. How many molecules mus
 
 **Given:** $\sigma_P/\langle P\rangle = 0.01$, $P = 1.013\cdot10^5\,\text{Pa}$, $T = 300\,\text{K}$, $k_B = 1.381\cdot10^{-23}\,\text{J/K}$.
 
-**General law:** $\sigma_P/\langle P\rangle = N^{-1/2}$, and the ideal gas law $PV = Nk_BT$ for the volume that holds $N$ molecules.
+**General law:** $\sigma_P/\langle P\rangle \approx N^{-1/2}$, up to a factor of order one that depends on the dimension and on whether the sample trades molecules with the air around it; and the ideal gas law $PV = Nk_BT$ for the volume that holds $N$ molecules.
 
 **Symbolic result:**
 
@@ -271,7 +273,7 @@ $$
 
 **Substitution:** $N = 0.01^{-2} = 1.0\cdot10^4$ molecules. $V = 1.0\cdot10^4\cdot1.381\cdot10^{-23}\cdot300/1.013\cdot10^5 = 4.09\cdot10^{-22}\,\text{m}^3$, a cube of side $\ell = 7.4\cdot10^{-8}\,\text{m}$.
 
-**Result:** about $10^4$ molecules, a cube of air about $74\,\text{nm}$ across. Any sample a person can see is enormously larger, which is why no one has ever watched the air pressure twitch.
+**Result:** about $10^4$ molecules, a cube of air about $74\,\text{nm}$ across. The factor of order one moves this little: $\ell$ grows only as $N^{1/3}$, so it changes the side by under twenty percent. Any sample a person can see is enormously larger, which is why no one has ever watched the air pressure twitch.
 
 </Solution>
 
@@ -333,9 +335,9 @@ $$
 
 **Units:** a ratio of temperatures is dimensionless, so $V_2$ is in litres like $V_1$.
 
-**Substitution:** $V_2 = 5.0\cdot255/300 = 4.25\,\text{L}$. $\langle E\rangle$ falls from $6.21\cdot10^{-21}\,\text{J}$ to $5.28\cdot10^{-21}\,\text{J}$, by $15\%$.
+**Substitution:** $V_2 = 5.0\cdot255/300 = 4.3\,\text{L}$. $\langle E\rangle$ falls from $6.21\cdot10^{-21}\,\text{J}$ to $5.28\cdot10^{-21}\,\text{J}$, by $15\%$.
 
-**Result:** (a) $4.25\,\text{L}$. (b) $15\%$ less energy per atom; the number of atoms is unchanged. The balloon shrinks because each atom pushes more gently and less often, not because any atoms left.
+**Result:** (a) $4.3\,\text{L}$. (b) $15\%$ less energy per atom; the number of atoms is unchanged. The balloon shrinks because each atom pushes more gently and less often, not because any atoms left.
 
 </Solution>
 
@@ -349,7 +351,7 @@ Sensor A samples the pressure of $10^4$ molecules and averages a hundred indepen
 
 **Given:** A: $N_A = 10^4$, $k = 100$ independent readings averaged; B: $N_B = 10^6$, one reading.
 
-**General law:** one reading of $N$ independent molecules has $\sigma_P/\langle P\rangle = N^{-1/2}$; the average of $k$ independent readings has a spread $k^{-1/2}$ times that of one.
+**General law:** one reading of $N$ independent molecules has $\sigma_P/\langle P\rangle \approx N^{-1/2}$; the average of $k$ independent readings has a spread $k^{-1/2}$ times that of one.
 
 **Symbolic result:**
 

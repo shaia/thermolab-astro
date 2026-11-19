@@ -90,7 +90,7 @@ questions:
     level: mid
     objectives: [OBJ-4.1-4]
     prompt: >-
-      A box holds $10\,000$ non-interacting particles in thermal equilibrium. Estimate the relative fluctuation of its pressure, $\sigma_P/\langle P\rangle$, as a decimal fraction.
+      Gases of $10\,000$ particles each, like those of figure 4.1b, are prepared at the same temperature. Estimate the relative spread of their long-time pressures, $\sigma_P/\langle P\rangle$, as a decimal fraction.
     answer: 0.01
     unit: ''
     tolerance: 0.05
@@ -112,13 +112,13 @@ questions:
     qualitative: true
     objectives: [OBJ-4.1-1, OBJ-4.1-4]
     prompt: >-
-      Which single change would make a gas's pressure fluctuations easiest to detect?
+      Figure 4.1b measures how much the long-time pressure differs from one gas to the next at the same temperature. Which single change would make that spread easiest to detect?
     choices:
       - text: >-
           Measuring a very small sample, so that $N$ is small.
         correct: true
         feedback: >-
-          Yes. The relative fluctuation depends on $N$ and essentially nothing else; not on the temperature, the species or the pressure itself. A small $N$ is the only lever.
+          Yes. The relative spread depends on $N$ and essentially nothing else; not on the temperature, the species or the pressure itself. A small $N$ is the only lever.
       - text: >-
           Raising the temperature, so the collisions are more violent.
         feedback: >-
@@ -127,7 +127,7 @@ questions:
       - text: >-
           Using heavier molecules, so each impact is larger.
         feedback: >-
-          The mass cancels out of the pressure at fixed temperature, and out of its relative fluctuation too.
+          Each impact is larger, but they come less often. At fixed temperature the mass cancels out of the pressure, and out of its spread from gas to gas too.
         misconception: MC-violence-sets-fluctuation
       - text: >-
           Compressing the gas, so collisions happen more often.
@@ -272,7 +272,7 @@ questions:
       - text: >-
           Collisions between molecules change the total momentum delivered to the walls.
         feedback: >-
-          Collisions between molecules conserve momentum and energy, so on their own they do not change the pressure. What breaks is the size of the molecules and the forces between them.
+          Collisions between point particles conserve momentum and energy and leave the pressure unchanged. They matter only because real molecules have a size, and that size, with the attraction between them, is the answer above.
       - text: >-
           Equipartition stops holding at high density.
         feedback: >-
@@ -302,7 +302,7 @@ questions:
       - text: >-
           That the mass of the particles cancels out of the pressure.
         feedback: >-
-          This too it supports: four times the mass at the same temperature gives the same measured pressure.
+          This too it supports, given equipartition: the gas is set up with the energy $Nk_BT$ whatever the mass, and four times the mass then gives the same measured pressure.
       - text: >-
           That the relative fluctuation of the pressure falls as $N^{-1/2}$.
         feedback: >-
