@@ -8,7 +8,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { existsSync } from 'node:fs';
 import { hydrated, overflow } from './helpers';
 
-const PAGES = ['practice/ch4/', 'test/ch4/', 'me/', 'formulas/', 'glossary/', 'summary/ch4/', 'search/'];
+const PAGES = ['practice/ch4/', 'test/ch4/', 'me/', 'formulas/', 'glossary/', 'summary/ch4/', 'search/', 'workbook/4-1/'];
 
 const errorsOf = (page: Page) => {
   const errors: string[] = [];
@@ -60,6 +60,33 @@ for (const lang of ['en', 'he'] as const) {
   });
 }
 
+for (const lang of ['en', 'he'] as const) {
+  test(`the workbook holds ten problems and two sourced challenges, linked from the lesson, in ${lang}`, async ({ page }) => {
+    await page.goto(`/${lang}/lessons/4-1/`);
+    await page.locator('.lesson-workbook a').click();
+    await expect(page).toHaveURL(new RegExp(`/${lang}/workbook/4-1/$`));
+    await expect(page.locator('[data-workbook-item]')).toHaveCount(12);
+    await expect(page.locator('.wb-source a')).toHaveCount(2);
+    const first = page.locator('[data-workbook-item="W-4.1-02"]');
+    await first.locator('.wb-solution summary').click();
+    await expect(first.locator('.sol-step').last()).toBeVisible();
+  });
+
+  test(`a review problem's open part reveals its model solution and scores the rubric, in ${lang}`, async ({ page }) => {
+    await page.goto(`/${lang}/practice/ch4/`);
+    await expect(page.locator('.bagrut')).toHaveCount(4);
+    const part = page.locator('[data-qid="Q-4-bagrut-2"] .open-part');
+    await part.scrollIntoViewIfNeeded();
+    await hydrated(part);
+    await part.locator('textarea').fill('P = N m <v_x^2> / V ...');
+    await part.locator('.q-actions .btn.primary').click();
+    await expect(part.locator('.open-steps li[data-kind="limit"]')).toBeVisible();
+    for (const box of await part.locator('.open-rubric input').all()) await box.check();
+    await part.locator('.q-actions .btn.primary').click();
+    await expect(part.locator('.q-feedback.ok')).toBeVisible();
+  });
+}
+
 test('the glossary lists every term, alphabetical in each language', async ({ page }) => {
   for (const lang of ['en', 'he']) {
     await page.goto(`/${lang}/glossary/`);
@@ -89,14 +116,14 @@ test('the lesson links to its laboratory notebook in the page’s language', asy
 });
 
 test('search finds the lesson in each language', async ({ page }) => {
-  for (const [lang, q, title] of [
-    ['en', 'equipartition', 'The microscopic origin of pressure'],
-    ['he', 'מקסוול', 'המקור המיקרוסקופי של הלחץ'],
+  for (const [lang, q] of [
+    ['en', 'equipartition'],
+    ['he', 'מקסוול'],
   ]) {
     await page.goto(`/${lang}/search/`);
     const box = page.locator('#q');
     await expect(box).toBeEnabled({ timeout: 15_000 });
     await box.fill(q);
-    await expect(page.locator('.search-results a', { hasText: title })).toBeVisible();
+    await expect(page.locator(`.search-results a[href="/${lang}/lessons/4-1/"]`)).toBeVisible();
   }
 });

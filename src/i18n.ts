@@ -66,6 +66,8 @@ const en = {
     figure: 'Figure',
     solution: 'Tried it yourself? Open the solution',
     print: 'Print or save as PDF',
+    workbook: 'Practice problems with full solutions',
+    workbookNote: 'Ten written problems with answers and worked solutions.',
     question: (i: number) => `Question ${i}`,
   },
   block: {
@@ -200,6 +202,8 @@ const he: Strings = {
     figure: 'איור',
     solution: 'ניסיתם לבד? פתחו את הפתרון',
     print: 'הדפסה או שמירה כ-PDF',
+    workbook: 'תרגול נוסף עם פתרונות מלאים',
+    workbookNote: 'עשר שאלות כתובות עם תשובות ופתרונות מלאים.',
     question: (i) => `שאלה ${i}`,
   },
   block: {

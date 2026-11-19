@@ -86,14 +86,17 @@ claims the lesson makes:
   stemming: a bare word and its prefixed forms (לחץ, הלחץ) return overlapping but different results.
 - A **print / save as PDF** button. A spread prints as its text followed by its figure.
 
+**Problems, with published solutions** (the author's decision; ThermoLab kept its solutions with the instructor):
+
+- Four review problems from ThermoLab's problems 2 to 5, each worth 25 points. Each has auto-graded parts, plus open parts with a model solution and a rubric the student ticks.
+- A workbook: ten practice problems with final answers and full solutions. Two of them are ThermoLab's problems 1 and 6(c).
+- Two challenge problems adapted from MIT 8.044 (Statistical Physics I, OpenCourseWare 2013), problem set 3 problem 2 and problem set 7 problem 1. Both sources were opened and read.
+
 ## Still left out
 
-- **The workbook and multi-part review problems.** ThermoLab's problem set deliberately publishes no
-  solutions. unimech's workbook and review problems are built around showing worked solutions and
-  marking rubrics. Which way to go is the author's decision.
 - **Videos.** ThermoLab has none, so there is nothing to port.
-- **Six worked examples per lesson.** unimech's rule applies once a module has a summary. Lesson 4.1
-  has two.
+- **Six worked examples per lesson.** unimech asks for six once a module has a summary. Lesson 4.1 has two.
+- **The lab bundle in CI.** Published lab links lead nowhere until the workflow fetches ThermoLab's JupyterLite bundle.
 
 ## What the pilot measured
 

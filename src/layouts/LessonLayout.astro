@@ -19,9 +19,11 @@ interface Props {
   objectives: { id: string; text: string }[];
   prev: Link | null;
   next: Link | null;
+  /** the lesson's workbook page, when it has one */
+  workbook?: string | null;
 }
 
-const { id, title, subtitle, minutes, objectives, prev, next } = Astro.props;
+const { id, title, subtitle, minutes, objectives, prev, next, workbook = null } = Astro.props;
 const lang = langOf(Astro.url.pathname);
 const s = ui(lang);
 const chapter = chapterOf(id);
@@ -52,6 +54,14 @@ const [, n] = id.split('.');
 
     <footer class="sheet sheet-narrow">
       <LessonEnd client:visible id={id} title={title} lang={lang} />
+      {
+        workbook && (
+          <p class="lesson-workbook">
+            <a class="btn primary" href={workbook}>{s.lesson.workbook}</a>
+            <span>{s.lesson.workbookNote}</span>
+          </p>
+        )
+      }
       <p class="lesson-nav">
         {prev && <a href={prev.href}>{s.nav.backArrow} {prev.id} {prev.title}</a>}
         {next && <a href={next.href}>{next.id} {next.title} {s.nav.fwdArrow}</a>}
@@ -70,6 +80,16 @@ const [, n] = id.split('.');
 </script>
 
 <style>
+  .lesson-workbook {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    margin: 18px 0 0;
+    font-family: var(--font-ui);
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
   .lesson-nav {
     display: flex;
     justify-content: space-between;

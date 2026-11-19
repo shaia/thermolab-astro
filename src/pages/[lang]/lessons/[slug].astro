@@ -42,9 +42,11 @@ export async function getStaticPaths() {
 const { entry, prev, next } = Astro.props;
 const { Content } = await render(entry);
 const d = entry.data;
+const hasWorkbook = (await getCollection('workbook')).some((w) => w.data.lang === d.lang && w.data.lesson === d.id);
+const workbook = hasWorkbook ? langUrl(d.lang, `workbook/${lessonSlug(d.id)}/`) : null;
 const components = { Block, Check, Example, Explain, Explore, Formula, Hook, Note, Page, Predict, Revisit, Solution, Spread, Step, Summary, Term };
 ---
 
-<LessonLayout id={d.id} title={d.title} subtitle={d.subtitle} minutes={d.minutes} objectives={d.objectives} prev={prev} next={next}>
+<LessonLayout id={d.id} title={d.title} subtitle={d.subtitle} minutes={d.minutes} objectives={d.objectives} prev={prev} next={next} workbook={workbook}>
   <Content components={components} />
 </LessonLayout>

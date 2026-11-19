@@ -64,10 +64,21 @@ interface Choice {
   correct?: boolean;
   feedback: string;
 }
+interface Part {
+  label: string;
+  type: string;
+  points?: number;
+  objectives?: string[];
+  choices?: Choice[];
+  solution?: { kind: string; text: string }[];
+  rubric?: { text: string }[];
+  answer?: unknown;
+}
 interface Question {
   id: string;
   type: string;
   objectives: string[];
+  parts?: Part[];
   level?: string;
   qualitative?: boolean;
   prompt: string;
@@ -156,27 +167,55 @@ const texStrings = (v: unknown, path: string, out: [string, string][] = []): [st
   else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) if (!NOT_TEXT.has(k)) texStrings(x, path ? `${path}.${k}` : k, out);
   return out;
 };
+/** The checks a single card and a review problem's auto-graded part share. */
+function checkCard(w: string, q: { type: string; choices?: Choice[] }) {
+  if (q.type === 'mc' && (q.choices ?? []).filter((c) => c.correct).length !== 1) fail(w, 'needs exactly one correct choice');
+  for (const c of q.choices ?? []) if (!c.feedback?.trim()) fail(w, `choice "${c.text}" has no feedback`);
+}
+const REVIEW_POINTS = 25;
+/** derivations carry over half of a review problem, as in unimech */
+const MIN_OPEN_POINTS = 13;
 for (const { file, data } of banks) {
   const parsed = questionBank.safeParse(data);
   if (!parsed.success) for (const issue of parsed.error.issues.slice(0, 8)) fail(file, `schema: ${issue.path.join('.')}: ${issue.message}`);
-  const folder = file.match(/questions\/(en|he)\/ch(\d+)\/(\d+-\d+)\.yaml$/);
+  const folder = file.match(/questions\/(en|he)\/ch(\d+)\/(\d+-\d+|bagrut)\.yaml$/);
   if (!folder) {
-    fail(file, 'a bank lives in src/content/questions/<en|he>/ch<N>/<chapter>-<lesson>.yaml');
+    fail(file, 'a bank lives in src/content/questions/<en|he>/ch<N>/<chapter>-<lesson>.yaml, or bagrut.yaml for review problems');
     continue;
   }
   if (data?.lang !== folder[1]) fail(file, `lang: ${data?.lang} does not match the folder ${folder[1]}/`);
   if (data?.chapter !== Number(folder[2])) fail(file, `chapter: ${data?.chapter} does not match the folder ch${folder[2]}`);
-  const prefix = `Q-${folder[3].replace('-', '.')}-`;
+  const review = folder[3] === 'bagrut';
+  const prefix = review ? `Q-${folder[2]}-bagrut-` : `Q-${folder[3].replace('-', '.')}-`;
   for (const q of data?.questions ?? []) {
     const w = `${file} ${q.id}`;
     if (!q.id.startsWith(prefix)) fail(w, `a question in ${folder[3]}.yaml has an id ${prefix}…`);
-    for (const o of q.objectives ?? []) {
-      if (!objectiveIds.has(o)) fail(w, `objective ${o} is not in the course map`);
-      else if (!o.startsWith(`OBJ-${folder[3].replace('-', '.')}-`)) fail(w, `objective ${o} belongs to another lesson`);
+    if (review !== (q.type === 'bagrut')) fail(w, review ? 'bagrut.yaml holds review problems only' : 'review problems go in bagrut.yaml');
+    const units = q.type === 'bagrut' ? (q.parts ?? []).map((pt) => ({ ...pt, w: `${w}/${pt.label}` })) : [{ ...q, w }];
+    for (const u of units) {
+      for (const o of u.objectives ?? []) {
+        if (!objectiveIds.has(o)) fail(u.w, `objective ${o} is not in the course map`);
+        else if (!review && !o.startsWith(`OBJ-${folder[3].replace('-', '.')}-`)) fail(u.w, `objective ${o} belongs to another lesson`);
+        else if (review && !o.startsWith(`OBJ-${folder[2]}.`)) fail(u.w, `objective ${o} belongs to another module`);
+      }
+      if ((u.objectives ?? []).length === 0) fail(u.w, 'no objectives');
+      checkCard(u.w, u);
     }
-    if ((q.objectives ?? []).length === 0) fail(w, 'no objectives');
-    if (q.type === 'mc' && (q.choices ?? []).filter((c) => c.correct).length !== 1) fail(w, 'needs exactly one correct choice');
-    for (const c of q.choices ?? []) if (!c.feedback?.trim()) fail(w, `choice "${c.text}" has no feedback`);
+    if (q.type === 'bagrut') {
+      const parts = q.parts ?? [];
+      if (new Set(parts.map((pt) => pt.label)).size !== parts.length) fail(w, 'two parts share a label');
+      const total = parts.reduce((s, pt) => s + (pt.points ?? 0), 0);
+      if (total !== REVIEW_POINTS) fail(w, `parts add up to ${total} points; a review problem is worth ${REVIEW_POINTS}`);
+      const open = parts.filter((pt) => pt.type === 'open');
+      const openPoints = open.reduce((s, pt) => s + (pt.points ?? 0), 0);
+      if (openPoints < MIN_OPEN_POINTS) fail(w, `open parts carry ${openPoints} points; derivations carry at least ${MIN_OPEN_POINTS}`);
+      for (const pt of open) {
+        if (!pt.solution?.some((s) => s.kind === 'result')) fail(`${w}/${pt.label}`, 'the model solution must end in a result step');
+        if ((pt.rubric ?? []).length < 2) fail(`${w}/${pt.label}`, 'an open part needs a rubric of at least 2 lines');
+      }
+      const last = parts.at(-1);
+      if (last && (last.type !== 'open' || !last.solution?.some((s) => s.kind === 'limit'))) fail(w, 'the last part is open and its solution has a limit check');
+    }
     for (const [path, text] of texStrings(q, '')) {
       try {
         tex(text, path);
@@ -198,7 +237,7 @@ for (const lang of LANGS) {
 
 const LADDER = ['basic', 'mid', 'bagrut'];
 for (const lang of LANGS) {
-  const qs = questionsOf(lang).map(({ q }) => q);
+  const qs = questionsOf(lang).map(({ q }) => q).filter((q) => q.type !== 'bagrut');
   const chaptersWithBanks = [...new Set(banks.filter((b) => b.data?.lang === lang).map((b) => b.data?.chapter))];
   for (const n of chaptersWithBanks) {
     const where = `src/content/questions/${lang}/ch${n}`;
@@ -295,6 +334,7 @@ for (const [id, pair] of byId) {
 
 /** What a question must share with its translation: everything but the words. */
 const answerKey = (q: Question) => ({
+  parts: (q.parts ?? []).map((pt) => ({ type: pt.type, points: pt.points, objectives: pt.objectives, answer: pt.answer, correct: (pt.choices ?? []).map((c) => !!c.correct), solution: (pt.solution ?? []).map((s) => s.kind), rubric: (pt.rubric ?? []).length })),
   type: q.type,
   objectives: q.objectives,
   level: q.level ?? 'basic',
@@ -352,6 +392,66 @@ for (const m of misconceptions) {
   for (const l of lessons.filter((x) => x.id === m.remedy.lesson)) {
     if (m.remedy.anchor && !hasAnchor(l.body, m.remedy.anchor)) fail(m.file, `${m.id} remedy anchor #${m.remedy.anchor} is not in ${l.file}`);
   }
+}
+
+/* ------------------------------------------------------------- workbooks */
+
+interface WorkbookItem {
+  id: string;
+  level?: string;
+  qualitative?: boolean;
+  objectives?: string[];
+  prompt: string;
+  answer: string;
+  solution?: { kind: string; text: string }[];
+}
+interface Workbook {
+  lang: Lang;
+  lesson: string;
+  practice?: WorkbookItem[];
+  challenge?: WorkbookItem[];
+}
+const workbooks = walk(join(CONTENT, 'workbook'))
+  .filter((f) => f.endsWith('.yaml'))
+  .map((f) => ({ file: rel(f), data: yamlFile<Workbook>(f) }))
+  .filter((w) => w.data);
+for (const { file, data } of workbooks) {
+  const folder = file.match(/workbook\/(en|he)\/(\d+-\d+)\.yaml$/);
+  if (!folder) fail(file, 'a workbook lives in src/content/workbook/<en|he>/<chapter>-<lesson>.yaml');
+  else if (folder[1] !== data.lang || folder[2] !== data.lesson.replace('.', '-')) fail(file, `lang/lesson ${data.lang} ${data.lesson} do not match the path`);
+  const lesson = lessons.find((l) => l.id === data.lesson && l.lang === data.lang);
+  if (!lesson) {
+    fail(file, `lesson ${data.lesson} is not written in ${data.lang}`);
+    continue;
+  }
+  const practice = data.practice ?? [];
+  if (practice.length !== 10) fail(file, `${practice.length} practice problems (a workbook has 10)`, true);
+  if ((data.challenge ?? []).length !== 2) fail(file, `${(data.challenge ?? []).length} challenge problems (a workbook has 2, from sources opened and read)`, true);
+  for (const level of ['basic', 'mid', 'bagrut']) if (practice.filter((p) => p.level === level).length < 2) fail(file, `fewer than 2 practice problems at level ${level}`, true);
+  if (practice.filter((p) => p.qualitative).length < 3) fail(file, 'fewer than 3 qualitative practice problems', true);
+  for (const o of lesson.objectives.map((x) => x.id)) if (!practice.some((p) => p.objectives?.includes(o))) fail(file, `objective ${o} has no practice problem`, true);
+  for (const item of [...practice, ...(data.challenge ?? [])]) {
+    const w = `${file} ${item.id}`;
+    if (!item.id.startsWith(`W-${data.lesson}-`)) fail(w, `the id does not match lesson ${data.lesson}`);
+    for (const o of item.objectives ?? []) if (!lesson.objectives.some((x) => x.id === o)) fail(w, `objective ${o} is not an objective of lesson ${data.lesson}`);
+    if (item.solution?.at(-1)?.kind !== 'result') fail(w, 'the full solution must end in a result step');
+    const fields = [['prompt', item.prompt], ['answer', item.answer], ...(item.solution ?? []).map((s, i) => [`solution step ${i + 1}`, s.text])] as [string, string][];
+    for (const [k, v] of fields) {
+      try {
+        tex(String(v ?? ''), k);
+      } catch (e) {
+        fail(w, (e as Error).message);
+      }
+    }
+  }
+}
+// parity: the two workbooks of a lesson hold the same problems, at the same levels, with solutions of the same shape
+const workbookKey = (w: Workbook) =>
+  [...(w.practice ?? []), ...(w.challenge ?? [])].map((i) => ({ id: i.id, level: i.level, qualitative: !!i.qualitative, objectives: i.objectives, steps: (i.solution ?? []).map((s) => s.kind) }));
+for (const en of workbooks.filter((w) => w.data.lang === 'en')) {
+  const he = workbooks.find((w) => w.data.lang === 'he' && w.data.lesson === en.data.lesson);
+  if (!he) fail(en.file, `lesson ${en.data.lesson} has no Hebrew workbook`, true);
+  else if (!same(workbookKey(en.data), workbookKey(he.data))) fail(he.file, `parity with ${en.file}: problems, levels, objectives or solution steps differ`);
 }
 
 /* ------------------------------------------------------------- module summaries */

@@ -1,0 +1,190 @@
+---
+/**
+ * A lesson's workbook: practice problems by level and sourced challenge problems. Each problem hides
+ * its final answer and its full solution behind <details>, so the page is static HTML with no island.
+ * TeX is rendered here at build time and fails the build when invalid.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { chapterOf, lessonSlug, moduleNumber } from '~/course';
+import { tex } from '~/lib/tex';
+import { chaptersWithSummary } from '~/lib/companions';
+import { langUrl } from '~/lib/url';
+import type { Lang } from '~/i18n';
+import '~/styles/lesson.css';
+import '~/styles/platform.css';
+
+export async function getStaticPaths() {
+  const lessons = await getCollection('lessons');
+  return (await getCollection('workbook')).map((w) => {
+    const lesson = lessons.find((l) => l.data.id === w.data.lesson && l.data.lang === w.data.lang);
+    if (!lesson) throw new Error(`workbook ${w.id}: lesson ${w.data.lesson} is not written in ${w.data.lang}`);
+    return { params: { lang: w.data.lang, lesson: lessonSlug(w.data.lesson) }, props: { w: w.data, title: lesson.data.title } };
+  });
+}
+
+const lang = Astro.params.lang as Lang;
+const { w, title } = Astro.props;
+const id = w.lesson;
+const chapter = chapterOf(id);
+const mod = moduleNumber(chapter?.n ?? 0);
+const hasSummary = chapter ? (await chaptersWithSummary(lang)).has(chapter.n) : false;
+
+const T = {
+  en: {
+    title: `Practice · ${id} ${title}`,
+    description: `Written practice problems for lesson ${id}, with answers and full solutions`,
+    kicker: `Module ${mod} · ${chapter?.title.en} · lesson ${id}`,
+    heading: `Practice: ${title}`,
+    lede: 'Work each problem on paper before you open anything. Check only the final answer first; if yours differs, open the full solution and find the step where your route left it.',
+    back: 'Back to the lesson',
+    practicePage: 'The module’s practice page',
+    summary: 'Module summary',
+    problems: 'Practice problems',
+    question: (n: number) => `Problem ${n}`,
+    answer: 'Final answer',
+    solution: 'Full solution',
+    challenge: 'Challenge problems',
+    challengeLede: 'Problems from other courses and competitions, adapted. One star: hard. Two stars: very hard.',
+    challengeN: (n: number) => `Challenge ${n}`,
+    stars: (s: number) => (s === 2 ? 'Two stars: very hard' : 'One star: hard'),
+    source: 'Source:',
+    adapted: ' (adapted)',
+    levels: { basic: 'Basic', mid: 'Intermediate', bagrut: 'Exam level' },
+    step: { given: 'Given', formula: 'Formula', law: 'General law', manipulation: 'Derivation', substitution: 'Substitution', reasoning: 'Reasoning', limit: 'Limit check', units: 'Unit check', result: 'Result' },
+  },
+  he: {
+    title: `תרגול · ${id} ${title}`,
+    description: `שאלות תרגול כתובות לשיעור ${id}, עם תשובות ופתרונות מלאים`,
+    kicker: `מודול ${mod} · ${chapter?.title.he} · שיעור ${id}`,
+    heading: `תרגול: ${title}`,
+    lede: 'פתרו כל שאלה על דף לפני שאתם פותחים משהו. קודם בדקו רק את התשובה הסופית; אם יצא לכם אחרת, פתחו את הפתרון המלא ומצאו את השלב שבו הדרך שלכם נפרדה ממנו.',
+    back: 'חזרה לשיעור',
+    practicePage: 'דף התרגול של המודול',
+    summary: 'סיכום המודול',
+    problems: 'שאלות תרגול',
+    question: (n: number) => `שאלה ${n}`,
+    answer: 'תשובה סופית',
+    solution: 'פתרון מלא',
+    challenge: 'שאלות אתגר',
+    challengeLede: 'שאלות מקורסים ומתחרויות אחרים, בעיבוד. כוכב אחד: קשה. שני כוכבים: קשה מאוד.',
+    challengeN: (n: number) => `אתגר ${n}`,
+    stars: (s: number) => (s === 2 ? 'שני כוכבים: קשה מאוד' : 'כוכב אחד: קשה'),
+    source: 'מקור:',
+    adapted: ' (בעיבוד)',
+    levels: { basic: 'בסיס', mid: 'בינוני', bagrut: 'רמת מבחן' },
+    step: { given: 'נתונים', formula: 'נוסחה', law: 'החוק הכללי', manipulation: 'פיתוח', substitution: 'הצבה', reasoning: 'נימוק', limit: 'בדיקת גבולות', units: 'בדיקת יחידות', result: 'תוצאה' },
+  },
+}[lang];
+
+const LEVELS = ['basic', 'mid', 'bagrut'] as const;
+type Item = (typeof w.practice)[number] | (typeof w.challenge)[number];
+/** A part marker, (b) or (ב), right after the end of a sentence starts a new line, however the YAML folded it. */
+const parts = (s: string) => s.replace(/([.?!:])[ \t]+(\([a-hא-ח]\)\s)/g, '$1\n$2');
+const render = (item: Item) => ({
+  id: item.id,
+  prompt: tex(parts(item.prompt), `${item.id} prompt`),
+  answer: tex(parts(item.answer), `${item.id} answer`),
+  steps: item.solution.map((s, i) => ({ label: T.step[s.kind], html: tex(s.text, `${item.id} solution step ${i + 1}`) })),
+});
+let counter = 0;
+const groups = LEVELS.map((l) => ({ key: l, label: T.levels[l], items: w.practice.filter((p) => p.level === l).map((p) => ({ ...render(p), n: ++counter })) })).filter(
+  (g) => g.items.length > 0,
+);
+const challenge = w.challenge.map((c, i) => ({ ...render(c), n: i + 1, stars: '★'.repeat(c.stars), starsLabel: T.stars(c.stars), source: c.source }));
+---
+
+<BaseLayout title={T.title} description={T.description}>
+  <div class="platform workbook">
+    <header class="sheet sheet-narrow">
+      <p class="kicker">{T.kicker}</p>
+      <h1>{T.heading}</h1>
+      <p class="p-lede">{T.lede}</p>
+      <div class="p-links">
+        <a class="btn primary" href={langUrl(lang, `lessons/${lessonSlug(id)}/`)}>{T.back}</a>
+        {chapter && <a class="btn" href={langUrl(lang, `practice/ch${chapter.n}/`)}>{T.practicePage}</a>}
+        {chapter && hasSummary && <a class="btn" href={langUrl(lang, `summary/ch${chapter.n}/`)}>{T.summary}</a>}
+      </div>
+    </header>
+
+    <section class="sheet sheet-narrow" aria-labelledby="wb-practice">
+      <h2 id="wb-practice">{T.problems}</h2>
+      {
+        groups.map((g) => (
+          <div class="level-group" data-level-group={g.key}>
+            <h3>
+              {g.label} <span class="chip">{g.items.length}</span>
+            </h3>
+            <ol class="wb-list">
+              {g.items.map((it) => (
+                <li class="wb-item" id={it.id} data-workbook-item={it.id}>
+                  <p class="wb-num">{T.question(it.n)}</p>
+                  <div class="wb-text" set:html={it.prompt} />
+                  <details class="solution wb-answer">
+                    <summary>{T.answer}</summary>
+                    <div class="solution-body wb-text" set:html={it.answer} />
+                  </details>
+                  <details class="solution wb-solution">
+                    <summary>{T.solution}</summary>
+                    <div class="solution-body">
+                      {it.steps.map((s) => (
+                        <div class="sol-step">
+                          <span class="sol-label">{s.label}</span>
+                          <div class="wb-text" set:html={s.html} />
+                        </div>
+                      ))}
+                    </div>
+                  </details>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))
+      }
+    </section>
+
+    {
+      challenge.length > 0 && (
+        <section class="sheet sheet-narrow" aria-labelledby="wb-challenge">
+          <h2 id="wb-challenge">{T.challenge}</h2>
+          <p class="p-lede">{T.challengeLede}</p>
+          <ol class="wb-list">
+            {challenge.map((it) => (
+              <li class="wb-item wb-challenge" id={it.id} data-workbook-item={it.id}>
+                <p class="wb-num">
+                  {T.challengeN(it.n)}{' '}
+                  <span class="chip wb-stars" aria-label={it.starsLabel}>
+                    {it.stars}
+                  </span>
+                </p>
+                <div class="wb-text" set:html={it.prompt} />
+                <p class="wb-source">
+                  {T.source}{' '}
+                  <a href={it.source.url} rel="noopener" lang="en" dir="ltr">
+                    {it.source.name} {it.source.year}, {it.source.problem}
+                  </a>
+                  {it.source.adapted && T.adapted}
+                </p>
+                <details class="solution wb-answer">
+                  <summary>{T.answer}</summary>
+                  <div class="solution-body wb-text" set:html={it.answer} />
+                </details>
+                <details class="solution wb-solution">
+                  <summary>{T.solution}</summary>
+                  <div class="solution-body">
+                    {it.steps.map((s) => (
+                      <div class="sol-step">
+                        <span class="sol-label">{s.label}</span>
+                        <div class="wb-text" set:html={s.html} />
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>

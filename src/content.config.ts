@@ -99,4 +99,57 @@ const summaries = defineCollection({
   schema: z.object({ lang, chapter: z.number().int().min(0).max(18), title: z.string() }),
 });
 
-export const collections = { lessons, questions, glossary, misconceptions, summaries };
+/* ---- Lesson workbook: written practice problems and sourced challenge problems, answers hidden ---- */
+
+/**
+ * One step of a written solution; the last one is the `result`. The course format is general law →
+ * derivation → symbolic result → limit check → unit check → numbers.
+ */
+const solutionStep = z.object({
+  kind: z.enum(['given', 'formula', 'law', 'manipulation', 'substitution', 'reasoning', 'limit', 'units', 'result']),
+  text: z.string(),
+});
+const workbookItem = {
+  objectives: z.array(z.string()).min(1),
+  prompt: z.string(),
+  /** the short final answer: value with units, or a one-line decision */
+  answer: z.string(),
+  solution: z.array(solutionStep).min(1),
+};
+/** One file per lesson and language: src/content/workbook/<lang>/<chapter>-<lesson>.yaml. */
+const workbook = defineCollection({
+  loader: glob({ base: './src/content/workbook', pattern: '**/*.yaml' }),
+  schema: z.object({
+    lang,
+    lesson: z.string().regex(/^\d+\.\d+$/),
+    practice: z.array(
+      z.object({
+        id: z.string().regex(/^W-\d+\.\d+-\d{2}$/),
+        level: z.enum(['basic', 'mid', 'bagrut']),
+        qualitative: z.boolean().default(false),
+        ...workbookItem,
+      }),
+    ),
+    challenge: z
+      .array(
+        z.object({
+          id: z.string().regex(/^W-\d+\.\d+-c\d$/),
+          /** 1 = hard, 2 = very hard */
+          stars: z.union([z.literal(1), z.literal(2)]),
+          ...workbookItem,
+          /** where the problem comes from; only a source actually opened and read is cited */
+          source: z.object({
+            name: z.string(),
+            year: z.number().int().min(1900),
+            problem: z.string(),
+            url: z.string().url(),
+            verified: z.union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/), z.date().transform((d) => d.toISOString().slice(0, 10))]),
+            adapted: z.boolean().default(true),
+          }),
+        }),
+      )
+      .default([]),
+  }),
+});
+
+export const collections = { lessons, questions, glossary, misconceptions, summaries, workbook };
