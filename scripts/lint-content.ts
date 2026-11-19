@@ -472,6 +472,12 @@ for (const sm of summaries) {
     continue;
   }
   if (!lessons.some((l) => l.lang === sm.lang && Number(l.id.split('.')[0]) === sm.chapter)) fail(sm.file, `module ${sm.chapter} has no written ${sm.lang} lesson`);
+  // a module with a summary is finished: every lesson of it carries six worked examples and a workbook (unimech's rule)
+  for (const l of lessons.filter((x) => x.lang === sm.lang && Number(x.id.split('.')[0]) === sm.chapter)) {
+    const examples = (l.body.match(/<Example\b/g) ?? []).length;
+    if (examples < 6) fail(l.file, `module ${sm.chapter} has a summary, so the lesson needs 6 worked examples (it has ${examples})`, true);
+    if (!workbooks.some((w) => w.data.lang === l.lang && w.data.lesson === l.id)) fail(l.file, `module ${sm.chapter} has a summary, so the lesson needs a workbook`, true);
+  }
   const headings = [...sm.body.matchAll(/^## (.+)$/gm)].map((m) => m[1].trim());
   if (!same(headings, SUMMARY_SECTIONS[sm.lang])) fail(sm.file, `sections must be exactly: ${SUMMARY_SECTIONS[sm.lang].map((h) => `"## ${h}"`).join(', ')}`);
   for (const m of sm.body.matchAll(/<LessonLink\s+id="([^"]+)"(?:\s+anchor="([^"]+)")?/g)) {

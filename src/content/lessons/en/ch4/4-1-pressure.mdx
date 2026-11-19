@@ -277,6 +277,126 @@ $$
 
 </Example>
 
+<Example id="ex-4-1-3" title="A hail on every square centimetre">
+
+Air at $300\,\text{K}$ and $1.013\cdot10^5\,\text{Pa}$ is mostly nitrogen ($28.0\,u$, with $u = 1.661\cdot10^{-27}\,\text{kg}$). The number of molecules striking a wall per unit area per second is $\Phi = \tfrac14 n\bar v$, where $\bar v = \sqrt{8k_BT/(\pi m)}$ is the mean speed.
+
+(a) How many molecules strike one square centimetre of your skin each second?
+
+(b) What momentum does one impact deliver, on average? Why is it larger than $2m\sqrt{\langle v_x^2\rangle}$?
+
+<Solution>
+
+**Given:** $T = 300\,\text{K}$, $P = 1.013\cdot10^5\,\text{Pa}$, $m = 28.0\cdot1.661\cdot10^{-27} = 4.65\cdot10^{-26}\,\text{kg}$, $k_B = 1.381\cdot10^{-23}\,\text{J/K}$.
+
+**General law:** $n = P/(k_BT)$ from the ideal gas law; the force per area is the impact rate per area times the mean momentum per impact, so $\overline{\Delta p} = P/\Phi$.
+
+**Symbolic result:**
+
+$$
+\Phi = \frac14\,\frac{P}{k_BT}\sqrt{\frac{8k_BT}{\pi m}} \qquad \overline{\Delta p} = \frac{P}{\Phi} = \sqrt{2\pi m k_BT}
+$$
+
+**Limit check:** as $T \to 0$ at fixed $P$, $\Phi \propto T^{-1/2}$ grows while $\overline{\Delta p} \propto T^{1/2}$ shrinks: a cold gas at the same pressure pushes with more, gentler impacts. As $m \to \infty$ at fixed $T$, each impact carries more momentum and they come more rarely, with $P$ unchanged.
+
+**Units:** $\Phi$: $\text{m}^{-3}\cdot\text{m/s} = \text{m}^{-2}\text{s}^{-1}$; $\overline{\Delta p}$: $\sqrt{\text{kg}\cdot\text{J}} = \text{kg}\cdot\text{m/s}$.
+
+**Substitution:** $n = 2.45\cdot10^{25}\,\text{m}^{-3}$, $\bar v = 476\,\text{m/s}$, $\Phi = 2.91\cdot10^{27}\,\text{m}^{-2}\text{s}^{-1} = 2.91\cdot10^{23}\,\text{cm}^{-2}\text{s}^{-1}$. $\overline{\Delta p} = 3.48\cdot10^{-23}\,\text{kg·m/s}$, against $2m\sqrt{\langle v_x^2\rangle} = 2.78\cdot10^{-23}\,\text{kg·m/s}$.
+
+**Result:** (a) About $3\cdot10^{23}$ impacts per square centimetre per second. (b) $3.48\cdot10^{-23}\,\text{kg·m/s}$ per impact. It is larger because fast molecules reach the wall more often, so the molecules that do strike are faster than the average one.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-4-1-4" title="A balloon in the freezer">
+
+A party balloon holds $5.0\,\text{L}$ of helium at $300\,\text{K}$, at atmospheric pressure. It is put in a freezer at $255\,\text{K}$; its skin keeps the pressure close to atmospheric.
+
+(a) What is its volume once it has cooled?
+
+(b) By what fraction has the mean kinetic energy per atom fallen? Has the number of atoms changed?
+
+<Solution>
+
+**Given:** $V_1 = 5.0\,\text{L}$, $T_1 = 300\,\text{K}$, $T_2 = 255\,\text{K}$, $P$ and $N$ fixed.
+
+**General law:** $PV = Nk_BT$ and $\langle E\rangle = \tfrac32 k_BT$.
+
+**Symbolic result:**
+
+$$
+V_2 = V_1\,\frac{T_2}{T_1} \qquad \frac{\langle E\rangle_2}{\langle E\rangle_1} = \frac{T_2}{T_1}
+$$
+
+**Limit check:** $T_2 = T_1$ leaves everything unchanged; as $T_2 \to 0$ the volume would shrink to zero, but long before that the helium stops being an ideal gas (see the last example, on quantum helium).
+
+**Units:** a ratio of temperatures is dimensionless, so $V_2$ is in litres like $V_1$.
+
+**Substitution:** $V_2 = 5.0\cdot255/300 = 4.25\,\text{L}$. $\langle E\rangle$ falls from $6.21\cdot10^{-21}\,\text{J}$ to $5.28\cdot10^{-21}\,\text{J}$, by $15\%$.
+
+**Result:** (a) $4.25\,\text{L}$. (b) $15\%$ less energy per atom; the number of atoms is unchanged. The balloon shrinks because each atom pushes more gently and less often, not because any atoms left.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-4-1-5" title="One big sample or a hundred small ones?">
+
+Sensor A samples the pressure of $10^4$ molecules and averages a hundred independent readings. Sensor B takes a single reading of $10^6$ molecules. Which reading is steadier?
+
+<Solution>
+
+**Given:** A: $N_A = 10^4$, $k = 100$ independent readings averaged; B: $N_B = 10^6$, one reading.
+
+**General law:** one reading of $N$ independent molecules has $\sigma_P/\langle P\rangle = N^{-1/2}$; the average of $k$ independent readings has a spread $k^{-1/2}$ times that of one.
+
+**Symbolic result:**
+
+$$
+\left(\frac{\sigma_P}{\langle P\rangle}\right)_A = \frac{1}{\sqrt{N_A}}\,\frac{1}{\sqrt k} = \frac{1}{\sqrt{kN_A}} \qquad \left(\frac{\sigma_P}{\langle P\rangle}\right)_B = \frac{1}{\sqrt{N_B}}
+$$
+
+**Limit check:** $k = 1$ gives back a single reading of $N_A$. In both cases what counts is the total number of independent contributions, $kN_A$ or $N_B$: the $N^{-1/2}$ law does not care whether they come at once or one sample after another.
+
+**Units:** both are pure numbers.
+
+**Substitution:** A: $1/\sqrt{100\cdot10^4} = 10^{-3}$. B: $1/\sqrt{10^6} = 10^{-3}$.
+
+**Result:** they are equally steady, $10^{-3}$, because both average over $10^6$ independent contributions.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-4-1-6" title="When is helium a quantum gas?">
+
+The model fails when the thermal wavelength $\lambda = h/\sqrt{2\pi m k_BT}$ of the atoms becomes comparable with their spacing $n^{-1/3}$. Compare helium gas ($4.003\,u$) at atmospheric pressure at $300\,\text{K}$ and at its boiling point, $4.2\,\text{K}$. Take $h = 6.626\cdot10^{-34}\,\text{J·s}$.
+
+<Solution>
+
+**Given:** $m = 4.003\cdot1.661\cdot10^{-27} = 6.65\cdot10^{-27}\,\text{kg}$, $P = 1.013\cdot10^5\,\text{Pa}$, $T = 300\,\text{K}$ and $4.2\,\text{K}$.
+
+**General law:** $n = P/(k_BT)$, so the spacing is $(k_BT/P)^{1/3}$, and $\lambda = h/\sqrt{2\pi mk_BT}$.
+
+**Symbolic result:**
+
+$$
+\frac{\lambda}{n^{-1/3}} = \frac{h}{\sqrt{2\pi mk_BT}}\left(\frac{P}{k_BT}\right)^{1/3} \propto T^{-5/6}
+$$
+
+**Limit check:** as $T \to \infty$ the ratio goes to zero and the gas is classical; cooling at fixed pressure makes the atoms both slower (longer $\lambda$) and closer, so the ratio grows fast.
+
+**Units:** $\text{J·s}/\sqrt{\text{kg}\cdot\text{J}} = \text{m}$, and $(\text{J}/\text{Pa})^{1/3} = (\text{m}^3)^{1/3} = \text{m}$: the ratio is a pure number.
+
+**Substitution:** at $300\,\text{K}$ the ratio is $1.5\cdot10^{-2}$. At $4.2\,\text{K}$: $n = 1.75\cdot10^{27}\,\text{m}^{-3}$, spacing $8.3\cdot10^{-10}\,\text{m}$, $\lambda = 4.3\cdot10^{-10}\,\text{m}$, a ratio of $0.51$.
+
+**Result:** at room temperature helium is safely classical ($\lambda$ is $1.5\%$ of the spacing); at its boiling point $\lambda$ is half the spacing, and quantum statistics can no longer be ignored (module 17).
+
+</Solution>
+
+</Example>
+
 <Check
   title="Twelve questions on the lesson"
   ids={['Q-4.1-motion', 'Q-4.1-two-containers', 'Q-4.1-double-mass', 'Q-4.1-ten-thousand', 'Q-4.1-detect', 'Q-4.1-twenty', 'Q-4.1-box-side', 'Q-4.1-per-particle', 'Q-4.1-internal-energy', 'Q-4.1-dense', 'Q-4.1-trust', 'Q-4.1-what-it-shows']}
