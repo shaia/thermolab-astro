@@ -48,6 +48,7 @@ const en = {
     me: 'My path',
     formulas: 'Formula sheet',
     glossary: 'Glossary',
+    search: 'Search',
     lesson: 'Lesson navigation',
     sections: 'Parts of the lesson',
     prev: (id: string, title: string) => `Previous: ${id} ${title}`,
@@ -64,6 +65,7 @@ const en = {
     objectives: 'By the end of this lesson you can:',
     figure: 'Figure',
     solution: 'Tried it yourself? Open the solution',
+    print: 'Print or save as PDF',
     question: (i: number) => `Question ${i}`,
   },
   block: {
@@ -181,6 +183,7 @@ const he: Strings = {
     me: 'המסלול שלי',
     formulas: 'דף נוסחאות',
     glossary: 'מילון',
+    search: 'חיפוש',
     lesson: 'ניווט בשיעור',
     sections: 'חלקי השיעור',
     prev: (id, title) => `הקודם: ${id} ${title}`,
@@ -196,6 +199,7 @@ const he: Strings = {
     objectives: 'בסוף השיעור תוכלו:',
     figure: 'איור',
     solution: 'ניסיתם לבד? פתחו את הפתרון',
+    print: 'הדפסה או שמירה כ-PDF',
     question: (i) => `שאלה ${i}`,
   },
   block: {

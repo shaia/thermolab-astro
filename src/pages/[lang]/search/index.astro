@@ -1,0 +1,65 @@
+---
+/** Site search in one language. The index is Pagefind's, written after `astro build` (see package.json). */
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Search from '~/ui/Search';
+import { url } from '~/lib/url';
+import { LANGS, type Lang } from '~/i18n';
+import '~/styles/lesson.css';
+import '~/styles/platform.css';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const T = {
+  en: { title: 'Search', lede: 'Lessons, summaries, the glossary and the formula sheet, in English.' },
+  he: { title: 'חיפוש', lede: 'שיעורים, סיכומים, המילון ודף הנוסחאות, בעברית.' },
+}[lang];
+---
+
+<BaseLayout title={T.title}>
+  <div class="platform" data-pagefind-ignore>
+    <section class="sheet sheet-narrow">
+      <p class="kicker">{T.title}</p>
+      <h1>{T.title}</h1>
+      <p class="p-lede">{T.lede}</p>
+      <Search client:load lang={lang} bundle={url('pagefind/pagefind.js')} />
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  :global(.search-input) {
+    width: 100%;
+    min-height: 48px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--ink-3);
+    background: var(--paper);
+    color: var(--ink);
+    font: 500 1.05rem var(--font-ui);
+  }
+  :global(.search-results) {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+  }
+  :global(.search-results li) {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  :global(.search-results a) {
+    font-family: var(--font-ui);
+    font-weight: 600;
+  }
+  :global(.search-results p) {
+    margin: 4px 0 0;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+  }
+  :global(.search-results mark) {
+    background: var(--accent-soft);
+    color: inherit;
+  }
+</style>

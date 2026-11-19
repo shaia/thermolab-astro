@@ -7,13 +7,14 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint:content": "tsx scripts/lint-content.ts",
+    "lite": "tsx scripts/lite.ts",
     "e2e": "playwright test"
   },
   "dependencies": {
@@ -44,6 +45,7 @@
     "@playwright/test": "^1.64.1",
     "@types/node": "^26.6.6",
     "@types/three": "^0.187.0",
+    "pagefind": "^1.3.0",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "vitest": "^5.0.5"

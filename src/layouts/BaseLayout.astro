@@ -56,7 +56,8 @@ const other = otherLang(lang);
   <body>
     <a class="skip-link" href="#main">{s.skip}</a>
     {!bare && <SiteHeader />}
-    <main id="main">
+    <!-- data-pagefind-body: the search index reads page content only, never the header or settings -->
+    <main id="main" data-pagefind-body>
       <slot />
     </main>
   </body>

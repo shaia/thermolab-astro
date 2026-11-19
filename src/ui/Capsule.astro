@@ -23,7 +23,7 @@ const lang = langOf(Astro.url.pathname);
 const s = ui(lang);
 ---
 
-<nav class="capsule glass" aria-label={s.nav.lesson} data-kickers={JSON.stringify(s.blockShort)}>
+<nav class="capsule glass no-print" aria-label={s.nav.lesson} data-kickers={JSON.stringify(s.blockShort)} data-pagefind-ignore>
   <a class="cap-btn" href={langUrl(lang)} title={s.nav.contents} aria-label={s.nav.contents}>☰</a>
   {
     prev ? (
