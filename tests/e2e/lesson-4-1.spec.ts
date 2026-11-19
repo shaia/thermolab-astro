@@ -107,7 +107,8 @@ test('the contents list all nineteen modules in both languages, and the root cho
   for (const lang of ['en', 'he']) {
     await page.goto(`/${lang}/`);
     await expect(page.locator('[data-lesson-id]')).toHaveCount(19);
-    await expect(page.locator('[data-lesson-id="4.1"] a')).toHaveAttribute('href', `/${lang}/lessons/4-1/`);
+    await expect(page.locator('[data-lesson-id="4.1"] > a')).toHaveAttribute('href', `/${lang}/lessons/4-1/`);
+    await expect(page.locator('[data-lesson-id="4.1"] .chapter-tools a')).toHaveCount(3);
   }
   await page.goto('/');
   await expect(page).toHaveURL(/\/(en|he)\/$/);

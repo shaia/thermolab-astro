@@ -37,6 +37,7 @@ const [, n] = id.split('.');
         {subtitle && <p class="lesson-sub">{subtitle}</p>}
         <p class="lesson-meta">
           <span class="chip">{s.lesson.minutes(minutes)}</span>
+          <button type="button" class="btn ghost no-print print-btn" onclick="window.print()">{s.lesson.print}</button>
         </p>
       </div>
       <section class="objectives" aria-labelledby="obj-h">

@@ -451,3 +451,42 @@
     translate: none;
   }
 }
+/* ---------- print ----------
+   A printed lesson reads top to bottom: each spread becomes its text followed by its figure, frozen
+   in whatever state the reader left it. Controls, tasks and the capsule have nothing to do on paper. */
+@media print {
+  .lesson {
+    padding: 0;
+  }
+  .sheet,
+  .spread {
+    box-shadow: none;
+    margin-bottom: 12px;
+  }
+  .spread {
+    display: block;
+  }
+  .spread::after {
+    display: none;
+  }
+  .page-figure {
+    background: none;
+    break-inside: avoid;
+  }
+  .fig {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+  .sim-controls,
+  .sim-tasks,
+  .sim-tools,
+  .predict-actions,
+  .lesson-nav,
+  .lesson-end {
+    display: none !important;
+  }
+  .step {
+    background: none !important;
+  }
+}
