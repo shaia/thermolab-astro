@@ -23,6 +23,7 @@ figures: [fig-4-1a, fig-4-1b]
 
 import GasBox from '~/sims/GasBox.astro';
 import PressureSpread from '~/sims/PressureSpread.astro';
+import Lab from '~/components/Lab.astro';
 
 <Spread
   fig="fig-4-1a"
@@ -89,6 +90,8 @@ Back to sixty atoms, now four times as heavy, at the same temperature. They visi
 Finally, shrink the box to a side of $0.7\,\mu\text{m}$, about half the area, at the same $N$ and $T$. The atoms are as fast as before but have less far to go between walls, so they bounce more often, and the wall they push on is shorter. The pressure roughly doubles, as the dashed line says it should.
 
 </Step>
+
+<Lab notebook="04-pressure" />
 
 </Explore>
 

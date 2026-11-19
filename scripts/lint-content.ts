@@ -236,6 +236,7 @@ function skeleton(l: Lesson) {
     predict: [...b.matchAll(/<Predict[\s\S]*?id="([^"]+)"[\s\S]*?choices=\{\[([\s\S]*?)\]\}[\s\S]*?answer=\{(\d+)\}/g)].map((m) => `${m[1]}: ${(m[2].match(/^\s*'/gm) ?? []).length} choices, answer ${m[3]}`),
     checks: [...b.matchAll(/<Check[\s\S]*?ids=\{\[([^\]]*)\]\}/g)].map((m) => (m[1].match(/'([^']+)'/g) ?? []).join(',')),
     revisits: [...b.matchAll(/<Revisit\s+id="([^"]+)"/g)].map((m) => m[1]),
+    labs: [...b.matchAll(/<Lab\s+notebook="([^"]+)"/g)].map((m) => m[1]),
     terms: [...new Set([...b.matchAll(/<Term\s+id="([^"]+)"/g)].map((m) => m[1]))].sort(),
   };
 }

@@ -39,3 +39,6 @@ public/media/
 
 # scratch scripts of question authors (recomputations), never committed
 .scratch/
+
+# ThermoLab's JupyterLite bundle, copied in by scripts/lite.ts (70 MB, never committed)
+public/lite/
