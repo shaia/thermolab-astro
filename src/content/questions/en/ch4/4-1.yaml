@@ -20,6 +20,7 @@ questions:
           They have come to rest, which is why the pressure no longer changes.
         feedback: >-
           That would need zero kinetic energy, which is absolute zero. It also contradicts itself: motionless molecules exert no pressure at all, so the gauge would read zero, not a steady value.
+        misconception: MC-equilibrium-motion-stops
       - text: >-
           They move, but no longer strike the walls, so no more momentum is transferred.
         feedback: >-
@@ -46,10 +47,12 @@ questions:
           B has twice the pressure, because it holds twice as many atoms.
         feedback: >-
           The number of atoms alone does not set the pressure; the density does. B has twice the atoms in twice the volume, so $N/V$, and with it $P$, is unchanged.
+        misconception: MC-doubling-doubles-everything
       - text: >-
           B has twice the temperature, because it has twice the internal energy.
         feedback: >-
           The most common confusion in the subject. Temperature tracks the mean energy per particle; twice the energy spread over twice the particles leaves the mean, and so the temperature, where it was.
+        misconception: MC-temperature-total-energy
       - text: >-
           A has the higher pressure, because its atoms are more crowded.
         feedback: >-
@@ -72,6 +75,7 @@ questions:
           It doubles, because each collision delivers twice the momentum.
         feedback: >-
           Each collision does deliver more momentum, but at fixed temperature the heavier particles are slower, $\langle v_x^2\rangle = k_BT/m$, so they reach the wall less often. Work through $P = Nm\langle v_x^2\rangle/V$ and watch $m$ cancel.
+        misconception: MC-heavier-pushes-harder
       - text: >-
           It halves, because the heavier particles move more slowly.
         feedback: >-
@@ -119,10 +123,12 @@ questions:
           Raising the temperature, so the collisions are more violent.
         feedback: >-
           Hotter collisions are more violent, but the mean pressure rises in proportion. The **relative** fluctuation is $N^{-1/2}$, whatever the temperature.
+        misconception: MC-violence-sets-fluctuation
       - text: >-
           Using heavier molecules, so each impact is larger.
         feedback: >-
           The mass cancels out of the pressure at fixed temperature, and out of its relative fluctuation too.
+        misconception: MC-violence-sets-fluctuation
       - text: >-
           Compressing the gas, so collisions happen more often.
         feedback: >-
@@ -171,6 +177,7 @@ questions:
           The particles briefly stopped moving.
         feedback: >-
           Elastic bounces conserve the kinetic energy exactly, so the particles never slow down. They were moving; they just were not at a wall.
+        misconception: MC-equilibrium-motion-stops
       - text: >-
           Some energy was lost in the collisions with the walls.
         feedback: >-
@@ -222,6 +229,7 @@ questions:
           The temperature.
         feedback: >-
           The temperature is the same by assumption. It measures the energy per particle, not the total.
+        misconception: MC-temperature-total-energy
       - text: >-
           The mean speed of an atom.
         feedback: >-

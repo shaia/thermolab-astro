@@ -74,4 +74,29 @@ const glossary = defineCollection({
   }),
 });
 
-export const collections = { lessons, questions, glossary };
+const text = z.object({ en: z.string(), he: z.string() });
+
+/**
+ * The misconception register: beliefs the questions are built to catch, both languages side by
+ * side. A wrong answer may name one; two such answers make it active on the learner's page, with
+ * a link to the place in a lesson that refutes it. Converted from ThermoLab's assessment/misconceptions.yml.
+ */
+const misconceptions = defineCollection({
+  loader: yamlDir('src/content/misconceptions'),
+  schema: z.object({
+    id: z.string().regex(/^MC-[\w-]+$/),
+    title: text,
+    belief: text,
+    truth: text,
+    /** where to go to unlearn it: a lesson id plus an anchor or figure */
+    remedy: z.object({ lesson: z.string(), anchor: z.string().optional(), label: text }),
+  }),
+});
+
+/** End-of-module summary, one file per language: what to remember and how to solve the module's problems. */
+const summaries = defineCollection({
+  loader: glob({ base: './src/content/summaries', pattern: '**/*.mdx' }),
+  schema: z.object({ lang, chapter: z.number().int().min(0).max(18), title: z.string() }),
+});
+
+export const collections = { lessons, questions, glossary, misconceptions, summaries };

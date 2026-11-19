@@ -1,0 +1,46 @@
+---
+lang: en
+chapter: 4
+title: 'Module 04 in one page: pressure from molecules'
+---
+
+## The big idea
+
+Pressure is momentum delivered to a wall. Each molecule's bounce is violent and random, but a gas makes so many of them that their sum is steady: the relative jitter falls as $N^{-1/2}$. Add equipartition, and the bookkeeping of bounces becomes the ideal gas law.
+
+## What to remember
+
+<Formula tex="F_1 = \frac{mv_x^2}{L_x} \qquad P = \frac{Nm\langle v_x^2\rangle}{V}" label="One particle on one wall, then all of them (exact for the model)" />
+
+<Formula tex="m\langle v_x^2\rangle = k_BT \qquad\Longrightarrow\qquad PV = Nk_BT" label="Equipartition turns mechanics into the ideal gas law" />
+
+<Formula tex="\frac{\sigma_P}{\langle P\rangle} = \frac{1}{\sqrt{N}}" label="Relative fluctuation of the pressure" />
+
+- Temperature sets the mean energy **per particle**: $\tfrac32 k_BT$ in three dimensions, $k_BT$ in two. Internal energy is the **total**, $U = N\langle E\rangle$.
+- The mass cancels from the pressure at fixed temperature: heavier particles hit harder and less often.
+- The model: point particles, elastic walls, no forces between particles, a Maxwell-Boltzmann distribution imposed rather than reached. See <LessonLink id="4.1" anchor="derive">the derivation</LessonLink>.
+
+## Common mistakes
+
+- **"Equilibrium means the molecules stopped."** They move as fast as ever; only the averages settled. Motionless molecules would exert no pressure at all.
+- **"Heavier molecules push harder."** Not at the same temperature. Run <LessonLink id="4.1" anchor="heavy">the gas four times heavier</LessonLink> and compare.
+- **"Twice the gas, twice the pressure."** Twice the gas in twice the volume keeps $N/V$, and so $P$ and $T$, the same. Only the extensive quantities double.
+- **"The jitter comes from violent collisions."** The relative fluctuation depends on $N$ alone, not on the temperature or the mass.
+- **$1/N$ instead of $1/\sqrt N$.** The spread of a sum grows as $\sqrt N$ and its mean as $N$; the ratio falls as $N^{-1/2}$.
+
+## How to solve
+
+1. **Name the system and what is held fixed** ($N$, $V$, $T$, the mass). Most pressure questions are a ratio at fixed something.
+2. **Write the law in symbols first:** $PV = Nk_BT$, $U = \tfrac32 Nk_BT$, $\sigma_P/\langle P\rangle = N^{-1/2}$.
+3. **Take ratios before numbers.** "The box side shrinks from $1.0$ to $0.70$" is $P_2/P_1 = (1.0/0.70)^2$, no constants needed.
+4. **Check limits:** $V \to \infty$ gives $P \to 0$; $N = 1$ gives a $100\%$ fluctuation.
+5. **Check units:** $\text{J/m}^3 = \text{Pa}$.
+6. **Only then substitute numbers**, and ask whether the model holds (dilute, not too cold).
+
+## Checklist before an exam
+
+- I can derive $PV = Nk_BT$ from one bounce, and say where equipartition enters.
+- I can explain why the mass cancels, without an equation.
+- I can tell temperature from internal energy, and intensive from extensive.
+- I can estimate the relative pressure fluctuation of $N$ particles, and the sample size for a given one.
+- I can name the assumptions of the model and the two regimes where it fails.

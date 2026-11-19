@@ -303,6 +303,7 @@ const answerKey = (q: Question) => ({
   unit: q.unit,
   tolerance: q.tolerance,
   commonWrong: ((q.commonWrong as { value: number }[] | undefined) ?? []).map((w) => w.value),
+  misconceptions: [...(q.choices ?? []), ...((q.commonWrong as Choice[] | undefined) ?? [])].map((c) => (c as { misconception?: string }).misconception ?? null),
 });
 const enQ = new Map(questionsOf('en').map(({ q, file }) => [q.id, { q, file }]));
 const heQ = new Map(questionsOf('he').map(({ q, file }) => [q.id, { q, file }]));
@@ -315,6 +316,86 @@ for (const [qid, { q, file }] of enQ) {
   if (!same(answerKey(q), answerKey(other.q))) fail(other.file, `${qid}: answer key differs from the English (${JSON.stringify(answerKey(q))} vs ${JSON.stringify(answerKey(other.q))})`);
 }
 for (const [qid, { file }] of heQ) if (!enQ.has(qid)) fail(file, `${qid} has no English version`, true);
+
+/* ------------------------------------------------------------- misconceptions */
+
+interface Misconception {
+  id: string;
+  remedy: { lesson: string; anchor?: string };
+  file: string;
+}
+const misconceptions: Misconception[] = walk(join(CONTENT, 'misconceptions'))
+  .filter((f) => f.endsWith('.yaml'))
+  .flatMap((f) => (yamlFile<Omit<Misconception, 'file'>[]>(f) ?? []).map((e) => ({ ...e, file: rel(f) })));
+const mcIds = new Set(misconceptions.map((m) => m.id));
+const detected = new Set<string>();
+for (const lang of LANGS) {
+  for (const { q, file } of questionsOf(lang)) {
+    const tags = [...(q.choices ?? []), ...((q.commonWrong as Choice[] | undefined) ?? [])].flatMap((c) => {
+      const t = (c as { misconception?: string }).misconception;
+      return t ? [t] : [];
+    });
+    for (const t of tags) {
+      if (!mcIds.has(t)) fail(`${file} ${q.id}`, `misconception ${t} is not in the register (src/content/misconceptions/)`);
+      detected.add(t);
+    }
+  }
+}
+/** Whether a lesson renders an element with this HTML id (a <Spread fig> renders its figure with it). */
+const hasAnchor = (body: string, id: string) =>
+  [...body.matchAll(/<(\w+)\b[^>]*?\sid="([^"]+)"/g)].some((m) => m[2] === id && m[1] !== 'Term') ||
+  [...body.matchAll(/<Spread\b[^>]*?\sfig="([^"]+)"/g)].some((m) => m[1] === id);
+for (const m of misconceptions) {
+  if (!detected.has(m.id)) fail(m.file, `${m.id} is not detected by any distractor`, true);
+  if (!plannedById.has(m.remedy.lesson)) fail(m.file, `${m.id} remedy points at lesson ${m.remedy.lesson}, which is not in the course map`);
+  for (const l of lessons.filter((x) => x.id === m.remedy.lesson)) {
+    if (m.remedy.anchor && !hasAnchor(l.body, m.remedy.anchor)) fail(m.file, `${m.id} remedy anchor #${m.remedy.anchor} is not in ${l.file}`);
+  }
+}
+
+/* ------------------------------------------------------------- module summaries */
+
+const SUMMARY_SECTIONS: Record<Lang, string[]> = {
+  en: ['The big idea', 'What to remember', 'Common mistakes', 'How to solve', 'Checklist before an exam'],
+  he: ['הרעיון הגדול', 'מה חייבים לזכור', 'טעויות נפוצות', 'איך פותרים', 'רשימת בדיקה לפני מבחן'],
+};
+const summaries = walk(join(CONTENT, 'summaries'))
+  .filter((f) => f.endsWith('.mdx'))
+  .map((f) => {
+    const m = rel(f).match(/summaries\/(en|he)\/ch(\d+)\.mdx$/);
+    return { file: rel(f), lang: (m?.[1] ?? 'en') as Lang, chapter: Number(m?.[2]), ok: !!m, body: readFileSync(f, 'utf8') };
+  });
+for (const sm of summaries) {
+  if (!sm.ok) {
+    fail(sm.file, 'a summary lives in src/content/summaries/<en|he>/ch<N>.mdx');
+    continue;
+  }
+  if (!lessons.some((l) => l.lang === sm.lang && Number(l.id.split('.')[0]) === sm.chapter)) fail(sm.file, `module ${sm.chapter} has no written ${sm.lang} lesson`);
+  const headings = [...sm.body.matchAll(/^## (.+)$/gm)].map((m) => m[1].trim());
+  if (!same(headings, SUMMARY_SECTIONS[sm.lang])) fail(sm.file, `sections must be exactly: ${SUMMARY_SECTIONS[sm.lang].map((h) => `"## ${h}"`).join(', ')}`);
+  for (const m of sm.body.matchAll(/<LessonLink\s+id="([^"]+)"(?:\s+anchor="([^"]+)")?/g)) {
+    const target = lessons.find((l) => l.lang === sm.lang && l.id === m[1]);
+    if (!target) fail(sm.file, `<LessonLink id="${m[1]}">: lesson not written in ${sm.lang}`);
+    else if (m[2] && !hasAnchor(target.body, m[2])) fail(sm.file, `<LessonLink id="${m[1]}" anchor="${m[2]}">: no such id in the lesson`);
+  }
+  for (const f of [...sm.body.matchAll(/\$\$([\s\S]+?)\$\$/g)].map((m) => `$$${m[1]}$$`).concat([...sm.body.matchAll(/\btex="([^"]+)"/g)].map((m) => `$$${m[1]}$$`))) {
+    try {
+      tex(f, sm.file);
+    } catch (e) {
+      fail(sm.file, (e as Error).message);
+    }
+  }
+}
+// parity: the two summaries of a module share their formula cards and their links
+const summaryKey = (body: string) => ({
+  formulas: [...body.matchAll(/<Formula\s+tex="([^"]+)"/g)].map((m) => m[1]),
+  links: [...body.matchAll(/<LessonLink\s+id="([^"]+)"(?:\s+anchor="([^"]+)")?/g)].map((m) => `${m[1]}#${m[2] ?? ''}`),
+});
+for (const en of summaries.filter((s) => s.lang === 'en')) {
+  const he = summaries.find((s) => s.lang === 'he' && s.chapter === en.chapter);
+  if (!he) fail(en.file, `module ${en.chapter} has no Hebrew summary`, true);
+  else if (!same(summaryKey(en.body), summaryKey(he.body))) fail(he.file, `parity with ${en.file}: formula cards or lesson links differ`);
+}
 
 /* ------------------------------------------------------------- glossary spellings */
 
@@ -342,6 +423,17 @@ for (const l of lessons) {
   }
 }
 
+// glossary definitions are rendered with KaTeX in the term cards and on the glossary page
+for (const g of glossary as (Term & { definition?: Record<Lang, string> })[]) {
+  for (const lang of LANGS) {
+    try {
+      tex(g.definition?.[lang] ?? '', `glossary ${g.id}.definition.${lang}`);
+    } catch (e) {
+      fail(g.file, (e as Error).message);
+    }
+  }
+}
+
 /* --------------------------------------------------------------- report */
 
 if (problems.length) {
@@ -350,4 +442,6 @@ if (problems.length) {
   process.exit(1);
 }
 const count = (lang: Lang) => `${lessons.filter((l) => l.lang === lang).length} ${lang}`;
-console.log(`lint-content: ok${onlyFile ? ` for ${onlyFile}` : ''} (lessons: ${count('en')}, ${count('he')}; questions: ${enQ.size} en, ${heQ.size} he; ${glossary.length} terms; parity checked for ${byId.size} lesson(s))`);
+console.log(
+  `lint-content: ok${onlyFile ? ` for ${onlyFile}` : ''} (lessons: ${count('en')}, ${count('he')}; questions: ${enQ.size} en, ${heQ.size} he; ${glossary.length} terms; ${misconceptions.length} misconceptions; ${summaries.length} summaries; parity checked for ${byId.size} lesson(s))`,
+);

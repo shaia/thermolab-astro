@@ -14,8 +14,8 @@
 - id: impulse
   term: { en: impulse, he: מתקף }
   definition:
-    en: The change in momentum a force produces over a time interval; a bounce off a wall hands the wall an impulse 2m|v_x|.
-    he: שינוי התנע שכוח יוצר במשך פרק זמן; החזרה מדופן מעבירה לדופן מתקף של 2m|v_x|.
+    en: The change in momentum a force produces over a time interval; a bounce off a wall hands the wall an impulse $2m|v_x|$.
+    he: שינוי התנע שכוח יוצר במשך פרק זמן; החזרה מדופן מעבירה לדופן מתקף של $2m|v_x|$.
   lesson: '4.1'
 - id: elastic-collision
   term: { en: elastic collision, he: התנגשות אלסטית }
@@ -26,21 +26,21 @@
 - id: equipartition
   term: { en: equipartition theorem, he: משפט חלוקת האנרגיה השווה }
   definition:
-    en: In classical thermal equilibrium every quadratic term in the energy carries a mean of k_B T / 2.
-    he: בשיווי משקל תרמי קלאסי כל איבר ריבועי באנרגיה נושא בממוצע k_B T / 2.
+    en: In classical thermal equilibrium every quadratic term in the energy carries a mean of $k_BT/2$.
+    he: בשיווי משקל תרמי קלאסי כל איבר ריבועי באנרגיה נושא בממוצע $k_BT/2$.
   lesson: '4.1'
 - id: ideal-gas-law
   term: { en: ideal gas law, he: חוק הגזים האידיאליים }
   definition:
-    en: PV = N k_B T, the equation of state of a dilute gas of particles that do not interact.
-    he: PV = N k_B T, משוואת המצב של גז דליל של חלקיקים שאינם מקיימים אינטראקציה.
+    en: $PV = Nk_BT$, the equation of state of a dilute gas of particles that do not interact.
+    he: $PV = Nk_BT$, משוואת המצב של גז דליל של חלקיקים שאינם מקיימים אינטראקציה.
   lesson: '4.1'
 - id: maxwell-boltzmann
   term: { en: Maxwell-Boltzmann distribution, he: התפלגות מקסוול-בולצמן }
   reject: ['התפלגות מקסוול בולצמן']
   definition:
-    en: The distribution of molecular velocities in a classical gas in equilibrium; each velocity component is Gaussian with variance k_B T / m.
-    he: התפלגות מהירויות המולקולות בגז קלאסי בשיווי משקל; כל רכיב מהירות גאוסי, עם שונות k_B T / m.
+    en: The distribution of molecular velocities in a classical gas in equilibrium; each velocity component is Gaussian with variance $k_BT/m$.
+    he: התפלגות מהירויות המולקולות בגז קלאסי בשיווי משקל; כל רכיב מהירות גאוסי, עם שונות $k_BT/m$.
   lesson: '4.1'
 - id: microstate
   term: { en: microstate, he: מיקרו-מצב }
@@ -53,8 +53,8 @@
   term: { en: fluctuation, he: פלוקטואציה }
   reject: ['תנודה סטטיסטית']
   definition:
-    en: The deviation of a quantity from its mean; its relative size usually falls as N^(-1/2).
-    he: הסטייה של גודל מהממוצע שלו; הגודל היחסי שלה קטן בדרך כלל כמו N^(-1/2).
+    en: The deviation of a quantity from its mean; its relative size usually falls as $N^{-1/2}$.
+    he: הסטייה של גודל מהממוצע שלו; הגודל היחסי שלה קטן בדרך כלל כמו $N^{-1/2}$.
   lesson: '4.1'
 - id: internal-energy
   term: { en: internal energy, he: אנרגיה פנימית }

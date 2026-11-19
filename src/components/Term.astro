@@ -5,6 +5,7 @@
  */
 import { getEntry } from 'astro:content';
 import { langOf } from '~/i18n';
+import { tex } from '~/lib/tex';
 interface Props {
   id: string;
 }
@@ -18,6 +19,6 @@ const g = entry.data;
 <span class="term" tabindex="0"
   ><slot /><span class="term-card" role="tooltip"
     ><b>{g.term[lang]}</b>{lang === 'he' && <span class="term-en ltr">{g.term.en}</span>}
-    <span class="term-def">{g.definition[lang]}</span></span
+    <span class="term-def" set:html={tex(g.definition[lang], `glossary ${id}`)} /></span
   ></span
 >
