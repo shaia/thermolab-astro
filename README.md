@@ -73,14 +73,27 @@ claims the lesson makes:
 - [PressureSpread](src/sims/PressureSpread.tsx): the pressures of 300 freshly drawn gases, and their
   relative spread against N on log–log axes.
 
-## Left out of the pilot
+**Around the lesson,** in both languages:
 
-- **Platform pages with no module-04 content:** practice, chapter test, workbook, chapter summary,
-  formula sheet, glossary, "my path". Multi-part review problems are also left out. Together these
-  hold about 190 lines of Hebrew interface text that would move into `src/i18n.ts` the same way.
-- **Misconception register and videos:** neither collection exists here.
-- **The JupyterLite labs:** they would be built into `dist/lite/` as in ThermoLab.
-- **Site search** (Pagefind, about a day) and a print button.
+- Practice page, module test, "my path", formula sheet, glossary and the module 04 summary. Each
+  page keeps its own words in a two-language table at its top.
+- A misconception register (five entries, ThermoLab's ids where it had one). Wrong answers name the
+  belief behind them, and "my path" links each active one to the step that refutes it.
+- **Laboratory.** The lesson links to ThermoLab's own notebook in JupyterLite. `npm run lite` copies
+  the bundle ThermoLab already builds into `public/lite/`. It is not committed (70 MB), and CI does
+  not fetch it yet, so published lab links lead nowhere until it does.
+- **Search** with Pagefind, run after `astro build`, one index per language. Hebrew gets no
+  stemming: a bare word and its prefixed forms (לחץ, הלחץ) return overlapping but different results.
+- A **print / save as PDF** button. A spread prints as its text followed by its figure.
+
+## Still left out
+
+- **The workbook and multi-part review problems.** ThermoLab's problem set deliberately publishes no
+  solutions. unimech's workbook and review problems are built around showing worked solutions and
+  marking rubrics. Which way to go is the author's decision.
+- **Videos.** ThermoLab has none, so there is nothing to port.
+- **Six worked examples per lesson.** unimech's rule applies once a module has a summary. Lesson 4.1
+  has two.
 
 ## What the pilot measured
 
