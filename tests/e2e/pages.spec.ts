@@ -105,9 +105,12 @@ test('the lesson links to its laboratory notebook in the page’s language', asy
   for (const lang of ['en', 'he']) {
     await page.goto(`/${lang}/lessons/4-1/`);
     const link = page.locator('[data-lab="04-pressure"] a');
-    await expect(link).toHaveAttribute('href', `/lite/lab/index.html?path=${lang}/labs/04-pressure.ipynb`);
+    // the local copy when `npm run lite` made one, otherwise the bundle ThermoLab publishes (src/lib/lite.ts)
+    const local = existsSync('public/lite/lab/index.html');
+    const root = local ? '/lite/' : 'https://slow-is-smooth.io/thermolab/lite/';
+    await expect(link).toHaveAttribute('href', `${root}lab/index.html?path=${lang}/labs/04-pressure.ipynb`);
   }
-  // the bundle is ThermoLab's, copied in by `npm run lite`; when it is there, the notebooks must be too
+  // a local copy, when there is one, must hold the notebooks the links name
   test.skip(!existsSync('dist/lite/lab/index.html'), 'no JupyterLite bundle in dist/ (run npm run lite before building)');
   for (const lang of ['en', 'he']) {
     expect((await request.get(`/lite/files/${lang}/labs/04-pressure.ipynb`)).status()).toBe(200);

@@ -7,8 +7,8 @@
  *   THERMOLAB_LITE=<path> npm run lite    # from anywhere else
  *
  * The bundle is ThermoLab's, built by its build_site.py; this site does not rebuild it. It is not
- * committed here (70 MB): run this before `npm run build` wherever the site is published.
- * Without it the lesson's lab card still renders, and its link leads nowhere.
+ * committed here (70 MB). Without a local copy the lab card links to the bundle ThermoLab publishes
+ * (src/lib/lite.ts), so this is only needed to work offline or to test a bundle not yet published.
  */
 
 import { cpSync, existsSync, rmSync } from 'node:fs';

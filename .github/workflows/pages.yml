@@ -88,8 +88,8 @@ jobs:
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path }}/
-        # The laboratory notebooks are ThermoLab's JupyterLite bundle (scripts/lite.ts), built by ThermoLab's
-        # own pipeline. Until this workflow fetches that bundle, the published lab links lead nowhere.
+        # The lab card links to the JupyterLite bundle ThermoLab publishes with its own site (src/lib/lite.ts);
+        # set PUBLIC_LITE_URL here to point it somewhere else.
         run: npm run build
       - uses: actions/upload-pages-artifact@v5
         with:

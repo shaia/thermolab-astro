@@ -2,17 +2,17 @@
 /**
  * The lesson's laboratory: a card that opens ThermoLab's notebook for the lesson in JupyterLite, in
  * the page's language, running in the browser with nothing to install. The bundle is ThermoLab's own
- * (see scripts/lite.ts); the notebook is named as ThermoLab names it, e.g. "04-pressure".
+ * (see src/lib/lite.ts for where it is served from); the notebook is named as ThermoLab names it, e.g. "04-pressure".
  */
 import { langOf } from '~/i18n';
-import { url } from '~/lib/url';
+import { labHref } from '~/lib/lite';
 
 interface Props {
   notebook: string;
 }
 const { notebook } = Astro.props;
 const lang = langOf(Astro.url.pathname);
-const href = url(`lite/lab/index.html?path=${lang}/labs/${notebook}.ipynb`);
+const href = labHref(lang, notebook);
 const n = notebook.slice(0, 2);
 const T = {
   en: {

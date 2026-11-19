@@ -79,9 +79,10 @@ claims the lesson makes:
   page keeps its own words in a two-language table at its top.
 - A misconception register (five entries, ThermoLab's ids where it had one). Wrong answers name the
   belief behind them, and "my path" links each active one to the step that refutes it.
-- **Laboratory.** The lesson links to ThermoLab's own notebook in JupyterLite. `npm run lite` copies
-  the bundle ThermoLab already builds into `public/lite/`. It is not committed (70 MB), and CI does
-  not fetch it yet, so published lab links lead nowhere until it does.
+- **Laboratory.** The lesson links to ThermoLab's own notebook in JupyterLite, in the page's
+  language. The link goes to the bundle ThermoLab publishes with its site. `npm run lite` copies a
+  local bundle into `public/lite/` (70 MB, not committed) for offline work, and `PUBLIC_LITE_URL`
+  overrides both. See [src/lib/lite.ts](src/lib/lite.ts).
 - **Search** with Pagefind, run after `astro build`, one index per language. Hebrew gets no
   stemming: a bare word and its prefixed forms (לחץ, הלחץ) return overlapping but different results.
 - A **print / save as PDF** button. A spread prints as its text followed by its figure.
@@ -95,8 +96,6 @@ claims the lesson makes:
 ## Still left out
 
 - **Videos.** ThermoLab has none, so there is nothing to port.
-- **Six worked examples per lesson.** unimech asks for six once a module has a summary. Lesson 4.1 has two.
-- **The lab bundle in CI.** Published lab links lead nowhere until the workflow fetches ThermoLab's JupyterLite bundle.
 
 ## What the pilot measured
 
