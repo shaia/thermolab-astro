@@ -1,0 +1,7 @@
+---
+/** The hysteresis loop for lesson MDX: <Spread figure={IsingHysteresis} figureProps={{ temperature: 1.5, tasks: ['loop'] }}>. */
+import IsingHysteresis, { type IsingHysteresisProps } from './IsingHysteresis';
+type Props = IsingHysteresisProps;
+---
+
+<IsingHysteresis client:visible {...Astro.props} />
