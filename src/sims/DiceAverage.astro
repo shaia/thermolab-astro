@@ -1,0 +1,7 @@
+---
+/** The running average of fair dice for lesson MDX: <Spread figure={DiceAverage} figureProps={{ runs: 5, rolls: 1000, view: 'average', tasks: ['converge'] }}>. */
+import DiceAverage, { type DiceAverageProps } from './DiceAverage';
+type Props = DiceAverageProps;
+---
+
+<DiceAverage client:visible {...Astro.props} />
