@@ -1,0 +1,56 @@
+# Misconceptions lesson 2.1 is built to catch. MC-ideal-gas-universal is ThermoLab's register entry for module 02
+# (assessment/misconceptions.yml: ideal-gas-universal). The register's other module-02 entry,
+# doubling-doubles-everything, is already defined as MC-doubling-doubles-everything in 4-1.yaml (module 04 was ported
+# first, and ids are global); lesson 2.1 confronts it at its step #doubling and example #ex-2-1-2. The other two are
+# new: MC-any-gas-liquefies is the belief the hook's nitrogen cylinder refutes, and MC-vdw-loop-is-real is the wrong
+# answer the lesson's prediction invites; the register had no entry for either.
+- id: MC-ideal-gas-universal
+  title:
+    en: Every gas obeys the ideal gas law
+    he: כל גז מקיים את חוק הגזים האידיאליים
+  belief:
+    en: PV = Nk_BT is a law of nature that every gas obeys, at any density and any temperature.
+    he: ⁦PV = Nk_BT⁩ הוא חוק טבע שכל גז מקיים, בכל צפיפות ובכל טמפרטורה.
+  truth:
+    en: It is an empirical law of the dilute classical regime, exact only as the density goes to zero. Compressed at 280 K, real CO₂ already has a pressure 14% below the ideal one at 2 MPa (Z = 0.86), and then holds its pressure fixed at 4.16 MPa while it condenses, which no law without a molecular size or attraction in it can produce.
+    he: זהו חוק אמפירי של המשטר הדליל והקלאסי, המדויק רק כשהצפיפות שואפת לאפס. ⁦CO₂⁩ ממשי הנדחס ב-⁦280 K⁩ נמצא כבר ב-⁦2 MPa⁩ בלחץ נמוך ב-⁦14%⁩ מהלחץ האידיאלי (⁦Z = 0.86⁩), ואחר כך שומר על לחץ קבוע של ⁦4.16 MPa⁩ בזמן שהוא מתעבה, דבר שחוק שאין בו גודל מולקולה או משיכה אינו יכול לתת.
+  remedy:
+    lesson: '2.1'
+    anchor: co2
+    label:
+      en: Put real CO₂ beside the ideal and van der Waals isotherms
+      he: הציבו ⁦CO₂⁩ ממשי לצד האיזותרמות האידיאלית ושל ואן דר ואלס
+
+- id: MC-any-gas-liquefies
+  title:
+    en: Any gas liquefies if you compress it hard enough
+    he: כל גז מתנזל אם דוחסים אותו חזק מספיק
+  belief:
+    en: Squeeze any gas hard enough, at any temperature, and it turns into a liquid.
+    he: אם דוחסים כל גז חזק מספיק, בכל טמפרטורה, הוא הופך לנוזל.
+  truth:
+    en: Only below its critical temperature. Above T_c every isotherm falls steadily, so compression raises the density smoothly and no separate liquid ever forms. Nitrogen, with T_c = 126 K, cannot be liquefied at room temperature by any pressure; butane, with T_c = 425 K, sloshes in a lighter.
+    he: רק מתחת לטמפרטורה הקריטית שלו. מעל ⁦T_c⁩ כל איזותרמה יורדת ברציפות, ולכן דחיסה מעלה את הצפיפות בהדרגה ואף פעם אינו נוצר נוזל נפרד. חנקן, שה-⁦T_c⁩ שלו ⁦126 K⁩, אינו מתנזל בטמפרטורת החדר בשום לחץ; בוטאן, שה-⁦T_c⁩ שלו ⁦425 K⁩, משכשך במצית.
+  remedy:
+    lesson: '2.1'
+    anchor: supercritical
+    label:
+      en: Watch an isotherm above the critical temperature
+      he: צפו באיזותרמה מעל הטמפרטורה הקריטית
+
+- id: MC-vdw-loop-is-real
+  title:
+    en: A real gas follows the van der Waals loop
+    he: גז ממשי עובר בלולאת ואן דר ואלס
+  belief:
+    en: Below T_c, a gas compressed at fixed temperature does what the van der Waals isotherm draws, its pressure rising, then falling, then rising again.
+    he: מתחת ל-⁦T_c⁩, גז הנדחס בטמפרטורה קבועה עושה את מה שאיזותרמת ואן דר ואלס משרטטת, ולחצו עולה, אחר כך יורד, ואחר כך עולה שוב.
+  truth:
+    en: A real substance holds its pressure at the saturation pressure while it condenses, a flat stretch. On the stretch of the loop where (∂P/∂v)_T > 0 no state is stable; what replaces the loop, and where the flat stretch lies, is module 14's subject.
+    he: חומר ממשי שומר על לחצו בלחץ הרוויה בזמן שהוא מתעבה, קטע שטוח. בקטע הלולאה שבו ⁦(∂P/∂v)_T > 0⁩ אין מצב יציב; מה בא במקום הלולאה, והיכן נמצא הקטע השטוח, הוא הנושא של מודול 14.
+  remedy:
+    lesson: '2.1'
+    anchor: wiggle
+    label:
+      en: See where the van der Waals isotherm rises with volume
+      he: ראו היכן איזותרמת ואן דר ואלס עולה עם הנפח

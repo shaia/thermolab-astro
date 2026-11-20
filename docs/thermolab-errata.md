@@ -63,3 +63,33 @@ when it is.
 - Line 425 says the result "becomes the continuous exponential e^{−n/τ} once Q ≫ 1, with τ = −1/ln(1 − 1/Q) → Q".
   With that τ, (1 − 1/Q)^n = e^{−n/τ} exactly for every Q ≥ 2; only τ ≈ Q − 1/2 needs Q ≫ 1. An imprecision, not
   an error; the port states it correctly.
+
+## Module 02: equations of state
+
+- `data/co2-isotherm-280k.csv` (and its two notebook copies) is presented as NIST data ("the NIST CO2 isotherm",
+  "NIST (measured)") but is hand-built, and its stated NIST reference values are wrong. NIST Chemistry WebBook
+  (fluid.cgi, CO₂, 280 K): P_sat = 4.1607 MPa (CSV 4.1663), saturated vapour 121.74 kg/m³ (CSV 114.8), saturated
+  liquid 883.58 kg/m³ (CSV 827). So the plateau runs from 361.5 to 49.8 cm³/mol, not 383.4 to 53.2. The vapour rows
+  have round Z (0.97, 0.94, 0.90, 0.85, 0.80, 0.75, 0.71) and lie 0.8–2.9% above NIST's isotherm at the same molar
+  volume (1.2e-3 m³/mol: 1.746 against 1.718 MPa; 4.2e-4: 3.935 against 3.828 MPa). The row 5.0e-5 m³/mol at 6.5 MPa
+  is inside NIST's two-phase region (880 kg/m³ < 883.58), so it should be 4.16 MPa. The port quotes NIST's isotherm.
+- Explore, alt text of `gases-surface.mp4`: the fold is "a region where the surface is no longer single-valued in
+  pressure for a given volume and temperature". P(v, T) of the van der Waals equation is single-valued everywhere;
+  it is v at given (P, T) that has three values below T_c.
+- Model specification (page, notebook, `gases.py` docstring), *Valid when*: "moderate densities near and above T_c"
+  for the van der Waals sheet. Near T_c is where it is quantitatively worst: Z_c = 3/8 against 0.275 for CO₂ (NIST
+  T_c = 304.1282 K, P_c = 7.3773 MPa, ρ_c = 467.6 kg/m³) and 0.290 for argon, and its v_c = 3b is 1.37 times CO₂'s
+  measured critical volume (128.5 against 94.1 cm³/mol).
+- Quiz Q-02-6 calls the CO₂ constants a_m = 0.3640, b_m = 4.267e-5 "independently published … not fit from its
+  critical point", and finds T_c within 0.1% "even though". Tabulated van der Waals constants are computed from the
+  critical point: T_c = 304.2 K, P_c = 7.41 MPa give a_m = 0.3642, b_m = 4.267e-5 (argon's 0.1355, 3.201e-5 likewise
+  come from 150.87 K, 4.898 MPa). The agreement is circular; only v_c is a test.
+- Quiz Q-02-8's discussion cites "Problem 5(d) on the problem set"; problem 5 has parts (a)–(c).
+- Derive: the van der Waals equation is "not a consequence of the state postulate the way the ideal gas law can be
+  read as one". The state postulate says a surface exists and implies no particular equation, the ideal one
+  included; the page's own box labels the ideal gas law empirical.
+- Advanced: at the Boyle temperature "the two corrections cancel to leading order in 1/v at every density
+  simultaneously". They cancel only in the 1/v term; for van der Waals Z = 1 + b²/v² + … there (Z = 1.005 at
+  v_r = 5, T_r = 27/8). An imprecision.
+- Quiz Q-02-7's correct choice: "any van der Waals substance at a given (T_r, P_r) has the same reduced volume v_r".
+  Below T_c a given (T_r, P_r) on the loop's range has three v_r; the law fixes P_r from (T_r, v_r). An imprecision.
