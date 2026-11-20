@@ -1,4 +1,5 @@
 import katex from 'katex';
+import { katexMacros } from './katex-macros.mjs';
 
 const escapeHtml = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -31,7 +32,7 @@ function renderMath(src: string, display: boolean, where: string): string {
     throw new Error(`a row of ${JSON.stringify(src)}${where ? ` in ${where}` : ''} ends in a single \\: a row break is \\\\`);
   }
   try {
-    return katex.renderToString(src, { displayMode: display, throwOnError: true, strict: 'error' });
+    return katex.renderToString(src, { displayMode: display, throwOnError: true, strict: 'error', macros: katexMacros() });
   } catch (err) {
     throw new Error(`KaTeX rejected ${JSON.stringify(src)}${where ? ` in ${where}` : ''}: ${(err as Error).message}`);
   }

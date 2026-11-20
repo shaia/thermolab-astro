@@ -5,6 +5,7 @@ import preact from '@astrojs/preact';
 import mdx from '@astrojs/mdx';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { katexMacros } from './src/lib/katex-macros.mjs';
 
 // GitHub Pages serves a project site under /<repo>/. CI passes the prefix that
 // actions/configure-pages reports; locally both are unset and the site is served from /.
@@ -21,7 +22,7 @@ export default defineConfig({
     processor: unified({
       remarkPlugins: [remarkMath],
       // throwOnError: a formula KaTeX rejects must fail the build, never ship as raw TeX.
-      rehypePlugins: [[rehypeKatex, { throwOnError: true, strict: 'error' }]],
+      rehypePlugins: [[rehypeKatex, { throwOnError: true, strict: 'error', macros: katexMacros() }]],
     }),
   },
 });

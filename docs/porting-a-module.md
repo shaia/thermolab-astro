@@ -94,6 +94,9 @@ line each, with the evidence. ThermoLab is fixed separately, from that list.
   `course.ts`) wrap a formula in U+2066 … U+2069. Do not put U+200F marks next to `$…$`;
   KaTeX output is already isolated. A minus sign in plain Hebrew text is U+2212, inside an
   isolate.
+- ThermoLab's TeX macros work here unchanged: `\dbar` (the inexact differential, printed δ, as in
+  ThermoLab), `\Won` and `\kB` ([src/lib/katex-macros.mjs](../src/lib/katex-macros.mjs)). In plain
+  text write δQ, not đQ.
 - TeX is shared between the languages: never `\text{English words}` in TeX that both lessons
   carry; rephrase in symbols or move the words out of the formula.
 
