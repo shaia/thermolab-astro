@@ -1,0 +1,670 @@
+# Lesson 0.1 check questions. Ported from ThermoLab's assessment/quizzes/00-orientation.en.yml (Q-00-1 … Q-00-10, all
+# ten; Q-00-9, a prediction, and Q-00-10, a short answer, become multiple choice; Q-00-2's feedback on 17.5 is corrected,
+# see docs/thermolab-errata.md) and extended to cover the seven objectives and the four misconceptions of
+# src/content/misconceptions/0-1.yaml. Every number was recomputed with ThermoLab's library (sampling, forms,
+# validation); simulated numbers are multi-seed means. Ids are shared with the Hebrew bank, which must hold the same
+# questions with the same answers.
+lang: en
+chapter: 0
+questions:
+  # ---------------------------------------------------------------- OBJ-0.1-1: a law out of lawless events
+  - id: Q-0.1-one-or-many
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-0.1-1]
+    prompt: >-
+      Which is more predictable: the face of one fair die, or the average of $10\,000$ fair dice? By roughly how much, and why?
+    choices:
+      - text: >-
+          The average, by a factor of about a hundred: one roll strays from $3.5$ by about $1.7$, the average of $10\,000$ by about $0.017$. Each roll adds a full unit to the count but only a random wobble to the sum, so the sum's typical excess over $3.5N$ grows as $\sqrt N$ while the divisor grows as $N$.
+        correct: true
+        feedback: >-
+          Right. $\sigma_1 = \sqrt{35/12} = 1.708$ and $\sigma_1/\sqrt{10\,000} = 0.0171$. Nothing about any die changed: the excess of the sum is typically $\sigma_1\sqrt{N} = 171$, and dividing it by $N = 10\,000$ makes it small.
+      - text: >-
+          The average, by a factor of about a hundred, because the later rolls cancel the deviations of the earlier ones.
+        feedback: >-
+          The number is right and the mechanism is wrong. Dice have no memory: after a run of sixes the next rolls still average $3.5$. The early excess of the sum is never cancelled; it is divided by an ever larger $N$. Dilution, not compensation.
+        misconception: MC-lln-compensation
+      - text: >-
+          The average, by a factor of $10\,000$: the typical error falls as $1/N$.
+        feedback: >-
+          The variance of the average falls as $1/N$; the typical error is its square root and falls as $N^{-1/2}$. Ten thousand dice improve on one die a hundredfold, not ten-thousandfold.
+        misconception: MC-scatter-one-over-n
+      - text: >-
+          Neither: every die is as unpredictable as ever, so their average is just as unpredictable.
+        feedback: >-
+          Every die is, and the average still is not. In figure 0.1a every run is as jagged as the next at the start, and every run ends near $3.5$. If this answer were right, no macroscopic quantity would ever be reproducible.
+
+  - id: Q-0.1-hot-start
+    type: numeric
+    level: mid
+    objectives: [OBJ-0.1-1]
+    prompt: >-
+      The first ten rolls of a fair die add up to $50$, an average of $5.0$. The die is then rolled $990$ more times. What do you expect the average of all $1000$ rolls to be?
+    answer: 3.515
+    unit: ''
+    tolerance: 0.0015
+    correctFeedback: >-
+      The next $990$ rolls average $3.5$ whatever came before, so the expected sum is $50 + 990 \times 3.5 = 3515$ and the expected average $3.515$. The opening excess, $50 - 35 = 15$, is still in the sum; it has only been divided by $1000$. Simulated, keeping only the runs whose first ten rolls sum to $50$: $3.5145 \pm 0.0005$ over $64$ seeds.
+    wrongFeedback: >-
+      Add the ten rolls you know to the expected sum of the $990$ you do not, $990 \times 3.5$, and divide by $1000$.
+    commonWrong:
+      - value: 3.5
+        feedback: >-
+          That has the later rolls pay back the hot start. They do not: dice have no memory, so the excess of $15$ stays in the sum for good. The average gets close to $3.5$ because $15/1000$ is small, not because the $15$ went away.
+        misconception: MC-lln-compensation
+      - value: 5.0
+        feedback: >-
+          The hot start does not carry on. Each later roll averages $3.5$; only the first ten are known to be high.
+
+  - id: Q-0.1-what-makes-a-law
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-0.1-1, OBJ-0.1-3]
+    prompt: >-
+      The argument that the average of $N$ dice settles on $3.5$ rests on a few premises. Which one, if dropped, can stop the average from settling at all?
+    choices:
+      - text: >-
+          That the dice are independent. If all $N$ dice were glued together so that they always showed the same face, their average would be the face of one die, with spread $\sigma_1$ for every $N$.
+        correct: true
+        feedback: >-
+          Right. Glued dice have every covariance equal to $\sigma_1^2$, so $\operatorname{Var}(S_N) = N^2\sigma_1^2$ and $\operatorname{Var}(A_N) = \sigma_1^2$: the $1/N$ is gone. A weaker correlation $\rho$ between every pair leaves a floor, $\operatorname{Var}(A_N) \to \rho\,\sigma_1^2$ as $N \to \infty$. Independence is the premise that ties the argument to the world.
+      - text: >-
+          That the dice are fair. A loaded die has no reason to settle.
+        feedback: >-
+          A loaded die settles too, on its own mean, with its own $\sigma$: the derivation used only a finite variance and independence. Loading changes the coefficient $\sigma/\mu$, not the $N^{-1/2}$.
+      - text: >-
+          That a die has six equally spaced faces.
+        feedback: >-
+          Nothing in the proof used the number of faces or the shape of the distribution; only that each term has a finite variance and that the covariances vanish. That is why the same argument works for molecular velocities.
+      - text: >-
+          That the dice compensate: a high roll makes a low roll more likely next.
+        feedback: >-
+          The argument never used this, and it is false: dice have no memory. If it were true, successive rolls would be negatively correlated, and the average would settle with a **smaller** spread than $\sigma_1/\sqrt N$: still $N^{-1/2}$, with a smaller coefficient. It would settle faster than $N^{-1/2}$ only if the excess were paid back exactly. In fact it settles with exactly the spread independence predicts.
+        misconception: MC-lln-compensation
+
+  # ---------------------------------------------------------------- OBJ-0.1-2: mean and variance
+  - id: Q-0.1-die-variance
+    type: numeric
+    level: basic
+    objectives: [OBJ-0.1-2]
+    prompt: >-
+      Compute the variance of a single roll of a fair six-sided die.
+    answer: 2.917
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      $\langle X\rangle = 7/2$ and $\langle X^2\rangle = 91/6$, so $\sigma_1^2 = 91/6 - 49/4 = 35/12 = 2.917$. Its square root, $\sigma_1 = 1.708$, is the standard deviation, and $\sigma_1/\mu_1 = 0.488$ is the coefficient in front of $N^{-1/2}$.
+    wrongFeedback: >-
+      Use $\sigma^2 = \langle X^2\rangle - \langle X\rangle^2$, with each face weighted by $1/6$.
+    commonWrong:
+      - value: 1.708
+        feedback: >-
+          That is the standard deviation, the square root of the variance.
+      - value: 15.17
+        feedback: >-
+          That is $\langle X^2\rangle = 91/6$. Subtract the square of the mean, $49/4$.
+      - value: 17.5
+        feedback: >-
+          That is the sum of the six squared deviations, $\sum_k (k - 3.5)^2$. Each face has probability $1/6$: divide by $6$.
+
+  - id: Q-0.1-split-die
+    type: numeric
+    level: mid
+    objectives: [OBJ-0.1-2]
+    prompt: >-
+      A die has faces marked $1$, $1$, $1$, $6$, $6$, $6$, each equally likely. Compute its variance.
+    answer: 6.25
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      $\mu = (3 \cdot 1 + 3 \cdot 6)/6 = 3.5$, the same as a fair die; $\langle X^2\rangle = (3 \cdot 1 + 3 \cdot 36)/6 = 18.5$; $\sigma^2 = 18.5 - 12.25 = 6.25$, so $\sigma = 2.5$: every face lies $2.5$ from the mean. Averages of such dice settle on $3.5$ too, but need $6.25/2.917 = 2.14$ times as many dice for the same precision.
+    wrongFeedback: >-
+      Compute $\mu$ and $\langle X^2\rangle$ with each of the six faces weighted by $1/6$, then $\sigma^2 = \langle X^2\rangle - \mu^2$.
+    commonWrong:
+      - value: 2.917
+        feedback: >-
+          That is the fair die. This one has the same mean, $3.5$, but all its probability sits at the extremes.
+      - value: 2.5
+        feedback: >-
+          That is the standard deviation. The variance is its square.
+      - value: 18.5
+        feedback: >-
+          That is $\langle X^2\rangle$. Subtract $\mu^2 = 12.25$.
+
+  - id: Q-0.1-three-dice
+    type: numeric
+    level: mid
+    objectives: [OBJ-0.1-2, OBJ-0.1-3]
+    prompt: >-
+      Three fair dice are thrown independently. What is the standard deviation of their sum?
+    answer: 2.958
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      Variances of independent dice add: $3 \cdot 35/12 = 8.75$, and $\sqrt{8.75} = 2.958 = \sigma_1\sqrt3$. Standard deviations do not add; their squares do.
+    wrongFeedback: >-
+      Add the three variances, $35/12$ each, then take the square root.
+    commonWrong:
+      - value: 5.12
+        feedback: >-
+          That is $3\sigma_1$: you added standard deviations. For independent dice the **variances** add, so the spread grows as $\sqrt3$, not $3$.
+      - value: 8.75
+        feedback: >-
+          That is the variance of the sum. The standard deviation is its square root.
+      - value: 0.986
+        feedback: >-
+          That is $\sigma_1/\sqrt3$, the standard deviation of the **average** of three dice. The sum's spread grows with $N$.
+        misconception: MC-sum-scatter-shrinks
+
+  - id: Q-0.1-opposite-faces
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-0.1-2]
+    prompt: >-
+      One fair die is thrown. $X$ is the face on top and $Y$ the face underneath; opposite faces of a die add up to $7$. What is $\operatorname{Var}(X + Y)$?
+    choices:
+      - text: >-
+          $0$
+        correct: true
+        feedback: >-
+          Right. $X + Y = 7$ on every throw, so it does not vary. In the general formula, $\operatorname{Cov}(X, 7 - X) = -\sigma_1^2$, and $\sigma_1^2 + \sigma_1^2 - 2\sigma_1^2 = 0$. Negative covariance makes a sum steadier than independent terms would.
+      - text: >-
+          $2\sigma_1^2 = 35/6$
+        feedback: >-
+          That is the answer for two independent dice. $Y$ is fixed by $X$, so the covariance does not vanish, and variances add only when it does.
+      - text: >-
+          $4\sigma_1^2 = 35/3$
+        feedback: >-
+          That is $X + X$, one die read twice, where the covariance is $+\sigma_1^2$. Here a high top face means a low bottom face: the covariance is $-\sigma_1^2$.
+      - text: >-
+          $\sigma_1^2 = 35/12$
+        feedback: >-
+          $Y = 7 - X$ has the same variance as $X$, but the variance of the sum also counts the covariance, $2\operatorname{Cov}(X, Y) = -2\sigma_1^2$.
+
+  # ---------------------------------------------------------------- OBJ-0.1-3: the N^(-1/2) law
+  - id: Q-0.1-ten-thousand
+    type: mc
+    level: basic
+    objectives: [OBJ-0.1-3]
+    prompt: >-
+      Averaging $100$ fair dice gives an answer that typically lands within about $0.17$ of $3.5$. You now average $10\,000$ dice instead. Which statement is correct?
+    choices:
+      - text: >-
+          About $0.017$: the typical distance falls as $N^{-1/2}$, so a hundredfold larger $N$ shrinks it tenfold.
+        correct: true
+        feedback: >-
+          Right, in the number and in the reason. $\sigma_{A_N} = \sigma_1/\sqrt N$, so multiplying $N$ by $100$ divides the spread by $10$: $1.708/100 = 0.0171$. Measured over eight seeds, $0.0171$.
+      - text: >-
+          About $0.017$: the later rolls compensate for the early deviations and cancel them out.
+        feedback: >-
+          The number is right and the mechanism is wrong. Dice have no memory: after a run of sixes the next roll still averages $3.5$. The early excess is never cancelled; it is divided by an ever larger $N$ until it stops mattering. Dilution, not compensation.
+        misconception: MC-lln-compensation
+      - text: >-
+          About $0.0017$: the typical distance falls as $1/N$.
+        feedback: >-
+          The most common wrong scaling. Variances add, so the variance of the average falls as $1/N$; the spread is its square root and falls as $N^{-1/2}$.
+        misconception: MC-scatter-one-over-n
+      - text: >-
+          About $0.17$: averaging more dice does not change how far a single experiment strays.
+        feedback: >-
+          If that were so, no macroscopic quantity would be reproducible. In figure 0.1b the histogram of the averages visibly narrows as $N$ grows.
+
+  - id: Q-0.1-sum-and-average
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-0.1-3]
+    prompt: >-
+      As $N$ grows, what happens to the absolute spread of the **sum** of $N$ fair dice, and to the relative spread of their **average**?
+    choices:
+      - text: >-
+          The sum's absolute spread grows as $\sqrt N$; the average's relative spread falls as $N^{-1/2}$.
+        correct: true
+        feedback: >-
+          Right, and both come from the one statement that variances of independent quantities add, $\operatorname{Var}(S_N) = N\sigma_1^2$. The sum becomes less predictable in absolute terms while the average becomes more predictable; they are different questions about the same data.
+      - text: >-
+          Both shrink, since averaging suppresses randomness.
+        feedback: >-
+          The average's does, the sum's does not. $\operatorname{Var}(S_N) = N\sigma_1^2$, so the sum strays by $\sigma_1\sqrt N$, which grows without bound. Only after dividing by $N$ does the spread shrink.
+        misconception: MC-sum-scatter-shrinks
+      - text: >-
+          Both grow, since more dice means more chances of an extreme result.
+        feedback: >-
+          True of the sum, false of the average. The sum's spread grows as $\sqrt N$, but the sum itself grows as $N$, faster, so the average's relative spread falls.
+      - text: >-
+          The sum's spread stays the same; the average's falls as $1/N$.
+        feedback: >-
+          Neither half is right. Both follow from $\operatorname{Var}(S_N) = N\sigma_1^2$: take the square root for the sum, $\sigma_1\sqrt N$, then divide by $N$ for the average, $\sigma_1/\sqrt N$.
+
+  - id: Q-0.1-dice-needed
+    type: numeric
+    level: mid
+    objectives: [OBJ-0.1-3]
+    prompt: >-
+      How many fair dice must be averaged for the relative spread of the average, $\sigma_{A_N}/\mu_1$, to fall to $1\%$?
+    answer: 2381
+    unit: ''
+    tolerance: 0.03
+    correctFeedback: >-
+      $\sigma_{A_N}/\mu_1 = 0.488\,N^{-1/2} = 0.01$ gives $N = (0.488/0.01)^2 = (35/12)/(49/4)/10^{-4} = 2381$. Each further factor of ten in precision costs a factor of a hundred in dice.
+    wrongFeedback: >-
+      Set $(\sigma_1/\mu_1)\,N^{-1/2} = 0.01$, with $\sigma_1/\mu_1 = 0.488$, and solve for $N$.
+    commonWrong:
+      - value: 48.8
+        feedback: >-
+          That is $0.488/0.01$: it assumes the spread falls as $1/N$. It falls as $N^{-1/2}$, so the ratio must be squared.
+        misconception: MC-scatter-one-over-n
+      - value: 29167
+        feedback: >-
+          That makes the **absolute** spread $0.01$, $\sigma_1^2/10^{-4}$. The question asks for $1\%$ of the mean, $0.035$.
+
+  - id: Q-0.1-chebyshev
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-0.1-3]
+    prompt: >-
+      Chebyshev's inequality bounds the chance that the average of $N$ independent dice misses $\mu_1$ by $\varepsilon$ or more: $P\big(|A_N - \mu_1| \ge \varepsilon\big) \le \sigma_1^2/(N\varepsilon^2)$. Evaluate the bound for $N = 1000$ fair dice and $\varepsilon = 0.1$.
+    answer: 0.292
+    unit: ''
+    tolerance: 0.02
+    correctFeedback: >-
+      $2.917/(1000 \times 0.01) = 0.292$. The true chance, from the exact distribution of the sum of $1000$ dice, is $0.065$: the typical miss is $\sigma_1/\sqrt{1000} = 0.054$, so $0.1$ is $1.85$ standard deviations. The bound is loose by a factor of $4.5$, but it needs nothing beyond a finite variance, and it goes to zero as $N \to \infty$: the weak law of large numbers.
+    wrongFeedback: >-
+      Substitute $\sigma_1^2 = 35/12$, $N = 1000$ and $\varepsilon^2 = 0.01$.
+    commonWrong:
+      - value: 0.0292
+        feedback: >-
+          That divides by $\varepsilon$, not $\varepsilon^2$.
+      - value: 0.54
+        feedback: >-
+          That is $\sigma_{A_N}/\varepsilon = 0.054/0.1$. Chebyshev's bound is its square.
+
+  # ---------------------------------------------------------------- OBJ-0.1-4: dimensions and units
+  - id: Q-0.1-speed-dimensions
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-0.1-4]
+    prompt: >-
+      Which of these expressions can be a molecular speed? ($k_B$ is Boltzmann's constant, $T$ a temperature, $m$ the mass of a molecule.)
+    choices:
+      - text: >-
+          $\sqrt{3k_BT/m}$
+        correct: true
+        feedback: >-
+          Right. $k_BT$ is an energy, so $k_BT/m$ is an energy per mass, $\mathsf{L}^2\mathsf{T}^{-2}$, and its square root is a speed. What the check cannot tell you is whether the factor is $1$, $2$ or $3$: dimensions reject wrong formulas; they never supply the factors of right ones.
+      - text: >-
+          $3k_BT/m$
+        feedback: >-
+          This is an energy per mass, a speed squared. It is one square root away.
+      - text: >-
+          $\sqrt{3k_BTm}$
+        feedback: >-
+          An energy times a mass is $\mathsf{M}^2\mathsf{L}^2\mathsf{T}^{-2}$, and its square root is a momentum, not a speed.
+      - text: >-
+          $\sqrt{3k_BT/m^2}$
+        feedback: >-
+          This is a speed divided by the square root of a mass. Reduce every candidate to powers of kg, m, s and K before deciding.
+
+  - id: Q-0.1-exp-argument
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-0.1-4]
+    prompt: >-
+      In an isothermal atmosphere at temperature $T$ the density of a gas falls with height $h$. With $m$ the mass of a molecule and $g$ the acceleration of gravity, which of these can be the factor by which it falls?
+    choices:
+      - text: >-
+          $e^{-mgh/(k_BT)}$
+        correct: true
+        feedback: >-
+          Right. $mgh$ is an energy and so is $k_BT$: the exponent is a pure number, as the argument of every exponential must be. This is the Boltzmann factor of a molecule at height $h$.
+      - text: >-
+          $e^{-mgh/T}$
+        feedback: >-
+          The exponent has units of $\text{J/K}$, and $e^{1\,\text{J/K}}$ means nothing. $k_B$ is there to turn a temperature into an energy.
+      - text: >-
+          $e^{-h/(k_BT)}$
+        feedback: >-
+          The exponent has units of $\text{m/J}$. A height is not an energy until it is multiplied by a weight, $mg$.
+      - text: >-
+          $e^{-mg/(k_BT)}$
+        feedback: >-
+          The exponent has units of $1/\text{m}$, and it no longer depends on the height. Multiply by $h$ to make it a pure number.
+
+  - id: Q-0.1-helium-speed
+    type: numeric
+    level: mid
+    objectives: [OBJ-0.1-4]
+    prompt: >-
+      Evaluate $\sqrt{3k_BT/m}$ for helium, $m = 4.003\,u$ with $u = 1.661 \times 10^{-27}\,\text{kg}$, at $T = 300\,\text{K}$, taking $k_B = 1.381 \times 10^{-23}\,\text{J/K}$. Give the answer in m/s.
+    answer: 1367
+    unit: m/s
+    tolerance: 0.02
+    correctFeedback: >-
+      $m = 6.649 \times 10^{-27}\,\text{kg}$, $3k_BT = 1.243 \times 10^{-20}\,\text{J}$, the ratio is $1.869 \times 10^{6}\,\text{m}^2/\text{s}^2$, and its root $1367\,\text{m/s}$. Nitrogen at the same temperature gives $517\,\text{m/s}$: the ratio is $\sqrt{28.0/4.003} = 2.64$, the factor the formula predicts for a seven times lighter molecule.
+    wrongFeedback: >-
+      Convert the mass to kilograms first, $4.003 \times 1.661 \times 10^{-27}\,\text{kg}$; then $\text{J/kg} = \text{m}^2/\text{s}^2$.
+    commonWrong:
+      - value: 789
+        feedback: >-
+          That is $\sqrt{k_BT/m}$: the factor $3$ was dropped. Dimensions cannot catch it; only care can.
+      - value: 1.87e6
+        feedback: >-
+          That is $3k_BT/m$, a speed squared, in $\text{m}^2/\text{s}^2$. Take the square root.
+      - value: 1.76e-9
+        feedback: >-
+          You used $4.003\,\text{g} = 4.003 \times 10^{-3}\,\text{kg}$, the mass of a mole, as the mass of one atom. A molecular speed needs the mass of one molecule.
+
+  # ---------------------------------------------------------------- OBJ-0.1-5: partials, total differential, line integrals
+  - id: Q-0.1-partial-x
+    type: numeric
+    level: basic
+    objectives: [OBJ-0.1-5]
+    prompt: >-
+      For $f(x, y) = x^2y$, evaluate $(\partial f/\partial x)_y$ at the point $(x, y) = (2, 3)$.
+    answer: 12
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      Holding $y$ fixed, $(\partial f/\partial x)_y = 2xy = 2 \cdot 2 \cdot 3 = 12$.
+    wrongFeedback: >-
+      Differentiate $x^2y$ with respect to $x$, treating $y$ as a constant, then substitute.
+    commonWrong:
+      - value: 4
+        feedback: >-
+          Either you differentiated $x^2$ and dropped the factor $y$ ($2x = 4$), or you computed $(\partial f/\partial y)_x = x^2 = 4$. Held fixed, $y$ is a constant factor, and it stays.
+
+  - id: Q-0.1-total-differential
+    type: mc
+    level: basic
+    objectives: [OBJ-0.1-5]
+    prompt: >-
+      What is the total differential of $f(x, y) = x^2y$?
+    choices:
+      - text: >-
+          $\mathrm{d}f = 2xy\,\mathrm{d}x + x^2\,\mathrm{d}y$
+        correct: true
+        feedback: >-
+          Right: each partial derivative multiplies the differential of its own variable. Every Maxwell relation of module 10 is a statement about differentials of exactly this kind.
+      - text: >-
+          $\mathrm{d}f = x^2\,\mathrm{d}x + 2xy\,\mathrm{d}y$
+        feedback: >-
+          The coefficients are swapped. The coefficient of $\mathrm{d}x$ is the derivative with respect to $x$ at fixed $y$, $2xy$.
+      - text: >-
+          $\mathrm{d}f = 2xy\,\mathrm{d}x$
+        feedback: >-
+          That is the response to changing $x$ alone. The total differential counts both variables; dropping the $\mathrm{d}y$ term is exactly the error that makes a partial and a total derivative disagree.
+      - text: >-
+          $\mathrm{d}f = 2xy + x^2$
+        feedback: >-
+          A differential must carry the differentials $\mathrm{d}x$ and $\mathrm{d}y$. Without them this is a sum of two derivatives, and it cannot be integrated along a path.
+
+  - id: Q-0.1-held-variable
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-0.1-5]
+    prompt: >-
+      A monatomic ideal gas has $U = \tfrac32 Nk_BT$ and $PV = Nk_BT$, with $N$ fixed. One student writes $\partial U/\partial V = 0$; another writes $\partial U/\partial V = \tfrac32 P$. Who is right?
+    choices:
+      - text: >-
+          Both, about different derivatives: $(\partial U/\partial V)_T = 0$ and $(\partial U/\partial V)_P = \tfrac32 P$. Without the subscript the question has no single answer.
+        correct: true
+        feedback: >-
+          Right. At fixed $T$ the energy does not change with the volume. At fixed $P$, expanding the gas heats it, $T = PV/(Nk_B)$, so $U = \tfrac32 PV$ grows with $V$. Same function, same variable, two derivatives: write the subscript every time.
+      - text: >-
+          The first: $U$ depends only on $T$, so its derivative with respect to $V$ is zero.
+        feedback: >-
+          Only while $T$ is held fixed. At fixed pressure a change of volume changes the temperature, and with it $U$: $(\partial U/\partial V)_P = \tfrac32 P$.
+      - text: >-
+          The second: substituting $Nk_BT = PV$ gives $U = \tfrac32 PV$, and the derivative follows.
+        feedback: >-
+          That substitution makes $U$ a function of $P$ and $V$, so the derivative it gives is the one at fixed $P$. Written as a function of $T$ and $V$, $U$ has zero derivative at fixed $T$. Both are correct.
+      - text: >-
+          Neither: $U$ is not a function of $V$, so $\partial U/\partial V$ does not exist.
+        feedback: >-
+          $P$, $V$ and $T$ are tied by the equation of state, so $U$ can be written as a function of any two of them, and each choice has its own partial derivatives.
+
+  - id: Q-0.1-line-integral
+    type: numeric
+    level: mid
+    objectives: [OBJ-0.1-5]
+    prompt: >-
+      Integrate the form $\omega = x\,\mathrm{d}y$ from $(0, 0)$ to $(1, 1)$ along the parabola $y = x^2$.
+    answer: 0.667
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      Write the path as $x = t$, $y = t^2$, so $\mathrm{d}y = 2t\,\mathrm{d}t$: $\int_0^1 t \cdot 2t\,\mathrm{d}t = 2/3$. The same form gives $1/2$ along the straight line, $1$ across and then up, and $0$ up and then across: $x\,\mathrm{d}y$ is not exact.
+    wrongFeedback: >-
+      Parametrize the path, $x = t$, $y = t^2$, substitute $x$ and $\mathrm{d}y = 2t\,\mathrm{d}t$, and integrate over $t$ from $0$ to $1$.
+    commonWrong:
+      - value: 0.5
+        feedback: >-
+          That is the integral along the straight line $y = x$. For an inexact form the path matters: along the parabola $\mathrm{d}y = 2x\,\mathrm{d}x$.
+      - value: 0.333
+        feedback: >-
+          That is $\int_0^1 x^2\,\mathrm{d}x$: you integrated $y\,\mathrm{d}x$ instead of $x\,\mathrm{d}y$, or wrote $\mathrm{d}y = x\,\mathrm{d}x$ and lost the $2$ in $\mathrm{d}y = 2x\,\mathrm{d}x$.
+
+  # ---------------------------------------------------------------- OBJ-0.1-6: exactness
+  - id: Q-0.1-y-dx-exact
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-0.1-6]
+    prompt: >-
+      Is the form $\omega = y\,\mathrm{d}x$, with $M = y$ and $N = 0$, exact?
+    choices:
+      - text: >-
+          No: $\partial M/\partial y = 1$ but $\partial N/\partial x = 0$, so no potential exists and its integral depends on the path.
+        correct: true
+        feedback: >-
+          Right. The test settles it without integrating anything, and the integrals confirm it: from $(0, 0)$ to $(1, 1)$ the form gives $0$ across and then up, $1/2$ along the straight line, and $1$ up and then across. In thermal physics this is why heat and work are path functions.
+      - text: >-
+          Yes: it is the differential of $xy$.
+        feedback: >-
+          $\mathrm{d}(xy) = y\,\mathrm{d}x + x\,\mathrm{d}y$, which has a term more. Differentiate a candidate potential and compare with the form; the $x\,\mathrm{d}y$ has nowhere to come from.
+      - text: >-
+          Yes: every form built from smooth functions is exact.
+        feedback: >-
+          Smoothness is not the issue. Exactness is a condition on how $M$ and $N$ are related, and most smooth forms fail it.
+      - text: >-
+          It cannot be decided without first choosing a path.
+        feedback: >-
+          Backwards: the test is what decides **before** any path is chosen, and what it decides is whether the choice of path will matter.
+
+  - id: Q-0.1-which-exact
+    type: mc
+    level: mid
+    objectives: [OBJ-0.1-6]
+    prompt: >-
+      Which of these forms is exact?
+    choices:
+      - text: >-
+          $2xy\,\mathrm{d}x + x^2\,\mathrm{d}y$
+        correct: true
+        feedback: >-
+          Right. $\partial(2xy)/\partial y = 2x = \partial(x^2)/\partial x$, and the potential is $f = x^2y$.
+      - text: >-
+          $y\,\mathrm{d}x - x\,\mathrm{d}y$
+        feedback: >-
+          $\partial M/\partial y = 1$ but $\partial N/\partial x = -1$. Change the sign of the second term and it becomes $\mathrm{d}(xy)$; as written it is not exact.
+      - text: >-
+          $y^2\,\mathrm{d}x + xy\,\mathrm{d}y$
+        feedback: >-
+          $\partial M/\partial y = 2y$ but $\partial N/\partial x = y$. Close is not equal: the form is not exact.
+      - text: >-
+          $x\,\mathrm{d}x + x\,\mathrm{d}y$
+        feedback: >-
+          $\partial M/\partial y = 0$ but $\partial N/\partial x = 1$. The first term is $\mathrm{d}(x^2/2)$; the second, $x\,\mathrm{d}y$, is not exact.
+
+  - id: Q-0.1-loop-area
+    type: numeric
+    level: mid
+    objectives: [OBJ-0.1-6]
+    prompt: >-
+      Integrate $x\,\mathrm{d}y$ counter-clockwise around the rectangle with corners $(0, 0)$, $(2, 0)$, $(2, 3)$, $(0, 3)$.
+    answer: 6
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      Along the bottom and top edges $\mathrm{d}y = 0$; along the left edge $x = 0$. Only the right edge counts: $x = 2$ while $y$ runs from $0$ to $3$, giving $6$, the enclosed area. A loop integral need not vanish, because $\partial N/\partial x = 1 \ne 0 = \partial M/\partial y$.
+    wrongFeedback: >-
+      Go round the four edges in turn; on each, either $x$ is $0$ or $\mathrm{d}y$ is.
+    commonWrong:
+      - value: -6
+        feedback: >-
+          That is the clockwise loop. Counter-clockwise, the right edge runs upward, $\mathrm{d}y > 0$.
+      - value: 0
+        feedback: >-
+          Only an exact form integrates to zero around every loop. $x\,\mathrm{d}y$ fails the test: $\partial N/\partial x = 1$, $\partial M/\partial y = 0$.
+
+  - id: Q-0.1-heat-paths
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-0.1-6, OBJ-0.1-7]
+    prompt: >-
+      In units with $Nk_B = 1$, a monatomic ideal gas taken quasistatically from $(V, T) = (1, 1)$ to $(2, 2)$ takes in the heat $\int \left(\tfrac32\,\mathrm{d}T + (T/V)\,\mathrm{d}V\right)$: $2.193$ if it expands first and is then heated, $2.886$ if it is heated first and then expands. What follows?
+    choices:
+      - text: >-
+          No function $Q(V, T)$ has this as its change: the form fails the test, $\partial(T/V)/\partial T = 1/V \ne 0$, so heat is a path function and a small amount of it is written $\dbar Q$. $\Delta U = 1.5$ on both paths; the work makes up the difference.
+        correct: true
+        feedback: >-
+          Right. Along the first path $W = -\ln 2 = -0.693$, along the second $W = -2\ln 2 = -1.386$, and $Q + W = 1.5$ both times. $U$ is a state function; $Q$ and $W$ are not.
+      - text: >-
+          One of the two integrals must be wrong: energy is conserved, so the heat between two states is fixed.
+        feedback: >-
+          Conservation fixes $\Delta U = Q + W$, not $Q$. Both integrals are computed without approximation, $1.5 + \ln 2$ and $1.5 + 2\ln 2$; the works differ by the same $\ln 2$.
+      - text: >-
+          The heat depends on the path, so the first law fails for this gas.
+        feedback: >-
+          The first law holds on both paths: $Q + W = 2.193 - 0.693 = 2.886 - 1.386 = 1.5 = \Delta U$. It constrains the sum, not each term.
+      - text: >-
+          The two paths only take the steps in a different order; computed with fine enough steps, the integrals would agree.
+        feedback: >-
+          They were computed without approximation. The difference, $\ln 2$, is the integral around the loop formed by the two paths, and it is not zero because the form is not exact.
+
+  - id: Q-0.1-entropy-change
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-0.1-6]
+    prompt: >-
+      Divide the heat form of a monatomic ideal gas in a quasistatic change by $T$: $\tfrac32\,\mathrm{d}T/T + \mathrm{d}V/V$, in units with $Nk_B = 1$. Integrate it from $(V, T) = (1, 1)$ to $(3, 2)$.
+    answer: 2.138
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      The form is exact, $\mathrm{d}\left(\tfrac32\ln T + \ln V\right)$, so any path gives $\tfrac32\ln 2 + \ln 3 = 1.040 + 1.099 = 2.138$. The heat itself, not divided by $T$, is $2.599$ if the gas expands first and $3.697$ if it is heated first: $1/T$ is an integrating factor.
+    wrongFeedback: >-
+      Find the potential, $\tfrac32\ln T + \ln V$, and take its difference between the endpoints; no path is needed.
+    commonWrong:
+      - value: 2.341
+        feedback: >-
+          That is $\tfrac32\ln 3 + \ln 2$: the factor $\tfrac32$ goes with $T$, which doubles, and the $1$ with $V$, which triples.
+      - value: 2.599
+        feedback: >-
+          That is the heat along the path that expands first, $1.5 + \ln 3$, without dividing by $T$.
+
+  # ---------------------------------------------------------------- OBJ-0.1-7: the conventions
+  - id: Q-0.1-compression-sign
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-0.1-7]
+    prompt: >-
+      A gas is compressed: the surroundings push a piston in and the volume decreases. In this course's convention, $\mathrm{d}U = \dbar Q + \dbar W$, what is the sign of the work term?
+    choices:
+      - text: >-
+          Positive, because energy was transferred into the gas.
+        correct: true
+        feedback: >-
+          Right. This course counts the work done **on** the system, so everything that goes in adds to $U$, with no minus sign to remember. $\dbar W = -P\,\mathrm{d}V$, and $\mathrm{d}V < 0$ makes it positive.
+      - text: >-
+          Negative, because the volume of the gas decreased.
+        feedback: >-
+          The sign follows the energy, not the volume. Pushing the piston in does work on the gas, so energy went in: $-P\,\mathrm{d}V > 0$ when $\mathrm{d}V < 0$.
+        misconception: MC-work-sign-by-volume
+      - text: >-
+          Negative, because work always enters the first law with a minus sign.
+        feedback: >-
+          That is the other common convention, $\mathrm{d}U = \dbar Q - \dbar W'$, with $W'$ the work done **by** the system. Both are correct physics; this course counts the work done on it.
+      - text: >-
+          Zero, because a compression transfers heat rather than work.
+        feedback: >-
+          Pushing a piston is a mechanical transfer of energy, which is work by definition. Heat may also flow, but it is a separate term.
+
+  - id: Q-0.1-delta-and-labels
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-0.1-7]
+    prompt: >-
+      What does the $\delta$ in $\dbar Q$ mark, and why does this course label one statement a "theorem" and another a "numerical observation"?
+    choices:
+      - text: >-
+          $\dbar Q$ is an inexact differential: there is no function $Q$ of the state, and how much heat crosses depends on the route. The labels separate what is derived mathematically from stated premises from what a computation of one model showed. Both keep a symbol or a claim from promising more than it carries.
+        correct: true
+        feedback: >-
+          Right. Writing $\mathrm{d}Q$ would assert that a function $Q$ exists to be differentiated; none does. And a reader who cannot tell a theorem from a numerical observation will come to believe that a simulation proved an identity.
+      - text: >-
+          $\delta$ marks a quantity smaller than one written with $\mathrm{d}$; the labels rank statements by how important they are.
+        feedback: >-
+          Both $\mathrm{d}$ and $\delta$ mark small amounts; the difference is whether a function of the state stands behind the amount. And the labels say what kind of claim a statement is, not how much it matters.
+      - text: >-
+          $\dbar Q$ is the change in the heat the system contains; a numerical observation is a theorem that has not yet been checked by simulation.
+        feedback: >-
+          A system contains internal energy, not heat; heat is energy in transit. And a simulation never turns an observation into a theorem: only a derivation does.
+      - text: >-
+          $\dbar Q$ and $\mathrm{d}Q$ mean the same, and the choice is typographical; a numerical observation is simply a theorem stated with numbers.
+        feedback: >-
+          The choice of symbol carries the physics: $\mathrm{d}$ is reserved for differentials of state functions. A numerical observation is evidence from a computation, not a proof.
+
+  - id: Q-0.1-expansion-work
+    type: numeric
+    level: mid
+    objectives: [OBJ-0.1-7]
+    prompt: >-
+      A gas expands slowly at a constant pressure of $1.00 \times 10^{5}\,\text{Pa}$, from $1.0 \times 10^{-3}\,\text{m}^3$ to $3.0 \times 10^{-3}\,\text{m}^3$. What is $W$ in this course's first law, $\mathrm{d}U = \dbar Q + \dbar W$, in joules?
+    answer: -200
+    unit: J
+    tolerance: 0.02
+    correctFeedback: >-
+      $W = -\int P\,\mathrm{d}V = -P\,\Delta V = -1.00 \times 10^{5} \times 2.0 \times 10^{-3} = -200\,\text{J}$. The gas pushed on its surroundings and spent energy doing it, so the work done on it is negative.
+    wrongFeedback: >-
+      $\dbar W = -P\,\mathrm{d}V$ is the work done **on** the gas; integrate at constant $P$.
+    commonWrong:
+      - value: 200
+        feedback: >-
+          That is the work done **by** the gas, $W' = -W$, the other convention. This course counts the work done on the system.
+
+  - id: Q-0.1-simulation-proves
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-0.1-7]
+    prompt: >-
+      A million simulated throws of two dice give a variance of the sum of $5.83$, against $2\sigma_1^2 = 35/6 = 5.833$, agreeing within its sampling error of about $0.006$. What has this established?
+    choices:
+      - text: >-
+          That the code and the algebra agree: a numerical observation consistent with the theorem. The theorem is established by its derivation, and whether real dice are independent is a question about real dice, which the simulation cannot answer: its generator is built to make the draws behave as independent.
+        correct: true
+        feedback: >-
+          Right. Derivations establish, simulations illustrate and check, experiments decide whether a model describes the world. A disagreement would have been worth a lot, since it would have exposed a bug or a wrong derivation; agreement is evidence, not proof.
+      - text: >-
+          That variances of independent random variables add: a million cases amount to a proof.
+        feedback: >-
+          No finite number of runs proves an identity, and here the identity was never in doubt: it follows in three lines from the definition of the variance. The runs check that the code implements what the derivation assumed.
+      - text: >-
+          That real dice are independent, since the simulated dice behave like real ones.
+        feedback: >-
+          The simulated dice behave as independent because the generator is built to make them so; they carry no information about real dice. Real dice are slightly loaded, and only an experiment with real dice can test them.
+      - text: >-
+          Nothing at all: a simulation cannot say anything about a theorem.
+        feedback: >-
+          Too strong. Agreement within the sampling error is good evidence that the implementation is right, and it is how a wrong code or a wrong derivation gets caught. It is evidence, not proof.

@@ -7,13 +7,12 @@
  */
 
 import katex from 'katex';
+import { katexMacros } from '../src/lib/katex-macros.mjs';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.argv[2];
 if (!root) throw new Error('usage: katex-audit.ts <thermolab content/<lang> folder>');
-// the macros ThermoLab's myst.yml defines (content/en/myst.yml, project.math); a migration carries them into the KaTeX config
-const macros = { '\\dbar': '\\delta', '\\Won': 'W_{\\mathrm{on}}', '\\kB': 'k_{\\mathrm{B}}' };
 
 const walk = (d: string): string[] =>
   readdirSync(d).flatMap((f) => {
@@ -32,7 +31,7 @@ for (const file of walk(root)) {
   for (const [src, displayMode] of [...display, ...inline]) {
     total++;
     try {
-      katex.renderToString(src, { displayMode, throwOnError: true, strict: 'error', macros: { ...macros } });
+      katex.renderToString(src, { displayMode, throwOnError: true, strict: 'error', macros: katexMacros() });
     } catch (e) {
       const msg = (e as Error).message.replace(/^KaTeX parse error: /, '').replace(/ at position \d+.*$/s, '').replace(/".*?"/g, '"…"').slice(0, 90);
       const f = failures.get(msg) ?? { count: 0, example: `${file.split(/[\\/]/).slice(-2).join('/')}: ${src.trim().slice(0, 70)}` };

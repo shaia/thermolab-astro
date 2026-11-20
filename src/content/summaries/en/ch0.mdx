@@ -1,0 +1,61 @@
+---
+lang: en
+chapter: 0
+title: 'Module 00 in one page: how many makes a law'
+---
+
+## The big idea
+
+One die is lawless; the average of a thousand is a law. Nothing about a single die changes as more are rolled: the average settles because the scatter of a sum of $N$ independent quantities grows only as $\sqrt N$ while the sum itself grows as $N$, so the relative scatter of the average falls as $N^{-1/2}$. An early excess is never paid back, only diluted. That is how a gas of $10^{23}$ unpredictable molecules has a sharp pressure, and it is the question the whole course answers. The rest of the module is the toolkit the course leans on: units and dimensions, derivatives that say what is held, differential forms whose integrals may or may not depend on the path, and the conventions for work, for heat, and for what kind of claim a statement is.
+
+## What to remember
+
+<Formula tex="\mu = \sum_k p_k x_k \qquad \sigma^2 = \langle X^2 \rangle - \mu^2 \qquad \mu_1 = \frac72 \quad \sigma_1^2 = \frac{35}{12}" label="Mean and variance; for one fair die, 7/2 and 35/12" />
+
+<Formula tex="\operatorname{Var}(X + Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X, Y)" label="Means always add; variances add when the covariance vanishes, as for independent variables" />
+
+<Formula tex="\sigma_{S_N} = \sigma_1\sqrt N \qquad \sigma_{A_N} = \frac{\sigma_1}{\sqrt N} \qquad \frac{\sigma_{A_N}}{\mu_1} = \frac{\sigma_1}{\mu_1}\,N^{-1/2}" label="The sum strays more, the average less; the honest measure is the ratio" />
+
+<Formula tex="\mathrm{d}f = \left(\frac{\partial f}{\partial x}\right)_y \mathrm{d}x + \left(\frac{\partial f}{\partial y}\right)_x \mathrm{d}y \qquad \left(\frac{\partial M}{\partial y}\right)_x = \left(\frac{\partial N}{\partial x}\right)_y" label="The total differential, and the test that M dx + N dy is exact" />
+
+<Formula tex="\mathrm{d}U = \dbar Q + \dbar W \qquad \dbar W = -P\,\mathrm{d}V" label="The first law in this course's convention: W is the work done on the system" />
+
+- **One fair die:** $\sigma_1 = 1.708$, $\sigma_1/\mu_1 = 0.488$. A hundred dice average $3.5 \pm 0.17$; a thousand, $3.5 \pm 0.054$. Chebyshev turns the law into a guarantee, $P(|A_N - \mu_1| \ge \varepsilon) \le \sigma_1^2/(N\varepsilon^2)$: the weak law of large numbers. See <LessonLink id="0.1" anchor="relative">the law as a ratio</LessonLink>.
+- **Units.** SI throughout, $k_B$ always written, $R = N_Ak_B$, temperatures in kelvin. Only like dimensions add, and the argument of $\exp$ or $\ln$ is a pure number. See <LessonLink id="0.1" anchor="units">the unit conventions</LessonLink>.
+- **Exact or not.** An exact form $\mathrm{d}f$ integrates to $f(B) - f(A)$ along every path and to zero around every loop. $y\,\mathrm{d}x$ is not exact: from $(1, 1)$ to $(2, 2)$ it gives $1$, $2$ or $1.5$ depending on the route. See <LessonLink id="0.1" anchor="exactness">exact and inexact</LessonLink>.
+- **State and path functions.** $U$, $V$, $T$ have values in a state and exact differentials, written $\mathrm{d}$; heat and work are energy in transit, path functions, written $\dbar Q$ and $\dbar W$. Dividing the heat of an ideal gas by $T$ makes it exact: <LessonLink id="0.1" anchor="integrating-factor">an integrating factor</LessonLink>.
+- **Kinds of claim.** Definition, empirical law, theorem, model assumption, approximation, numerical observation, open question; and every simulation states its model in seven fields. A simulation illustrates and checks; it never proves. See <LessonLink id="0.1" anchor="epistemic-labels">epistemic labels</LessonLink> and <LessonLink id="0.1" anchor="model-spec">model specifications</LessonLink>.
+
+## Common mistakes
+
+- **"Later rolls make up for earlier ones."** Dice have no memory: after a hot start the next rolls still average $3.5$, and the opening excess of the sum is never repaid. The average settles because that excess is divided by an ever larger $N$. Follow <LessonLink id="0.1" anchor="dilution">the runs that started hot</LessonLink>.
+- **"The sum steadies like the average."** The sum's scatter grows, as $\sigma_1\sqrt N$: four times the dice, twice the scatter. Only the average's falls. See <LessonLink id="0.1" anchor="sum-grows">the same dice read as a sum</LessonLink>.
+- **"The scatter of an average falls as $1/N$."** The variance does; the scatter is its square root and falls as $N^{-1/2}$. Four times the dice halve it. <LessonLink id="0.1" anchor="quadruple">Quadruple the dice</LessonLink> and measure.
+- **"Variances always add."** Only when the covariance vanishes. One die read twice has $\operatorname{Var}(2X) = 4\sigma_1^2$, not $2\sigma_1^2$.
+- **"A matching slope proves the law."** Many wrong models give an exponent near $-\tfrac12$; check the coefficient too. See <LessonLink id="0.1" anchor="fit">measure the law</LessonLink>.
+- **"Same units, same quantity."** Pressure and energy density share units, but a gas has $P = \tfrac23 u$ and radiation $P = \tfrac13 u$. Dimensions reject formulas; they never supply a dimensionless factor. See <LessonLink id="0.1" anchor="dimensions">dimensions</LessonLink>.
+- **A partial derivative without its subscript.** $(\partial U/\partial V)_T = 0$ but $(\partial U/\partial V)_P = \tfrac32 P$ for the same ideal gas. See <LessonLink id="0.1" anchor="partials">derivatives that say what is held</LessonLink>.
+- **"Compression work is negative because the volume shrinks."** The sign follows the energy: $\dbar W = -P\,\mathrm{d}V > 0$ when $\mathrm{d}V < 0$, and energy enters the gas. See <LessonLink id="0.1" anchor="work-sign">the sign of work</LessonLink>.
+- **Writing $\mathrm{d}Q$.** It asserts a function $Q$ of the state, and there is none: around a cycle, $\oint \mathrm{d}U = 0$ but $\oint \dbar Q$ need not vanish. See <LessonLink id="0.1" anchor="inexact-d">heat is not a function of the state</LessonLink>.
+- **Comparing numbers by absolute difference.** Molecular energies are near $10^{-21}\,\text{J}$, so "they differ by less than $10^{-12}\,\text{J}$" says nothing. Compare $|a - b|/|b|$.
+
+## How to solve
+
+1. **For a random quantity, write the distribution first:** values and probabilities, checked to sum to $1$. Then $\mu = \sum_k p_kx_k$ and $\sigma^2 = \langle X^2\rangle - \mu^2$.
+2. **For a sum or an average of $N$ copies, ask whether they are independent.** If so, $\langle S_N\rangle = N\mu_1$, $\sigma_{S_N} = \sigma_1\sqrt N$, $\sigma_{A_N} = \sigma_1/\sqrt N$. If not, keep the covariances.
+3. **Quote steadiness as a ratio**, $\sigma/\mu$, and solve $N = (\sigma_1/\mu_1)^2/\varepsilon^2$ for a target relative scatter $\varepsilon$. For a guarantee, use Chebyshev; for an estimate, the Gaussian.
+4. **Check the dimensions** of every formula before using it, and of every exponent; convert to SI before computing.
+5. **For a derivative, name what is held**, and form the total differential when everything moves.
+6. **For a line integral, parametrize the path and substitute.** Before integrating, run the mixed-partials test: if the form is exact, find the potential and take $f(B) - f(A)$.
+7. **For energy bookkeeping, use $\mathrm{d}U = \dbar Q + \dbar W$** with $W$ the work done on the system; get $\Delta U$ from the endpoints, $W$ from the path, and $Q = \Delta U - W$.
+8. **Check limits:** $N = 1$ gives one die back; a die that always shows six has zero variance; a loop of zero size gives zero.
+
+## Checklist before an exam
+
+- I can explain, without equations, why the average of many dice settles and why that is dilution, not compensation.
+- I can compute the mean and variance of a discrete random variable, and of the sum and average of $N$ independent copies.
+- I can derive the $N^{-1/2}$ law from "variances of independent variables add", and say why the sum's scatter grows while the average's shrinks.
+- I can check a formula by dimensional analysis in SI units, and state the course's unit conventions.
+- I can compute partial derivatives with the held variable written, form a total differential, and evaluate a line integral along a given path.
+- I can test a form for exactness, find its potential when it has one, and give an inexact form whose integral depends on the path.
+- I can state the sign of work in $\mathrm{d}U = \dbar Q + \dbar W$, say why heat is written $\dbar Q$, and say what the epistemic labels and a model specification promise.

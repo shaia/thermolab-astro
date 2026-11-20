@@ -1,0 +1,7 @@
+---
+/** The line-integral figure for lesson MDX: <Spread figure={FormPaths} figureProps={{ form: 'inexact', path: 'a', tasks: ['two-routes'] }}>. */
+import FormPaths, { type FormPathsProps } from './FormPaths';
+type Props = FormPathsProps;
+---
+
+<FormPaths client:visible {...Astro.props} />

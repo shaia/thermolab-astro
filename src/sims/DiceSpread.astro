@@ -1,0 +1,7 @@
+---
+/** The spread of an average of N dice for lesson MDX: <Spread figure={DiceSpread} figureProps={{ n: 100, view: 'average', tasks: ['quadruple'] }}>. */
+import DiceSpread, { type DiceSpreadProps } from './DiceSpread';
+type Props = DiceSpreadProps;
+---
+
+<DiceSpread client:visible {...Astro.props} />

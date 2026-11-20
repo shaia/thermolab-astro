@@ -56,7 +56,68 @@ const planned = (n: number, part: Part, en: string, he: string): Chapter => ({
 });
 
 export const chapters: Chapter[] = [
-  planned(0, 'foundations', 'Orientation: how many makes a law', 'התמצאות: כמה זה מספיק כדי שיתקיים חוק'),
+  {
+    n: 0,
+    part: 'foundations',
+    title: { en: 'Orientation: how many makes a law', he: 'התמצאות: כמה זה מספיק כדי שיתקיים חוק' },
+    lessons: [
+      {
+        id: '0.1',
+        title: { en: 'How many makes a law', he: 'כמה זה מספיק כדי שיתקיים חוק' },
+        objectives: [
+          {
+            id: 'OBJ-0.1-1',
+            text: {
+              en: 'Explain how predictable aggregate behaviour emerges from unpredictable individual events, using the average of many independent random quantities.',
+              he: 'להסביר כיצד התנהגות מצרפית צפויה נובעת מאירועים בודדים בלתי צפויים, באמצעות הממוצע של גדלים מקריים בלתי תלויים רבים.',
+            },
+          },
+          {
+            id: 'OBJ-0.1-2',
+            text: {
+              en: 'Compute the mean and variance of a discrete random variable, and of the sum and average of N independent copies of it.',
+              he: `לחשב את התוחלת והשונות של משתנה מקרי בדיד, ושל הסכום והממוצע של ${f('N')} עותקים בלתי תלויים שלו.`,
+            },
+          },
+          {
+            id: 'OBJ-0.1-3',
+            text: {
+              en: 'Derive and apply the N^(-1/2) law: the relative scatter of an average falls as N^(-1/2) while the absolute scatter of a sum grows as N^(1/2).',
+              he: `לגזור וליישם את חוק ${f('N^(−1/2)')}: הפיזור היחסי של ממוצע דועך כמו ${f('N^(−1/2)')}, בעוד הפיזור המוחלט של סכום גדל כמו ${f('N^(1/2)')}.`,
+            },
+          },
+          {
+            id: 'OBJ-0.1-4',
+            text: {
+              en: 'Check a formula by dimensional analysis in SI units, and state the unit conventions this course uses.',
+              he: `לבדוק נוסחה בעזרת ניתוח ממדי ביחידות ${f('SI')}, ולנסח את מוסכמות היחידות שהקורס הזה משתמש בהן.`,
+            },
+          },
+          {
+            id: 'OBJ-0.1-5',
+            text: {
+              en: 'Compute partial derivatives in held-variable notation, form a total differential, and evaluate the line integral of a differential form along a path.',
+              he: 'לחשב נגזרות חלקיות בסימון של משתנה מוחזק, להרכיב דיפרנציאל שלם, ולחשב אינטגרל קווי של תבנית דיפרנציאלית לאורך מסלול.',
+            },
+          },
+          {
+            id: 'OBJ-0.1-6',
+            text: {
+              en: 'Decide whether a differential form is exact using the mixed-partials criterion, and exhibit an inexact form whose integral depends on the path.',
+              he: 'להכריע אם תבנית דיפרנציאלית מדויקת בעזרת קריטריון הנגזרות המעורבות, ולהציג תבנית לא מדויקת שהאינטגרל שלה תלוי במסלול.',
+            },
+          },
+          {
+            id: 'OBJ-0.1-7',
+            text: {
+              en: 'State the conventions this course runs on: the sign of work in the first law, the meaning of the inexact differential, and what the epistemic labels and model specifications promise.',
+              he: 'לנסח את המוסכמות שהקורס פועל לפיהן: הסימן של העבודה בחוק הראשון, משמעות הדיפרנציאל הלא מדויק, ומה מבטיחות התוויות האפיסטמיות ומפרטי המודל.',
+            },
+          },
+        ],
+      },
+    ],
+  },
   planned(1, 'thermodynamics', 'Thermal equilibrium', 'שיווי משקל תרמי'),
   planned(2, 'thermodynamics', 'Equations of state', 'משוואות מצב'),
   planned(3, 'statistical', 'Probability and emergence', 'הסתברות והתהוות'),
