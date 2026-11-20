@@ -1,0 +1,467 @@
+# Module 01 review problems, from ThermoLab's problem set (content/en/thermodynamics/01-equilibrium-problems.md,
+# problems 2-5; problems 1 and 6 went to the workbook). The lesson's worked examples 1, 3 and 4 already solve problems
+# 2, 3 and 4 with ThermoLab's numbers, so these keep each problem's topic and its open question but change the numbers
+# and the scenario. Problem 5's radiation test in part (d) is new: it makes the problem's argument checkable. Every
+# number was recomputed with ThermoLab's library (thermolab.equilibrium); simulated numbers are multi-seed means.
+# ThermoLab kept its solutions with the instructor; this platform publishes worked solutions and rubrics. Ids are
+# shared with the Hebrew file.
+lang: en
+chapter: 1
+questions:
+  - id: Q-1-bagrut-1
+    type: bagrut
+    title: >-
+      Water in a cold teapot
+    prompt: >-
+      $0.25\,\text{kg}$ of water at $95\,{}^\circ\text{C}$ (specific heat $c = 4200\,\text{J/(kg K)}$) is poured into a ceramic teapot of heat capacity $C_B = 400\,\text{J/K}$, at room temperature, $18\,{}^\circ\text{C}$. Treat the water and the pot as isolated together once the water is in, with constant heat capacities.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-3]
+        prompt: >-
+          Find the heat capacity $C_A$ of the water.
+        answer: 1050
+        unit: J/K
+        tolerance: 0.01
+        correctFeedback: >-
+          $C_A = mc = 0.25 \times 4200 = 1050\,\text{J/K}$: the water needs $2.6$ times as much energy per kelvin as the pot.
+        wrongFeedback: >-
+          The heat capacity of a mass $m$ of specific heat $c$ is $C = mc$, with $m$ in kilograms.
+        commonWrong:
+          - value: 1.05e6
+            feedback: >-
+              That puts the mass in grams. The specific heat is per kilogram: $m = 0.25\,\text{kg}$.
+          - value: 4200
+            feedback: >-
+              That is the specific heat, per kilogram. Multiply by the mass, $0.25\,\text{kg}$.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-3]
+        prompt: >-
+          Find the common temperature the water and the pot reach.
+        answer: 73.76
+        unit: °C
+        tolerance: 0.01
+        correctFeedback: >-
+          $T_\mathrm{eq} = (1050 \times 95 + 400 \times 18)/1450 = 106\,950/1450 = 73.8\,{}^\circ\text{C}$. A weighted average of temperatures may be taken in Celsius, because the weights sum to one and the offset cancels.
+        wrongFeedback: >-
+          Weight each starting temperature by its own heat capacity: $T_\mathrm{eq} = (C_AT_{A,0} + C_BT_{B,0})/(C_A + C_B)$.
+        commonWrong:
+          - value: 56.5
+            feedback: >-
+              That is the plain average of $95$ and $18$, right only for equal heat capacities. The water has $2.6$ times the pot's, and pulls the result toward its own start.
+            misconception: MC-equal-weight-equilibrium
+          - value: 39.24
+            feedback: >-
+              That weights each temperature by the **other** body's heat capacity. The water, with the larger capacity, must move less, so the result lies closer to $95\,{}^\circ\text{C}$.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-1.1-3]
+        prompt: >-
+          The water falls by $21.2\,\text{K}$ and the pot rises by $55.8\,\text{K}$. Why does the pot move more?
+        choices:
+          - text: >-
+              The same energy, $22.3\,\text{kJ}$, leaves the water and enters the pot, and the pot needs less energy per kelvin. The two changes are in inverse proportion to the heat capacities: $55.8/21.2 = 2.625 = 1050/400$.
+            correct: true
+            feedback: >-
+              Right. $C_A\,|\Delta T_A| = C_B\,|\Delta T_B|$ is energy conservation, and it is the lever rule: the heavier side, the larger capacity, moves less.
+          - text: >-
+              The pot started further from the final temperature, so it had further to go.
+            feedback: >-
+              That is circular: where the final temperature lands is the question. It lands nearer the water's start because the water has the larger heat capacity.
+          - text: >-
+              The colder body always moves more, because heat flows into it.
+            feedback: >-
+              Which body moves more is set by the heat capacities, not by which is colder. Pour cold water into a hot pot of the same capacities, and the water, with the larger capacity, still moves less.
+          - text: >-
+              Heat enters ceramic faster than it leaves water.
+            feedback: >-
+              Rates decide how fast the pair gets there, not where. The final temperature, and with it each body's change, follows from energy conservation alone, whatever the conductance of the contact.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-1.1-3]
+        prompt: >-
+          The water should settle at $80\,{}^\circ\text{C}$ or above. Derive, from energy conservation, the temperature $T_{B,0}$ to which the pot must be preheated for the pair to settle at a chosen $T^\ast$, as a formula in $C_A$, $C_B$, $T_{A,0}$ and $T^\ast$, and evaluate it for $T^\ast = 80\,{}^\circ\text{C}$. State what the derivation assumes, and check your formula in limits.
+        solution:
+          - kind: law
+            text: >-
+              The water and the pot are isolated together and no work is done, so every joule the water loses the pot gains: $\Delta U_A + \Delta U_B = 0$. With constant heat capacities, $\Delta U = C\,\Delta T$ for each, and the pair is to end at $T^\ast$: $C_A(T^\ast - T_{A,0}) + C_B(T^\ast - T_{B,0}) = 0$.
+          - kind: manipulation
+            text: >-
+              Solve for $T_{B,0}$: $C_B(T_{B,0} - T^\ast) = -C_A(T_{A,0} - T^\ast)$. The pot must start below $T^\ast$ by $C_A/C_B$ times the water's fall.
+          - kind: formula
+            text: >-
+              $T_{B,0} = T^\ast - \dfrac{C_A}{C_B}\,\big(T_{A,0} - T^\ast\big)$
+          - kind: limit
+            text: >-
+              $T^\ast = T_{A,0}$: $T_{B,0} = T_{A,0}$, the pot must be as hot as the water, since the water may lose nothing. $C_B \to 0$: $T_{B,0} \to -\infty$, a pot of no heat capacity takes no heat whatever its temperature. $C_B \to \infty$: $T_{B,0} \to T^\ast$, a huge pot holds the water at its own temperature. $C_A = C_B$: $T_{B,0} = 2T^\ast - T_{A,0}$, as far below $T^\ast$ as the water starts above it.
+          - kind: units
+            text: >-
+              $C_A/C_B$ is a pure number and multiplies a temperature difference, so $T_{B,0}$ is a temperature; Celsius may be used throughout, since only differences and a weighted average with weights summing to one appear.
+          - kind: substitution
+            text: >-
+              $T_{B,0} = 80 - (1050/400)(95 - 80) = 80 - 2.625 \times 15 = 80 - 39.4 = 40.6\,{}^\circ\text{C}$. Check: $(1050 \times 95 + 400 \times 40.6)/1450 = 80.0\,{}^\circ\text{C}$.
+          - kind: result
+            text: >-
+              $T_{B,0} = T^\ast - (C_A/C_B)(T_{A,0} - T^\ast) = 40.6\,{}^\circ\text{C}$: rinsing the pot with hot tap water at about $41\,{}^\circ\text{C}$ is enough, where a cold pot costs the water $21\,\text{K}$. The derivation assumes constant heat capacities and no loss to the room while the pair settles; a real pot also loses heat to the air, so it is worth preheating a little more.
+        rubric:
+          - text: >-
+              Writes energy conservation for the isolated pair, $C_A(T^\ast - T_{A,0}) + C_B(T^\ast - T_{B,0}) = 0$.
+            weight: 2
+          - text: >-
+              Solves it for $T_{B,0} = T^\ast - (C_A/C_B)(T_{A,0} - T^\ast)$.
+            weight: 2
+          - text: >-
+              Evaluates $40.6\,{}^\circ\text{C}$.
+          - text: >-
+              States the assumptions: constant heat capacities, no exchange with the surroundings.
+          - text: >-
+              A limit check: $T^\ast = T_{A,0}$, $C_B \to 0$ or $C_B \to \infty$, with what each means.
+            weight: 2
+
+  - id: Q-1-bagrut-2
+    type: bagrut
+    title: >-
+      Two bodies, one contact
+    prompt: >-
+      Body A, of heat capacity $C_A = 90\,\text{J/K}$, starts at $70\,{}^\circ\text{C}$; body B, of $C_B = 180\,\text{J/K}$, starts at $10\,{}^\circ\text{C}$. They touch through a contact of conductance $\kappa = 1.2\,\text{W/K}$ and are otherwise isolated. Heat crosses by Newton's law of cooling, $\dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-4]
+        prompt: >-
+          Find the relaxation time $\tau$.
+        answer: 50
+        unit: s
+        tolerance: 0.01
+        correctFeedback: >-
+          $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big) = (90 \times 180)/(1.2 \times 270) = 16\,200/324 = 50\,\text{s}$.
+        wrongFeedback: >-
+          $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$, in seconds when the capacities are in $\text{J/K}$ and $\kappa$ in $\text{W/K}$.
+        commonWrong:
+          - value: 75
+            feedback: >-
+              That is $C_A/\kappa$, the relaxation time against a reservoir. B is not one: its temperature moves toward A's, which closes the gap faster.
+          - value: 225
+            feedback: >-
+              That is $(C_A + C_B)/\kappa$. The capacities combine as $C_AC_B/(C_A + C_B) = 60\,\text{J/K}$, smaller than either.
+          - value: 0.02
+            feedback: >-
+              That is $1/\tau$, the rate, in $\text{s}^{-1}$. The relaxation time is its inverse.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-3]
+        prompt: >-
+          Find the temperature at which the two bodies meet.
+        answer: 30
+        unit: °C
+        tolerance: 0.01
+        correctFeedback: >-
+          $T_\mathrm{eq} = (90 \times 70 + 180 \times 10)/270 = 8100/270 = 30\,{}^\circ\text{C}$: A falls $40\,\text{K}$, B rises $20\,\text{K}$. The conductance plays no part: it sets how fast, not where.
+        wrongFeedback: >-
+          Energy conservation: $T_\mathrm{eq} = (C_AT_{A,0} + C_BT_{B,0})/(C_A + C_B)$.
+        commonWrong:
+          - value: 40
+            feedback: >-
+              That is the plain average, right only for equal capacities. B has twice A's, and pulls the result toward its own start.
+            misconception: MC-equal-weight-equilibrium
+          - value: 50
+            feedback: >-
+              That weights each temperature by the other body's capacity. The larger body, B, moves less.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-4]
+        prompt: >-
+          How long after contact is the gap down to $1.0\,\text{K}$?
+        answer: 204.7
+        unit: s
+        tolerance: 0.02
+        correctFeedback: >-
+          $60\,e^{-t/\tau} = 1.0$ gives $t = \tau\ln 60 = 50 \times 4.09 = 205\,\text{s}$, about four relaxation times.
+        wrongFeedback: >-
+          Solve $\Delta T(0)\,e^{-t/\tau} = 1.0\,\text{K}$ for $t$, with $\Delta T(0) = 60\,\text{K}$, using the natural logarithm.
+        commonWrong:
+          - value: 88.9
+            feedback: >-
+              That uses $\log_{10} 60$. The exponential is $e^{-t/\tau}$, so the logarithm is the natural one: $\ln 60 = 4.09$.
+          - value: 307
+            feedback: >-
+              That is $(C_A/\kappa)\ln 60$, with B treated as a reservoir. B moves too, and $\tau = 50\,\text{s}$.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-1.1-4, OBJ-1.1-3]
+        prompt: >-
+          Derive, from the rate equation of each body, the law $\Delta T(t) = \Delta T(0)\,e^{-t/\tau}$ for the gap $\Delta T = T_A - T_B$ and the formula for $\tau$. Then find $T_A(t)$ and $T_B(t)$ separately, evaluate them at $t = \tau$, and find the total heat that crosses the contact on the way to equilibrium. Check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              Newton's law for each body, with $C\,\mathrm{d}T = \dbar Q$ and no work done: $C_A\,\mathrm{d}T_A/\mathrm{d}t = \kappa(T_B - T_A)$ and $C_B\,\mathrm{d}T_B/\mathrm{d}t = \kappa(T_A - T_B)$.
+          - kind: manipulation
+            text: >-
+              Divide each by its capacity and subtract: $\mathrm{d}\,\Delta T/\mathrm{d}t = -\kappa\,(1/C_A + 1/C_B)\,\Delta T = -\Delta T/\tau$, with $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$, so $\Delta T(t) = \Delta T(0)\,e^{-t/\tau}$. Adding the two equations instead gives $\mathrm{d}(C_AT_A + C_BT_B)/\mathrm{d}t = 0$: the weighted mean stays at $T_\mathrm{eq}$ throughout.
+          - kind: manipulation
+            text: >-
+              From $C_AT_A + C_BT_B = (C_A + C_B)\,T_\mathrm{eq}$ and $T_A - T_B = \Delta T$, solve for the two temperatures. The heat that has crossed by time $t$ is $C_A\big(T_{A,0} - T_A(t)\big)$.
+          - kind: formula
+            text: >-
+              $T_A(t) = T_\mathrm{eq} + \dfrac{C_B}{C_A + C_B}\,\Delta T(0)\,e^{-t/\tau} \qquad T_B(t) = T_\mathrm{eq} - \dfrac{C_A}{C_A + C_B}\,\Delta T(0)\,e^{-t/\tau} \qquad Q_\infty = \dfrac{C_AC_B}{C_A + C_B}\,\Delta T(0)$
+          - kind: limit
+            text: >-
+              $C_B \to \infty$: $\tau \to C_A/\kappa$, $T_B$ stays at $T_{B,0}$ and $T_A$ relaxes onto it, a body against a reservoir, as in forensic cooling; $Q_\infty \to C_A\,\Delta T(0)$, all of A's excess. $\kappa \to \infty$: $\tau \to 0$, the instant equilibrium no real contact gives. $t = 0$ returns the starting temperatures, and $t \to \infty$ gives both $T_\mathrm{eq}$.
+          - kind: units
+            text: >-
+              $\tau$: $(\text{J/K})^2/\big((\text{W/K})(\text{J/K})\big) = \text{J/W} = \text{s}$. $Q_\infty$: $(\text{J/K})\cdot\text{K} = \text{J}$.
+          - kind: substitution
+            text: >-
+              $\Delta T(0) = 60\,\text{K}$, $T_\mathrm{eq} = 30\,{}^\circ\text{C}$, $\tau = 50\,\text{s}$. At $t = \tau$ the gap is $60\,e^{-1} = 22.1\,\text{K}$, so $T_A = 30 + \tfrac23 \times 22.1 = 44.7\,{}^\circ\text{C}$ and $T_B = 30 - \tfrac13 \times 22.1 = 22.6\,{}^\circ\text{C}$. $Q_\infty = (90 \times 180/270) \times 60 = 3600\,\text{J}$, equal to $C_A(70 - 30)$ and to $C_B(30 - 10)$.
+          - kind: result
+            text: >-
+              $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big) = 50\,\text{s}$; both temperatures approach $30\,{}^\circ\text{C}$ exponentially with the same $\tau$, A from above and B from below, A moving twice as far; at $t = \tau$ they are at $44.7$ and $22.6\,{}^\circ\text{C}$; $3600\,\text{J}$ crosses in all.
+        rubric:
+          - text: >-
+              Writes the two rate equations and subtracts them to get $\mathrm{d}\,\Delta T/\mathrm{d}t = -\Delta T/\tau$ with $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$.
+            weight: 2
+          - text: >-
+              Shows that $C_AT_A + C_BT_B$ is constant, so both temperatures approach $T_\mathrm{eq}$.
+          - text: >-
+              Finds $T_A(t)$ and $T_B(t)$ with the weights $C_B/(C_A + C_B)$ and $C_A/(C_A + C_B)$.
+            weight: 2
+          - text: >-
+              Evaluates $44.7\,{}^\circ\text{C}$, $22.6\,{}^\circ\text{C}$ and $3600\,\text{J}$.
+          - text: >-
+              A limit check: $C_B \to \infty$ (reservoir) or $\kappa \to \infty$, with what each means.
+            weight: 2
+
+  - id: Q-1-bagrut-3
+    type: bagrut
+    title: >-
+      Dating a death by Newton's law
+    prompt: >-
+      A body is found in a cellar held at $T_\infty = 16\,{}^\circ\text{C}$. At the first measurement its temperature is $32.0\,{}^\circ\text{C}$; two hours later it is $28.0\,{}^\circ\text{C}$. Assume it cools by Newton's law toward the cellar, $T(t) - T_\infty = (T_0 - T_\infty)\,e^{-t/\tau}$, and that it was at $37\,{}^\circ\text{C}$ at death.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-4]
+        prompt: >-
+          Find the relaxation time $\tau$, in hours.
+        answer: 6.952
+        unit: h
+        tolerance: 0.02
+        correctFeedback: >-
+          The gaps above the cellar are $16\,\text{K}$ and $12\,\text{K}$, so $\tau = 2/\ln(16/12) = 2/0.288 = 6.95\,\text{h}$.
+        wrongFeedback: >-
+          The exponential describes the gap above the cellar, $T - T_\infty$. Take the ratio of the two gaps and solve for $\tau$.
+        commonWrong:
+          - value: 14.98
+            feedback: >-
+              That uses $\ln(32/28)$, the readings themselves. The exponential decays toward the cellar's $16\,{}^\circ\text{C}$, not toward $0\,{}^\circ\text{C}$: subtract it first.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-4]
+        prompt: >-
+          How long before the first measurement did death occur, in hours?
+        answer: 1.891
+        unit: h
+        tolerance: 0.02
+        correctFeedback: >-
+          The gap fell from $21\,\text{K}$ to $16\,\text{K}$: $t^\ast = \tau\ln(21/16) = 6.95 \times 0.272 = 1.89\,\text{h}$, about an hour and fifty-three minutes.
+        wrongFeedback: >-
+          Use $\tau$ from (a) and the gap at death, $37 - 16 = 21\,\text{K}$: $t^\ast = \tau\ln(21/16)$.
+        commonWrong:
+          - value: 2.5
+            feedback: >-
+              That extrapolates at the measured $2\,\text{K/h}$ as if the cooling were steady. It was faster before the first reading, when the gap was larger, so the $5\,\text{K}$ took less time.
+          - value: 2.17
+            feedback: >-
+              That leaves the cellar out throughout: $14.98 \times \ln(37/32)$. The exponential applies to the gap above $16\,{}^\circ\text{C}$.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-1.1-4]
+        prompt: >-
+          It turns out that the person had a fever of $39\,{}^\circ\text{C}$ at death. How does that change the estimate?
+        choices:
+          - text: >-
+              Death was earlier, $2.52\,\text{h}$ before the first reading: $\tau$, fixed by the two readings, is unchanged, and cooling from $39$ to $37\,{}^\circ\text{C}$ took another $\tau\ln(23/21) = 0.63\,\text{h}$.
+            correct: true
+            feedback: >-
+              Right. The two readings fix $\tau$ whatever happened before them; only the starting gap changes, from $21$ to $23\,\text{K}$, and $t^\ast = \tau\ln(23/16) = 2.52\,\text{h}$.
+          - text: >-
+              Not at all: $\tau$ is fixed by the two readings, so the estimate stands.
+            feedback: >-
+              $\tau$ is unchanged, but the starting point is not. The body had $2\,\text{K}$ more to lose, and losing it took time.
+          - text: >-
+              Death was later: a hotter body cools faster, so it lost the extra $2\,\text{K}$ almost at once.
+            feedback: >-
+              It did cool faster at first, at $23/\tau = 3.3\,\text{K/h}$, but it still needed $\tau\ln(23/21) = 0.63\,\text{h}$ to lose $2\,\text{K}$. A faster rate shortens the extra time; it cannot make it negative.
+          - text: >-
+              Death was one hour earlier: the extra $2\,\text{K}$ at the measured $2\,\text{K/h}$.
+            feedback: >-
+              That uses the rate measured between the readings. Near $38\,{}^\circ\text{C}$ the gap was larger and the body cooled faster, about $3.2\,\text{K/h}$, so the extra $2\,\text{K}$ took $0.63\,\text{h}$.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-1.1-4]
+        prompt: >-
+          Show that the time of death follows from the temperature at death, the two readings, the cellar's temperature and the interval between the readings, without finding $\tau$ first, and write the formula. The cellar's temperature is known only to within $\pm 1\,\text{K}$, and the temperature at death to within $\pm 0.5\,\text{K}$: which uncertainty matters more for the estimate? Check your formula in limits, including the limit in which the cooling between readings is small compared with the gaps.
+        solution:
+          - kind: law
+            text: >-
+              With the cellar as a reservoir, the gap $g = T - T_\infty$ decays as $g(t) = g(0)\,e^{-t/\tau}$, so a gap $g$ shrinks to a later gap $g'$ in a time $\tau\ln(g/g')$: equal ratios take equal times.
+          - kind: manipulation
+            text: >-
+              Call the gaps at death and at the two readings $g_0$, $g_1$, $g_2$, and the interval $\Delta t$. The readings give $\tau = \Delta t/\ln(g_1/g_2)$, and death came $t^\ast = \tau\ln(g_0/g_1)$ before the first. Eliminate $\tau$.
+          - kind: formula
+            text: >-
+              $t^\ast = \Delta t\,\dfrac{\ln(g_0/g_1)}{\ln(g_1/g_2)} \qquad g_i = T_i - T_\infty$
+          - kind: limit
+            text: >-
+              $g_0 \to g_1$, a body found at the moment of death: $t^\ast \to 0$. $g_2 \to g_1$, no cooling seen between the readings: $\tau \to \infty$ and $t^\ast \to \infty$, a body that does not cool cannot be dated. When the changes are small beside the gaps, $\ln(1 + x) \approx x$ gives $t^\ast \to \Delta t\,(T_0 - T_1)/(T_1 - T_2)$, linear extrapolation at the measured rate: $2.5\,\text{h}$ here, too long, because the body cooled faster before the first reading than between the two.
+          - kind: units
+            text: >-
+              The ratio of logarithms is a pure number, so $t^\ast$ is in the units of $\Delta t$, hours; the gaps are temperature differences, so Celsius readings may be used.
+          - kind: substitution
+            text: >-
+              $g_0 = 21\,\text{K}$, $g_1 = 16\,\text{K}$, $g_2 = 12\,\text{K}$, $\Delta t = 2\,\text{h}$: $t^\ast = 2 \times \ln(1.3125)/\ln(1.3333) = 2 \times 0.2719/0.2877 = 1.89\,\text{h}$. A cellar at $15\,{}^\circ\text{C}$ gives $1.92\,\text{h}$, at $17\,{}^\circ\text{C}$ $1.86\,\text{h}$: $\pm 0.03\,\text{h}$. A temperature at death of $37.5\,{}^\circ\text{C}$ gives $2.05\,\text{h}$, of $36.5\,{}^\circ\text{C}$ $1.72\,\text{h}$: $\pm 0.17\,\text{h}$.
+          - kind: result
+            text: >-
+              $t^\ast = \Delta t\,\ln(g_0/g_1)/\ln(g_1/g_2) = 1.89\,\text{h}$ before the first reading. The temperature at death matters about five times more than the cellar's: a change in $T_\infty$ shifts all three gaps together and largely cancels in the ratio, while $g_0$ enters alone. The model's own assumptions, a constant $\kappa$ (clothing, posture, air flow) and a uniform body, are larger sources of error than either.
+        rubric:
+          - text: >-
+              Eliminates $\tau$ to reach $t^\ast = \Delta t\,\ln(g_0/g_1)/\ln(g_1/g_2)$, with the gaps measured from the cellar's temperature.
+            weight: 2
+          - text: >-
+              Evaluates $1.89\,\text{h}$.
+          - text: >-
+              Evaluates both sensitivities ($\pm 0.03\,\text{h}$ and $\pm 0.17\,\text{h}$) and concludes that the temperature at death matters more, with a reason.
+            weight: 2
+          - text: >-
+              A limit check: $g_0 \to g_1$, $g_2 \to g_1$, or the linear-extrapolation limit, with what it means.
+            weight: 2
+
+  - id: Q-1-bagrut-4
+    type: bagrut
+    title: >-
+      Where the hop model breaks, and what survives
+    prompt: >-
+      The hop model of figure 1.1a moves quanta of one size $\varepsilon$ between two Einstein solids and reads each body's temperature by equipartition, $T = q\varepsilon/(nk_B)$. Temperatures below are in units of $\varepsilon/k_B$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-5]
+        prompt: >-
+          A real Einstein solid of many oscillators, holding $q$ quanta on $n$ oscillators, has $k_BT = \varepsilon/\ln(1 + n/q)$ (module 12 derives it). Find the temperature of a real Einstein solid holding $0.25$ quanta per oscillator, which the model would put at $T = 0.25$.
+        answer: 0.6213
+        unit: ''
+        tolerance: 0.02
+        correctFeedback: >-
+          $1/\ln(1 + 4) = 1/\ln 5 = 0.621$: two and a half times the model's $0.25$. At high temperature $1/\ln(1 + n/q) \to q/n + \tfrac12$, close to the model's value in proportion ($25.497$ against $25$ at twenty-five quanta per oscillator); at a quarter of a quantum per oscillator even that expansion fails ($0.75$). Low temperature is where equipartition, and the model's thermometer, break.
+        wrongFeedback: >-
+          Put $n/q = 4$ into $k_BT = \varepsilon/\ln(1 + n/q)$.
+        commonWrong:
+          - value: 0.25
+            feedback: >-
+              That is the model's equipartition reading, $q/n$. The real solid's temperature is the one asked for, and at this occupation the two differ by a factor $2.5$.
+          - value: 0.75
+            feedback: >-
+              That is the high-temperature expansion, $q/n + \tfrac12$. It needs many quanta per oscillator; at $0.25$ it is off by $20\%$.
+          - value: 1.609
+            feedback: >-
+              That is $\ln 5$ itself. The temperature is its inverse.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-5]
+        prompt: >-
+          The model builds a starting state by rounding $q = nT$ to the nearest whole number of quanta. A body of $n_A = 2$ oscillators is requested at $T_A = 2.3$. At what temperature does it actually start?
+        answer: 2.5
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          $q = 2 \times 2.3 = 4.6$ rounds to $5$, and $T_A = 5/2 = 2.5$, $9\%$ above the request. Rounding can shift a temperature by up to half a quantum per oscillator, $1/(2n)$: $0.25$ here, negligible for a macroscopic $n$. A body of two oscillators cannot even be set to the temperature asked of it.
+        wrongFeedback: >-
+          Compute $q = nT$, round it to the nearest whole number, and convert back, $T = q/n$.
+        commonWrong:
+          - value: 2.0
+            feedback: >-
+              That truncates $4.6$ to $4$. The model rounds to the nearest whole number, $5$.
+          - value: 2.3
+            feedback: >-
+              That is the request. Quanta are whole, so a body of $2$ oscillators can only take temperatures in steps of $0.5$.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-1.1-2, OBJ-1.1-5]
+        prompt: >-
+          Two oscillators on each side share four quanta, and the hop model has run long enough to reach equilibrium. In what fraction of the steps are the two temperatures exactly equal?
+        answer: 0.375
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          The stationary law is binomial: $q_A = 0, 1, 2, 3, 4$ in the ratio $1 : 4 : 6 : 4 : 1$. The temperatures are equal only at $q_A = 2$, in $6/16 = 0.375$ of the steps; measured over eight runs of $400\,000$ steps, $0.3748 \pm 0.0003$. The rest of the time the gap $T_A - T_B = q_A - 2$ is $\pm 1$ or $\pm 2$, as large as the temperatures themselves: for so small a pair, temperature is not yet a macroscopic quantity.
+        wrongFeedback: >-
+          At equilibrium each of the four quanta sits in A with probability $1/2$, independently; the temperatures are equal when $q_A = 2$.
+        commonWrong:
+          - value: 1
+            feedback: >-
+              That has the temperatures stay equal once equilibrium is reached, which would need the quanta to stop crossing. They keep hopping, and every crossing changes both temperatures; equilibrium fixes the probabilities of the states, not the state.
+            misconception: MC-equilibrium-motion-stops
+          - value: 0.2
+            feedback: >-
+              That makes the five values of $q_A$ equally likely. There are six ways to place two of four labelled quanta in A and only one to place all four.
+          - value: 0.257
+            feedback: >-
+              That is $9/35$, from the count of a real Einstein solid, whose quanta cannot be told apart ($5 : 8 : 9 : 8 : 5$). The hop model moves labelled quanta, and its own stationary law is the binomial one.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-1.1-3, OBJ-1.1-4, OBJ-1.1-5]
+        prompt: >-
+          Two different real materials in contact do not trade quanta of one size, and much of the heat between them may be carried by radiation instead. Argue that this invalidates the model's mechanism but not its two macroscopic results, the equilibrium temperature and the exponential relaxation near equilibrium. Then test the argument on two black plates of heat capacity $C = 100\,\text{J/K}$ each, facing each other closely over an area $A = 0.010\,\text{m}^2$, isolated from everything else, starting at $310\,\text{K}$ and $290\,\text{K}$, with the net radiated power $P = \sigma A\,(T_A^4 - T_B^4)$, $\sigma = 5.67 \times 10^{-8}\,\text{W}\,\text{m}^{-2}\,\text{K}^{-4}$. Find the effective conductance and $\tau$ near equilibrium, and the error of Newton's law at the start. Check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              $T_\mathrm{eq}$ rests on energy conservation and constant heat capacities alone: whatever carries the energy across, quanta of unequal sizes, phonons through an interface, radiation, the pair is isolated, so $C_A(T_\mathrm{eq} - T_{A,0}) + C_B(T_\mathrm{eq} - T_{B,0}) = 0$ holds unchanged. The exponential rests on a heat flow linear in the difference. Any mechanism gives a net power $P(T_A, T_B)$ that vanishes when $T_A = T_B$ (equal temperatures, no net flow: the zeroth law), so expanded about equal temperatures its first term is linear, $P \approx \kappa\,(T_A - T_B)$: Newton's law is the small-difference limit of every mechanism, and the mechanism sets only $\kappa$, which the model never claimed to predict.
+          - kind: manipulation
+            text: >-
+              For radiation, $T_A^4 - T_B^4 = (T_A - T_B)(T_A + T_B)(T_A^2 + T_B^2)$. With $\bar T = (T_A + T_B)/2$ and $\Delta T = T_A - T_B$, $T_A + T_B = 2\bar T$ and $T_A^2 + T_B^2 = 2\bar T^2 + \Delta T^2/2$, so $P = 4\sigma A\,\bar T^3\,\Delta T\,\big[1 + (\Delta T/2\bar T)^2\big]$. With equal capacities, energy conservation keeps $\bar T = T_\mathrm{eq}$ at every moment.
+          - kind: formula
+            text: >-
+              $\kappa = 4\sigma A\,T_\mathrm{eq}^3 \qquad \tau = \dfrac{C_AC_B}{\kappa\,(C_A + C_B)} \qquad \dfrac{P}{\kappa\,\Delta T} - 1 = \left(\dfrac{\Delta T}{2T_\mathrm{eq}}\right)^2$
+          - kind: limit
+            text: >-
+              $\Delta T/T_\mathrm{eq} \to 0$: the correction vanishes as its square, Newton's law becomes exact, and the gap relaxes exponentially with $\tau$ above. For a large gap the radiation runs faster than Newton's law, so the decay starts faster than exponential and becomes exponential as the gap shrinks. $T_\mathrm{eq} \to 0$: $\kappa \propto T^3 \to 0$ and $\tau \to \infty$, radiation dies out in the cold. $C_B \to \infty$: $\tau \to C_A/\kappa$, a plate facing a reservoir.
+          - kind: units
+            text: >-
+              $\sigma A\,T^3$: $\text{W}\,\text{m}^{-2}\,\text{K}^{-4} \cdot \text{m}^2 \cdot \text{K}^3 = \text{W/K}$, a conductance; $\tau$ in $\text{J/W} = \text{s}$.
+          - kind: substitution
+            text: >-
+              Equal capacities give $T_\mathrm{eq} = 300\,\text{K}$. $\kappa = 4 \times 5.67 \times 10^{-8} \times 0.010 \times 300^3 = 0.0612\,\text{W/K}$, and $\tau = (100 \times 100)/(0.0612 \times 200) = 817\,\text{s}$, about $14$ minutes. At the start, $\Delta T = 20\,\text{K}$: the exact power is $5.67 \times 10^{-10} \times (310^4 - 290^4) = 1.226\,\text{W}$, against Newton's $0.0612 \times 20 = 1.225\,\text{W}$, an error of $(20/600)^2 = 0.11\%$. Even a $200\,\text{K}$ gap would give only $11\%$.
+          - kind: result
+            text: >-
+              A different mechanism changes the conductance, not the two results: the pair still meets at the capacity-weighted $T_\mathrm{eq} = 300\,\text{K}$, and near equilibrium the gap still decays as $e^{-t/\tau}$, here with $\kappa = 4\sigma A T_\mathrm{eq}^3 = 0.0612\,\text{W/K}$ and $\tau = 817\,\text{s}$, Newton's law being off by only $0.11\%$ at the start. What the model's equal quanta get wrong is the microscopic route and the time scale, which it never claimed to get right.
+        rubric:
+          - text: >-
+              Argues that $T_\mathrm{eq}$ follows from energy conservation and constant heat capacities, whatever the mechanism.
+            weight: 2
+          - text: >-
+              Argues that any net flow vanishes at equal temperatures, so its linear term is Newton's law, with a mechanism-dependent $\kappa$.
+            weight: 2
+          - text: >-
+              Linearizes the radiation law to $\kappa = 4\sigma A T_\mathrm{eq}^3$ and evaluates $0.0612\,\text{W/K}$ and $\tau \approx 817\,\text{s}$.
+          - text: >-
+              Evaluates the error of Newton's law at the start, about $0.1\%$.
+          - text: >-
+              A limit check: $\Delta T/T \to 0$, $T \to 0$ or $C_B \to \infty$, with what it means.
+            weight: 2
