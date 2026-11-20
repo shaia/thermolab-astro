@@ -166,7 +166,61 @@ export const chapters: Chapter[] = [
       },
     ],
   },
-  planned(2, 'thermodynamics', 'Equations of state', 'משוואות מצב'),
+  {
+    n: 2,
+    part: 'thermodynamics',
+    title: { en: 'Equations of state', he: 'משוואות מצב' },
+    lessons: [
+      {
+        id: '2.1',
+        title: { en: 'A lighter that sloshes: equations of state', he: 'מצית שמשכשך: משוואות מצב' },
+        objectives: [
+          {
+            id: 'OBJ-2.1-1',
+            text: {
+              en: 'State the state postulate for a simple compressible substance (fixing two independent intensive variables fixes every other equilibrium property), and explain why all equilibrium states therefore form a single surface in (P, v, T) space.',
+              he: `לנסח את הנחת המצב עבור חומר דחיס פשוט (קיבוע שני משתנים אינטנסיביים בלתי תלויים מקבע כל תכונת שיווי משקל אחרת), ולהסביר מדוע כל מצבי שיווי המשקל מרכיבים לפיכך משטח יחיד במרחב ${f('(P, v, T)')}.`,
+            },
+          },
+          {
+            id: 'OBJ-2.1-2',
+            text: {
+              en: 'Classify a thermodynamic variable as intensive or extensive by the doubling test, form per-particle densities such as v = V/N, and predict which quantities change when two identical systems are joined.',
+              he: `לסווג משתנה תרמודינמי כאינטנסיבי או אקסטנסיבי באמצעות מבחן ההכפלה, ליצור צפיפויות לחלקיק כגון ${f('v = V/N')}, ולחזות אילו גדלים משתנים כאשר מחברים שתי מערכות זהות.`,
+            },
+          },
+          {
+            id: 'OBJ-2.1-3',
+            text: {
+              en: 'Use the ideal gas law PV = Nk_BT to compute any one of P, V, T, N from the others, and state its epistemic status: an empirical law of the dilute classical regime, not a law of nature.',
+              he: `להשתמש בחוק הגזים האידיאליים ${f('PV = Nk_BT')} כדי לחשב כל אחד מבין ${f('P, V, T, N')} מתוך האחרים, ולנסח את מעמדו האפיסטמי: חוק אמפירי של המשטר הדליל והקלאסי, ולא חוק טבע.`,
+            },
+          },
+          {
+            id: 'OBJ-2.1-4',
+            text: {
+              en: 'Explain the physical origin of the van der Waals constants a (mutual attraction lowers the pressure by a/v²) and b (excluded volume shifts v to v − b), and compute pressures from P = k_BT/(v − b) − a/v².',
+              he: `להסביר את המקור הפיזיקלי של קבועי ואן דר ואלס ${f('a')} (משיכה הדדית מנמיכה את הלחץ ב-${f('a/v²')}) ו-${f('b')} (נפח מודר מסיט את ${f('v')} אל ${f('v − b')}), ולחשב לחצים מתוך ${f('P = k_BT/(v − b) − a/v²')}.`,
+            },
+          },
+          {
+            id: 'OBJ-2.1-5',
+            text: {
+              en: 'Derive the critical point (v_c, T_c, P_c) = (3b, 8a/(27k_Bb), a/(27b²)) from ∂P/∂v = 0 and ∂²P/∂v² = 0 on the critical isotherm, and explain why no pressure liquefies a gas above T_c.',
+              he: `לגזור את הנקודה הקריטית ${f('(v_c, T_c, P_c) = (3b, 8a/(27k_Bb), a/(27b²))')} מתוך ${f('∂P/∂v = 0')} ו-${f('∂²P/∂v² = 0')} על האיזותרמה הקריטית, ולהסביר מדוע שום לחץ אינו מנזל גז מעל ${f('T_c')}.`,
+            },
+          },
+          {
+            id: 'OBJ-2.1-6',
+            text: {
+              en: 'Rewrite the van der Waals equation in reduced variables P_r = P/P_c, v_r = v/v_c, T_r = T/T_c to obtain the parameter-free law of corresponding states, and use the compressibility factor Z = Pv/(k_BT) to quantify how far a real gas is from ideal.',
+              he: `לכתוב מחדש את משוואת ואן דר ואלס במשתנים מצומצמים ${f('P_r = P/P_c, v_r = v/v_c, T_r = T/T_c')} ולקבל את חוק המצבים המתאימים חסר הפרמטרים, ולהשתמש במקדם הדחיסות ${f('Z = Pv/(k_BT)')} כדי לכמת את מרחקו של גז ממשי מאידיאליות.`,
+            },
+          },
+        ],
+      },
+    ],
+  },
   planned(3, 'statistical', 'Probability and emergence', 'הסתברות והתהוות'),
   {
     n: 4,
