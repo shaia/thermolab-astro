@@ -1,0 +1,7 @@
+---
+/** The relaxation at three system sizes for lesson MDX: <Spread figure={RelaxationScale} figureProps={{ base: 20, factor: 10, tasks: ['scatter-shrinks'] }}>. */
+import RelaxationScale, { type RelaxationScaleProps } from './RelaxationScale';
+type Props = RelaxationScaleProps;
+---
+
+<RelaxationScale client:visible {...Astro.props} />
