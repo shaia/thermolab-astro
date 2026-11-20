@@ -1,0 +1,612 @@
+---
+lang: en
+id: '0.1'
+chapter: 0
+order: 1
+title: How many makes a law
+subtitle: One die is lawless, a thousand dice are a law; and the tools, units, derivatives, differential forms and conventions, that the rest of the course leans on
+minutes: 120
+objectives:
+  - id: OBJ-0.1-1
+    text: Explain how predictable aggregate behaviour emerges from unpredictable individual events, using the average of many independent random quantities.
+  - id: OBJ-0.1-2
+    text: Compute the mean and variance of a discrete random variable, and of the sum and average of N independent copies of it.
+  - id: OBJ-0.1-3
+    text: 'Derive and apply the N^(-1/2) law: the relative scatter of an average falls as N^(-1/2) while the absolute scatter of a sum grows as N^(1/2).'
+  - id: OBJ-0.1-4
+    text: Check a formula by dimensional analysis in SI units, and state the unit conventions this course uses.
+  - id: OBJ-0.1-5
+    text: Compute partial derivatives in held-variable notation, form a total differential, and evaluate the line integral of a differential form along a path.
+  - id: OBJ-0.1-6
+    text: Decide whether a differential form is exact using the mixed-partials criterion, and exhibit an inexact form whose integral depends on the path.
+  - id: OBJ-0.1-7
+    text: 'State the conventions this course runs on: the sign of work in the first law, the meaning of the inexact differential, and what the epistemic labels and model specifications promise.'
+prerequisites: []
+figures: [fig-0-1a, fig-0-1b, fig-0-1c]
+---
+
+import DiceAverage from '~/sims/DiceAverage.astro';
+import DiceSpread from '~/sims/DiceSpread.astro';
+import FormPaths from '~/sims/FormPaths.astro';
+import Lab from '~/components/Lab.astro';
+import LessonLink from '~/components/LessonLink.astro';
+
+<Spread
+  fig="fig-0-1a"
+  n="0.1a"
+  caption="Fair dice rolled live, each run from its own seed. In the average view: the average of each run's first $n$ rolls against $n$, on a logarithmic axis, with the line $3.5$ and, optionally, the envelope $3.5 \pm \sigma/\sqrt{n}$, where $\sigma = \sqrt{35/12} \approx 1.708$ is the standard deviation of one roll. In the excess view: the same runs as the running sum minus $3.5\,n$, with the envelope $\pm\sigma\sqrt{n}$. The readout gives $n$ and each run's current average, or excess. The button rolls every run again with new seeds."
+  figure={DiceAverage}
+  figureProps={{ runs: 5, rolls: 1000, view: 'average', envelope: true, tasks: ['converge', 'envelope', 'excess', 'many-runs'] }}
+>
+
+<Hook title="One die is lawless, a thousand dice are a law">
+
+Roll one fair <Term id="die">die</Term>. No theory in physics will tell you what comes up. Newtonian mechanics governs the tumble completely, and it is no use to you: the outcome depends on the throw so sensitively that predicting it would take initial conditions known to a precision nobody can reach. The single roll is, for every practical purpose, lawless.
+
+Now roll a thousand dice and average them. You get $3.50$, give or take about $0.05$. Do it again: $3.50$ again, within about the same margin. Do it in another room, with other dice, next year: still $3.50$. Roll a million and the answer is $3.500$ to within about $0.002$, close enough to calibrate an instrument against.
+
+Nothing about any one die changed. Each is exactly as unpredictable as before, yet a number built entirely out of unpredictable things has become reproducible enough to be treated as a *property of the collection* rather than an accident of the throw. That is the question this whole course answers: **how does predictable macroscopic behaviour emerge from uncertain microscopic behaviour?** Dice are its smallest honest instance. A gas is the same question with $10^{23}$ molecules instead of a thousand dice, and with momentum instead of a face value.
+
+This lesson has a second job. Thermal physics leans on four skills from its first week: probability, units, derivatives and conventions. The later parts of the lesson are the toolkit for the other three, kept here as a reference the rest of the course points back to. Work through them now, and you will know which one to spend a weekend on.
+
+</Hook>
+
+<Predict
+  id="pred-0-1"
+  prompt="You average 100 fair dice, and then 400. The typical distance of the average from 3.5 halves. What happens to the typical distance of the sum of the dice from its expected value (350, then 1400)?"
+  choices={[
+    'It halves too: adding dice suppresses the randomness.',
+    'It stays the same.',
+    'It doubles.',
+    'It quadruples, in proportion to the number of dice.',
+  ]}
+  answer={2}
+>
+
+Check it in figure 0.1a's excess view, after the first experiments below, and then in figure 0.1b.
+
+</Predict>
+
+<Explore title="Roll, and watch">
+
+<Step fig="fig-0-1a" set={{ runs: 1, rolls: 1000, view: 'average', envelope: false }} id="converge">
+
+Figure 0.1a rolls one die a thousand times and plots the average of the rolls so far. The axis of $n$ is logarithmic, so the first ten rolls take as much room as the last nine hundred. At the start the average swings wildly: after one roll it is whatever the die showed, anything from $1$ to $6$. Then it creeps onto the line at $3.5$ and stays near it. Nothing was smoothed or corrected: each point is the sum of the rolls so far, divided by how many there were.
+
+</Step>
+
+<Step fig="fig-0-1a" set={{ runs: 10, rolls: 1000, view: 'average', envelope: false }} id="many-runs">
+
+Ten runs, each from its own <Term id="random-seed">seed</Term>. Every one starts as jagged as the first, each in its own way, and every one ends near $3.5$. At a thousand rolls they sit within about $\pm 0.05$ of it: the spread of the average of a thousand rolls, measured over $2000$ runs and eight seeds, is $0.0537 \pm 0.0003$. Press "roll again with new seeds" a few times. The paths change completely; the destination does not.
+
+</Step>
+
+<Step fig="fig-0-1a" set={{ runs: 10, rolls: 100000, view: 'average', envelope: true }} id="envelope">
+
+Now a hundred thousand rolls, with the envelope $3.5 \pm \sigma/\sqrt{n}$ drawn in. The envelope is not fitted to the runs: it is computed from one die, below. At every $n$ about two runs in three are inside it (measured: $69\%$ at $n = 100$ and at $1000$, $68\%$ at $10^5$), and it narrows tenfold for every hundredfold more rolls, to $\pm 0.0054$ at the end. That is the shape of the law this lesson derives.
+
+</Step>
+
+<Lab notebook="00-orientation" />
+
+</Explore>
+
+<Explain title="One die, exactly" id="one-die">
+
+<Step fig="fig-0-1a" set={{ runs: 1, rolls: 1000, view: 'average', envelope: true }}>
+
+**The vocabulary.** A <Term id="random-variable">random variable</Term> $X$ takes the value $x_k$ with probability $p_k$, where $\sum_k p_k = 1$. Its <Term id="expectation">mean</Term>, or expectation, and its <Term id="variance">variance</Term> are
+
+<Formula tex="\mu = \langle X \rangle = \sum_k p_k x_k \qquad \sigma^2 = \big\langle (X - \mu)^2 \big\rangle = \langle X^2 \rangle - \mu^2" label="Mean and variance of a discrete random variable" />
+
+The <Term id="standard-deviation">standard deviation</Term> $\sigma$ is the square root of the variance. It carries the units of $X$ itself, and it measures how far from the mean $X$ typically lands.
+
+**One fair die.** Each face has $p_k = 1/6$, so
+
+$$
+\mu_1 = \frac{1 + 2 + 3 + 4 + 5 + 6}{6} = \frac{7}{2}, \qquad \langle X^2 \rangle = \frac{1 + 4 + 9 + 16 + 25 + 36}{6} = \frac{91}{6}, \qquad \sigma_1^2 = \frac{91}{6} - \frac{49}{4} = \frac{35}{12}
+$$
+
+So $\mu_1 = 3.5$, $\sigma_1^2 \approx 2.917$ and $\sigma_1 \approx 1.708$. No approximation anywhere: these are the exact properties of one die, and $\sigma_1$ is the $\sigma$ of the figure's envelope.
+
+</Step>
+
+<Step fig="fig-0-1a" set={{ runs: 10, rolls: 1000, view: 'average', envelope: true }}>
+
+**Independence.** Two random variables are <Term id="independence">independent</Term> when every joint probability factorizes, $P(X = x,\, Y = y) = P(X = x)\,P(Y = y)$: knowing one tells you nothing about the other. Two dice thrown separately are independent; a die and the same die read twice are not. Independence implies $\langle XY \rangle = \langle X \rangle \langle Y \rangle$, which is all the derivation below uses. The converse fails: if $X$ is $-1$, $0$ or $1$ with equal chances and $Y = X^2$, then $\langle XY \rangle = \langle X^3 \rangle = 0 = \langle X \rangle\langle Y \rangle$, yet $Y$ is fixed by $X$.
+
+</Step>
+
+</Explain>
+
+<Explain title="Dilution, not compensation" id="mechanism">
+
+<Step fig="fig-0-1a" set={{ runs: 5, rolls: 100000, view: 'excess', envelope: true }} id="dilution">
+
+**Why does the average settle?** The tempting answer is that the dice compensate: a run of high rolls is later cancelled by a run of low ones. That can be tested. Roll $40\,000$ runs and keep the ones whose first ten rolls averaged above $4.5$, about $2.5\%$ of them. Their opening average is $4.74$. If the dice compensated, the rolls that follow would have to average below $3.5$. They do not: over the next sixty rolls the hot runs average $3.499 \pm 0.001$ ($64$ batches of $40\,000$ runs), exactly what every other run does. The dice have no memory.
+
+So the opening excess, $10 \times (4.74 - 3.5) = 12.4$ above the expected sum, is never paid back. Switch the figure to its excess view, the running sum minus $3.5\,n$: no run returns to zero and stays there. Each one wanders, and its typical distance from zero grows like $\sigma_1\sqrt{n}$, the widening envelope: $54$ after a thousand rolls, $540$ after a hundred thousand. The sum does not settle at all. The *average* settles because the excess, whatever it is, is divided by $n$: after a thousand rolls the hot runs' average is $3.5 + 12.4/1000 = 3.512$, and it was never corrected, only diluted.
+
+**Your prediction gets its answer here.** The sum of $N$ dice strays from its expected value by about $\sigma_1\sqrt{N}$: four times the dice, twice the distance, $17$ for $100$ dice and $34$ for $400$. It is the average that halves. Figure 0.1b measures both.
+
+</Step>
+
+</Explain>
+
+</Spread>
+
+<Spread
+  fig="fig-0-1b"
+  n="0.1b"
+  caption="An experiment, averaging (or summing) $N$ fair dice, repeated many times, computed live. Left: the histogram of the results, with the measured standard deviation and the predicted one, $\sigma_1/\sqrt{N}$ for the average or $\sigma_1\sqrt{N}$ for the sum. Right, on logarithmic axes: the measured relative spread of the average (or the absolute spread of the sum) at $N = 1$, $4$, $16$, $64$, $256$, $1024$ and $4096$, against the line $N^{-1/2}$ (or $N^{1/2}$), with the current $N$ marked. The readout gives $N$, the measured and predicted spreads, and the exponent fitted to the right panel."
+  figure={DiceSpread}
+  figureProps={{ n: 100, samples: 2000, view: 'average', tasks: ['quadruple', 'sum-grows', 'fit'] }}
+>
+
+<Explain title="Means add; variances add when independent" id="variance-algebra">
+
+<Step fig="fig-0-1b" set={{ n: 100, samples: 2000, view: 'average' }} id="variances-add">
+
+**The one property that does all the work.** For any two random variables, means add: $\langle X + Y \rangle = \langle X \rangle + \langle Y \rangle$. Expanding the definition of the variance,
+
+$$
+\operatorname{Var}(X + Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\big(\langle XY \rangle - \langle X \rangle\langle Y \rangle\big)
+$$
+
+The bracket is the <Term id="covariance">covariance</Term>. It vanishes for independent variables, and then
+
+<Formula tex="\operatorname{Var}(X + Y) = \operatorname{Var}(X) + \operatorname{Var}(Y)" label="Variances of independent random variables add" />
+
+Repeated, this extends to any number of mutually independent terms. Notice what the proof did not use: nothing about dice, six faces, or the shape of the distribution; only that each term has a finite variance and that the covariances vanish. That generality is why the same three lines will do the work when the random quantities are molecular velocities, and independence is exactly what fails in the systems where thermal physics gets hard.
+
+</Step>
+
+<Step fig="fig-0-1b" set={{ n: 100, samples: 2000, view: 'average' }} id="law">
+
+**The consequence.** Let $S_N = X_1 + \dots + X_N$ be the sum of $N$ independent dice and $A_N = S_N/N$ their average. Means add, so $\langle S_N \rangle = N\mu_1$ and $\langle A_N \rangle = \mu_1$. Variances add, so $\operatorname{Var}(S_N) = N\sigma_1^2$; and dividing a quantity by $N$ divides its variance by $N^2$, so $\operatorname{Var}(A_N) = \sigma_1^2/N$:
+
+<Formula tex="\sigma_{S_N} = \sigma_1 \sqrt{N} \qquad \sigma_{A_N} = \frac{\sigma_1}{\sqrt{N}}" label="The spread of the sum, and of the average, of N independent copies" />
+
+Read the two together: they point in opposite directions. The sum gets *noisier* in absolute terms as $N$ grows; the average gets *steadier*. Both come from the same $N\sigma_1^2$. Figure 0.1b repeats "average a hundred dice" two thousand times: the histogram's width is the reproducibility of one experiment, $\sigma_1/\sqrt{100} = 0.171$.
+
+</Step>
+
+<Step fig="fig-0-1b" set={{ n: 400, samples: 2000, view: 'average' }} id="quadruple">
+
+**Four times the dice.** With $400$ dice the histogram is half as wide, $0.085$: not a quarter. The *variance* of the average falls as $1/N$; the spread is its square root, and falls as $N^{-1/2}$. A hundred times the dice divide the spread by ten.
+
+</Step>
+
+<Step fig="fig-0-1b" set={{ n: 400, samples: 2000, view: 'sum' }} id="sum-grows">
+
+**The same dice, read as a sum.** The histogram of the sums of $400$ dice is centred on $1400$, and its spread is $\sigma_1\sqrt{400} = 34.2$, twice the $17.1$ of a hundred dice. On the right, the absolute spread of the sum climbs as $N^{1/2}$. The sum becomes less predictable in absolute terms at the same time as the average becomes more predictable: they are different questions about the same data.
+
+</Step>
+
+<Step fig="fig-0-1b" set={{ n: 4096, samples: 2000, view: 'average' }} id="relative">
+
+**Why the honest statement is a ratio.** A spread carries the units of whatever was measured, so on its own it says nothing about steadiness: $0.05$ is enormous for a quantity of size $0.01$ and invisible for one of size $10^6$. The number that means something is the dimensionless ratio
+
+<Formula tex="\frac{\sigma_{A_N}}{\mu_1} = \frac{\sigma_1}{\mu_1}\,N^{-1/2} \qquad \frac{\sigma_1}{\mu_1} = \frac{\sqrt{35/12}}{7/2} \approx 0.488" label="The N^(-1/2) law, with its coefficient for a fair die" />
+
+For $100$ dice it is $4.9\%$; for $10^4$, $0.49\%$; for $10^{23}$, $1.5 \times 10^{-12}$. That is why a gas has a pressure and a single die does not have an average. The same sum of independent quantities comes back three times: module 3 asks what *shape* the distribution of the average takes (the central limit theorem), <LessonLink id="4.1" anchor="mole">module 4</LessonLink> makes the quantities molecular velocities and the average a pressure, and module 8 counts microstates, whose peak narrows as $N^{-1/2}$.
+
+**From typical to guaranteed.** The law so far says how far the average *typically* strays. Chebyshev's inequality turns that into a guarantee: for every $\varepsilon > 0$,
+
+$$
+P\big(|A_N - \mu_1| \ge \varepsilon\big) \le \frac{\sigma_1^2}{N\varepsilon^2}
+$$
+
+which goes to zero as $N \to \infty$: the weak <Term id="law-of-large-numbers">law of large numbers</Term>. It is a loose bound (for a thousand dice and $\varepsilon = 0.1$ it allows $0.29$, where the true chance is $0.065$), but it needs nothing beyond a finite variance.
+
+</Step>
+
+<Step fig="fig-0-1b" set={{ n: 100, samples: 2000, view: 'average' }} id="fit">
+
+**Measure the law; do not assume it.** The right panel measures the relative spread at seven values of $N$ and fits a straight line on the logarithmic axes. Over sixteen seeds, the fitted exponent is $-0.501$, scattering by $0.002$ from seed to seed; for the sum it is $+0.500$, scattering by $0.001$. A slope alone is weak evidence, since many wrong models give something near $-\tfrac12$, so check the height too: the measured spread times $\sqrt N$ comes back as $0.488 \pm 0.002$, the coefficient $\sigma_1/\mu_1$. Press "draw new samples" and watch which digits of the fit survive a change of seed.
+
+</Step>
+
+</Explain>
+
+<Explain title="What a computation can and cannot establish" id="honesty">
+
+<Step fig="fig-0-1b" set={{ n: 100, samples: 2000, view: 'average' }} id="epistemic-labels">
+
+**What kind of claim is this?** Thermal physics mixes exact mathematics, empirical laws, modelling choices and numerical evidence, often in one paragraph, and blurring them is how a student comes to believe that a simulation proved an identity. This course labels its claims with one of seven <Term id="epistemic-label">epistemic labels</Term>, here each with an example from this lesson or the next ones:
+
+- A **definition** names something; it is useful or useless, never true or false: *the variance is $\langle (X - \mu)^2 \rangle$.*
+- An **empirical law** summarizes measurement, could have come out otherwise, and holds where it was tested: *at fixed volume, the pressure of a dilute gas is proportional to its absolute temperature.*
+- A **theorem** follows by mathematics from stated premises: *variances of independent random variables add.*
+- A **model assumption** is a deliberate simplification: *every face of a die is equally likely.*
+- An **approximation** is a controlled error with a range of validity: *Stirling's $\ln N! \approx N\ln N - N$, whose error, about $\tfrac12\ln(2\pi N)$, is negligible beside $N\ln N$ when $N$ is large.*
+- A **numerical observation** is what a computation showed, evidence and not proof: *the fitted exponent was $-0.501$, with a seed-to-seed scatter of $0.002$.*
+- An **open question** marks something unsettled, or a place where the course is deliberately silent: *whether the arrow of time is explained by the initial state of the universe.*
+
+The figure's exponent is a numerical observation about a model; the $N^{-1/2}$ law is a theorem. The first is evidence that the second was implemented correctly. It is not why the second is true.
+
+</Step>
+
+<Step fig="fig-0-1b" set={{ n: 100, samples: 2000, view: 'sum' }} id="model-spec">
+
+**Model specifications.** Every simulation in the course states what it models in a <Term id="model-specification">model specification</Term> of seven fields, always in the same order. For the dice:
+
+- **System:** $N$ dice, each showing one of six equally likely faces; the observable is their sum or their average.
+- **Dynamics:** none. Each draw is independent of every other, with no memory and nothing evolving in time.
+- **Boundary:** trivially closed; $N$ is fixed for one experiment, and nothing is exchanged.
+- **Ensemble:** every face equally probable, by assumption rather than by proof.
+- **Ignored:** all the physics of real dice: the tumble, the bounce, pip asymmetry, air drag, and the deterministic chaos that is the real reason a throw looks random.
+- **Valid when:** the randomness is well described by independent uniform draws.
+- **Failure modes:** correlated draws, loaded dice, and any question about a *single* roll beyond its distribution.
+
+Two fields do unusual work here. *Dynamics: none* means that whatever makes the average settle cannot be a dynamical mechanism: there is none. And *Ensemble* records a postulate, not a fact; module 8 makes the same kind of postulate about the microstates of a gas. The fields students skip are the two worth reading: **Ignored** says where the model's answers will be wrong, and **Failure modes** where it stops being a description at all.
+
+**Simulation never proves.** Derivations establish; simulations illustrate and check; experiments decide whether a model describes the world. A pseudo-random generator makes its draws independent by construction, so these runs test our algebra, not our assumption. Whether a real source of randomness is independent is a question about that source, which no simulation can settle: real dice are slightly loaded, and molecules in a dense gas are genuinely correlated. Independence is where this chain of reasoning is bolted to the world, and it is the joint to check first when a prediction fails.
+
+</Step>
+
+</Explain>
+
+</Spread>
+
+<Spread
+  fig="fig-0-1c"
+  n="0.1c"
+  caption="A differential form $M\,\mathrm{d}x + N\,\mathrm{d}y$ in the plane, drawn as faint arrows $(M, N)$, and its integral from $A = (1, 1)$ to $B = (2, 2)$ along three paths: $a$, along $x$ first and then $y$; $b$, along $y$ first and then $x$; $c$, the straight line; or around the loop that goes out along $a$ and back along $b$. The running integral is traced along the path. The forms: $y\,\mathrm{d}x + x\,\mathrm{d}y$, which is exact; $y\,\mathrm{d}x$, which is not; the heat taken in by a monatomic ideal gas on the $(V, T)$ plane, in units with $Nk_B = 1$; and that heat divided by $T$. The readout gives the integral along each path drawn, and the mixed partials $\partial M/\partial y$ and $\partial N/\partial x$ at a point, with the verdict exact or not exact."
+  figure={FormPaths}
+  figureProps={{ form: 'heat', path: 'a', tasks: ['two-routes', 'mixed-partials', 'loop', 'integrating-factor'] }}
+>
+
+<Explain title="Units and dimensions" id="toolkit-units">
+
+<Step fig="fig-0-1c" set={{ form: 'heat', path: 'a' }} id="dimensions">
+
+**Dimensions.** Every physical quantity is a product of powers of base dimensions; four matter here: length $\mathsf{L}$ (metre), mass $\mathsf{M}$ (kilogram), time $\mathsf{T}$ (second) and temperature $\Theta$ (kelvin). Energy is $\mathsf{M}\mathsf{L}^2\mathsf{T}^{-2}$, the joule; pressure, a force per area, is $\mathsf{M}\mathsf{L}^{-1}\mathsf{T}^{-2}$, the pascal. <Term id="dimensional-analysis">Dimensional analysis</Term> rests on two rules: only quantities of the same dimensions may be added or compared, and the argument of $\exp$, $\ln$ or $\sin$ must be a pure number. That is why $e^{-E/k_BT}$ has the form it does: $k_BT$ is there to make the exponent dimensionless.
+
+The figure shows a form from module 5: the heat a monatomic ideal gas takes in, $\tfrac32 Nk_B\,\mathrm{d}T + (Nk_BT/V)\,\mathrm{d}V$. Both terms must be energies, and they are: $Nk_B\,\mathrm{d}T$ is $(\text{J/K})\cdot\text{K}$, and $(Nk_BT/V)\,\mathrm{d}V$ is a pressure times a volume, $\text{Pa}\cdot\text{m}^3 = \text{J}$.
+
+**Reading a constant's units.** From $PV = Nk_BT$, with $N$ a pure count, $[k_B] = \text{Pa}\cdot\text{m}^3/\text{K} = \text{J/K}$: an energy per kelvin. **Checking a formula.** Of $\sqrt{3k_BT/m}$, $\sqrt{3k_BT/m^2}$ and $\sqrt{3k_BTm}$, only the first is a speed: $[k_BT/m] = \mathsf{L}^2\mathsf{T}^{-2}$. Ten seconds, and it catches a large share of all algebra errors.
+
+**Shared units are a hint, not an identity.** $\text{Pa} = \text{N/m}^2 = \text{N}\cdot\text{m}/\text{m}^3 = \text{J/m}^3$: pressure and energy density have the same dimensions. That hints that pressure is about energy, but it fixes no factor: a monatomic ideal gas has $P = \tfrac23 u$, where $u$ is its energy density, and isotropic radiation has $P = \tfrac13 u$. Dimensional analysis cannot produce a dimensionless factor; $\sqrt{k_BT/m}$, $\sqrt{2k_BT/m}$ and $\sqrt{3k_BT/m}$ pass it equally. Use it to *reject* formulas, never to derive them.
+
+</Step>
+
+<Step fig="fig-0-1c" set={{ form: 'heat', path: 'b' }} id="units">
+
+**The unit conventions of this course.**
+
+- **SI throughout:** metres, kilograms, seconds, kelvin. A problem quoting litres or atmospheres is converted before anything is computed.
+- **$k_B$ is always written.** Many advanced texts set $k_B = 1$ and measure temperature in energy units; that hides exactly the conversion a student is learning, so this course does not. Entropy is in $\text{J/K}$. (The figure draws in units with $Nk_B = 1$, as a figure may; every formula in the text keeps $k_B$.)
+- **$R = N_Ak_B$.** Chemistry's $PV = nRT$, with $n$ in moles, is this course's $PV = Nk_BT$, with $N$ a plain count of particles.
+- **Temperatures are absolute**, in kelvin, unless a difference is quoted.
+
+**Compare numbers as fractions.** Two numbers agree when their *relative* difference $|a - b|/|b|$ is small. Absolute differences mean nothing without a scale: molecular energies are around $10^{-21}\,\text{J}$, so a test of whether two of them differ by less than $10^{-12}\,\text{J}$ says "equal" whatever the physics did.
+
+</Step>
+
+</Explain>
+
+<Explain title="Derivatives that say what is held" id="toolkit-calculus">
+
+<Step fig="fig-0-1c" set={{ form: 'exact', path: 'a' }} id="partials">
+
+**Partial derivatives.** For a function of several variables, the <Term id="partial-derivative">partial derivative</Term> with respect to one of them is the ordinary derivative with the others held fixed. For $f(x, y) = x^2y$,
+
+$$
+\left(\frac{\partial f}{\partial x}\right)_y = 2xy \qquad \left(\frac{\partial f}{\partial y}\right)_x = x^2
+$$
+
+**The subscript is not decoration.** In thermodynamics $P$, $V$, $T$ and $N$ are tied together by an equation of state, so any one can be eliminated for the others, and "the derivative with respect to $V$" means different things depending on what is held. A monatomic ideal gas has $U = \tfrac32 Nk_BT$. At fixed temperature its energy does not depend on the volume at all, $(\partial U/\partial V)_T = 0$. At fixed pressure, $T = PV/Nk_B$, so $U = \tfrac32 PV$ and $(\partial U/\partial V)_P = \tfrac32 P$. Same function, same variable, two different derivatives: write the subscript every time.
+
+**Mixed partials commute.** For a function with continuous second derivatives, $\partial^2 f/\partial y\,\partial x = \partial^2 f/\partial x\,\partial y$; for $x^2y$ both are $2x$. These <Term id="mixed-partials">mixed partial derivatives</Term> become a machine for thermodynamic identities in module 10, and they are the exactness test below.
+
+</Step>
+
+<Step fig="fig-0-1c" set={{ form: 'exact', path: 'c' }} id="total-differential">
+
+**The total differential.** When both variables change, the first-order change of $f$ collects both responses, its <Term id="total-differential">total differential</Term>:
+
+<Formula tex="\mathrm{d}f = \left(\frac{\partial f}{\partial x}\right)_y \mathrm{d}x + \left(\frac{\partial f}{\partial y}\right)_x \mathrm{d}y" label="The total differential of f(x, y)" />
+
+For $f = x^2y$, $\mathrm{d}f = 2xy\,\mathrm{d}x + x^2\,\mathrm{d}y$. The form in the figure, $y\,\mathrm{d}x + x\,\mathrm{d}y$, is the total differential of $xy$.
+
+**Along a path, the partial and the total derivative differ.** Move along the line $y = x$. Substituting first, $f = x^3$, so $\mathrm{d}f/\mathrm{d}x = 3x^2$, which is $3$ at $x = 1$. But $(\partial f/\partial x)_y$ at $(1, 1)$ is $2xy = 2$. Both are right; they answer different questions. Dividing the total differential by $\mathrm{d}x$ shows where the gap comes from:
+
+$$
+\left.\frac{\mathrm{d}f}{\mathrm{d}x}\right|_{y = x} = \left(\frac{\partial f}{\partial x}\right)_y + \left(\frac{\partial f}{\partial y}\right)_x \frac{\mathrm{d}y}{\mathrm{d}x} = 2xy + x^2 = 3x^2
+$$
+
+The partial derivative ignores that $y$ changes too; the total derivative does not.
+
+</Step>
+
+</Explain>
+
+<Explain title="When the route matters" id="toolkit-forms">
+
+<Step fig="fig-0-1c" set={{ form: 'inexact', path: 'a' }} id="line-integral">
+
+**Line integrals.** An expression $\omega = M(x, y)\,\mathrm{d}x + N(x, y)\,\mathrm{d}y$ is a <Term id="differential-form">differential form</Term>. It is not a number; it becomes one when it is integrated along a path $C$, a <Term id="line-integral">line integral</Term>. Write the path as $(x(t), y(t))$, $t$ from $t_0$ to $t_1$, and substitute:
+
+<Formula tex="\int_C \omega = \int_{t_0}^{t_1} \left[ M\big(x(t), y(t)\big)\,\frac{\mathrm{d}x}{\mathrm{d}t} + N\big(x(t), y(t)\big)\,\frac{\mathrm{d}y}{\mathrm{d}t} \right] \mathrm{d}t" label="The line integral of a differential form along a parametrized path" />
+
+Take $\omega = y\,\mathrm{d}x$ from $A = (1, 1)$ to $B = (2, 2)$. Along path $a$, first $x$ runs from $1$ to $2$ at $y = 1$, giving $1$; then $x$ is fixed, so $\mathrm{d}x = 0$ and nothing is added. Along path $b$, $y$ rises first, adding nothing, and then $x$ runs from $1$ to $2$ at $y = 2$: the integral is $2$. Along the straight line $c$, $y = x$ and $\int_1^2 x\,\mathrm{d}x = 1.5$. Same start, same finish, three answers. Step through the paths in the figure.
+
+</Step>
+
+<Step fig="fig-0-1c" set={{ form: 'inexact', path: 'loop' }} id="exactness">
+
+**Exact and inexact.** A form is an <Term id="exact-differential">exact differential</Term> when it is the total differential of some function $f$, a potential: $M = (\partial f/\partial x)_y$ and $N = (\partial f/\partial y)_x$. Then the route stops mattering:
+
+$$
+\int_C \mathrm{d}f = f(B) - f(A), \qquad \oint \mathrm{d}f = 0
+$$
+
+for every path $C$ from $A$ to $B$ and every closed loop.
+
+On a region without holes, a form is exact exactly when its mixed partials agree, which is the statement that the mixed partials of $f$ commute:
+
+<Formula tex="\left(\frac{\partial M}{\partial y}\right)_x = \left(\frac{\partial N}{\partial x}\right)_y" label="The exactness test for M dx + N dy" />
+
+For $y\,\mathrm{d}x + x\,\mathrm{d}y$ both sides are $1$: it is exact, it is $\mathrm{d}(xy)$, and every path from $A$ to $B$ gives $2 \cdot 2 - 1 \cdot 1 = 3$. For $y\,\mathrm{d}x$, $\partial M/\partial y = 1$ but $\partial N/\partial x = 0$: no potential exists, and the paths disagree. The figure now runs the loop, out along $a$ and back along $b$: $1 - 2 = -1$, minus the area the loop encloses. The test decides all of this before any path is chosen.
+
+</Step>
+
+</Explain>
+
+<Explain title="The conventions this course runs on" id="conventions">
+
+<Step fig="fig-0-1c" set={{ form: 'heat', path: 'a' }} id="inexact-d">
+
+**Heat is not a function of the state.** Back to the heat form, on the $(V, T)$ plane, in units with $Nk_B = 1$: $\tfrac32\,\mathrm{d}T + (T/V)\,\mathrm{d}V$. Its mixed partials are $\partial(T/V)/\partial T = 1/V$ and $\partial(\tfrac32)/\partial V = 0$: it is not exact. Taking the gas from $(V, T) = (1, 1)$ to $(2, 2)$ takes in a heat of $1.5 + \ln 2 = 2.193$ along path $a$ (expand at $T = 1$, then heat), $1.5 + 2\ln 2 = 2.886$ along $b$ (heat, then expand at $T = 2$), and $2.5$ along the straight line. Same two states, three heats.
+
+So a system *has* an internal energy, a volume, a temperature: each is a <Term id="state-function">state function</Term>, and its change depends only on the endpoints. A system does not *have* a heat or a work: those are names for energy in transit, <Term id="path-function">path functions</Term>, and how much of each crosses depends on the route. The course marks the difference in the symbol. An exact differential is written with $\mathrm{d}$: $\mathrm{d}U$, $\mathrm{d}V$, $\mathrm{d}T$. A small amount of heat or work is an <Term id="inexact-differential">inexact differential</Term>, written with a $\delta$: $\dbar Q$, $\dbar W$. Writing $\mathrm{d}Q$ would assert that some function $Q$ of the state exists to be differentiated. None does.
+
+</Step>
+
+<Step fig="fig-0-1c" set={{ form: 'heat', path: 'loop' }} id="work-sign">
+
+**The sign of work.** The first law says the <Term id="internal-energy">internal energy</Term> of a system changes by whatever energy crosses its boundary. The arbitrary part, a <Term id="sign-convention">sign convention</Term>, is which direction of work counts as positive. This course always writes
+
+$$
+\mathrm{d}U = \dbar Q + \dbar W, \qquad \dbar W = -P\,\mathrm{d}V
+$$
+
+where $Q$ is the heat added to the system and $W$ the work done *on* it, the second equation holding for a quasistatic change. Everything that goes in adds to $U$, with no minus sign to remember. Many books count instead the work $W'$ done *by* the system, $W' = -W$, and write $\mathrm{d}U = \dbar Q - \dbar W'$; both are correct physics, and module 7's engines are the one place this course converts, in one marked block, and back. A compression has $\mathrm{d}V < 0$, so $W > 0$: you pushed the piston in, and energy went into the gas. An expansion has $W < 0$: the gas spent energy pushing on its surroundings.
+
+The figure runs the loop: out along $a$, back along $b$. The gas returns to its starting state, so $\Delta U = 0$, but the heat around the loop is $2.193 - 2.886 = -\ln 2 = -0.693$: the gas gave out heat. Where did that energy come from? From work: $W = -\oint P\,\mathrm{d}V = +\ln 2$. The loop expands the gas cold, at $T = 1$, and compresses it hot, at $T = 2$, which costs more work than the expansion returned. Positive $W$, negative $Q$, and they sum to zero, as the first law demands.
+
+</Step>
+
+<Step fig="fig-0-1c" set={{ form: 'entropy', path: 'loop' }} id="integrating-factor">
+
+**An integrating factor.** Divide the heat form by $T$:
+
+$$
+\frac{3}{2}\,\frac{\mathrm{d}T}{T} + \frac{\mathrm{d}V}{V} = \mathrm{d}\!\left(\frac32 \ln T + \ln V\right)
+$$
+
+The mixed partials are now both zero, and the form is exact: every path from $A$ to $B$ gives $\tfrac52\ln 2 = 1.733$, and the loop gives $0$. A function that turns an inexact form into an exact one is an <Term id="integrating-factor">integrating factor</Term>, and here it is $1/T$. This is not a curiosity: module 7 shows that $1/T$ is an integrating factor for the heat of *every* system taken through reversible changes, and the exact form it produces is the differential of the entropy. It is here so that, when it arrives, it arrives as mathematics you have already met.
+
+</Step>
+
+</Explain>
+
+</Spread>
+
+<Page>
+
+<Example id="ex-0-1-1" title="A fair die, a loaded die, and one die read twice">
+
+(a) Compute the mean and variance of one fair die from the definitions.
+
+(b) A die is loaded so that six comes up with probability $1/3$ and each other face with probability $2/15$. Compute its mean and variance.
+
+(c) Find $\operatorname{Var}(X + Y)$ for two fair dice thrown independently, and for $Y = X$, one die read twice.
+
+<Solution>
+
+**Given:** fair, $p_k = 1/6$ for $k = 1, \dots, 6$; loaded, $p_6 = 1/3$ and $p_k = 2/15$ for $k = 1, \dots, 5$ (they sum to $5 \cdot 2/15 + 1/3 = 1$).
+
+**General law:** $\mu = \sum_k p_kx_k$, $\sigma^2 = \sum_k p_kx_k^2 - \mu^2$; $\operatorname{Var}(X + Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X, Y)$, with $\operatorname{Cov}(X, X) = \operatorname{Var}(X)$.
+
+**Symbolic result:**
+
+$$
+\operatorname{Var}(X + Y) = 2\sigma_1^2 \qquad \operatorname{Var}(X + X) = \operatorname{Var}(2X) = 4\sigma_1^2
+$$
+
+the first for independent dice, the second for one die read twice.
+
+**Limit check:** load the die further, until six comes up every time: the mean goes to $6$ and the variance to $0$, as it must for a quantity that never varies. Between the two cases of (c), a covariance anywhere from $0$ to $\sigma_1^2$ moves the answer anywhere from $2\sigma_1^2$ to $4\sigma_1^2$.
+
+**Units:** a face is a pure number, so are $\mu$ and $\sigma^2$.
+
+**Substitution:** (a) $\mu_1 = 21/6 = 3.5$; $\langle X^2 \rangle = 91/6$; $\sigma_1^2 = 91/6 - 49/4 = 35/12 = 2.917$. (b) $\mu = (2/15)(1 + 2 + 3 + 4 + 5) + 6/3 = 2 + 2 = 4$; $\langle X^2 \rangle = (2/15)(55) + 36/3 = 7.333 + 12 = 19.333$; $\sigma^2 = 19.333 - 16 = 3.333$. (c) $2 \cdot 2.917 = 5.833$; $4 \cdot 2.917 = 11.667$.
+
+**Result:** (a) $\mu_1 = 3.5$, $\sigma_1^2 = 35/12 = 2.917$. (b) $\mu = 4$, $\sigma^2 = 10/3 = 3.333$: the load moved probability onto six, the face farthest from the old mean, so the spread grew. (c) $5.83$ for independent dice; $11.67$, twice that, for one die read twice. Variances add only when the covariance vanishes.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-0-1-2" title="Scatter bookkeeping">
+
+(a) You average $100$ fair dice. Give the mean and standard deviation of the result.
+
+(b) How many dice must you average for the standard deviation to fall to $0.001$?
+
+(c) For that many dice, what is the standard deviation of their *sum*, and how did it change from $N = 100$?
+
+<Solution>
+
+**Given:** $\mu_1 = 3.5$, $\sigma_1 = \sqrt{35/12} = 1.708$; target $\sigma_{A} = 0.001$.
+
+**General law:** $\sigma_{A_N} = \sigma_1/\sqrt N$ and $\sigma_{S_N} = \sigma_1\sqrt N$ for independent dice.
+
+**Symbolic result:**
+
+$$
+N = \left(\frac{\sigma_1}{\sigma_{A}}\right)^2 \qquad \sigma_{S_N} = \sigma_1\sqrt N = \frac{\sigma_1^2}{\sigma_{A}}
+$$
+
+**Limit check:** $N = 1$ gives back one die, $\sigma_{A_1} = \sigma_{S_1} = \sigma_1$. As $N \to \infty$ the average's spread goes to zero while the sum's grows without bound; relative to its own mean $N\mu_1$, the sum's spread is $\sigma_1/(\mu_1\sqrt N)$, the same as the average's.
+
+**Units:** faces are pure numbers; every quantity here is too.
+
+**Substitution:** (a) $1.708/10 = 0.171$. (b) $N = (1.708/0.001)^2 = 2.92 \times 10^6$. (c) $1.708 \times \sqrt{2.92 \times 10^6} = 2917$, against $1.708 \times 10 = 17.1$ at $N = 100$.
+
+**Result:** (a) $3.5 \pm 0.171$. (b) about three million dice, an impractical experiment to do by hand, which is why the laboratory uses a computer. (c) the sum's spread grew $171$-fold, to $2917$, while the average's shrank $171$-fold. The sum strays further in absolute terms; it strays less in proportion to its size, $2917/(1.02 \times 10^7) = 2.9 \times 10^{-4}$, the same fraction as the average.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-0-1-3" title="Dimensional detective">
+
+(a) Which of $\sqrt{3k_BT/m}$, $3k_BT/m$ and $\sqrt{3k_BTm}$ can be a molecular speed? Evaluate the one that can for nitrogen ($m = 28.0\,u$, $u = 1.661 \times 10^{-27}\,\text{kg}$) at $300\,\text{K}$, with $k_B = 1.381 \times 10^{-23}\,\text{J/K}$.
+
+(b) A calculation gives an energy of $6.214 \times 10^{-21}\,\text{J}$ where theory predicts $6.207 \times 10^{-21}\,\text{J}$. A student checks that they differ by less than $10^{-12}\,\text{J}$ and reports a perfect match. What is wrong, and what is the honest comparison?
+
+<Solution>
+
+**Given:** $[k_BT] = \mathsf{M}\mathsf{L}^2\mathsf{T}^{-2}$, $[m] = \mathsf{M}$; $T = 300\,\text{K}$, $m = 4.65 \times 10^{-26}\,\text{kg}$; $a = 6.214 \times 10^{-21}\,\text{J}$, $b = 6.207 \times 10^{-21}\,\text{J}$.
+
+**General law:** a speed has dimensions $\mathsf{L}\mathsf{T}^{-1}$; two numbers agree when $|a - b|/|b| \ll 1$.
+
+**Symbolic result:**
+
+$$
+\left[\frac{k_BT}{m}\right] = \mathsf{L}^2\mathsf{T}^{-2} \qquad \left[\sqrt{\frac{k_BT}{m}}\right] = \mathsf{L}\mathsf{T}^{-1} \qquad \left[\sqrt{k_BTm}\right] = \mathsf{M}\mathsf{L}\mathsf{T}^{-1}
+$$
+
+**Limit check:** $\sqrt{3k_BT/m}$ goes to zero as $T \to 0$ and as $m \to \infty$: a colder gas is slower, and so is a gas of heavier molecules at the same temperature, as module 4 shows. The other two fail before any limit: one is a speed squared, the other a momentum.
+
+**Units:** $\sqrt{(\text{J/K})\cdot\text{K}/\text{kg}} = \sqrt{\text{J/kg}} = \sqrt{\text{m}^2/\text{s}^2} = \text{m/s}$.
+
+**Substitution:** (a) $m = 28.0 \times 1.661 \times 10^{-27} = 4.65 \times 10^{-26}\,\text{kg}$; $\sqrt{3 \times 1.381 \times 10^{-23} \times 300/4.65 \times 10^{-26}} = 517\,\text{m/s}$. (b) $|a - b| = 7 \times 10^{-24}\,\text{J}$, and $|a - b|/b = 1.1 \times 10^{-3}$.
+
+**Result:** (a) only $\sqrt{3k_BT/m}$, which for nitrogen at room temperature is $517\,\text{m/s}$; the factor $3$ is physics, which dimensions cannot check. (b) any two molecular energies differ by less than $10^{-12}\,\text{J}$, so that test passes whatever the calculation did. As a fraction they differ by $0.11\%$: close, and whether it is close enough depends on the precision the calculation claimed.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-0-1-4" title="A small change in an ideal gas">
+
+A gas of $N = 1.00 \times 10^{22}$ molecules has $P = Nk_BT/V$, with $V = 1.00 \times 10^{-3}\,\text{m}^3$ and $T = 300\,\text{K}$. Its temperature rises by $3\,\text{K}$ while its volume falls by $1.0 \times 10^{-5}\,\text{m}^3$.
+
+(a) Estimate the change in pressure with the total differential, and compare it with the exact change.
+
+(b) Repeat with the volume *rising* by $1.0 \times 10^{-5}\,\text{m}^3$.
+
+<Solution>
+
+**Given:** $Nk_B = 1.00 \times 10^{22} \times 1.381 \times 10^{-23} = 0.1381\,\text{J/K}$; $\mathrm{d}T = 3\,\text{K}$; $\mathrm{d}V = \mp 1.0 \times 10^{-5}\,\text{m}^3$.
+
+**General law:** $\mathrm{d}P = (\partial P/\partial T)_V\,\mathrm{d}T + (\partial P/\partial V)_T\,\mathrm{d}V$.
+
+**Symbolic result:**
+
+$$
+\left(\frac{\partial P}{\partial T}\right)_V = \frac{Nk_B}{V} \qquad \left(\frac{\partial P}{\partial V}\right)_T = -\frac{Nk_BT}{V^2} \qquad \mathrm{d}P = P\left(\frac{\mathrm{d}T}{T} - \frac{\mathrm{d}V}{V}\right)
+$$
+
+**Limit check:** at fixed volume $P$ is linear in $T$, so with $\mathrm{d}V = 0$ the estimate is exact. As both changes shrink, the error of the estimate shrinks faster than the estimate itself: it comes from products of the small changes, second order, while the estimate is first order.
+
+**Units:** $(\text{J/K})/\text{m}^3 \cdot \text{K} = \text{J/m}^3 = \text{Pa}$, and $(\text{J}/\text{m}^6)\cdot\text{m}^3 = \text{Pa}$.
+
+**Substitution:** $P = 0.1381 \times 300/10^{-3} = 4.143 \times 10^4\,\text{Pa}$; $(\partial P/\partial T)_V = 138.1\,\text{Pa/K}$; $(\partial P/\partial V)_T = -4.143 \times 10^7\,\text{Pa/m}^3$. (a) $\mathrm{d}P = 138.1 \times 3 + 4.143 \times 10^7 \times 10^{-5} = 414.3 + 414.3 = 828.6\,\text{Pa}$. Exactly, $0.1381 \times 303/(0.99 \times 10^{-3}) - 41\,430 = 42\,267 - 41\,430 = 837\,\text{Pa}$. (b) $414.3 - 414.3 = 0$; exactly, $T/V = 303/1.01 \times 10^{-3} = 300/10^{-3}$, unchanged.
+
+**Result:** (a) the estimate is $829\,\text{Pa}$ against the exact $837\,\text{Pa}$, $1.0\%$ low. (b) both give zero: a $1\%$ rise in $T$ and a $1\%$ rise in $V$ leave $T/V$, and so $P$, exactly unchanged. The two terms of the total differential are two separate responses, and here they cancel.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-0-1-5" title="Exact or not">
+
+Take $\omega_1 = y\,\mathrm{d}x + x\,\mathrm{d}y$ and $\omega_2 = y\,\mathrm{d}x$.
+
+(a) Apply the mixed-partials test to each, and find the potential of the exact one.
+
+(b) Integrate both from $(0, 0)$ to $(1, 1)$ along the straight line, and along the route across to $(1, 0)$ and then up.
+
+(c) Integrate $\omega_2$ counter-clockwise around the unit square with corners $(0, 0)$, $(1, 0)$, $(1, 1)$, $(0, 1)$.
+
+<Solution>
+
+**Given:** $\omega_1$: $M = y$, $N = x$; $\omega_2$: $M = y$, $N = 0$.
+
+**General law:** exact when $(\partial M/\partial y)_x = (\partial N/\partial x)_y$; an exact form $\mathrm{d}f$ integrates to $f(B) - f(A)$ along every path from $A$ to $B$, and to zero around every loop.
+
+**Symbolic result:**
+
+$$
+\omega_1 = \mathrm{d}(xy) \qquad \oint_{\square} \omega_2 = \oint_{\square} y\,\mathrm{d}x = -\int_0^1 1\,\mathrm{d}x = -1
+$$
+
+(on the square only the top edge, at $y = 1$, run from $x = 1$ back to $x = 0$, contributes).
+
+**Limit check:** shrink the square to side $s$: $\oint y\,\mathrm{d}x = -s^2$, minus the enclosed area, which goes to zero with the loop. For $\omega_1$ every loop of every size gives zero.
+
+**Units:** $x$ and $y$ are pure numbers here, and so are the integrals.
+
+**Substitution:** (a) $\omega_1$: $1 = 1$, exact, $f = xy$; $\omega_2$: $1 \ne 0$, inexact. (b) Straight line, $x = y = t$: $\omega_1$ gives $\int_0^1 2t\,\mathrm{d}t = 1$ and $\omega_2$ gives $\int_0^1 t\,\mathrm{d}t = \tfrac12$. Across then up: $\omega_1$ gives $0 + 1 = 1$; $\omega_2$ gives $0$ (on the first leg $y = 0$, on the second $\mathrm{d}x = 0$). (c) $-1$.
+
+**Result:** $\omega_1$ gives $1$ along both routes, $f(1,1) - f(0,0)$; $\omega_2$ gives $\tfrac12$ and $0$, and $-1$ around the square. The loop integral had to be non-zero: if $\omega_2$ were exact, every loop would give zero.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-0-1-6" title="Compressing a gas, in either convention">
+
+The gas of example 4, $N = 1.00 \times 10^{22}$ molecules at $300\,\text{K}$, is compressed slowly at constant temperature from $1.00 \times 10^{-3}\,\text{m}^3$ to $0.50 \times 10^{-3}\,\text{m}^3$. Find the work in this course's convention and in the other, and the heat. The internal energy of an ideal gas depends only on its temperature.
+
+<Solution>
+
+**Given:** $Nk_BT = 0.1381 \times 300 = 41.43\,\text{J}$; $V_1 = 1.00 \times 10^{-3}\,\text{m}^3$, $V_2 = 0.50 \times 10^{-3}\,\text{m}^3$; $T$ fixed, so $\Delta U = 0$.
+
+**General law:** the work done on the gas, $W = -\int_{V_1}^{V_2} P\,\mathrm{d}V$ with $P = Nk_BT/V$; the work done by it, $W' = -W$; the first law, $\Delta U = Q + W$.
+
+**Symbolic result:**
+
+$$
+W = -Nk_BT\int_{V_1}^{V_2}\frac{\mathrm{d}V}{V} = Nk_BT\ln\frac{V_1}{V_2} \qquad W' = -W \qquad Q = -W
+$$
+
+**Limit check:** $V_2 = V_1$ gives $W = 0$: no compression, no work. For an expansion, $V_2 > V_1$, the logarithm is negative and so is $W$: the gas does work on its surroundings. As $V_2 \to 0$, $W$ grows without bound, though long before that the gas stops being ideal.
+
+**Units:** $(\text{J/K})\cdot\text{K}$ times a pure logarithm: joules.
+
+**Substitution:** $W = 41.43 \times \ln 2 = 28.7\,\text{J}$; $W' = -28.7\,\text{J}$; $Q = -28.7\,\text{J}$.
+
+**Result:** $W = +28.7\,\text{J}$ in this course's convention: energy went into the gas. In the other convention the same process has $W' = -28.7\,\text{J}$; the physics is identical, only the bookkeeping differs. Since $U$ did not change, the gas gave the same $28.7\,\text{J}$ out as heat, $Q = -28.7\,\text{J}$. A different route between the same two states would exchange a different work and heat, with the same $\Delta U = 0$.
+
+</Solution>
+
+</Example>
+
+{/* TODO bank */}
+
+<Check
+  title="Questions on the lesson"
+  ids={[]}
+/>
+
+<Summary title="What we learned">
+
+- **One die is lawless; the average of many is a law.** Nothing about a die changes; the average of $N$ independent dice strays from $3.5$ by about $\sigma_1/\sqrt N$, which shrinks without limit.
+- **Mean and variance:** $\mu = \sum_k p_kx_k$, $\sigma^2 = \langle X^2\rangle - \mu^2$; one die has $\mu_1 = 7/2$ and $\sigma_1^2 = 35/12$. Means always add; variances add when the covariance vanishes, as it does for independent variables.
+- **The $N^{-1/2}$ law:** $\sigma_{S_N} = \sigma_1\sqrt N$ grows, $\sigma_{A_N} = \sigma_1/\sqrt N$ shrinks, and the honest measure is the ratio $\sigma_{A_N}/\mu_1 = (\sigma_1/\mu_1)N^{-1/2}$, about $10^{-12}$ for $10^{23}$ quantities.
+- **Dilution, not compensation:** dice have no memory; an early excess is never paid back, only divided by an ever larger $N$.
+- **Dimensions reject formulas; they never supply factors.** SI throughout, $k_B$ always written, numbers compared as fractions.
+- **Write what is held:** $(\partial f/\partial x)_y$; the total differential $\mathrm{d}f = (\partial f/\partial x)_y\mathrm{d}x + (\partial f/\partial y)_x\mathrm{d}y$; a form $M\,\mathrm{d}x + N\,\mathrm{d}y$ is exact when $\partial M/\partial y = \partial N/\partial x$, and only then is its integral independent of the path.
+- **The conventions:** $\mathrm{d}U = \dbar Q + \dbar W$, with $W$ the work done on the system; $\mathrm{d}$ for state functions, $\delta$ for heat and work; every claim labelled by its kind, every simulation by its model specification; and a simulation illustrates and checks, but never proves.
+
+<Revisit id="pred-0-1" />
+
+</Summary>
+
+</Page>

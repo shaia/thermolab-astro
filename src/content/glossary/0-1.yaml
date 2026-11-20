@@ -1,0 +1,147 @@
+# Terms lesson 0.1 introduces. Hebrew spellings, and the spellings rejected, follow ThermoLab's canonical glossary
+# (glossary/terms.yml) and its Hebrew module, math refresher and conventions page. Terms defined by later lessons
+# (fluctuation, internal energy, the ideal gas law: 4.1) are used here through <Term> of their definitions.
+- id: die
+  term: { en: die, he: קובייה }
+  definition:
+    en: A cube whose faces show 1 to 6. It is fair when every face comes up with probability $1/6$.
+    he: קובייה שעל ששת פניה המספרים 1 עד 6. היא הוגנת כאשר כל פן עולה בהסתברות $1/6$.
+  reject: ['קוביה']
+  lesson: '0.1'
+- id: random-variable
+  term: { en: random variable, he: משתנה מקרי }
+  definition:
+    en: A quantity that takes the value $x_k$ with probability $p_k$, where $\sum_k p_k = 1$; the face of a die is one.
+    he: גודל שמקבל את הערך $x_k$ בהסתברות $p_k$, כאשר $\sum_k p_k = 1$; הפאה של קובייה היא דוגמה.
+  lesson: '0.1'
+- id: expectation
+  term: { en: mean (expectation), he: תוחלת }
+  definition:
+    en: The probability-weighted average of a random variable, $\mu = \langle X\rangle = \sum_k p_k x_k$; $7/2$ for a fair die.
+    he: הממוצע של משתנה מקרי, משוקלל בהסתברויות, $\mu = \langle X\rangle = \sum_k p_k x_k$; $7/2$ בקובייה הוגנת.
+  lesson: '0.1'
+- id: variance
+  term: { en: variance, he: שונות }
+  definition:
+    en: The mean squared distance from the mean, $\sigma^2 = \langle (X - \mu)^2\rangle = \langle X^2\rangle - \mu^2$; $35/12$ for a fair die.
+    he: הממוצע של ריבוע המרחק מהתוחלת, $\sigma^2 = \langle (X - \mu)^2\rangle = \langle X^2\rangle - \mu^2$; $35/12$ בקובייה הוגנת.
+  lesson: '0.1'
+- id: standard-deviation
+  term: { en: standard deviation, he: סטיית תקן }
+  definition:
+    en: The square root of the variance, $\sigma$. It has the units of the quantity itself and measures its typical distance from the mean; $1.708$ for a fair die.
+    he: השורש הריבועי של השונות, $\sigma$. יש לה היחידות של הגודל עצמו, והיא מודדת את המרחק הטיפוסי שלו מהתוחלת; $1.708$ בקובייה הוגנת.
+  lesson: '0.1'
+- id: independence
+  term: { en: independence, he: אי-תלות }
+  definition:
+    en: Two random variables are independent when every joint probability factorizes, $P(X = x, Y = y) = P(X = x)\,P(Y = y)$; knowing one tells nothing about the other. It implies $\langle XY\rangle = \langle X\rangle\langle Y\rangle$, but not conversely.
+    he: שני משתנים מקריים בלתי תלויים כאשר כל הסתברות משותפת מתפרקת למכפלה, $P(X = x, Y = y) = P(X = x)\,P(Y = y)$; ידיעת האחד אינה מלמדת דבר על השני. מכאן נובע $\langle XY\rangle = \langle X\rangle\langle Y\rangle$, אבל לא להפך.
+  reject: ['עצמאות']
+  lesson: '0.1'
+- id: covariance
+  term: { en: covariance, he: שונות משותפת }
+  definition:
+    en: $\langle XY\rangle - \langle X\rangle\langle Y\rangle$, the term that keeps variances from adding. It is zero for independent variables.
+    he: $\langle XY\rangle - \langle X\rangle\langle Y\rangle$, האיבר שמונע מהשונויות להתחבר. הוא מתאפס עבור משתנים בלתי תלויים.
+  lesson: '0.1'
+- id: law-of-large-numbers
+  term: { en: law of large numbers, he: חוק המספרים הגדולים }
+  definition:
+    en: The average of $N$ independent copies of a random variable with finite variance approaches its mean as $N$ grows; the chance of missing it by more than $\varepsilon$ is at most $\sigma^2/(N\varepsilon^2)$.
+    he: הממוצע של $N$ עותקים בלתי תלויים של משתנה מקרי בעל שונות סופית מתקרב לתוחלת שלו ככל ש-$N$ גדל; הסיכוי להחטיא אותה ביותר מ-$\varepsilon$ הוא לכל היותר $\sigma^2/(N\varepsilon^2)$.
+  lesson: '0.1'
+- id: random-seed
+  term: { en: seed, he: זרע }
+  definition:
+    en: The number that starts a pseudo-random generator. The same seed gives the same sequence, so a run can be repeated exactly; a different seed gives an independent run.
+    he: המספר שמתחיל מחולל פסאודו-אקראי. אותו זרע נותן את אותה סדרה, כך שאפשר לחזור על הרצה בדיוק; זרע אחר נותן הרצה בלתי תלויה.
+  lesson: '0.1'
+- id: dimensional-analysis
+  term: { en: dimensional analysis, he: ניתוח ממדי }
+  definition:
+    en: Checking that both sides of an equation, and every term added, have the same dimensions, and that the argument of every exponential or logarithm is a pure number. It rejects wrong formulas; it cannot supply numerical factors.
+    he: בדיקה ששני אגפי משוואה, וכל איבר שמחברים, הם בעלי אותם ממדים, ושהארגומנט של כל אקספוננט או לוגריתם הוא מספר טהור. היא פוסלת נוסחאות שגויות; היא אינה יכולה לספק מקדמים מספריים.
+  reject: ['אנליזה ממדית']
+  lesson: '0.1'
+- id: partial-derivative
+  term: { en: partial derivative, he: נגזרת חלקית }
+  definition:
+    en: The derivative with respect to one variable while the others are held fixed, written with the held variables as a subscript, $(\partial f/\partial x)_y$.
+    he: הנגזרת לפי משתנה אחד כשהאחרים מוחזקים קבועים, ונכתבת עם המשתנים המוחזקים כאינדקס תחתון, $(\partial f/\partial x)_y$.
+  lesson: '0.1'
+- id: mixed-partials
+  term: { en: mixed partial derivatives, he: נגזרות מעורבות }
+  definition:
+    en: Second derivatives taken with respect to two different variables. For a function with continuous second derivatives the order does not matter, $\partial^2 f/\partial y\,\partial x = \partial^2 f/\partial x\,\partial y$.
+    he: נגזרות שניות לפי שני משתנים שונים. בפונקציה בעלת נגזרות שניות רציפות הסדר אינו משנה, $\partial^2 f/\partial y\,\partial x = \partial^2 f/\partial x\,\partial y$.
+  lesson: '0.1'
+- id: total-differential
+  term: { en: total differential, he: דיפרנציאל שלם }
+  definition:
+    en: The first-order change of a function when all its variables change, $\mathrm{d}f = (\partial f/\partial x)_y\,\mathrm{d}x + (\partial f/\partial y)_x\,\mathrm{d}y$.
+    he: השינוי מסדר ראשון של פונקציה כשכל המשתנים שלה משתנים, $\mathrm{d}f = (\partial f/\partial x)_y\,\mathrm{d}x + (\partial f/\partial y)_x\,\mathrm{d}y$.
+  reject: ['דיפרנציאל מלא']
+  lesson: '0.1'
+- id: differential-form
+  term: { en: differential form, he: תבנית דיפרנציאלית }
+  definition:
+    en: An expression $\omega = M(x,y)\,\mathrm{d}x + N(x,y)\,\mathrm{d}y$. It becomes a number only when it is integrated along a path.
+    he: ביטוי מהצורה $\omega = M(x,y)\,\mathrm{d}x + N(x,y)\,\mathrm{d}y$. הוא הופך למספר רק כשמחשבים את האינטגרל שלו לאורך מסלול.
+  lesson: '0.1'
+- id: line-integral
+  term: { en: line integral, he: אינטגרל קווי }
+  definition:
+    en: The integral of a differential form along a path, computed by writing the path as $(x(t), y(t))$ and integrating $M\,\dot x + N\,\dot y$ over $t$.
+    he: האינטגרל של תבנית דיפרנציאלית לאורך מסלול, שמחשבים אותו על ידי כתיבת המסלול כ-$(x(t), y(t))$ ואינטגרציה של $M\,\dot x + N\,\dot y$ על $t$.
+  lesson: '0.1'
+- id: exact-differential
+  term: { en: exact differential, he: דיפרנציאל מדויק }
+  definition:
+    en: A form that is the total differential of some function $f$. Its integral from $A$ to $B$ is $f(B) - f(A)$ along every path, and zero around every loop; on a simply connected region the test is $\partial M/\partial y = \partial N/\partial x$.
+    he: תבנית שהיא הדיפרנציאל השלם של פונקציה כלשהי $f$. האינטגרל שלה זהה לכל מסלול בין אותן נקודות קצה, ואפס סביב כל לולאה; בתחום פשוט קשר המבחן הוא $\partial M/\partial y = \partial N/\partial x$.
+  lesson: '0.1'
+- id: inexact-differential
+  term: { en: inexact differential, he: דיפרנציאל לא מדויק }
+  definition:
+    en: A small quantity, such as a little heat or work, that is not the differential of any function of the state; its integral depends on the path. Written with a δ, as in δQ.
+    he: גודל קטן, כמו מעט חום או עבודה, שאינו הדיפרנציאל של שום פונקציה של המצב; האינטגרל שלו תלוי במסלול. נכתב עם δ, כמו ב-δQ.
+  lesson: '0.1'
+- id: integrating-factor
+  term: { en: integrating factor, he: גורם אינטגרציה }
+  definition:
+    en: A function that turns an inexact form into an exact one when the form is multiplied by it. For the heat of a quasistatic ideal gas, $1/T$ is one.
+    he: פונקציה שהופכת תבנית לא מדויקת למדויקת כשמכפילים בה את התבנית. עבור החום של גז אידיאלי בתהליך כמו-סטטי, $1/T$ הוא גורם כזה.
+  lesson: '0.1'
+- id: state-function
+  term: { en: state function, he: פונקציית מצב }
+  definition:
+    en: A property of a system's state, such as $U$, $V$ or $T$; its change between two states does not depend on how the system got from one to the other.
+    he: תכונה של מצב המערכת, כמו $U$, $V$ או $T$; השינוי שלה בין שני מצבים אינו תלוי בדרך שבה המערכת עברה מאחד לשני.
+  reject: ['פונקצית מצב']
+  lesson: '0.1'
+- id: path-function
+  term: { en: path function, he: פונקציית מסלול }
+  definition:
+    en: A quantity, such as heat or work, that describes a transfer during a process and depends on the route taken, not only on its ends. A system has no heat or work to differentiate.
+    he: גודל, כמו חום או עבודה, שמתאר העברה במהלך תהליך ותלוי בדרך שנבחרה, לא רק בנקודות הקצה שלה. למערכת אין חום או עבודה שאפשר לגזור.
+  reject: ['פונקצית מסלול']
+  lesson: '0.1'
+- id: sign-convention
+  term: { en: sign convention, he: מוסכמת סימנים }
+  definition:
+    en: A choice of which direction counts as positive. This course writes the first law as $\mathrm{d}U = \dbar Q + \dbar W$, with heat added to and work done on the system both positive.
+    he: בחירה של הכיוון שנחשב חיובי. הקורס כותב את החוק הראשון כ-$\mathrm{d}U = \dbar Q + \dbar W$, כשחום שנוסף למערכת ועבודה שנעשית עליה חיוביים שניהם.
+  lesson: '0.1'
+- id: epistemic-label
+  term: { en: epistemic label, he: תווית אפיסטמית }
+  definition:
+    en: 'A tag saying what kind of claim a statement is: definition, empirical law, theorem, model assumption, approximation, numerical observation or open question.'
+    he: 'תג שאומר מאיזה סוג היא טענה: הגדרה, חוק אמפירי, משפט, הנחת מידול, קירוב, תצפית נומרית או שאלה פתוחה.'
+  lesson: '0.1'
+- id: model-specification
+  term: { en: model specification, he: מפרט מודל }
+  definition:
+    en: 'The seven fields every simulation in the course states, always in this order: system, dynamics, boundary, ensemble, ignored, valid when, failure modes.'
+    he: 'שבעת השדות שכל סימולציה בקורס מציינת, תמיד בסדר הזה: מערכת, דינמיקה, גבול, צבר, מוזנח, תקף כאשר, אופני כשל.'
+  lesson: '0.1'

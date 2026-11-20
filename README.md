@@ -10,7 +10,37 @@ figures in place of the rendered videos:
 - **15: phase transitions and the Ising model**, the second: three times larger, with Monte Carlo live
   figures, chosen to measure what a hard module costs. See [the second pilot](#the-second-pilot-module-15).
 
-The question it answers is what a full migration would cost; see [what the pilot measured](#what-the-pilot-measured).
+The question it answered is what a full migration would cost; see [what the pilot measured](#what-the-pilot-measured).
+After the two pilots the full migration was decided (November 2026). Modules are ported one PR at a
+time, in course order, by the process in [docs/porting-a-module.md](docs/porting-a-module.md).
+What the ports find wrong in ThermoLab is collected in [docs/thermolab-errata.md](docs/thermolab-errata.md).
+
+## Migration
+
+| Module | Lesson | Status |
+|---|---|---|
+| 00 Orientation: how many makes a law | 0.1 | in progress |
+| 01 Thermal equilibrium | 1.1 | |
+| 02 Equations of state | 2.1 | |
+| 03 Probability and emergence | 3.1 | |
+| 04 Pressure | 4.1 | done (pilot, #1, #3) |
+| 05 Work and thermodynamic paths | 5.1 | |
+| 06 Thermodynamic processes | 6.1 | |
+| 07 The second law and heat engines | 7.1 | |
+| 08 Entropy and multiplicity | 8.1 | |
+| 09 The fundamental relation | 9.1 | |
+| 10 Thermodynamic potentials | 10.1 | |
+| 11 Statistical ensembles | 11.1 | |
+| 12 Partition functions | 12.1 | |
+| 13 Chemical potential | 13.1 | |
+| 14 Phase coexistence | 14.1 | |
+| 15 Phase transitions and the Ising model | 15.1 | done (pilot, #4) |
+| 16 Thermal radiation and the heat capacity of solids | 16.1 | |
+| 17 Quantum gases | 17.1 | |
+| 18 Fluctuations and transport | 18.1 | |
+
+Module 00 also carries ThermoLab's mathematics refresher and conventions page, as the later
+spreads of lesson 0.1, so later modules can link to them.
 
 ## Run it
 

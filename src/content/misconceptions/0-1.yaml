@@ -1,0 +1,70 @@
+# Misconceptions lesson 0.1 is built to catch. MC-lln-compensation is ThermoLab's register entry for module 00
+# (assessment/misconceptions.yml: lln-compensation). The other three are new: each is the wrong answer a distractor of
+# ThermoLab's quiz already targets (Q-00-3, Q-00-1, Q-00-8), and the lesson refutes it at a step; the register had no entry.
+- id: MC-lln-compensation
+  title:
+    en: Later rolls make up for earlier ones
+    he: הטלות מאוחרות מפצות על מוקדמות
+  belief:
+    en: The average of many dice settles because a run of high rolls is later cancelled by a run of low ones.
+    he: הממוצע של קוביות רבות מתייצב כי רצף של הטלות גבוהות מתקזז אחר כך ברצף של נמוכות.
+  truth:
+    en: Dice have no memory. After a hot start the next rolls still average 3.5, and the early excess of the sum is never paid back; it stays, while the sum's random wander grows as √N. The average settles because that excess is divided by an ever larger N. Dilution, not compensation.
+    he: לקוביות אין זיכרון. אחרי פתיחה חמה ההטלות הבאות עדיין מתמצעות ל-⁦3.5⁩, והעודף המוקדם של הסכום לעולם אינו מוחזר; הוא נשאר, בזמן שהשוטטות האקראית של הסכום גדלה כמו ⁦√N⁩. הממוצע מתייצב כי העודף הזה מחולק ב-⁦N⁩ שהולך וגדל. דילול, לא פיצוי.
+  remedy:
+    lesson: '0.1'
+    anchor: dilution
+    label:
+      en: Follow the runs that started hot
+      he: עקבו אחרי ההרצות שהתחילו חמות
+
+- id: MC-sum-scatter-shrinks
+  title:
+    en: The sum steadies like the average
+    he: הסכום מתייצב כמו הממוצע
+  belief:
+    en: Adding more dice makes the scatter of their sum shrink too, because averaging suppresses randomness.
+    he: הוספת קוביות מקטינה גם את הפיזור של הסכום שלהן, כי מיצוע מדכא אקראיות.
+  truth:
+    en: Var(S_N) = Nσ², so the sum's absolute scatter grows as σ√N, doubling for four times the dice. Only after dividing by N does the scatter of the average fall, as σ/√N. Both come from the same N σ².
+    he: ⁦Var(S_N) = Nσ²⁩, ולכן הפיזור המוחלט של הסכום גדל כמו ⁦σ√N⁩, ומוכפל כשיש פי ארבעה קוביות. רק אחרי החלוקה ב-⁦N⁩ הפיזור של הממוצע קטן, כמו ⁦σ/√N⁩. שניהם נובעים מאותו ⁦Nσ²⁩.
+  remedy:
+    lesson: '0.1'
+    anchor: sum-grows
+    label:
+      en: Read the same dice as a sum
+      he: קראו את אותן קוביות כסכום
+
+- id: MC-scatter-one-over-n
+  title:
+    en: The scatter of an average falls as 1/N
+    he: הפיזור של ממוצע קטן כמו ⁦1/N⁩
+  belief:
+    en: Averaging N times as many dice makes the typical error N times smaller, so four times the dice quarter it.
+    he: מיצוע של פי ⁦N⁩ יותר קוביות מקטין את השגיאה הטיפוסית פי ⁦N⁩, ולכן פי ארבעה קוביות מקטינות אותה פי ארבעה.
+  truth:
+    en: The variance of the average falls as 1/N; the scatter is its square root and falls as N^(-1/2). Four times the dice halve it; a hundred times the dice divide it by ten.
+    he: השונות של הממוצע קטנה כמו ⁦1/N⁩; הפיזור הוא השורש שלה וקטן כמו ⁦N^(-1/2)⁩. פי ארבעה קוביות מחציות אותו; פי מאה קוביות מקטינות אותו פי עשרה.
+  remedy:
+    lesson: '0.1'
+    anchor: quadruple
+    label:
+      en: Quadruple the dice and measure
+      he: הכפילו פי ארבעה את הקוביות ומדדו
+
+- id: MC-work-sign-by-volume
+  title:
+    en: Compression work is negative because the volume shrinks
+    he: עבודת דחיסה שלילית כי הנפח קטן
+  belief:
+    en: When a gas is compressed, the work in the first law is negative, because the volume decreased.
+    he: כשגז נדחס, העבודה בחוק הראשון שלילית, כי הנפח קטן.
+  truth:
+    en: The sign follows the energy, not the volume. This course writes dU = δQ + δW with W the work done on the system, δW = −P dV; compression has dV < 0, so W > 0, and energy enters the gas.
+    he: הסימן הולך אחרי האנרגיה, לא אחרי הנפח. הקורס כותב ⁦dU = δQ + δW⁩ כאשר ⁦W⁩ היא העבודה שנעשית על המערכת, ⁦δW = −P dV⁩; בדחיסה ⁦dV < 0⁩, ולכן ⁦W > 0⁩, ואנרגיה נכנסת לגז.
+  remedy:
+    lesson: '0.1'
+    anchor: work-sign
+    label:
+      en: The sign of work, with a compression worked through
+      he: הסימן של העבודה, עם דחיסה פתורה

@@ -22,3 +22,22 @@ when it is.
 - Worked example 3's sixth iterate: 0.762, not 0.763.
 - The hook: bulk iron cooled in zero field breaks into domains and is not magnetized.
 - Peierls: the argument, made rigorous, does prove that the square lattice orders.
+
+## Module 00: orientation
+
+- Independence is defined as ⟨XY⟩ = ⟨X⟩⟨Y⟩, and the covariance is said to vanish "exactly when" X and Y
+  are independent, "and then — and only then —" do variances add. That is uncorrelatedness: independence
+  implies it, not conversely (X uniform on {−1, 0, 1}, Y = X²: Cov = 0, yet Y is fixed by X), and variances
+  add whenever the covariance vanishes. The lesson defines independence by factorized joint probabilities.
+- Math refresher: "(∂U/∂T)_V and (∂U/∂T)_P … are the heat capacities at constant volume and at constant
+  pressure". C_P is (∂H/∂T)_P; for a monatomic ideal gas (∂U/∂T)_P = (3/2)Nk_B = C_V, while C_P = (5/2)Nk_B.
+- Conventions, epistemic labels: Stirling's relative error does not fall as ln N / N. The error is
+  ½ ln(2πN), so the relative error is about 1/(2N): 8.9·10⁻³ at N = 100 (ln N / N = 4.6·10⁻²) and
+  6.1·10⁻⁷ at N = 10⁶ (ln N / N = 1.4·10⁻⁵).
+- Advanced section: the variance tied to a heat capacity, Var(E) = k_B T² C_V, is module 12's result
+  (12-partition-functions, objective 1), not module 18's.
+- Math refresher and orientation: energies in this course are "routinely around 10⁻¹⁸ J". Molecular
+  thermal energies are k_B T ≈ 4·10⁻²¹ J at 300 K, and the problem set's own example is 6.2·10⁻²¹ J.
+- Hebrew conventions page: its dice model specification drops "and the deterministic chaos that is the
+  actual reason a throw looks random" from *Ignored* and "beyond its distribution" from *Failure modes*;
+  the English page and both module pages have them.
