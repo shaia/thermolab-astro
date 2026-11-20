@@ -1,0 +1,74 @@
+# Terms lesson 3.1 introduces. Hebrew spellings, and the spellings rejected, follow ThermoLab's canonical glossary
+# (glossary/terms.yml). Expectation, variance, standard deviation, independence, covariance and the law of large
+# numbers are lesson 0.1's, and are used here through <Term> of their definitions.
+- id: random-walk
+  term: { en: random walk, he: הילוך אקראי }
+  definition:
+    en: A position built as a running sum of random steps, $x_t = s_1 + \dots + s_t$. With independent steps of mean $\mu_1$ and variance $\sigma_1^2$, its mean is $\mu_1 t$ and its spread $\sigma_1\sqrt t$.
+    he: מיקום שנבנה כסכום מצטבר של צעדים מקריים, $x_t = s_1 + \dots + s_t$. כשהצעדים בלתי תלויים, בעלי תוחלת $\mu_1$ ושונות $\sigma_1^2$, התוחלת שלו היא $\mu_1 t$ והפיזור שלו $\sigma_1\sqrt t$.
+  reject: ['הליכה אקראית']
+  lesson: '3.1'
+- id: ensemble
+  term: { en: ensemble, he: צבר }
+  definition:
+    en: Many independent copies of one system or experiment, prepared alike. Its histogram, mean and spread describe the distribution that each single copy is drawn from.
+    he: עותקים רבים ובלתי תלויים של מערכת אחת או של ניסוי אחד, שהוכנו באותו אופן. ההיסטוגרמה, התוחלת והפיזור שלו מתארים את ההתפלגות שממנה נלקח כל עותק בודד.
+  reject: ['אנסמבל']
+  lesson: '3.1'
+- id: standard-error
+  term: { en: standard error, he: שגיאת תקן }
+  definition:
+    en: The standard deviation of an estimated mean; for the mean of $N$ independent draws of standard deviation $\sigma$, it is $\sigma/\sqrt N$. It shrinks with more data; the standard deviation of the draws themselves does not.
+    he: סטיית התקן של תוחלת מוערכת; עבור הממוצע של $N$ הגרלות בלתי תלויות שסטיית התקן של כל אחת היא $\sigma$, היא $\sigma/\sqrt N$. היא קטנה ככל שיש יותר נתונים; סטיית התקן של ההגרלות עצמן אינה קטנה.
+  reject: ['שגיאה סטנדרטית']
+  lesson: '3.1'
+- id: binomial-distribution
+  term: { en: binomial distribution, he: התפלגות בינומית }
+  definition:
+    en: 'The probability of $k$ successes in $n$ independent trials, each succeeding with probability $p$: $P(k) = \binom{n}{k}p^k(1 - p)^{n - k}$, with mean $np$ and variance $np(1 - p)$.'
+    he: 'ההסתברות ל-$k$ הצלחות ב-$n$ ניסויים בלתי תלויים, שבכל אחד מהם ההצלחה היא בהסתברות $p$: $P(k) = \binom{n}{k}p^k(1 - p)^{n - k}$, עם תוחלת $np$ ושונות $np(1 - p)$.'
+  reject: ['התפלגות בינומיאלית']
+  lesson: '3.1'
+- id: binomial-coefficient
+  term: { en: binomial coefficient, he: מקדם בינומי }
+  definition:
+    en: $\binom{n}{k} = n!/[k!\,(n - k)!]$, the number of ways to choose $k$ of $n$ items; for a walk, the number of step sequences with $k$ of their $n$ steps to the right.
+    he: $\binom{n}{k} = n!/[k!\,(n - k)!]$, מספר הדרכים לבחור $k$ מתוך $n$ פריטים; בהילוך, מספר סדרות הצעדים שבהן $k$ מתוך $n$ הצעדים הם ימינה.
+  lesson: '3.1'
+- id: stirling-approximation
+  term: { en: Stirling's approximation, he: קירוב סטירלינג }
+  definition:
+    en: $\ln m! \approx m\ln m - m + \tfrac12\ln(2\pi m)$, with an error that falls as $1/(12m)$. Without its last term it is the form used when $m$ is enormous.
+    he: $\ln m! \approx m\ln m - m + \tfrac12\ln(2\pi m)$, עם שגיאה שדועכת כמו $1/(12m)$. בלי האיבר האחרון זו הצורה שמשתמשים בה כש-$m$ עצום.
+  lesson: '3.1'
+- id: gaussian
+  term: { en: Gaussian, he: גאוסי }
+  definition:
+    en: The bell-shaped probability density $e^{-(x - \mu)^2/(2\sigma^2)}/\sqrt{2\pi\sigma^2}$, of mean $\mu$ and variance $\sigma^2$; the standard Gaussian has $\mu = 0$ and $\sigma = 1$.
+    he: צפיפות ההסתברות דמוית הפעמון $e^{-(x - \mu)^2/(2\sigma^2)}/\sqrt{2\pi\sigma^2}$, בעלת תוחלת $\mu$ ושונות $\sigma^2$; לגאוסית הסטנדרטית $\mu = 0$ ו-$\sigma = 1$.
+  lesson: '3.1'
+- id: de-moivre-laplace
+  term: { en: de Moivre–Laplace theorem, he: משפט דה-מואבר-לפלס }
+  definition:
+    en: Near its peak, the binomial distribution approaches the Gaussian of mean $np$ and variance $np(1 - p)$ as $n$ grows at fixed $p$. It says nothing reliable about the far tails.
+    he: בקרבת השיא שלה, ההתפלגות הבינומית שואפת לגאוסית בעלת תוחלת $np$ ושונות $np(1 - p)$ כאשר $n$ גדל ו-$p$ קבוע. על הזנבות הרחוקים אין המשפט אומר דבר אמין.
+  lesson: '3.1'
+- id: central-limit-theorem
+  term: { en: central limit theorem, he: משפט הגבול המרכזי }
+  definition:
+    en: For independent, identically distributed steps of finite mean $\mu$ and finite variance $\sigma^2$, the standardised sum $(S_n - n\mu)/(\sigma\sqrt n)$ approaches the standard Gaussian as $n \to \infty$, whatever the shape of one step.
+    he: עבור צעדים בלתי תלויים, בעלי אותה התפלגות, תוחלת סופית $\mu$ ושונות סופית $\sigma^2$, הסכום המתוקנן $(S_n - n\mu)/(\sigma\sqrt n)$ שואף לגאוסית הסטנדרטית כאשר $n \to \infty$, תהא צורתו של צעד בודד אשר תהא.
+  lesson: '3.1'
+- id: persistent-walk
+  term: { en: persistent walk, he: הילוך מתמיד }
+  definition:
+    en: A $\pm 1$ walk that repeats its previous step with probability $q$ and otherwise draws afresh. Steps $j$ apart have correlation $q^j$, and at long times its variance grows as $t(1 + q)/(1 - q)$.
+    he: הילוך של צעדי $\pm 1$ שחוזר על הצעד הקודם בהסתברות $q$, ואחרת מגריל צעד חדש. לצעדים שהמרחק ביניהם $j$ יש מתאם $q^j$, ובזמנים ארוכים השונות שלו גדלה כמו $t(1 + q)/(1 - q)$.
+  lesson: '3.1'
+- id: correlation
+  term: { en: correlation, he: מתאם }
+  definition:
+    en: The covariance of two random variables divided by the product of their standard deviations. It lies between $-1$ and $1$; it is zero for independent variables, and $1$ when one is a positive multiple of the other plus a constant.
+    he: השונות המשותפת של שני משתנים מקריים, מחולקת במכפלת סטיות התקן שלהם. ערכו בין $-1$ ל-$1$; הוא אפס עבור משתנים בלתי תלויים, ו-$1$ כשאחד מהם הוא כפולה חיובית של השני ועוד קבוע.
+  reject: ['קורלציה']
+  lesson: '3.1'

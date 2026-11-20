@@ -121,3 +121,32 @@ when it is.
   baseless (OBJ-02-2 includes forming per-particle densities, which 5(a)'s per-molecule b loosely touches), but no
   part asks to classify a quantity as extensive or intensive. The port's version (workbook W-2.1-07) adds one, on b
   and Nb.
+
+## Module 03: probability and emergence
+
+- Verify, "What the collapse measures" (English line 392, Hebrew 361): the distances at n = 256, heavy-tailed 0.004,
+  uniform 0.012, coin 0.029, are one seed's (seed 17 of `test_standardized_sums_converge_onto_one_gaussian` gives
+  0.0043, 0.0121, 0.0292). Over 8 seeds of 20,000 sums: heavy-tailed 0.0061 ± 0.0004, uniform 0.0060 ± 0.0006, coin
+  0.0285 ± 0.0007, against a floor of 0.0064 ± 0.0003. The uniform steps' 0.012 is a fluctuation to twice the floor
+  and contradicts the box's own "two distributions have reached the sampling floor"; the 0.004 is below it by chance.
+- Derive, the de Moivre–Laplace box (English line 288, Hebrew 266): "the terms discarded are of relative size
+  1/√n" holds only for p ≠ 1/2. For the fair coin, the page's only case, the cubic term vanishes by symmetry and the
+  error is of order 1/n: 1/(4n) at the peak, the page's own 0.25% at n = 100, where 1/√n would be 10%. From the
+  exact pmf, the largest gap within 3σ falls as n^(−1.48) at p = 1/2 and n^(−1.01) at p = 0.2 (n = 25 to 1600).
+- Epistemic labels (English lines 411, 429, 458; Hebrew 378, 396, 424). "What simulation can and cannot settle here"
+  is labelled *open-question*, but it states the scope of numerical evidence, which is not open (as in module 01).
+  "Independence is a hypothesis, not a decoration" is labelled *model-assumption*, but what it states is a numerical
+  observation (the distance stalls) and a theorem about the persistent walk (the factor (1 + q)/(1 − q)).
+  "Why 'Gaussian' turns up everywhere" is labelled *definition*; it defines nothing. It is the central limit
+  theorem's consequence, and its "regardless of what the contributions look like" needs the theorem's hypotheses
+  (independent contributions of finite variance, none dominant).
+- Transfer (English line 449, Hebrew 414): "a drop of ink takes minutes to cross a centimetre and years to cross a
+  metre". By diffusion, a small dye molecule in water (D ≈ 4·10⁻¹⁰ m²/s) spreads 1 cm in L²/(2D) ≈ 1.3·10⁵ s, a day
+  and a half, and 1 m in about 40 years. The ratio 10⁴ is right; minutes is what convection takes.
+- Transfer (English line 455, Hebrew 421): a poll of 1000 has a margin near 3% "because 1/√1000 ≈ 0.032". The
+  standard error of a proportion near 1/2 is √(0.25/1000) = 0.016; the 3% is the 95% margin, 1.96 × 0.016 = 0.031,
+  and matches 1/√1000 only because 1.96 × 0.5 ≈ 1. On a page that separates deviation from error, an imprecision
+  worth fixing.
+- The puzzle (English line 41–43, Hebrew 41): ten thousand walkers' histogram is "the same to a precision you can set
+  your watch by … reproducible to three figures". Its width at t = 1000 scatters by 0.6% from seed to seed (31.67,
+  scatter 0.19, 8 seeds; 1/√(2N) = 0.7% expected): two figures. Three need about a million walkers.

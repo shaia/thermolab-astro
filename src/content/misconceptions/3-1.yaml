@@ -1,0 +1,100 @@
+# Misconceptions lesson 3.1 is built to catch. MC-walker-restoring-force, MC-spread-means-drift and MC-clt-always-applies
+# are ThermoLab's register entries for module 03 (assessment/misconceptions.yml: walker-restoring-force,
+# spread-means-drift, clt-always-applies). MC-deviation-shrinks-with-n is new: it is the wrong answer two distractors of
+# ThermoLab's quiz Q-03-8 target, and problem 3(c) of its problem set; the register had no entry. The lesson also
+# confronts MC-lln-compensation, which lesson 0.1 defines; ThermoLab's Q-03-9 has a distractor for it.
+- id: MC-walker-restoring-force
+  title:
+    en: A walker who strays far is pulled back
+    he: הולך שהתרחק נמשך בחזרה
+  belief:
+    en: A random walker who has strayed far to the right is pulled back toward the origin, so his expected next displacement points home.
+    he: הולך אקראי שהתרחק הרבה ימינה נמשך בחזרה אל הראשית, ולכן ההעתק הצפוי הבא שלו מכוון הביתה.
+  truth:
+    en: >-
+      Nothing in the model refers to the origin. Each step is drawn the same way wherever the walker stands, so his
+      expected displacement over the next m steps is μ₁m, zero for a fair coin. Walkers that stood at +30 or beyond after
+      500 steps moved by −0.04 ± 0.05 on average over the next 500. The ensemble mean stays at zero because each walker's
+      own expected displacement is zero, not because anyone is recalled.
+    he: >-
+      שום דבר במודל אינו מתייחס לראשית. כל צעד מוגרל באותו אופן בכל מקום שבו ההולך עומד, ולכן ההעתק הצפוי שלו
+      ב-⁦m⁩ הצעדים הבאים הוא ⁦μ₁m⁩, אפס במטבע הוגן. הולכים שעמדו אחרי 500 צעדים ב-⁦+30⁩ או הלאה ממנו
+      זזו ב-500 הצעדים הבאים בממוצע ⁦−0.04 ± 0.05⁩. התוחלת של הצבר נשארת באפס כי ההעתק הצפוי של כל הולך בעצמו
+      הוא אפס, לא כי מישהו מוחזר.
+  remedy:
+    lesson: '3.1'
+    anchor: no-pull
+    label:
+      en: Follow the walkers that strayed to +30
+      he: עקבו אחרי ההולכים שהגיעו ל-⁦+30⁩
+
+- id: MC-spread-means-drift
+  title:
+    en: A widening cloud is a moving cloud
+    he: ענן שמתרחב הוא ענן שזז
+  belief:
+    en: A cloud of walkers that is getting wider must also have a drifting average position.
+    he: לענן של הולכים שהולך ומתרחב חייב להיות גם מיקום ממוצע שנסחף.
+  truth:
+    en: >-
+      The mean moves as μ₁t and the spread grows as σ₁√t; they are separate facts. A fair walk (μ₁ = 0) widens forever
+      with its mean at zero, within a standard error σ₁√(t/N); a biased walk drifts linearly while its width still grows
+      only as √t.
+    he: >-
+      התוחלת זזה כמו ⁦μ₁t⁩ והפיזור גדל כמו ⁦σ₁√t⁩; אלה שתי עובדות נפרדות. הילוך הוגן (⁦μ₁ = 0⁩) מתרחב
+      בלי סוף כשהתוחלת שלו באפס, בתחום שגיאת תקן של ⁦σ₁√(t/N)⁩; הילוך מוטה נסחף באופן ליניארי, בזמן שהרוחב
+      שלו עדיין גדל רק כמו ⁦√t⁩.
+  remedy:
+    lesson: '3.1'
+    anchor: drift
+    label:
+      en: Bias the coin and watch the mean and the spread
+      he: הטו את המטבע וצפו בתוחלת ובפיזור
+
+- id: MC-clt-always-applies
+  title:
+    en: Any sum of many random terms is Gaussian
+    he: כל סכום של איברים מקריים רבים הוא גאוסי
+  belief:
+    en: Add up enough random quantities and the standardised sum is always the standard Gaussian, whatever the terms.
+    he: אם מחברים מספיק גדלים מקריים, הסכום המתוקנן הוא תמיד הגאוסית הסטנדרטית, יהיו האיברים אשר יהיו.
+  truth:
+    en: >-
+      The central limit theorem has hypotheses: independent, identically distributed terms of finite variance. A
+      persistent walk breaks independence; standardised by σ₁√n, its sums stay a fixed distance from the Gaussian at every
+      n, because the correlations inflate the variance by (1 + q)/(1 − q). Cauchy steps break finite variance, and their
+      sums never settle onto a Gaussian.
+    he: >-
+      למשפט הגבול המרכזי יש הנחות: איברים בלתי תלויים, בעלי אותה התפלגות ובעלי שונות סופית. הילוך מתמיד מפר את
+      אי-התלות; כשמתקננים אותו ב-⁦σ₁√n⁩, הסכומים שלו נשארים במרחק קבוע מהגאוסית בכל ⁦n⁩, כי המתאמים מנפחים
+      את השונות פי ⁦(1 + q)/(1 − q)⁩. צעדי קושי מפרים את סופיות השונות, והסכומים שלהם לעולם אינם מתייצבים על
+      גאוסית.
+  remedy:
+    lesson: '3.1'
+    anchor: correlated
+    label:
+      en: Give the walk a memory
+      he: תנו להילוך זיכרון
+
+- id: MC-deviation-shrinks-with-n
+  title:
+    en: More data, a smaller standard deviation
+    he: יותר נתונים, סטיית תקן קטנה יותר
+  belief:
+    en: Measuring a quantity N times makes the standard deviation of the measurements fall as 1/√N.
+    he: מדידה של גודל ⁦N⁩ פעמים גורמת לסטיית התקן של המדידות לדעוך כמו ⁦1/√N⁩.
+  truth:
+    en: >-
+      The standard deviation describes the scatter of single draws and does not shrink with more data: a cloud of 4000
+      walkers and one of four million have the same spread. What falls as 1/√N is the standard error of their mean, σ/√N.
+      Four times the data halve the standard error and leave the standard deviation alone.
+    he: >-
+      סטיית התקן מתארת את הפיזור של הגרלות בודדות ואינה קטנה כשיש יותר נתונים: לענן של 4000 הולכים ולענן של ארבעה
+      מיליון יש אותו פיזור. מה שדועך כמו ⁦1/√N⁩ הוא שגיאת התקן של הממוצע שלהם, ⁦σ/√N⁩. פי ארבעה נתונים
+      מקטינים את שגיאת התקן פי שניים ואינם משנים את סטיית התקן.
+  remedy:
+    lesson: '3.1'
+    anchor: standard-error
+    label:
+      en: Two spreads, two objects
+      he: שני פיזורים, של שני דברים שונים
