@@ -1,0 +1,612 @@
+# Lesson 3.1 check questions. Ported from ThermoLab's assessment/quizzes/03-random-walks.en.yml (Q-03-1 … Q-03-10, all
+# ten) and extended to cover the six objectives and the misconceptions of src/content/misconceptions/3-1.yaml, plus
+# MC-lln-compensation and MC-scatter-one-over-n (0-1.yaml). Ported: Q-03-1 → rms-400; Q-03-2 → strayed-walker (new
+# numbers, a biased walker 20 below the cloud's centre: the fair-coin version is the lesson's prediction, pred-3-1);
+# Q-03-3 → binomial-sd; Q-03-4 → not-a-hypothesis; Q-03-5 → persistent (the walk is too wide "as n grows", not "at every
+# n": at n = 1 it is the coin, and the factor 19 is a long-time value, 9.8 at n = 16); Q-03-6 → peak-50; Q-03-7 →
+# widening-cloud and Q-03-2's feedback, without "walkers who stray right are matched by walkers who stray left", which
+# explains the zero mean by compensation; Q-03-8 → quadruple; Q-03-9 → emergence (the correct account now names both
+# counting facts: the routes, for the shape, and the average over N walkers, for its reproducibility); Q-03-10 →
+# biased-drift. Every number was recomputed with ThermoLab's library (thermolab.sampling: random_walk, walker_spread,
+# binomial_to_gaussian, correlated_walk) and exact binomial sums; simulated numbers are multi-seed means with their
+# seed-to-seed error. Ids are shared with the Hebrew bank, which must hold the same questions with the same answers.
+lang: en
+chapter: 3
+questions:
+  # ---------------------------------------------------------------- one walker, then a cloud
+  - id: Q-3.1-same-walker
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-3.1-6]
+    prompt: >-
+      Figure 3.1a first draws one fair walker alone, then the same walker among $3999$ others, all on the same clock. What does the arrival of the others change about his path?
+    choices:
+      - text: >-
+          Nothing. His steps are drawn independently of everyone else's, so his path is exactly what it was alone. What the others add is a histogram, whose shape comes back the same from run to run although his position does not.
+        correct: true
+        feedback: >-
+          Right. Independence means no walker's steps depend on any other walker. The order in the figure is a property of the ensemble's histogram, not of any one path.
+      - text: >-
+          His path is pulled toward the middle of the crowd, which is what keeps the crowd centred on the lamp post.
+        feedback: >-
+          Nothing in the model refers to the crowd or to the origin: each step is a fresh coin flip, wherever he stands. The crowd stays centred because every walker's expected displacement is zero, not because anyone is drawn in.
+        misconception: MC-walker-restoring-force
+      - text: >-
+          His later steps now make up for the excursions of walkers on the other side, which keeps the histogram symmetric.
+        feedback: >-
+          He cannot know what the other walkers did; his coin is independent of theirs. The histogram is symmetric because each walker's own distribution is, not because one walker repays another.
+        misconception: MC-lln-compensation
+      - text: >-
+          His path becomes predictable: with $4000$ walkers, the law of large numbers fixes where each of them ends.
+        feedback: >-
+          The law of large numbers fixes averages and fractions over the walkers, such as the fraction that ends within one spread of the start. It says nothing about any one of them, whose position after $1000$ steps still scatters by $\sqrt{1000} = 31.6$.
+
+  # ---------------------------------------------------------------- OBJ-3.1-1: a position is a sum
+  - id: Q-3.1-rms-400
+    type: numeric
+    level: basic
+    objectives: [OBJ-3.1-1]
+    prompt: >-
+      A walker takes $400$ steps of $+1$ or $-1$, each direction equally likely. How far from the start would you typically find him? Give the RMS spread $\sigma_1\sqrt t$, in steps.
+    answer: 20
+    unit: steps
+    tolerance: 0.02
+    correctFeedback: >-
+      $\operatorname{Var}(x_t) = \sigma_1^2 t$ with $\sigma_1 = 1$, so the typical distance is $\sqrt{400} = 20$ steps. Not $0$: the walk does spread. Not $400$: that is how far he would go if every step went the same way, and the steps cancel far more often than they conspire.
+    wrongFeedback: >-
+      One fair step has $\mu_1 = 0$ and $\sigma_1^2 = \langle s^2 \rangle = 1$. The variances of independent steps add, so $\operatorname{Var}(x_{400}) = 400$; the spread is its square root.
+    commonWrong:
+      - value: 0
+        feedback: >-
+          That is his expected position, $\mu_1 t = 0$. The question asks how far from it he typically is: the walk spreads even though it does not drift.
+      - value: 400
+        feedback: >-
+          That is the distance if all $400$ steps went the same way, which happens with probability $2 \times 2^{-400}$. It is the variance that grows as $t$; the spread grows as $\sqrt t$.
+
+  - id: Q-3.1-uniform-spread
+    type: numeric
+    level: mid
+    objectives: [OBJ-3.1-1]
+    prompt: >-
+      Each step of a walk is drawn uniformly from $[-1, 1]$. Find the spread of the walker's position after $t = 300$ steps.
+    answer: 10
+    unit: steps
+    tolerance: 0.02
+    correctFeedback: >-
+      $\mu_1 = 0$ and $\sigma_1^2 = \langle s^2 \rangle = \int_{-1}^{1} \tfrac12 s^2\,\mathrm{d}s = \tfrac13$, so the spread is $\sqrt{300/3} = 10$. Measured with ThermoLab's library, $16$ seeds of $5000$ walkers: $10.01 \pm 0.03$.
+    wrongFeedback: >-
+      Compute one step's variance from its density, $\tfrac12$ on $[-1, 1]$: $\sigma_1^2 = \langle s^2 \rangle - \mu_1^2$. Then the spread is $\sigma_1\sqrt t$.
+    commonWrong:
+      - value: 17.32
+        feedback: >-
+          That is $\sqrt{300}$, as if every step had size $1$ like a coin's. A uniform step is usually shorter than $1$: its variance is $\tfrac13$, not $1$.
+      - value: 5.774
+        feedback: >-
+          That uses $\sigma_1 = \tfrac13$, the variance, in place of the standard deviation, $\sigma_1 = 1/\sqrt 3 = 0.577$.
+      - value: 8.660
+        feedback: >-
+          That uses $\sigma_1 = \tfrac12$, the mean size of a step, $\langle |s| \rangle$. The spread adds variances, which weigh the long steps more: $\sqrt{\langle s^2 \rangle} = 0.577$.
+
+  - id: Q-3.1-biased-drift
+    type: numeric
+    level: basic
+    objectives: [OBJ-3.1-1]
+    prompt: >-
+      A walker takes $400$ steps of $\pm 1$, but the coin is biased: $+1$ with probability $0.6$. Find his expected displacement, $\mu_1 t$, in steps.
+    answer: 80
+    unit: steps
+    tolerance: 0.02
+    correctFeedback: >-
+      $\mu_1 = (+1)(0.6) + (-1)(0.4) = 0.2$, so $\langle x_{400} \rangle = 80$. Compare the spread, $\sigma_1\sqrt{400} = \sqrt{0.96} \times 20 = 19.6$: the drift is already four spreads from the start, and the gap keeps widening, because one grows as $t$ and the other only as $\sqrt t$. Measured, $16$ seeds of $5000$ walkers: a mean of $80.03 \pm 0.07$ and a spread of $19.62 \pm 0.05$.
+    wrongFeedback: >-
+      The mean of one step is $\mu_1 = \sum_s s\,P(s)$, and means add: $\langle x_t \rangle = \mu_1 t$.
+    commonWrong:
+      - value: 240
+        feedback: >-
+          That counts the right steps, $0.6 \times 400$, and forgets that the other $40\%$ go left. $\mu_1 = 0.6 - 0.4 = 0.2$.
+      - value: 19.6
+        feedback: >-
+          That is the spread, $\sigma_1\sqrt t$, the width of the cloud. The question asks where its centre goes: $\mu_1 t$. They are separate quantities with separate laws.
+
+  - id: Q-3.1-widening-cloud
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-3.1-1, OBJ-3.1-5]
+    prompt: >-
+      You watch a cloud of $N$ unbiased walkers getting steadily wider. What is its average position doing?
+    choices:
+      - text: >-
+          Staying at zero, within a standard error $\sigma_1\sqrt{t/N}$ that itself grows as $\sqrt t$.
+        correct: true
+        feedback: >-
+          Right, and the caveat matters. Every walker's expected position is $\mu_1 t = 0$ at every $t$; the measured mean of $N$ of them scatters about zero by the standard error $\sigma_1\sqrt t/\sqrt N$, which is why figure 3.1a draws a widening band around zero rather than a bare line.
+      - text: >-
+          Growing: a wider cloud must have a larger average position.
+        feedback: >-
+          Width and mean are separate quantities. The cloud widens symmetrically about zero, because each walker's expected position stays $\mu_1 t = 0$ while the spread grows as $\sigma_1\sqrt t$. A biased walk shows the contrast: there the mean marches linearly while the width still grows only as $\sqrt t$.
+        misconception: MC-spread-means-drift
+      - text: >-
+          Growing as $\sqrt t$, the same as the width.
+        feedback: >-
+          For an unbiased walk the mean does not grow at all: $\langle x_t \rangle = \mu_1 t$ and $\mu_1 = 0$. The $\sqrt t$ belongs to the spread alone.
+        misconception: MC-spread-means-drift
+      - text: >-
+          Impossible to say without knowing the shape of the step distribution.
+        feedback: >-
+          It is fixed: $\langle x_t \rangle = \mu_1 t$ for any step distribution with a finite mean, so "unbiased", $\mu_1 = 0$, already gives zero whatever the shape of the steps.
+
+  # ---------------------------------------------------------------- OBJ-3.1-1, -6: nothing pulls a walker back
+  - id: Q-3.1-strayed-walker
+    type: mc
+    level: mid
+    objectives: [OBJ-3.1-1, OBJ-3.1-6]
+    prompt: >-
+      Walkers step $+1$ with probability $0.6$ and $-1$ otherwise. After $100$ steps the cloud's centre is at $+20$, and one walker stands at $0$, two spreads behind it. Over his next $50$ steps, what is his expected displacement from where he stands now?
+    choices:
+      - text: >-
+          $+10$
+        correct: true
+        feedback: >-
+          Right: $\mu_1 \times 50 = 0.2 \times 50$, the same as for every other walker, wherever he stands. Measured with ThermoLab's library: of $40\,000$ such walkers about $1.0\%$ stand at $0$ after $100$ steps (exactly $1.03\%$), and over their next $50$ steps they move by $9.98 \pm 0.04$ on average ($64$ batches). He falls no further behind on average, and catches up none of the $20$.
+      - text: >-
+          $+30$
+        feedback: >-
+          That brings him to where the cloud's centre will be at $t = 150$, as if stragglers were pulled back into the pack. His coin does not know where the pack is: each of his next steps averages $0.2$, wherever he stands.
+        misconception: MC-walker-restoring-force
+      - text: >-
+          $+20$
+        feedback: >-
+          That brings him back to where the cloud's centre is now, as if a walker who fell behind were drawn toward it. Nothing in the model refers to the centre; his expected displacement is $\mu_1 m$ over $m$ steps, here $10$.
+        misconception: MC-walker-restoring-force
+      - text: >-
+          Less than $+10$: having fallen behind shows he draws more left steps than the coin's $40\%$.
+        feedback: >-
+          Every walker flips the same coin, independently at every step. His past steps were an unlucky draw, and they carry no information about his next ones.
+
+  # ---------------------------------------------------------------- OBJ-3.1-5: deviation and error
+  - id: Q-3.1-quadruple
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-3.1-5]
+    prompt: >-
+      You quadruple the number of measurements in a sample, from $N$ to $4N$. What happens to the standard deviation of the data, and to the standard error of their mean?
+    choices:
+      - text: >-
+          The standard deviation is unchanged; the standard error halves.
+        correct: true
+        feedback: >-
+          Right. The standard deviation describes the scatter of single values and does not care how many of them you looked at. The standard error, $\sigma/\sqrt N$, describes your uncertainty about the mean, and $\sqrt 4 = 2$.
+      - text: >-
+          Both halve.
+        feedback: >-
+          Measuring more of a quantity does not make it less variable. If it did, the scatter of the individual values would visibly shrink as you collected them, and it does not: $4000$ walkers and four million spread equally wide.
+        misconception: MC-deviation-shrinks-with-n
+      - text: >-
+          Both are unchanged.
+        feedback: >-
+          The standard deviation is unchanged, but the mean is better determined: its standard error is $\sigma/\sqrt N$. If it did not shrink, there would be no reason to repeat a measurement at all.
+      - text: >-
+          The standard deviation halves; the standard error is unchanged.
+        feedback: >-
+          That has the two exactly the wrong way round. Write both definitions side by side: one is a property of the data, $\sigma$, the other a property of your estimate of their mean, $\sigma/\sqrt N$.
+        misconception: MC-deviation-shrinks-with-n
+
+  - id: Q-3.1-band-width
+    type: numeric
+    level: mid
+    objectives: [OBJ-3.1-5]
+    prompt: >-
+      A cloud of $N = 2500$ fair $\pm 1$ walkers has taken $t = 900$ steps. Find the standard error of the cloud's mean position.
+    answer: 0.6
+    unit: steps
+    tolerance: 0.02
+    correctFeedback: >-
+      Each position scatters by $\sigma = \sigma_1\sqrt t = 30$, and the mean of $2500$ of them by $30/\sqrt{2500} = 0.6$. Measured over $64$ seeds: a spread of $30.04 \pm 0.05$, and the $64$ means scatter by $0.57$, which is itself uncertain by about $9\%$.
+    wrongFeedback: >-
+      Two steps: the spread of one walker's position, $\sigma_1\sqrt t$, then the standard error of the mean of $N$ independent positions, $\sigma/\sqrt N$.
+    commonWrong:
+      - value: 30
+        feedback: >-
+          That is the spread of the walkers' positions, which stays $30$ however many walkers there are. The mean of $2500$ of them is far better determined: divide by $\sqrt N$.
+      - value: 0.012
+        feedback: >-
+          That divides by $N$. The variance of the mean falls as $1/N$; the standard error, its square root, falls as $N^{-1/2}$.
+        misconception: MC-scatter-one-over-n
+      - value: 0.02
+        feedback: >-
+          That is $1/\sqrt N$, the standard error for a quantity of standard deviation $1$. Here each position scatters by $\sigma_1\sqrt t = 30$, not by one step.
+
+  - id: Q-3.1-relative-one-percent
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-3.1-5, OBJ-3.1-1]
+    prompt: >-
+      For the biased coin, $+1$ with probability $0.6$ and $-1$ otherwise, after how many steps has the spread of the walker's position fallen to $1\%$ of its mean?
+    answer: 240000
+    unit: steps
+    tolerance: 0.02
+    correctFeedback: >-
+      $\mu_1 = 0.2$, $\sigma_1^2 = 0.96$, and the ratio $\sigma_1\sqrt t/(\mu_1 t) = (\sigma_1/\mu_1)\,t^{-1/2}$ falls to $0.01$ when $t = (\sigma_1/\mu_1)^2 \times 10^4 = 24 \times 10^4$. The absolute spread is then $\sqrt{0.96 \times 240\,000} = 480$ steps, larger than ever; only relative to the mean, $48\,000$, has it become small.
+    wrongFeedback: >-
+      The relative spread is $\sigma_1\sqrt t/(\mu_1 t) = (\sigma_1/\mu_1)\,t^{-1/2}$. Set it to $0.01$ and solve for $t$, with $\sigma_1^2 = 1 - \mu_1^2$.
+    commonWrong:
+      - value: 250000
+        feedback: >-
+          That takes $\sigma_1 = 1$, as for the fair coin. A biased step varies less: $\sigma_1^2 = \langle s^2 \rangle - \mu_1^2 = 1 - 0.04 = 0.96$.
+      - value: 490
+        feedback: >-
+          That solves $\sqrt t = (\sigma_1/\mu_1)/0.01$ and stops: $490$ is $\sqrt t$. Square it.
+      - value: 2400
+        feedback: >-
+          That divides $(\sigma_1/\mu_1)^2$ by $0.01$ instead of by $0.01^2$. Squaring the condition $(\sigma_1/\mu_1)\,t^{-1/2} = 0.01$ squares the $0.01$ too.
+
+  # ---------------------------------------------------------------- OBJ-3.1-2: the coin walk is binomial
+  - id: Q-3.1-binomial-sd
+    type: numeric
+    level: basic
+    objectives: [OBJ-3.1-2]
+    prompt: >-
+      For the binomial distribution with $n = 100$ trials and $p = \tfrac12$, find the standard deviation of the number of successes, $\sqrt{np(1 - p)}$.
+    answer: 5
+    unit: ''
+    tolerance: 0.02
+    correctFeedback: >-
+      $\sqrt{100 \times 0.5 \times 0.5} = 5$: the number of heads in $100$ flips is $50 \pm 5$. The walker's position $x = 2k - n$ therefore spreads by $2 \times 5 = 10 = \sqrt{100}$, the walk's $\sigma_1\sqrt t$.
+    wrongFeedback: >-
+      $\operatorname{Var}(k) = np(1 - p)$; the standard deviation is its square root.
+    commonWrong:
+      - value: 25
+        feedback: >-
+          That is the variance, $np(1 - p)$. The standard deviation is its square root.
+      - value: 10
+        feedback: >-
+          That is the spread of the walker's position $x = 2k - n$, twice that of $k$. The question asks about $k$, the number of successes.
+      - value: 50
+        feedback: >-
+          That is the mean, $np$. The standard deviation measures the scatter about it.
+
+  - id: Q-3.1-position-sd
+    type: numeric
+    level: mid
+    objectives: [OBJ-3.1-2]
+    prompt: >-
+      A walker takes $n = 50$ steps of $\pm 1$, $+1$ with probability $p = 0.7$. His position is $x = 2k - n$, where $k$ is the number of right steps. Find the standard deviation of $x$.
+    answer: 6.481
+    unit: steps
+    tolerance: 0.01
+    correctFeedback: >-
+      $\operatorname{Var}(k) = np(1 - p) = 10.5$, and $\operatorname{Var}(2k - n) = 4\operatorname{Var}(k) = 42$, so $\sigma_x = 6.48$. The same from the step: $\sigma_1^2 = 1 - (2p - 1)^2 = 0.84$ and $\sigma_1\sqrt{50} = 6.48$.
+    wrongFeedback: >-
+      Find $\operatorname{Var}(k)$ for the binomial, then use $\operatorname{Var}(aX + c) = a^2\operatorname{Var}(X)$ with $a = 2$, $c = -n$.
+    commonWrong:
+      - value: 3.240
+        feedback: >-
+          That is $\sigma_k = \sqrt{10.5}$, the scatter of the number of right steps. Each extra right step is one fewer left step, so it moves $x$ by $2$: $\sigma_x = 2\sigma_k$.
+      - value: 7.071
+        feedback: >-
+          That is $\sqrt{50}$, the fair coin's spread. A biased coin's steps vary less: $\sigma_1^2 = 4p(1 - p) = 0.84$, not $1$.
+      - value: 4.583
+        feedback: >-
+          That takes $\operatorname{Var}(2k) = 2\operatorname{Var}(k)$. A factor inside the variance comes out squared: $\operatorname{Var}(2k) = 4\operatorname{Var}(k)$.
+
+  - id: Q-3.1-four-right
+    type: numeric
+    level: mid
+    objectives: [OBJ-3.1-2]
+    prompt: >-
+      A fair $\pm 1$ walker takes $10$ steps. What is the probability that he ends at $x = +4$?
+    answer: 0.1172
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      $x = 2k - n = 4$ needs $k = 7$ right steps out of $10$, so $P = \binom{10}{7}/2^{10} = 120/1024 = 0.117$. Every sequence of ten flips has the same probability, $2^{-10}$; there are $120$ of them with seven rights.
+    wrongFeedback: >-
+      Translate the position into a count of right steps with $x = 2k - n$, then use $P(k) = \binom{n}{k}p^k(1 - p)^{n - k}$.
+    commonWrong:
+      - value: 0.2051
+        feedback: >-
+          That is $\binom{10}{4}/2^{10}$, the probability of four right steps. Four rights and six lefts end at $x = -2$; $x = +4$ needs $k = (x + n)/2 = 7$.
+      - value: 0.0009766
+        feedback: >-
+          That is $2^{-10}$, the probability of one particular sequence. Many sequences end at $+4$: $\binom{10}{7} = 120$ of them.
+
+  - id: Q-3.1-routes
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-3.1-2, OBJ-3.1-6]
+    prompt: >-
+      After $100$ fair steps, a walker is about $10^{29}$ times as likely to stand at $x = 0$ as at $x = 100$. Why?
+    choices:
+      - text: >-
+          Every one of the $2^{100}$ sequences of steps has the same probability, and $\binom{100}{50} \approx 1.0 \times 10^{29}$ of them end at $0$, while one ends at $100$.
+        correct: true
+        feedback: >-
+          Right. The middle is tall because astronomically more routes lead there, not because any route is preferred. Module 8 reads the same count as the number of microstates of a macrostate.
+      - text: >-
+          A walker far from the origin is pulled back, so the routes that run away are suppressed.
+        feedback: >-
+          No step depends on where the walker stands. The route of a hundred rights has probability $2^{-100}$, exactly like every other route; there is just only one of it.
+        misconception: MC-walker-restoring-force
+      - text: >-
+          A sequence that mixes lefts and rights is individually more probable than a hundred rights in a row.
+        feedback: >-
+          Each particular sequence, mixed or not, has probability $2^{-100}$; a hundred rights in a row is exactly as likely as any one given mixed sequence. What differs is how many sequences end at each place.
+      - text: >-
+          A run of rights is later cancelled by a run of lefts, which brings the walker back toward $0$.
+        feedback: >-
+          The coin has no memory: after a run of rights the next step is still $\pm 1$ with equal chances, and the excess is never paid back. Ending near $0$ is common because many routes end there, not because the walk corrects itself.
+        misconception: MC-lln-compensation
+
+  # ---------------------------------------------------------------- OBJ-3.1-4: the de Moivre–Laplace bridge
+  - id: Q-3.1-peak-50
+    type: numeric
+    level: basic
+    objectives: [OBJ-3.1-4]
+    prompt: >-
+      Use the de Moivre–Laplace approximation to estimate the probability of exactly $50$ heads in $100$ fair coin flips: evaluate $1/\sqrt{2\pi npq}$ at $n = 100$, $p = q = \tfrac12$, to four significant figures.
+    answer: 0.07979
+    unit: ''
+    tolerance: 0.002
+    correctFeedback: >-
+      $1/\sqrt{2\pi \times 25} = 1/\sqrt{50\pi} = 0.07979$. The exact value is $\binom{100}{50}/2^{100} = 0.07959$, so the approximation is a quarter of a percent high at the peak. At $90$ heads it is $74$ times too large: a statement about the central region, not about the tails.
+    wrongFeedback: >-
+      At the peak the exponential is $1$, and the estimate is the prefactor $1/\sqrt{2\pi\sigma_k^2}$ with $\sigma_k^2 = npq = 25$.
+    commonWrong:
+      - value: 0.05642
+        feedback: >-
+          That uses the variance $np = 50$, without the factor $q$. The binomial's variance is $npq = 25$.
+      - value: 0.03989
+        feedback: >-
+          That uses the variance of the walker's position, $n = 100$, as if the Gaussian were a density in $x$. The count of heads $k$ has variance $npq = 25$; a density in $x$ would need the lattice spacing $2$ to give a probability.
+      - value: 0.07959
+        feedback: >-
+          That is the exact binomial value, $\binom{100}{50}/2^{100}$. The question asks for the approximation, which is $0.25\%$ higher.
+
+  - id: Q-3.1-k210
+    type: numeric
+    level: mid
+    objectives: [OBJ-3.1-4]
+    prompt: >-
+      Estimate, with the de Moivre–Laplace Gaussian, the probability of exactly $210$ heads in $400$ fair coin flips.
+    answer: 0.02420
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      $np = 200$, $npq = 100$, $\sigma_k = 10$, so $k = 210$ is one standard deviation out: $e^{-1/2}/(10\sqrt{2\pi}) = 0.6065 \times 0.03989 = 0.02420$. The exact binomial value is $0.024207$, $0.04\%$ away: one standard deviation out, the bridge is excellent.
+    wrongFeedback: >-
+      $P(k) \approx e^{-(k - np)^2/(2npq)}/\sqrt{2\pi npq}$, with $np = 200$ and $npq = 100$.
+    commonWrong:
+      - value: 0.02197
+        feedback: >-
+          That uses the variance $np = 200$ instead of $npq = 100$.
+      - value: 0.01468
+        feedback: >-
+          That drops the $2$ from the exponent: $e^{-1}$ instead of $e^{-(k - np)^2/(2npq)} = e^{-1/2}$.
+      - value: 0.03989
+        feedback: >-
+          That is the height at the peak, $k = 200$. At $k = 210$ the Gaussian has fallen by $e^{-1/2}$.
+
+  - id: Q-3.1-peak-error
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-3.1-4]
+    prompt: >-
+      For $100$ fair coin flips the de Moivre–Laplace estimate of $P(50)$ is $0.25\%$ high. For a fair coin the relative error at the peak is of order $1/n$. Estimate it, in percent, for $1600$ flips.
+    answer: 0.01563
+    unit: '%'
+    tolerance: 0.03
+    correctFeedback: >-
+      Sixteen times the flips, a sixteenth of the error: $0.25\%/16 = 0.0156\%$, which is $1/(4n)$. The exact comparison from the binomial gives $0.0156\%$ too. For a fair coin the term of the expansion that would give an error of order $n^{-1/2}$ is cubic in $k - np$ with a coefficient proportional to $q - p$, and it vanishes.
+    wrongFeedback: >-
+      An error of order $1/n$ falls by the same factor as $n$ grows.
+    commonWrong:
+      - value: 0.0625
+        feedback: >-
+          That scales the error as $n^{-1/2}$, a factor $4$ for sixteen times the flips. That is the rate for $p \ne \tfrac12$; for a fair coin the $n^{-1/2}$ term cancels by symmetry and the error falls as $1/n$.
+      - value: 0.25
+        feedback: >-
+          The error does not stay put: the approximation becomes exact near the peak as $n$ grows, with an error of order $1/n$ for a fair coin.
+
+  - id: Q-3.1-tails
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-3.1-4]
+    prompt: >-
+      For $100$ fair coin flips, where can the de Moivre–Laplace Gaussian be trusted?
+    choices:
+      - text: >-
+          In the central region, a few standard deviations either side of $50$. Far out, at a fixed fraction of heads such as $90$, it is wrong by a large factor, and the factor grows with the number of flips.
+        correct: true
+        feedback: >-
+          Right. At $n = 100$ the Gaussian is $0.4\%$ low two standard deviations out, $16\%$ high four out and $55\%$ high five out; at $90$ heads, eight out, it gives $1.0 \times 10^{-15}$ against the exact $1.37 \times 10^{-17}$, $74$ times too much. Rare events need the exact count.
+      - text: >-
+          Everywhere: with $100$ flips it is within a quarter of a percent of the exact probability for every $k$.
+        feedback: >-
+          The quarter of a percent is the error at the peak. The relative error grows away from it: $16\%$ four standard deviations out, and a factor $74$ at $90$ heads.
+      - text: >-
+          Best in the tails, where both probabilities are tiny and their difference is negligible.
+        feedback: >-
+          The absolute difference is tiny there, but so is the probability; relative to it, the error is largest in the tails. A probability of $10^{-17}$ estimated as $10^{-15}$ is wrong by a factor of $74$.
+      - text: >-
+          Anywhere, provided the number of flips is large enough: at a fixed fraction of heads such as $90\%$, the error shrinks as $n$ grows.
+        feedback: >-
+          At a fixed number of standard deviations the error does shrink with $n$. At a fixed fraction of the flips it grows: both probabilities fall exponentially in $n$, with exponents that differ by an amount proportional to $n$, so their ratio runs away.
+
+  # ---------------------------------------------------------------- OBJ-3.1-3: the central limit theorem and its hypotheses
+  - id: Q-3.1-not-a-hypothesis
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-3.1-3]
+    prompt: >-
+      Which of the following is **not** a hypothesis of the central limit theorem, as the lesson states it?
+    choices:
+      - text: >-
+          The individual steps are themselves Gaussian.
+        correct: true
+        feedback: >-
+          Right, and that is the whole point of the theorem. If the steps had to be Gaussian already, it would say almost nothing. Coins, uniform draws, heavy-tailed draws: anything of finite variance gives a Gaussian sum.
+      - text: >-
+          The steps are independent of one another.
+        feedback: >-
+          This is a hypothesis, and the one the persistent walk breaks: without it the covariances no longer vanish, the variances no longer simply add, and the sum is wider than $\sigma_1\sqrt n$.
+      - text: >-
+          The steps are all drawn from the same distribution.
+        feedback: >-
+          This is a hypothesis of the version stated in the lesson. Theorems with weaker conditions relax it, provided no step dominates, but they are other theorems, with their own conditions to check.
+      - text: >-
+          The step distribution has a finite variance.
+        feedback: >-
+          This is a hypothesis, and Cauchy steps break it: their sum spreads as $t$, not $\sqrt t$, and divided by $\sqrt t$ it never settles.
+
+  - id: Q-3.1-which-sums
+    type: multi
+    level: bagrut
+    objectives: [OBJ-3.1-3]
+    prompt: >-
+      Select every sum $S_n = s_1 + \cdots + s_n$ whose terms satisfy all the hypotheses of the central limit theorem as the lesson states it.
+    choices:
+      - text: >-
+          The faces of $n$ independent rolls of a fair die.
+        correct: true
+        feedback: >-
+          Independent, identical, with variance $35/12$: every hypothesis holds.
+      - text: >-
+          $\pm 1$ steps of a biased coin, $+1$ with probability $0.6$, independently.
+        correct: true
+        feedback: >-
+          A bias is not a failed hypothesis: the theorem allows any finite mean $\mu_1$, here $0.2$, and subtracts $n\mu_1$ before it standardises.
+      - text: >-
+          Independent draws from Student's distribution with five degrees of freedom.
+        correct: true
+        feedback: >-
+          Heavy tails, but a finite variance, $5/3$: the hypotheses hold, and the standardised sums do reach the Gaussian, more slowly than uniform steps.
+      - text: >-
+          $\pm 1$ steps of a persistent walk that repeats its previous step with probability $0.5$.
+        feedback: >-
+          Each step is still $\pm 1$ with equal chances, so the steps are identically distributed with finite variance, but they are not independent. Standardised by $\sqrt n$, the sums stay a fixed distance from the Gaussian.
+        misconception: MC-clt-always-applies
+      - text: >-
+          Independent Cauchy steps, density $1/[\pi(1 + s^2)]$.
+        feedback: >-
+          Independent and identical, but with no finite variance. Their sum is Cauchy again, $n$ times wider, and never Gaussian.
+        misconception: MC-clt-always-applies
+      - text: >-
+          Independent steps $s_i = \pm 2^i$, each sign with probability $\tfrac12$.
+        feedback: >-
+          Not identically distributed, and worse, the last step dominates: it alone carries three quarters of the variance of the sum. The sum is spread evenly over its lattice, a flat distribution at every $n$, not a Gaussian. Theorems for steps that are not identical require that none dominates, and here one does.
+        misconception: MC-clt-always-applies
+
+  - id: Q-3.1-persistent
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-3.1-3]
+    prompt: >-
+      A $\pm 1$ walk repeats its previous step with probability $0.9$ and otherwise draws a fresh step. Its sums, standardised by $\sigma_1\sqrt n$ with $\sigma_1 = 1$, are compared with the standard Gaussian for growing $n$. What happens, and why?
+    choices:
+      - text: >-
+          The histogram is too wide, and stays too wide as $n$ grows: independence fails, so the variances no longer simply add.
+        correct: true
+        feedback: >-
+          Right. The steps are still identically distributed with finite variance; only independence is gone. At long times $\operatorname{Var}(x_t) = t(1 + q)/(1 - q) = 19t$, so $\sqrt n$ underestimates the width by $\sqrt{19} = 4.4$, and the distance from the Gaussian stalls near $0.31$ instead of falling to the sampling floor. (At $n = 16$, short of the walk's memory, the exact factor is still only $9.8$.)
+      - text: >-
+          The histogram collapses onto the Gaussian anyway; it only needs more steps.
+        feedback: >-
+          It does not. "Any sum of many random terms is Gaussian" is the reflex the persistent walk exists to falsify: its distance from the standard Gaussian stops falling, $0.35$ at $n = 16$ and $0.31$ at $n = 256$, however large $n$ gets.
+        misconception: MC-clt-always-applies
+      - text: >-
+          The histogram loses its bell shape: two peaks appear.
+        feedback: >-
+          The shape is not what breaks. At long times the persistent walk is still Gaussian; it is the width that the independent-step formula gets wrong. Standardised by its true variance it collapses onto the Gaussian.
+      - text: >-
+          Nothing changes, since each step is still $\pm 1$ with equal probability.
+        feedback: >-
+          The distribution of one step is indeed unchanged, which is what makes this counterexample sharp. What changed is how the steps depend on each other, and the variance of a sum depends on that through the covariances.
+        misconception: MC-clt-always-applies
+
+  - id: Q-3.1-cauchy
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-3.1-3]
+    prompt: >-
+      A walk takes independent steps from the Cauchy distribution, density $1/[\pi(1 + s^2)]$. What do its sums, divided by $\sqrt n$, do as $n$ grows?
+    choices:
+      - text: >-
+          They never settle: they spread wider as $\sqrt n$, because the sum of $n$ Cauchy steps is a Cauchy distribution $n$ times wider. The hypothesis that fails is finite variance.
+        correct: true
+        feedback: >-
+          Right. The steps are independent and identical, but $\langle s^2 \rangle$ diverges. Divided by $n$ instead, the sums have the same Cauchy distribution at every $n$: a limit, but not a Gaussian one.
+      - text: >-
+          They collapse onto the Gaussian, more slowly than the heavy-tailed Student steps because their tails are heavier.
+        feedback: >-
+          Heavier tails slow the collapse only while the variance is finite. The Cauchy tails are heavy enough to make the variance infinite, and then there is no collapse at all: the sum stays Cauchy at every $n$.
+        misconception: MC-clt-always-applies
+      - text: >-
+          They stay too wide by a fixed factor, like the persistent walk's.
+        feedback: >-
+          That is how a broken independence fails: a Gaussian with the wrong width. Cauchy steps fail differently: there is no $\sigma_1$ to standardise by, the cloud widens as $n$ rather than $\sqrt n$, and the shape is not Gaussian.
+      - text: >-
+          They settle onto the Gaussian, because the steps are independent and identically distributed, and those are the hypotheses that matter.
+        feedback: >-
+          Finite variance is a hypothesis too, not a technicality. Without it, $\sigma_1\sqrt n$ is undefined, and the sum of $n$ Cauchy steps is a Cauchy distribution $n$ times wider at every $n$.
+        misconception: MC-clt-always-applies
+
+  # ---------------------------------------------------------------- OBJ-3.1-6: where the order comes from
+  - id: Q-3.1-emergence
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-3.1-6]
+    prompt: >-
+      Ten thousand independent fair walkers produce a smooth bell-shaped histogram that comes back the same in every run. Which account of where that order comes from is correct?
+    choices:
+      - text: >-
+          Two counting facts. Far more step sequences end near the middle than far out, each sequence being equally likely, which sets the shape of one walker's distribution; and each bar's height is an average over $N$ independent walkers, which settles as $N^{-1/2}$.
+        correct: true
+        feedback: >-
+          Right. The shape is a count of routes, and the reproducibility is lesson 0.1's law applied to the fraction of walkers in each bar. Nothing steers a walker, and no walker knows about any other.
+      - text: >-
+          Walkers who have strayed too far are pulled back, which keeps the distribution centred.
+        feedback: >-
+          There is no such mechanism, and the test is direct: of $40\,000$ fair walkers, those standing at $+30$ or beyond after $500$ steps move by $-0.04 \pm 0.04$ over their next $500$ ($64$ batches), zero. The ensemble settles by dilution, never by correction.
+        misconception: MC-walker-restoring-force
+      - text: >-
+          The walkers' steps average out to zero, so each walker ends up near the origin.
+        feedback: >-
+          Each walker does not end up near the origin: the typical distance is $\sigma_1\sqrt t$, which grows without bound. What settles is the ensemble's histogram, not any walker's position.
+      - text: >-
+          With enough walkers, an excess on one side is compensated by later walkers landing on the other.
+        feedback: >-
+          The walkers are independent, so no walker can make up for another; a later walker has no way to learn what the earlier ones did. This is the compensation fallacy of lesson 0.1, moved from time into the ensemble.
+        misconception: MC-lln-compensation
+
+  - id: Q-3.1-bar-scatter
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-3.1-6, OBJ-3.1-5]
+    prompt: >-
+      One bar of the walker histogram holds, on average, a fraction $f = 0.2$ of the walkers. With $N = 10\,000$ walkers, by what fraction of its own height does that bar scatter from run to run?
+    answer: 0.02
+    unit: ''
+    tolerance: 0.05
+    correctFeedback: >-
+      The bar's height is the mean of $N$ independent yes-or-no outcomes, each of variance $f(1 - f)$, so it scatters by $\sqrt{f(1 - f)/N} = 0.004$, a fraction $\sqrt{(1 - f)/(fN)} = 0.02$ of $f$. Measured: the fraction of fair walkers at $x \ge 18$ after $400$ steps (exactly $0.1977$), in $64$ runs of $10\,000$ walkers, scatters by $1.85\%$ of itself, against the predicted $2.0\%$; the scatter of $64$ numbers is itself uncertain by about $9\%$.
+    wrongFeedback: >-
+      Each walker is in the bar or not: a yes-or-no draw with mean $f$ and variance $f(1 - f)$. The bar's height is the average of $N$ of them; find its standard error and divide by $f$.
+    commonWrong:
+      - value: 0.004
+        feedback: >-
+          That is the absolute scatter of the fraction, $\sqrt{f(1 - f)/N}$. Relative to the bar's own height, $0.2$, it is five times larger.
+      - value: 0.01
+        feedback: >-
+          That is $1/\sqrt N$. The bar holds only about $fN = 2000$ of the walkers, and it is their number that scatters: relative to the bar, $\sqrt{(1 - f)/(fN)} = 0.02$.
+      - value: 0.02236
+        feedback: >-
+          That is $1/\sqrt{fN}$, the scatter of a count with no upper limit. A walker in the bar is one missing from the others, so the variance carries a factor $1 - f$: $\sqrt{0.8/2000} = 0.020$.
