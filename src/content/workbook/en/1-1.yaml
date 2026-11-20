@@ -1,0 +1,448 @@
+# Lesson 1.1 workbook. Problem 01 is ThermoLab's problem 1 (reading the zeroth law), problem 09 its problem 6 (the
+# computational one, with the parameters fixed so that it has an answer); the rest are new, and none repeats ThermoLab's
+# problems 2 to 5, which are review problems, or the lesson's six worked examples. The hop-model numbers in problems 07
+# and 09 were computed for this workbook with ThermoLab's thermolab.equilibrium (64-seed batches, 256 to 384 seeds in
+# all) and checked against the exact mean and variance, which both follow linear recursions. ThermoLab kept its
+# solutions with the instructor; this platform publishes them, by the author's decision. Hop-model temperatures are in
+# units of the quantum, epsilon/k_B, and its time in steps.
+lang: en
+lesson: '1.1'
+practice:
+  - id: W-1.1-01
+    level: basic
+    qualitative: true
+    objectives: [OBJ-1.1-1]
+    prompt: >-
+      Reading the zeroth law.
+      (a) State the zeroth law of thermodynamics precisely.
+      (b) A student argues: "If A is hotter than C, and B is hotter than C, then A and B must be at the same temperature." Explain exactly what is wrong with this argument, and contrast it with what the zeroth law actually says.
+      (c) Explain, in one sentence, why the zeroth law is what makes it meaningful to calibrate a single thermometer once and then trust its reading on many different objects.
+      (d) Body A is in thermal equilibrium with C, and B is hotter than C. Which way does heat flow when A and B touch? Which part of your answer is the zeroth law, and which is not?
+    answer: >-
+      (a) If A is in thermal equilibrium with C and B is in thermal equilibrium with C, then A and B are in thermal equilibrium with each other. (b) "Hotter than C" means "not in equilibrium with C", so the law's premise is absent; two bodies hotter than C can be at any two temperatures above C's ($80\,{}^\circ\text{C}$ and $40\,{}^\circ\text{C}$ against $20\,{}^\circ\text{C}$). The law makes the relation "in equilibrium with" transitive and says nothing about "hotter than". (c) Every object that brings the thermometer to the same reading is in equilibrium with every other such object, so one calibration labels them all. (d) From B to A: the zeroth law puts A in C's class, so $T_A = T_C < T_B$; that heat runs from the higher temperature to the lower is a further fact of experience, not the zeroth law.
+    solution:
+      - kind: reasoning
+        text: >-
+          (a) The law is a statement about one relation between bodies, "is in thermal equilibrium with": brought into thermal contact, nothing macroscopic about either changes. It says the relation is transitive: equilibrium with a common third body implies equilibrium with each other. Being an empirical law, it could have been false; experiment says it is not.
+      - kind: reasoning
+        text: >-
+          (b) The argument starts from "hotter than C", which is the denial of the zeroth law's premise: A and C are not in equilibrium, and neither are B and C. Nothing then follows about A and B: with C at $20\,{}^\circ\text{C}$, A could be at $80\,{}^\circ\text{C}$ and B at $40\,{}^\circ\text{C}$, and heat would flow from A to B. The student has treated "hotter than C" as if it were a class like "in equilibrium with C". The law sorts bodies into classes of mutual equilibrium; "hotter than" compares two different classes and is not an equivalence at all (no body is hotter than itself).
+      - kind: reasoning
+        text: >-
+          (c) The thermometer is the third body C. Calibrating it against reference bodies assigns a number to each class it can come to equilibrium with; the zeroth law guarantees that two objects which bring it to the same number belong to the same class, and so are in equilibrium with each other and with the reference body that number came from, without ever being brought together.
+      - kind: reasoning
+        text: >-
+          (d) A is in C's class, so it shares C's temperature, $T_A = T_C$; and B is hotter than C, $T_B > T_C$. So $T_B > T_A$ and heat flows from B to A. The first step is the zeroth law. The second, that temperatures are ordered and heat flows from the higher to the lower, is a separate fact of experience (the second law's territory, module 9): the zeroth law makes "the same temperature" meaningful, not "hotter".
+      - kind: result
+        text: >-
+          (a) Equilibrium with a common third body implies equilibrium with each other. (b) The argument has no premise to which the law applies: "hotter than C" is not "in equilibrium with C", and two bodies hotter than C need not share anything. (c) Transitivity lets one calibrated reading label a whole class of bodies. (d) B to A; the zeroth law gives $T_A = T_C$, and the direction of the flow comes from elsewhere.
+
+  - id: W-1.1-02
+    level: basic
+    objectives: [OBJ-1.1-3]
+    prompt: >-
+      To measure a metal's specific heat, a $0.100\,\text{kg}$ sample is heated to $100.0\,{}^\circ\text{C}$ in boiling water and dropped into $0.250\,\text{kg}$ of water at $20.0\,{}^\circ\text{C}$ ($c = 4200\,\text{J/(kg K)}$), held in an insulated cup of heat capacity $50\,\text{J/K}$, also at $20.0\,{}^\circ\text{C}$. The common temperature settles at $26.1\,{}^\circ\text{C}$.
+      (a) Find the metal's specific heat. Which metal is it likely to be: aluminium ($900\,\text{J/(kg K)}$), iron ($450$) or copper ($385$)?
+      (b) A student leaves the cup out of the calculation. By how much is her answer wrong, and in which direction?
+      (c) In reality the cup leaks a little heat to the room before the reading is taken. Does that make the measured specific heat too high or too low?
+    answer: >-
+      (a) $908\,\text{J/(kg K)}$: aluminium. (b) $867\,\text{J/(kg K)}$, $4.5\%$ too low. (c) Too low: the leak lowers the final reading, which makes the water and cup seem to have received less heat and the sample to have given it up over a larger drop.
+    solution:
+      - kind: given
+        text: >-
+          Sample: $m = 0.100\,\text{kg}$, unknown $c_s$, starting at $T_s = 100.0\,{}^\circ\text{C}$. Water: $C_1 = 0.250 \times 4200 = 1050\,\text{J/K}$; cup: $C_2 = 50\,\text{J/K}$; both at $T_1 = 20.0\,{}^\circ\text{C}$. Final $T_f = 26.1\,{}^\circ\text{C}$.
+      - kind: law
+        text: >-
+          The three bodies are isolated together and no work is done ($W = 0$), so the heats they take in add to zero, each $Q_i = C_i\,\Delta T_i$ for a constant heat capacity: $mc_s(T_f - T_s) + (C_1 + C_2)(T_f - T_1) = 0$.
+      - kind: formula
+        text: >-
+          $c_s = \dfrac{(C_1 + C_2)\,(T_f - T_1)}{m\,(T_s - T_f)}$
+      - kind: reasoning
+        text: >-
+          (b) Leaving out the cup replaces $C_1 + C_2$ by $C_1$, so the answer is too small by the fraction $C_2/(C_1 + C_2) = 50/1100 = 4.5\%$. (c) A leak to the room takes heat that the water and cup would otherwise have kept, so $T_f$ reads low. A lower $T_f$ shrinks the numerator and enlarges the denominator: the measured $c_s$ comes out too low as well.
+      - kind: limit
+        text: >-
+          If the final temperature were $T_1$, the sample would have given up no heat: $c_s = 0$. As $C_2 \to 0$ the cup drops out, as in (b). And the formula is a rearranged weighted average: putting $c_s = 900\,\text{J/(kg K)}$ back into $T_\mathrm{eq} = (mc_sT_s + (C_1 + C_2)T_1)/(mc_s + C_1 + C_2)$ gives $26.05\,{}^\circ\text{C}$, the reading to its precision.
+      - kind: units
+        text: >-
+          $(\text{J/K})\cdot\text{K}/(\text{kg}\cdot\text{K}) = \text{J/(kg K)}$. Temperature differences are the same in Celsius and kelvin, so the Celsius readings can be used directly.
+      - kind: substitution
+        text: >-
+          $c_s = 1100 \times 6.1/(0.100 \times 73.9) = 6710/7.39 = 908\,\text{J/(kg K)}$. Without the cup, $1050 \times 6.1/7.39 = 867\,\text{J/(kg K)}$.
+      - kind: result
+        text: >-
+          (a) $c_s = 908\,\text{J/(kg K)}$, aluminium within the precision of a reading to $0.1\,\text{K}$. (b) $867\,\text{J/(kg K)}$, $4.5\%$ low: every body that changes temperature belongs in the balance. (c) A leak biases the result low.
+
+  - id: W-1.1-03
+    level: basic
+    objectives: [OBJ-1.1-3, OBJ-1.1-4]
+    prompt: >-
+      Two copper blocks of $1.00\,\text{kg}$ each ($c = 385\,\text{J/(kg K)}$), A at $80\,{}^\circ\text{C}$ and B at $20\,{}^\circ\text{C}$, are clamped together through a contact of conductance $\kappa = 2.0\,\text{W/K}$ and are otherwise insulated.
+      (a) Find the common final temperature and the relaxation time.
+      (b) Find each block's temperature $3.0\,\text{min}$ after contact.
+      (c) Block B is replaced by a $10.0\,\text{kg}$ copper block at $20\,{}^\circ\text{C}$. Repeat (a) and (b), and compare the new $\tau$ with $C_A/\kappa$.
+    answer: >-
+      (a) $50.0\,{}^\circ\text{C}$; $\tau = 96\,\text{s}$. (b) The gap is $9.2\,\text{K}$: $T_A = 54.6\,{}^\circ\text{C}$, $T_B = 45.4\,{}^\circ\text{C}$. (c) $25.5\,{}^\circ\text{C}$; $\tau = 175\,\text{s}$, against $C_A/\kappa = 193\,\text{s}$; after $3.0\,\text{min}$ the gap is $21.5\,\text{K}$, $T_A = 45.0\,{}^\circ\text{C}$ and $T_B = 23.5\,{}^\circ\text{C}$.
+    solution:
+      - kind: given
+        text: >-
+          $C_A = 385\,\text{J/K}$; $C_B = 385\,\text{J/K}$, then $3850\,\text{J/K}$; $T_{A,0} = 80\,{}^\circ\text{C}$, $T_{B,0} = 20\,{}^\circ\text{C}$, a starting gap of $60\,\text{K}$; $\kappa = 2.0\,\text{W/K}$; $t = 180\,\text{s}$.
+      - kind: law
+        text: >-
+          Energy conservation for the isolated pair, with constant heat capacities and $W = 0$: $C_A(T_A - T_{A,0}) + C_B(T_B - T_{B,0}) = 0$ at every instant. Newton's law of cooling for the contact makes the gap decay as $\Delta T(t) = \Delta T(0)\,e^{-t/\tau}$.
+      - kind: manipulation
+        text: >-
+          At equilibrium both are at $T_\mathrm{eq}$; at any earlier time, conservation says $C_A(T_A - T_\mathrm{eq}) + C_B(T_B - T_\mathrm{eq}) = 0$, and $T_A - T_B = \Delta T$. Solving the two for $T_A$ and $T_B$ splits the gap between the bodies in inverse proportion to their capacities.
+      - kind: formula
+        text: >-
+          $T_\mathrm{eq} = \dfrac{C_AT_{A,0} + C_BT_{B,0}}{C_A + C_B} \qquad \tau = \dfrac{C_AC_B}{\kappa\,(C_A + C_B)} \qquad T_A = T_\mathrm{eq} + \dfrac{C_B}{C_A + C_B}\,\Delta T \qquad T_B = T_\mathrm{eq} - \dfrac{C_A}{C_A + C_B}\,\Delta T$
+      - kind: limit
+        text: >-
+          Equal blocks give the midpoint, $\tau = C/(2\kappa)$, and split the gap equally. As $C_B \to \infty$, $T_\mathrm{eq} \to T_{B,0}$, B does not move, and $\tau \to C_A/\kappa$: A alone has to change. The tenfold block of (c) is already close to that limit.
+      - kind: units
+        text: >-
+          $\tau$: $(\text{J/K})^2/\big((\text{W/K})(\text{J/K})\big) = \text{J/W} = \text{s}$; the fractions multiplying $\Delta T$ are pure numbers.
+      - kind: substitution
+        text: >-
+          (a) $T_\mathrm{eq} = 50.0\,{}^\circ\text{C}$; $\tau = 385/(2 \times 2.0) = 96.25\,\text{s}$. (b) $\Delta T = 60\,e^{-180/96.25} = 60 \times 0.154 = 9.25\,\text{K}$; $T_A = 50 + 4.62 = 54.6\,{}^\circ\text{C}$, $T_B = 50 - 4.62 = 45.4\,{}^\circ\text{C}$. (c) $T_\mathrm{eq} = (385 \times 80 + 3850 \times 20)/4235 = 107\,800/4235 = 25.45\,{}^\circ\text{C}$; $\tau = 385 \times 3850/(2.0 \times 4235) = 175.0\,\text{s}$; $C_A/\kappa = 192.5\,\text{s}$. $\Delta T = 60\,e^{-180/175} = 21.45\,\text{K}$; $T_A = 25.45 + (10/11)(21.45) = 44.96\,{}^\circ\text{C}$, $T_B = 25.45 - (1/11)(21.45) = 23.50\,{}^\circ\text{C}$.
+      - kind: result
+        text: >-
+          (a) $50.0\,{}^\circ\text{C}$, $\tau = 96\,\text{s}$. (b) $54.6$ and $45.4\,{}^\circ\text{C}$. (c) $25.5\,{}^\circ\text{C}$, $\tau = 175\,\text{s}$, within $10\%$ of the reservoir value $193\,\text{s}$; after three minutes A is at $45.0\,{}^\circ\text{C}$ and B has risen only to $23.5\,{}^\circ\text{C}$. The big block moves little and lands the pair near its own start, and it makes the approach slower, not faster.
+
+  - id: W-1.1-04
+    level: mid
+    qualitative: true
+    objectives: [OBJ-1.1-2, OBJ-1.1-1]
+    prompt: >-
+      Judge each claim in a sentence or two.
+      (a) "Once two bodies in contact reach the same temperature, energy stops passing between them."
+      (b) "In equilibrium, two bodies in contact hold equal energies."
+      (c) "In the hop model, the pair of figure 1.1a ($100$ and $300$ oscillators, $Q = 700$) is in equilibrium when a quantum is as likely to cross one way as the other, and that happens at $q_A = q_B = 350$."
+      (d) "Two bodies of $200$ oscillators each, sharing $Q = 1000$ quanta, are in equilibrium, so in most steps nothing crosses between them and $q_A$ stays at $500$."
+      (e) "A wall separates a room held at $20\,{}^\circ\text{C}$ by a heater from the outdoors at $0\,{}^\circ\text{C}$. Its temperatures have not changed all day, so the wall is in thermal equilibrium."
+      (f) "If quanta keep hopping in equilibrium, the temperatures keep changing, so two bodies are never really in equilibrium."
+    answer: >-
+      (a) Wrong: the net flow stops; energy crosses both ways at equal rates. (b) Wrong: equal temperatures, with energies in the ratio of the capacities ($175$ and $525$ quanta for figure 1.1a's pair). (c) Wrong: the rates balance at $q_A/n_A = q_B/n_B$, $q_A = 175$; at $q_A = 350$ crossings from A outnumber those from B three to one. (d) Wrong: half of all steps carry a quantum across, a quarter each way, and $q_A$ wanders about $500$ by $\pm16$. (e) Wrong: a steady state, with heat flowing through the wall all day; not equilibrium. (f) Wrong: the temperatures fluctuate, by a relative $N^{-1/2}$, about $10^{-12}$ for bodies you can hold; equilibrium is a statement about the macroscopic quantities, which are steady.
+    solution:
+      - kind: reasoning
+        text: >-
+          (a) Nothing switches off at equilibrium. Energy keeps crossing the contact in both directions; what vanishes is the difference between the two flows. (b) Equilibrium equalizes temperature, not energy: each body holds $U = CT$, so the one with the larger capacity holds more. In figure 1.1a the pair settles at $T = 1.75$ with $175$ quanta in A and $525$ in B.
+      - kind: reasoning
+        text: >-
+          (c) The crossing rates are $P(A \to B) = (q_A/Q)\,n_B/(n_A + n_B)$ and $P(B \to A) = (q_B/Q)\,n_A/(n_A + n_B)$, equal when $q_A/n_A = q_B/n_B$: the same quanta per oscillator, $q_A = 175$. At $q_A = 350$, $T_A = 3.5$ and $T_B = 1.17$; then $P(A \to B) = 0.5 \times 0.75 = 0.375$ against $P(B \to A) = 0.5 \times 0.25 = 0.125$, and A is still cooling. Equal energy is not equal temperature.
+      - kind: reasoning
+        text: >-
+          (d) At $q_A = 500$, a step takes a quantum from A with probability $1/2$ and drops it in B with probability $1/2$: $P(A \to B) = 1/4$, and likewise $P(B \to A) = 1/4$. Half the steps move a quantum across. $q_A$ is binomial about $500$ with $\sigma = \sqrt{1000 \times \tfrac12 \times \tfrac12} = 15.8$ quanta: it never stays put. (e) The wall's temperatures are steady only because the heater replaces, every second, the heat that flows through the wall to the outdoors. Switch the heater off and the wall's temperatures start to change at once. Equilibrium means no net flow and nothing changing without outside help; a steady state with a steady flow is not that.
+      - kind: reasoning
+        text: >-
+          (f) Equilibrium is defined by macroscopic quantities, and for a macroscopic body the fluctuation of its temperature is negligible: the relative fluctuation falls as $N^{-1/2}$, to about $10^{-12}$ for $10^{23}$ oscillators. In the $400$ oscillators of figure 1.1a it is $6.5\%$, visible, and a temperature of so small a body is itself a little fuzzy; that is a limit of the model's size, not of the idea.
+      - kind: result
+        text: >-
+          All six are wrong. Equilibrium is a balance of two busy flows (a, c, d) that sets equal temperatures, not equal energies (b); a steady temperature kept up by a steady flow is a steady state, not equilibrium (e); and the microscopic traffic leaves the macroscopic temperature steady to one part in $10^{12}$ (f).
+
+  - id: W-1.1-05
+    level: mid
+    objectives: [OBJ-1.1-3]
+    prompt: >-
+      Three bodies with constant heat capacities: A, $200\,\text{J/K}$ at $80\,{}^\circ\text{C}$; B, $600\,\text{J/K}$ at $20\,{}^\circ\text{C}$; C, $200\,\text{J/K}$ at $50\,{}^\circ\text{C}$. The contacts do no work, and nothing leaks to the surroundings.
+      (a) A and B are put in contact and left to equilibrate; then C is added. Find the intermediate and final temperatures.
+      (b) Instead, B and C go first and A is added after. Find the temperatures, and the heat C takes in at each stage.
+      (c) All three are put in contact at once. Find the final temperature, and prove that the order of the contacts never matters.
+      (d) Prove that the final temperature always lies between the lowest and the highest starting temperature.
+    answer: >-
+      (a) $35.0\,{}^\circ\text{C}$, then $38.0\,{}^\circ\text{C}$. (b) $27.5\,{}^\circ\text{C}$, then $38.0\,{}^\circ\text{C}$; C takes in $-4500\,\text{J}$, then $+2100\,\text{J}$, $-2400\,\text{J}$ in all. (c) $38.0\,{}^\circ\text{C}$: every stage conserves $\sum_i C_iT_i$, so the end is $\sum_i C_iT_{i,0}/\sum_i C_i$ whatever the order. (d) It is an average with positive weights $C_i/\sum_j C_j$ that sum to one.
+    solution:
+      - kind: given
+        text: >-
+          $C_A = 200$, $C_B = 600$, $C_C = 200\,\text{J/K}$; $T_{A,0} = 80$, $T_{B,0} = 20$, $T_{C,0} = 50\,{}^\circ\text{C}$.
+      - kind: law
+        text: >-
+          With $W = 0$ and nothing leaking, each body's internal energy changes only by the heat it takes in, $\Delta U_i = Q_i = C_i\,\Delta T_i$, and the heats exchanged within any group in contact add to zero.
+      - kind: manipulation
+        text: >-
+          (c) In a stage where some of the bodies equilibrate, $\sum C_i\,\Delta T_i = 0$ over those bodies, and the others do not change: so $E = \sum_i C_iT_i$ over all three is the same after every stage. At the end all share one temperature $T_f$, and $E = T_f\sum_i C_i$. (d) Write $T_f = \sum_i w_iT_{i,0}$ with $w_i = C_i/\sum_j C_j$: every $w_i > 0$ and $\sum_i w_i = 1$, so with $T_<$ the lowest starting temperature, $T_f - T_< = \sum_i w_i(T_{i,0} - T_<) \ge 0$, and likewise $T_> - T_f \ge 0$ for the highest, $T_>$.
+      - kind: formula
+        text: >-
+          $T_f = \dfrac{\sum_i C_iT_{i,0}}{\sum_i C_i} \qquad Q_i = C_i\,(T_f - T_{i,0})$
+      - kind: limit
+        text: >-
+          If one capacity grows without bound, that body is a reservoir and $T_f$ goes to its temperature. Equal capacities give the plain mean. A body that starts at $T_f$ (as C nearly does) exchanges no net heat, though in (b) it first gives up heat and then takes some back: $Q_i$ depends only on the end points because each body's energy depends only on its own temperature.
+      - kind: units
+        text: >-
+          $\sum C_iT_i/\sum C_i$: $(\text{J/K})\,{}^\circ\text{C}/(\text{J/K}) = {}^\circ\text{C}$. The weights sum to one, so the offset between Celsius and kelvin cancels and Celsius may be used throughout.
+      - kind: substitution
+        text: >-
+          (a) $(200 \times 80 + 600 \times 20)/800 = 28\,000/800 = 35.0\,{}^\circ\text{C}$; with C, $(800 \times 35 + 200 \times 50)/1000 = 38.0\,{}^\circ\text{C}$. (b) $(600 \times 20 + 200 \times 50)/800 = 27.5\,{}^\circ\text{C}$, so C takes in $200 \times (27.5 - 50) = -4500\,\text{J}$; then $(800 \times 27.5 + 200 \times 80)/1000 = 38.0\,{}^\circ\text{C}$, and C takes in $200 \times 10.5 = +2100\,\text{J}$. (c) $38\,000/1000 = 38.0\,{}^\circ\text{C}$. In all three orders A takes in $-8400\,\text{J}$, B $+10\,800\,\text{J}$, C $-2400\,\text{J}$, adding to zero.
+      - kind: result
+        text: >-
+          (a) $35.0$, then $38.0\,{}^\circ\text{C}$. (b) $27.5$, then $38.0\,{}^\circ\text{C}$, with C giving up $4500\,\text{J}$ and taking back $2100\,\text{J}$. (c) $38.0\,{}^\circ\text{C}$ in every order: energy conservation fixes the end, and the path only changes the route each temperature takes. (d) A positively weighted average cannot leave the range of what it averages.
+
+  - id: W-1.1-06
+    level: mid
+    objectives: [OBJ-1.1-3, OBJ-1.1-4]
+    prompt: >-
+      Two bodies, isolated together, touch through a fixed contact. Body A has $C_A = 300\,\text{J/K}$; B's heat capacity is unknown. The readings are: at $t = 0$, $T_A = 70.0\,{}^\circ\text{C}$ and $T_B = 10.0\,{}^\circ\text{C}$; at $t = 120\,\text{s}$, $52.0$ and $16.0\,{}^\circ\text{C}$; at $t = 240\,\text{s}$, $41.2$ and $19.6\,{}^\circ\text{C}$.
+      (a) From the first two readings, find $C_B$ and the equilibrium temperature.
+      (b) Find the relaxation time and the conductance of the contact.
+      (c) Use the third reading to test energy conservation and the exponential law, separately.
+      (d) When is the gap down to $1.0\,\text{K}$, and what does A read then?
+    answer: >-
+      (a) $C_B = 900\,\text{J/K}$; $T_\mathrm{eq} = 25.0\,{}^\circ\text{C}$. (b) $\tau = 235\,\text{s}$; $\kappa = 0.958\,\text{W/K}$. (c) $(300 \times 41.2 + 900 \times 19.6)/1200 = 25.0\,{}^\circ\text{C}$, unchanged; the gap $21.6\,\text{K} = 60 \times 0.6^2\,\text{K}$, the same factor per $120\,\text{s}$. (d) $t = \tau\ln 60 = 962\,\text{s}$, about $16\,\text{min}$; $T_A = 25.75\,{}^\circ\text{C}$.
+    solution:
+      - kind: given
+        text: >-
+          $C_A = 300\,\text{J/K}$. Gaps: $60.0$, $36.0$ and $21.6\,\text{K}$ at $0$, $120$ and $240\,\text{s}$. Changes over the first $120\,\text{s}$: $\Delta T_A = -18.0\,\text{K}$, $\Delta T_B = +6.0\,\text{K}$.
+      - kind: law
+        text: >-
+          Energy conservation for the isolated pair, $C_A\,\Delta T_A + C_B\,\Delta T_B = 0$; Newton's law of cooling, which makes the gap fall by the same factor in every interval of the same length, $\Delta T(t) = \Delta T(0)\,e^{-t/\tau}$, with $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$.
+      - kind: formula
+        text: >-
+          $C_B = -C_A\,\dfrac{\Delta T_A}{\Delta T_B} \qquad \tau = \dfrac{t_1}{\ln\big(\Delta T(0)/\Delta T(t_1)\big)} \qquad \kappa = \dfrac{C_AC_B}{\tau\,(C_A + C_B)} \qquad t_\ast = \tau\ln\dfrac{\Delta T(0)}{1\,\text{K}}$
+      - kind: limit
+        text: >-
+          Were the pair losing heat to the room, $C_AT_A + C_BT_B$ would drift down and the inferred $T_\mathrm{eq}$ would fall from reading to reading; the third reading holds it at $25.0\,{}^\circ\text{C}$, so the isolation assumption survives the test. Were the two gaps equal, the logarithm would vanish and $\tau$ would be infinite: no contact. As $\kappa \to \infty$, $\tau \to 0$.
+      - kind: units
+        text: >-
+          $C_B$: $(\text{J/K})\cdot\text{K}/\text{K} = \text{J/K}$. $\tau$: seconds over a pure number. $\kappa$: $(\text{J/K})^2/\big(\text{s}\cdot\text{J/K}\big) = \text{W/K}$.
+      - kind: substitution
+        text: >-
+          (a) $C_B = 300 \times 18.0/6.0 = 900\,\text{J/K}$; $T_\mathrm{eq} = (300 \times 70 + 900 \times 10)/1200 = 30\,000/1200 = 25.0\,{}^\circ\text{C}$. (b) $\tau = 120/\ln(60/36) = 120/0.511 = 234.9\,\text{s}$; $\kappa = 270\,000/(234.9 \times 1200) = 0.958\,\text{W/K}$. (c) $12\,360 + 17\,640 = 30\,000$, so $25.0\,{}^\circ\text{C}$ again; $36/60 = 0.600$ and $21.6/36 = 0.600$. (d) $234.9 \times \ln 60 = 234.9 \times 4.094 = 962\,\text{s}$; A then sits $C_B/(C_A + C_B) = 3/4$ of the gap above $T_\mathrm{eq}$: $25.75\,{}^\circ\text{C}$, with B at $24.75\,{}^\circ\text{C}$.
+      - kind: result
+        text: >-
+          (a) $C_B = 900\,\text{J/K}$, $T_\mathrm{eq} = 25.0\,{}^\circ\text{C}$. (b) $\tau = 235\,\text{s}$, $\kappa = 0.96\,\text{W/K}$. (c) Both laws pass: the weighted temperature stays at $25.0\,{}^\circ\text{C}$, and the gap shrinks by $0.600$ in each $120\,\text{s}$. (d) After about $16\,\text{min}$, with A at $25.75\,{}^\circ\text{C}$. Where the pair ends up came from conservation alone; how fast, from the rate law.
+
+  - id: W-1.1-07
+    level: mid
+    qualitative: true
+    objectives: [OBJ-1.1-5, OBJ-1.1-4]
+    prompt: >-
+      A student runs the hop model of figure 1.1a once ($n_A = 100$, $n_B = 300$, $T_A = 4$ and $T_B = 1$ in units of $\varepsilon/k_B$, so $Q = 700$ and $\tau = 699.5$ steps) and makes three claims.
+      (a) "After $700$ steps my gap $T_A - T_B$ is $1.27$, against the predicted $1.10$: the exponential law fails for this model."
+      (b) "I fitted a straight line to $\ln|T_A - T_B|$ over my whole run of $4200$ steps, and its slope gives $\tau \approx 1200$ steps, not $700$: the model's relaxation time is not $Q$."
+      (c) "Since the mean over runs follows $e^{-t/\tau}$ exactly, the simulation proves that a cup of tea cools by Newton's law."
+      Judge each claim, and say what measurement would settle (a) and (b).
+    answer: >-
+      (a) No failure: the law is about the mean, and a single run scatters about it by $0.15$; $1.27$ is $1.1$ standard deviations high, as about one run in seven is. The mean of $64$ runs, known to $\pm0.02$, settles it. (b) The fit is biased by the floor: after about three relaxation times the gap stops falling and jitters at $0.15$, which flattens a line fitted to the whole run (whole-run fits average about $1180$ steps). Fitting only the first $2\tau$ gives $703 \pm 7$ over $384$ seeds. (c) No: it shows that one mechanism produces the law; whether tea obeys it is for an experiment.
+    solution:
+      - kind: reasoning
+        text: >-
+          (a) The theorem behind the prediction, $\langle T_A - T_B\rangle_n = (T_A(0) - T_B(0))(1 - 1/Q)^n$, is a statement about the average over runs. A single run carries the binomial jitter of the lesson, $0.15$ for this pair (its exact standard deviation after $700$ steps is $0.152$). So $1.27$ sits $(1.27 - 1.10)/0.15 = 1.1$ standard deviations above the mean; over $384$ seeds, $15\%$ of runs reached $1.27$ or more. To test the law, average many seeds: $64$ runs give the mean to $0.15/8 = 0.019$, and their means came out between $1.093$ and $1.150$ against $1.103$.
+      - kind: reasoning
+        text: >-
+          (b) A straight line on the logarithmic plot is the exponential only while the mean gap is larger than the jitter. The mean falls to $0.15$ at about $t = \tau\ln(3/0.15) = 3\tau$; after that $|T_A - T_B|$ hovers at about $0.15$ and touches zero some $70$ times per run, points the logarithm cannot even take. A line fitted through the whole run is dragged flat by that floor. Measured with ThermoLab's code over six batches of $64$ seeds, whole-run fits average $1140$ to $1200$ steps, while fits over the first $2\tau$ average $703 \pm 7$, consistent with $699.5$; one such fit scatters by about $135$ steps. The cure is to fit where the signal exceeds the noise, or to fit the gap averaged over many seeds.
+      - kind: reasoning
+        text: >-
+          (c) The exact mean is a theorem about the hop model, checked by the simulation. It shows that random exchange weighted by occupation is enough to produce Newton's law, a sign that the law does not hang on microscopic details. It cannot show that tea, which loses heat by conduction, convection, evaporation and radiation, obeys the law, nor give its $\tau$ in seconds: a step is not a second. That is a measurement with a thermometer and a clock.
+      - kind: result
+        text: >-
+          (a) One run $1.1$ standard deviations from the mean is no evidence against a law about the mean; average $64$ seeds. (b) The whole-run fit measures the noise floor as much as the decay; fit the first two relaxation times, or the seed-averaged gap, and $\tau = Q$ returns. (c) A model can show a mechanism is sufficient; only an experiment says what a real body does.
+
+  - id: W-1.1-08
+    level: bagrut
+    objectives: [OBJ-1.1-4, OBJ-1.1-1]
+    prompt: >-
+      A thermometer exchanges heat with a large stirred water bath by Newton's law, with relaxation time $\tau = C/\kappa = 8.0\,\text{s}$ (its own heat capacity over the conductance of its contact with the water). The bath is so large that the thermometer does not change its temperature. At $t = 0$ thermometer and bath are both at $T_0 = 20.0\,{}^\circ\text{C}$, and a heater starts warming the bath at a steady $r = 3.0\,\text{K/min}$.
+      (a) Write the equation for the thermometer's temperature $T(t)$, and solve it.
+      (b) What do the thermometer and the bath read at $t = 60\,\text{s}$?
+      (c) Show that after a few $\tau$ the thermometer reads what the bath read a time $\tau$ earlier. Does it ever read the bath's temperature during the warming? Does it ever read above it?
+      (d) At $t = 60\,\text{s}$ the heater is switched off and the bath stays at the temperature it has reached. How long until the reading is within $0.01\,\text{K}$ of it?
+      (e) Using the zeroth law, explain why only (d)'s final reading can be trusted as the bath's temperature.
+    answer: >-
+      (a) $\tau\,\mathrm{d}T/\mathrm{d}t = T_\mathrm{b}(t) - T$ with $T_\mathrm{b} = T_0 + rt$, so $T(t) = T_0 + rt - r\tau\,(1 - e^{-t/\tau})$. (b) $22.60\,{}^\circ\text{C}$ against $23.00\,{}^\circ\text{C}$. (c) The lag tends to $r\tau = 0.40\,\text{K}$, so $T \to T_0 + r(t - \tau) = T_\mathrm{b}(t - \tau)$; it is always below the bath while the bath warms, and never above it. (d) $\tau\ln(0.400/0.01) = 29.5\,\text{s}$. (e) The zeroth law equates the readings of bodies in equilibrium; during the warming the thermometer is never in equilibrium with the bath.
+    solution:
+      - kind: given
+        text: >-
+          $\tau = 8.0\,\text{s}$; $T_0 = 20.0\,{}^\circ\text{C}$; $r = 3.0\,\text{K/min} = 0.050\,\text{K/s}$; heater off at $t_1 = 60\,\text{s}$; tolerance $0.01\,\text{K}$.
+      - kind: law
+        text: >-
+          Newton's law of cooling for the bulb, $\dbar Q = \kappa\,(T_\mathrm{b} - T)\,\mathrm{d}t$, with $\dbar Q = C\,\mathrm{d}T$ since no work is done on it: $\tau\,\mathrm{d}T/\mathrm{d}t = T_\mathrm{b}(t) - T$. The bath is a reservoir: its temperature is set by the heater, not by the thermometer.
+      - kind: manipulation
+        text: >-
+          Write the lag $L = T_\mathrm{b} - T$. Then $\mathrm{d}L/\mathrm{d}t = r - L/\tau$, with $L(0) = 0$, whose solution is $L = r\tau\,(1 - e^{-t/\tau})$: the lag grows from zero to $r\tau$ over a few $\tau$ and stays there. Then $T = T_\mathrm{b} - L \to T_0 + rt - r\tau = T_\mathrm{b}(t - \tau)$. After $t_1$, $r = 0$ and $\mathrm{d}L/\mathrm{d}t = -L/\tau$: the lag decays as $L(t_1)\,e^{-(t - t_1)/\tau}$.
+      - kind: formula
+        text: >-
+          $T(t) = T_0 + rt - r\tau\left(1 - e^{-t/\tau}\right) \qquad L(t) = r\tau\left(1 - e^{-t/\tau}\right) \qquad s = \tau\ln\dfrac{L(t_1)}{0.01\,\text{K}}$
+      - kind: limit
+        text: >-
+          As $\tau \to 0$ (a thermometer of no heat capacity, or a perfect contact) the lag vanishes and $T = T_\mathrm{b}$ at every moment. As $r \to 0$ there is no lag either: the bath holds still and the thermometer catches it. For $t \ll \tau$, $L \approx rt$: the thermometer has not started to move. $L$ is positive for every $t > 0$ and only shrinks toward zero after the heater stops, never changing sign: the first-order law has no overshoot.
+      - kind: units
+        text: >-
+          $r\tau$: $(\text{K/s})\cdot\text{s} = \text{K}$, a temperature difference, as a lag must be; $t/\tau$ is a pure number.
+      - kind: substitution
+        text: >-
+          (b) $T_\mathrm{b}(60) = 20.0 + 0.050 \times 60 = 23.00\,{}^\circ\text{C}$; $L = 0.40 \times (1 - e^{-7.5}) = 0.3998\,\text{K}$; $T = 22.60\,{}^\circ\text{C}$. (c) $r\tau = 0.050 \times 8.0 = 0.40\,\text{K}$. (d) $s = 8.0 \times \ln(0.3998/0.01) = 8.0 \times 3.69 = 29.5\,\text{s}$.
+      - kind: reasoning
+        text: >-
+          (e) A thermometer reports its own temperature. The zeroth law lets that number stand for another body's only when the two are in thermal equilibrium, nothing changing in contact. While the bath warms, heat flows into the bulb all the time and the two are never in equilibrium; the reading is that of a body $0.40\,\text{K}$ behind. Once the bath holds still for several $\tau$, the flow dies away and the reading becomes the bath's.
+      - kind: result
+        text: >-
+          (a) $T(t) = T_0 + rt - r\tau(1 - e^{-t/\tau})$. (b) $22.60\,{}^\circ\text{C}$ while the bath is at $23.00\,{}^\circ\text{C}$. (c) A steady lag of $r\tau = 0.40\,\text{K}$: the thermometer reads the bath as it was $8\,\text{s}$ before, always below it while it warms and never above. (d) $29.5\,\text{s}$, about $3.7\tau$. (e) Only an equilibrium reading carries the zeroth law's guarantee; a reading taken during a change is a reading of the thermometer.
+
+  - id: W-1.1-09
+    level: bagrut
+    objectives: [OBJ-1.1-3, OBJ-1.1-4, OBJ-1.1-5]
+    prompt: >-
+      Computational. Use the lesson's laboratory notebook and ThermoLab's thermolab.equilibrium module, or the same hop rule in any language with a seeded random generator. Take $n_A = 50$, $n_B = 150$, $T_A = 6$ and $T_B = 2$ in units of $\varepsilon/k_B$ (in the notebook, from_temperatures(50, 150, 6.0, 2.0, K_B), which makes the quantum $k_B$ times one kelvin).
+      (a) Run $64$ independent simulations of $10Q$ steps each, and check that the mean final temperature of A agrees with equilibrium_temperature, quoting an uncertainty on your estimate.
+      (b) At the checkpoints $0.5\tau$, $\tau$, $2\tau$ and $4\tau$ (take $300$, $600$, $1200$ and $2400$ steps), measure the mean gap $T_A - T_B$ across the seeds and compare it with predicted_relaxation. Does the agreement hold at every checkpoint, or only near equilibrium?
+      (c) Repeat at ten times the size ($n_A = 500$, $n_B = 1500$, the same temperatures), and measure the run-to-run relative spread of the gap one relaxation time in ($t = Q$ steps) at both sizes. Check that it shrinks as the system grows, and by how much.
+      (d) State one thing your numerical results do not prove about real thermal contact.
+    answer: >-
+      (a) $T_\mathrm{eq} = 3.000$; a batch of $64$ seeds gives it to $\pm0.027$ (four batches: $3.040$, $2.966$, $3.037$, $3.013$), single runs scattering by $0.21$. (b) Predicted $2.425$, $1.470$, $0.540$, $0.073$; every $64$-seed mean agrees within its error of $0.03$ to $0.04$ at every checkpoint (the $256$-seed means: $2.413$, $1.458$, $0.549$, $0.076$, each $\pm0.018$). The law is exact for the mean at every step; what worsens near equilibrium is the relative precision, $50\%$ at $4\tau$. (c) $0.19$ at $N = 200$ and $0.060$ at $N = 2000$: a ratio of $3.2 \approx \sqrt{10}$. (d) For example, that any real contact obeys Newton's law, or the value of a real $\kappa$; a step is not a second.
+    solution:
+      - kind: given
+        text: >-
+          $q_A = 300$, $q_B = 300$, $Q = 600$; $p = n_A/(n_A + n_B) = 1/4$; $\tau = -1/\ln(1 - 1/600) = 599.5$ steps. The larger pair: $Q = 6000$, $\tau = 5999.5$ steps.
+      - kind: law
+        text: >-
+          Energy conservation with $C = nk_B$ gives $T_\mathrm{eq}$. The mean change of $q_A$ per step is exactly linear in $q_A$, so $\langle T_A - T_B\rangle_n = (T_A(0) - T_B(0))(1 - 1/Q)^n$ exactly. At equilibrium $q_A$ is binomial, $\sigma_{q_A} = \sqrt{Qp(1 - p)}$; the mean of $M$ independent runs is uncertain by their standard deviation over $\sqrt M$.
+      - kind: formula
+        text: >-
+          $T_\mathrm{eq} = \dfrac{n_AT_A + n_BT_B}{n_A + n_B} \qquad \sigma_{T_A} = \dfrac{\sqrt{Qp(1 - p)}}{n_A} \qquad \dfrac{\sigma_{\Delta T}}{\langle \Delta T \rangle} \propto N^{-1/2}$
+      - kind: reasoning
+        text: >-
+          (b) Agreement in expectation holds at every step, since the law for the mean is a theorem about this model. What changes is how well $64$ runs can show it: the scatter of single runs grows from zero to the equilibrium value $0.28$ while the mean gap falls, so the relative error of the measured mean grows from about $1\%$ at $0.5\tau$ to about $50\%$ at $4\tau$. Close to equilibrium the comparison is weakest, not strongest. (c) The variance of $q_A$ also obeys a linear recursion, which gives the exact relative spreads at $t = Q$: $0.190$ and $0.0600$.
+      - kind: limit
+        text: >-
+          At $t = 0$ every run starts at the same state and the spread is zero; as $t \to \infty$ the mean gap goes to zero and the relative spread diverges, while the absolute spread settles at the binomial value. As $N \to \infty$ at fixed temperatures the relative spread goes to zero as $N^{-1/2}$, and a single run becomes the mean.
+      - kind: units
+        text: >-
+          Temperatures and gaps in units of $\varepsilon/k_B$; steps and quanta are counts; relative spreads and their ratio are pure numbers.
+      - kind: substitution
+        text: >-
+          (a) $T_\mathrm{eq} = (300 + 300)/200 = 3.000$; $\sigma_{T_A} = \sqrt{600 \times 0.1875}/50 = 10.6/50 = 0.212$, so $64$ runs give $\pm0.027$; measured $3.040$, $2.966$, $3.037$, $3.013$, and $3.014 \pm 0.013$ over $256$. (b) $4 \times (1 - 1/600)^n$ for $n = 300, 600, 1200, 2400$: $2.425$, $1.470$, $0.540$, $0.073$. The $64$-seed means ranged over $2.37$ to $2.44$, $1.39$ to $1.50$, $0.525$ to $0.574$, and $0.063$ to $0.095$, each with an error of $0.03$ to $0.04$; the largest miss, $1.391 \pm 0.040$ at $\tau$, is two errors. (c) Measured relative spreads: $0.18$ to $0.23$ over four batches at $N = 200$, $0.059$ and $0.061$ at $N = 2000$; exact $0.190/0.0600 = 3.16$, against $\sqrt{10} = 3.16$.
+      - kind: result
+        text: >-
+          (a) $3.01 \pm 0.03$ per batch of $64$, against $3.000$. (b) Agreement within error at all four checkpoints; the law holds at every step, and it is near equilibrium that a finite number of runs measures it least precisely. (c) The relative spread falls from $0.19$ to $0.060$, by $\sqrt{10}$, the $N^{-1/2}$ law. (d) The runs check the model and the code, not nature: they say nothing about whether a real contact obeys Newton's law, what its $\kappa$ is, or how many seconds a step is.
+
+  - id: W-1.1-10
+    level: bagrut
+    objectives: [OBJ-1.1-3]
+    prompt: >-
+      Well below $1\,\text{K}$, the heat capacity of a metal comes mostly from its conduction electrons and is proportional to the temperature: $C = \gamma nT$, with $\gamma = 0.695\,\text{mJ mol}^{-1}\,\text{K}^{-2}$ for copper and $n$ the amount in moles. (The lattice adds $4\%$ at $0.8\,\text{K}$ and less below; ignore it.) A copper block A of $1.0\,\text{mol}$ at $0.80\,\text{K}$ is put in contact with a block B of $3.0\,\text{mol}$ at $0.20\,\text{K}$, and the pair is isolated.
+      (a) Find a block's internal energy $U(T)$, up to a constant, and the final common temperature.
+      (b) Compare with the weighted average $T_\mathrm{eq} = (C_AT_{A,0} + C_BT_{B,0})/(C_A + C_B)$ evaluated with each heat capacity at its body's starting temperature, and with the same average weighted by amount alone. Which is right, and why?
+      (c) How much heat passes from A to B?
+      (d) Show that the weighted average is exact after all if each block's heat capacity is evaluated at the mean of its own starting and final temperatures, and check it numerically.
+      (e) Two equal blocks start at $T + \delta$ and $T - \delta$. How large is the error of the starting-capacity average, to leading order in $\delta$?
+    answer: >-
+      (a) $U = U_0 + \tfrac12\gamma nT^2$; $T_f = \sqrt{(n_AT_{A,0}^2 + n_BT_{B,0}^2)/(n_A + n_B)} = 0.436\,\text{K}$. (b) $0.543\,\text{K}$ ($25\%$ high) and $0.350\,\text{K}$ ($20\%$ low); only (a) is right, because the capacities change by a factor of up to $2.2$ along the way. (c) $0.156\,\text{mJ}$. (d) $\Delta U = C(\bar T)\,\Delta T$ exactly, with $\bar T$ the mean of the end temperatures; the weighted average then gives $0.4359\,\text{K}$. (e) It is high by $\delta^2/(2T)$: second order in the gap.
+    solution:
+      - kind: given
+        text: >-
+          $\gamma = 0.695 \times 10^{-3}\,\text{J mol}^{-1}\,\text{K}^{-2}$; $n_A = 1.0\,\text{mol}$, $T_{A,0} = 0.80\,\text{K}$; $n_B = 3.0\,\text{mol}$, $T_{B,0} = 0.20\,\text{K}$; no work, no leak.
+      - kind: law
+        text: >-
+          Energy conservation for the isolated pair, $\Delta U_A + \Delta U_B = 0$, with each $U$ found from its heat capacity at constant volume, $\mathrm{d}U = C\,\mathrm{d}T$. The weighted-average formula assumed $C$ constant; here it is not.
+      - kind: manipulation
+        text: >-
+          (a) $U(T) = U_0 + \int_0^T \gamma nT'\,\mathrm{d}T' = U_0 + \tfrac12\gamma nT^2$. Conservation: $\tfrac12\gamma n_A(T_f^2 - T_{A,0}^2) + \tfrac12\gamma n_B(T_f^2 - T_{B,0}^2) = 0$, and $\gamma$ cancels. (d) For each block, $\tfrac12\gamma n(T_f^2 - T_0^2) = \gamma n\,\tfrac{T_0 + T_f}{2}\,(T_f - T_0) = C(\bar T)\,(T_f - T_0)$ with $\bar T = (T_0 + T_f)/2$: the mean-value form is exact for $C \propto T$, and the conservation equation is then the weighted average with weights $C(\bar T)$. (e) With $n_A = n_B$: exact $T_f = \sqrt{T^2 + \delta^2} = T + \delta^2/(2T) + \dots$; starting-capacity average $\big((T + \delta)^2 + (T - \delta)^2\big)/(2T) = T + \delta^2/T$.
+      - kind: formula
+        text: >-
+          $T_f = \sqrt{\dfrac{n_AT_{A,0}^2 + n_BT_{B,0}^2}{n_A + n_B}} \qquad Q_{A \to B} = \tfrac12\gamma n_A\big(T_{A,0}^2 - T_f^2\big)$
+      - kind: limit
+        text: >-
+          (e) As $\delta \to 0$ every version agrees, and the starting-capacity average errs by $\delta^2/(2T)$: the constant-capacity formula is safe for small gaps and fails as the gap becomes comparable with the temperature itself, as here. If $C$ did not depend on $T$, $U$ would be linear in $T$ and the weighted average would be exact at any gap.
+      - kind: units
+        text: >-
+          $\gamma nT^2$: $\text{J mol}^{-1}\,\text{K}^{-2}\cdot\text{mol}\cdot\text{K}^2 = \text{J}$; under the square root, $\text{mol}\cdot\text{K}^2/\text{mol}$, so $T_f$ is in kelvin.
+      - kind: substitution
+        text: >-
+          (a) $T_f = \sqrt{(0.64 + 3 \times 0.04)/4} = \sqrt{0.19} = 0.4359\,\text{K}$. (b) Starting capacities $\gamma \times 0.80$ and $\gamma \times 0.60$: $(0.80 \times 0.80 + 0.60 \times 0.20)/1.40 = 0.5429\,\text{K}$. By amount: $(0.80 + 3 \times 0.20)/4 = 0.350\,\text{K}$. (c) $\tfrac12 \times 0.695 \times 10^{-3} \times (0.64 - 0.19) = 1.56 \times 10^{-4}\,\text{J}$, and B gains $\tfrac12 \times 0.695 \times 10^{-3} \times 3 \times (0.19 - 0.04)$, the same. (d) Weights $1.0 \times 0.618$ and $3.0 \times 0.318$: $(0.618 \times 0.80 + 0.954 \times 0.20)/1.572 = 0.4359\,\text{K}$.
+      - kind: result
+        text: >-
+          (a) $U = U_0 + \tfrac12\gamma nT^2$, and the blocks meet at $0.436\,\text{K}$. (b) $0.543\,\text{K}$ and $0.350\,\text{K}$ are both wrong; energy conservation with the true $U(T)$ is the law, and the weighted average is a consequence of it only for constant capacities. (c) $0.156\,\text{mJ}$. (d) Capacities taken at each block's mean temperature restore the formula, but finding them needs the answer first. (e) The error is of second order, $\delta^2/(2T)$, which is why the constant-capacity formula serves for small gaps.
+challenge:
+  - id: W-1.1-c1
+    stars: 1
+    objectives: [OBJ-1.1-3]
+    prompt: >-
+      A beaker of water is initially at $30\,{}^\circ\text{C}$. The beaker is made of $100\,\text{g}$ of aluminium ($c = 0.900\,\text{J/(g K)}$) and contains $180\,\text{g}$ of water ($c = 4.186\,\text{J/(g K)}$). Ice melts at $0\,{}^\circ\text{C}$ and takes in $L = 333\,\text{J/g}$ as it does; assume no heat escapes.
+      (a) $100\,\text{g}$ of ice at $0\,{}^\circ\text{C}$ is added. When the system again comes to equilibrium, what is the final temperature? If it is $0\,{}^\circ\text{C}$, how much ice remains?
+      (b) Repeat with $50\,\text{g}$ of ice.
+      (c) A student treats the ice as one more body with constant heat capacity (ice: $c = 2.1\,\text{J/(g K)}$) and uses the weighted average for (a). What does that give, and why does it fail? What does a melting solid behave like, as far as the rest of the system can tell?
+      (d) For which masses of added ice is the final temperature exactly $0\,{}^\circ\text{C}$?
+    answer: >-
+      (a) $0\,{}^\circ\text{C}$, with $24.0\,\text{g}$ of ice left ($76.0\,\text{g}$ melts). (b) $8.2\,{}^\circ\text{C}$, all melted. (c) $24.0\,{}^\circ\text{C}$, far off: melting takes in heat at a fixed temperature, which no constant heat capacity can describe. A melting solid is a reservoir pinned at $0\,{}^\circ\text{C}$, as if its heat capacity were infinite. (d) Any mass of $76.0\,\text{g}$ or more.
+    solution:
+      - kind: given
+        text: >-
+          Beaker and water: $C = 100 \times 0.900 + 180 \times 4.186 = 90.0 + 753.5 = 843.5\,\text{J/K}$, at $T_0 = 30\,{}^\circ\text{C}$. Ice: mass $m$ at $0\,{}^\circ\text{C}$; $L = 333\,\text{J/g}$; melt water $c_w = 4.186\,\text{J/(g K)}$.
+      - kind: law
+        text: >-
+          Energy conservation for the isolated system, with no work: the heat the beaker and water give up equals the heat taken in by the ice, to melt ($mL$ for the part that melts) and then to warm its melt water.
+      - kind: manipulation
+        text: >-
+          Cooling the beaker and water to $0\,{}^\circ\text{C}$ releases at most $CT_0$. If $mL > CT_0$, that heat melts only $m_1 = CT_0/L$ of the ice and everything stops at $0\,{}^\circ\text{C}$. If $mL < CT_0$, all the ice melts and the rest warms the whole system: $C(T_0 - T_f) = mL + mc_wT_f$.
+      - kind: formula
+        text: >-
+          $m_1 = \dfrac{CT_0}{L} \qquad T_f = \dfrac{CT_0 - mL}{C + mc_w}$
+      - kind: reasoning
+        text: >-
+          (c) With the ice as a body of $210\,\text{J/K}$ at $0\,{}^\circ\text{C}$, $T = 843.5 \times 30/1053.5 = 24.0\,{}^\circ\text{C}$. That assumes the ice's energy grows by $C\,\Delta T$, and misses the $333\,\text{J/g}$ it takes in at $0\,{}^\circ\text{C}$ without warming at all. While both phases are present, the mixture absorbs or releases heat with no change of temperature: the effective heat capacity is infinite, so to the beaker it is a reservoir at $0\,{}^\circ\text{C}$, and the weighted average, with an infinite weight, lands exactly there.
+      - kind: limit
+        text: >-
+          As $m \to 0$, $T_f \to T_0$: nothing to cool the water. At $mL = CT_0$ the two cases meet: all the ice just melts and $T_f = 0$. Ice beyond that cannot take the system below $0\,{}^\circ\text{C}$, because it is itself at $0\,{}^\circ\text{C}$; it only stays unmelted.
+      - kind: units
+        text: >-
+          $CT_0/L$: $(\text{J/K})\cdot\text{K}/(\text{J/g}) = \text{g}$; $T_f$: $\text{J}/(\text{J/K}) = \text{K}$, here a Celsius temperature above $0\,{}^\circ\text{C}$.
+      - kind: substitution
+        text: >-
+          $CT_0 = 843.5 \times 30 = 25\,304\,\text{J}$. (a) $100 \times 333 = 33\,300\,\text{J} > 25\,304\,\text{J}$: $25\,304/333 = 76.0\,\text{g}$ melts, $24.0\,\text{g}$ remains. (b) $50 \times 333 = 16\,650\,\text{J}$; $T_f = (25\,304 - 16\,650)/(843.5 + 209.3) = 8654/1052.8 = 8.22\,{}^\circ\text{C}$. (d) $m \ge 76.0\,\text{g}$.
+      - kind: result
+        text: >-
+          (a) $0\,{}^\circ\text{C}$ with $24.0\,\text{g}$ of ice left. (b) $8.2\,{}^\circ\text{C}$. (c) The constant-capacity average gives $24.0\,{}^\circ\text{C}$ and fails because a phase change absorbs heat at fixed temperature; a melting solid acts as a reservoir. (d) Any ice mass of at least $76.0\,\text{g}$ pins the final state at $0\,{}^\circ\text{C}$.
+    source:
+      name: 'Weber State University Physics 3180 Thermal Physics'
+      year: 2020
+      problem: 'Problem Set 2, Problem 5'
+      url: 'https://physics.weber.edu/schroeder/thermal/ps2.pdf'
+      verified: '2026-11-20'
+      adapted: true
+
+  - id: W-1.1-c2
+    stars: 2
+    objectives: [OBJ-1.1-1, OBJ-1.1-2]
+    prompt: >-
+      Two Einstein solids share $q = 100$ quanta of energy $\varepsilon$: A has $N_A = 150$ oscillators and B has $N_B = 250$. A real Einstein solid's quanta cannot be told apart, so $N$ oscillators hold $q$ quanta in $\Omega(N, q) = \dfrac{(q + N - 1)!}{q!\,(N - 1)!}$ ways. Some values: for $q_A = 9, 10, 11$, $\Omega_A = 1.3\cdot10^{14}$, $2.1\cdot10^{15}$, $3.1\cdot10^{16}$; for the matching $q_B = 91, 90, 89$, $\Omega_B = 2.9\cdot10^{84}$, $7.8\cdot10^{83}$, $2.1\cdot10^{83}$. The entropy is $S = k_B\ln\Omega$, and the temperature is defined by $1/T = \partial S/\partial U$.
+      (a) Use the data to calculate the temperatures of both solids when $q_A = 10$, in units of $\varepsilon/k_B$ and in kelvin for $\varepsilon = 0.1\,\text{eV}$. Which is larger, and which way will energy flow?
+      (b) Show, with Stirling's approximation, that $k_BT = \varepsilon/\ln(1 + N/q)$. Compare it with (a), and with this lesson's equipartition temperature $q\varepsilon/(Nk_B)$.
+      (c) At which $q_A$ are the two temperatures equal? Compare with the most probable division of the energy (a computer finds $q_A = 37$, with probability $0.073$) and with the hop model's balance condition $q_A/N_A = q_B/N_B$.
+      (d) The entropic and the equipartition temperatures give the same body different numbers. Explain why they nevertheless sort bodies into the same classes of mutual equilibrium, and what that says about what the zeroth law fixes and what it leaves open.
+    answer: >-
+      (a) $k_BT_A/\varepsilon = 0.37$ ($426\,\text{K}$), $k_BT_B/\varepsilon = 0.76$ ($878\,\text{K}$); B is hotter, and energy flows from B to A. (b) $0.361$ and $0.752$; the equipartition values, $0.067$ and $0.36$, are $5.5$ and $2.1$ times too low, both solids being far from the classical regime. (c) Between $q_A = 37$ and $38$, at $37.5$ in Stirling's approximation, where the most probable division also lies and where $q_A/N_A = q_B/N_B$. (d) Both are increasing functions of $q/N$, and equilibrium between two such solids is equal $q/N$: the zeroth law fixes the classes, not the numbers given to them.
+    solution:
+      - kind: law
+        text: >-
+          $1/T = \partial S/\partial U$ with $U = q\varepsilon$, evaluated by a centred difference: when $q_A$ goes from $9$ to $11$, $q_B$ goes from $91$ to $89$. Stirling: $\ln n! \approx n\ln n - n$. Energy flows from the higher temperature to the lower.
+      - kind: manipulation
+        text: >-
+          (a) $\dfrac{1}{k_BT_A} = \dfrac{\ln\Omega_A(11) - \ln\Omega_A(9)}{2\varepsilon}$ and $\dfrac{1}{k_BT_B} = \dfrac{\ln\Omega_B(91) - \ln\Omega_B(89)}{2\varepsilon}$. (b) For large $q$ and $N$, $\ln\Omega \approx (q + N)\ln(q + N) - q\ln q - N\ln N$, so $\partial\ln\Omega/\partial q = \ln(q + N) - \ln q = \ln(1 + N/q)$, and $1/k_BT = \ln(1 + N/q)/\varepsilon$.
+      - kind: formula
+        text: >-
+          $k_BT = \dfrac{\varepsilon}{\ln(1 + N/q)} \qquad T_A = T_B \iff \dfrac{q_A}{N_A} = \dfrac{q_B}{N_B}$
+      - kind: reasoning
+        text: >-
+          (c) By the formula, $T$ depends on $q/N$ alone, so the temperatures match when $q_A/150 = (100 - q_A)/250$, $q_A = 37.5$; the exact counts put the crossing between $37$ ($0.623$ against $0.628$) and $38$ ($0.632$ against $0.623$). The most probable division maximizes $\Omega_A\Omega_B$, that is $S_A + S_B$, where $\partial S_A/\partial U_A = \partial S_B/\partial U_B$: equal temperatures, at $37$ (probability $0.0734$) and $38$ ($0.0730$). The hop model, with its labelled quanta and a different count, balances its flows at the same $q_A/N_A = q_B/N_B$.
+      - kind: reasoning
+        text: >-
+          (d) Two Einstein solids with the same $\varepsilon$ are in equilibrium when $q/N$ is equal, and both $q\varepsilon/(Nk_B)$ and $\varepsilon/\big(k_B\ln(1 + N/q)\big)$ are increasing functions of $q/N$: each gives equal numbers to exactly the bodies that are in equilibrium with one another. That is all the zeroth law asks of a temperature. It defines the classes; which number labels a class is a further choice, an empirical temperature scale. The entropic one is singled out by the second law, as the absolute temperature (module 9); the equipartition label agrees with it only in the classical limit, $k_BT \approx \varepsilon(q/N + \tfrac12)$ for $q \gg N$.
+      - kind: limit
+        text: >-
+          For $q \gg N$, $\ln(1 + N/q) \approx N/q - N^2/(2q^2)$ and $k_BT \approx \varepsilon(q/N + \tfrac12)$: equipartition, up to the zero-point offset. For $q \ll N$, $k_BT \approx \varepsilon/\ln(N/q)$, far above $q\varepsilon/N$: here A has one quantum per $15$ oscillators, deep in the quantum regime that the lesson's model specification lists as a failure mode.
+      - kind: units
+        text: >-
+          $\ln\Omega$ is a pure number, so $\partial S/\partial U$ is $k_B$ per joule, and $k_BT$ comes out in units of $\varepsilon$; $T = (k_BT/\varepsilon)\,\varepsilon/k_B$, with $\varepsilon/k_B = 0.1\,\text{eV}/k_B = 1160\,\text{K}$.
+      - kind: substitution
+        text: >-
+          (a) $\ln(3.1\cdot10^{16}/1.3\cdot10^{14}) = 5.47$, so $k_BT_A/\varepsilon = 2/5.47 = 0.365$; from the exact counts, $0.367$, $426\,\text{K}$. $\ln(2.9\cdot10^{84}/2.1\cdot10^{83}) = 2.63$, $k_BT_B/\varepsilon = 0.762$; exact $0.756$, $878\,\text{K}$. (b) $1/\ln(1 + 150/10) = 1/\ln 16 = 0.361$; $1/\ln(1 + 250/90) = 0.752$. Equipartition: $10/150 = 0.067$ and $90/250 = 0.36$. At $q_A = 37.5$ both solids have $q/N = 0.25$ and $k_BT = \varepsilon/\ln 5 = 0.621\,\varepsilon$, $721\,\text{K}$.
+      - kind: result
+        text: >-
+          (a) $T_A = 0.37\,\varepsilon/k_B = 426\,\text{K}$, $T_B = 0.76\,\varepsilon/k_B = 878\,\text{K}$; energy flows from B to A. (b) $k_BT = \varepsilon/\ln(1 + N/q)$ matches the data; equipartition is several times too low at these energies. (c) The temperatures meet at $q_A \approx 37.5$, the most probable division and the hop model's balance point alike. (d) Every increasing function of $q/N$ labels the same equilibrium classes: the zeroth law guarantees the classes, and the scale is a separate matter.
+    source:
+      name: 'Weber State University Physics 3180 Thermal Physics'
+      year: 2020
+      problem: 'Problem Set 4, Problem 2'
+      url: 'https://physics.weber.edu/schroeder/thermal/ps4.pdf'
+      verified: '2026-11-20'
+      adapted: true

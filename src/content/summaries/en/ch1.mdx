@@ -1,0 +1,58 @@
+---
+lang: en
+chapter: 1
+title: 'Module 01 in one page: thermal equilibrium'
+---
+
+## The big idea
+
+Two bodies in contact exchange heat until they share a temperature, and three questions about that have three different answers. *What* they share is made meaningful by the zeroth law: equilibrium with a common third body implies equilibrium with each other, so a number can label each class of bodies in mutual equilibrium, and a thermometer is the third body. *Where* they meet is fixed by energy conservation alone: a weighted average of the starting temperatures, each weighted by its body's heat capacity. *How fast* needs a rate law, Newton's law of cooling, which closes the gap exponentially, never at once and never past. Equilibrium is not stillness: energy keeps crossing both ways, and only the net flow stops. A model of two Einstein solids trading quanta one random hop at a time obeys the exponential exactly on average, with a scatter that falls as $N^{-1/2}$: evidence that the macroscopic law does not depend on the microscopic mechanism, not proof that every real contact obeys it.
+
+## What to remember
+
+<Formula tex="T_\mathrm{eq} = \frac{C_A T_{A,0} + C_B T_{B,0}}{C_A + C_B} \qquad \frac{T_{A,0} - T_\mathrm{eq}}{T_\mathrm{eq} - T_{B,0}} = \frac{C_B}{C_A}" label="Energy conservation for an isolated pair with constant heat capacities: a weighted average, and the lever rule" />
+
+<Formula tex="\dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t \qquad T_A(t) - T_B(t) = \big(T_A(0) - T_B(0)\big)\,e^{-t/\tau} \qquad \tau = \frac{C_A C_B}{\kappa\,(C_A + C_B)}" label="Newton's law of cooling, the exponential it gives, and the relaxation time" />
+
+<Formula tex="\big\langle T_A - T_B \big\rangle_n = \big(T_A(0) - T_B(0)\big)\left(1 - \frac{1}{Q}\right)^{n} \qquad \tau = \frac{-1}{\ln(1 - 1/Q)} \approx Q" label="The hop model: the mean gap after n steps, exact, with Q the total number of quanta" />
+
+<Formula tex="\sigma_{q_A} = \sqrt{Q\,p\,(1 - p)} \qquad p = \frac{n_A}{n_A + n_B}" label="The equilibrium scatter of the hop model: a binomial count, so a relative scatter falling as the inverse square root of N" />
+
+- **The zeroth law** is an empirical law: it makes "in thermal equilibrium with" transitive, and so makes temperature a label of classes. It says nothing about "hotter than". See <LessonLink id="1.1" anchor="zeroth-law">what the thermometer reports</LessonLink>.
+- **Equilibrium is a balance.** In the model the two crossing rates are $(q_A/Q)\,n_B/(n_A + n_B)$ and $(q_B/Q)\,n_A/(n_A + n_B)$, equal when $q_A/n_A = q_B/n_B$. See <LessonLink id="1.1" anchor="still-hopping">what stops, and what does not</LessonLink>.
+- **Only the ratio of the capacities** sets $T_\mathrm{eq}$; the larger capacity moves less. Weighted averages of temperature may be taken in Celsius, because the weights sum to one. See <LessonLink id="1.1" anchor="t-eq">where they meet</LessonLink>.
+- **Reading $\tau$:** better contact (larger $\kappa$) shortens it; larger capacities lengthen it, through $C_AC_B/(C_A + C_B)$, which is dominated by the smaller one; against a reservoir $\tau = C_A/\kappa$. The gap is $37\%$ of its start after $\tau$, half after $0.69\,\tau$, $5\%$ after $3\tau$. See <LessonLink id="1.1" anchor="tau">what sets the relaxation time</LessonLink>.
+- **The model.** $C = nk_B$, $T = q\varepsilon/(nk_B)$, energy exactly conserved, $\tau \approx Q$ steps, an implied conductance $\kappa = (k_B/Q)\,n_An_B/(n_A + n_B)$ per step. A step is not a second. See <LessonLink id="1.1" anchor="hop-rule">why random hops obey the law exactly</LessonLink> and <LessonLink id="1.1" anchor="model-spec">the model specified</LessonLink>.
+
+## Common mistakes
+
+- **"Equilibrium is the midpoint."** Only for equal heat capacities. A body of $100$ oscillators at $4$ and one of $300$ at $1$ meet at $1.75$, not $2.5$. See <LessonLink id="1.1" anchor="unequal">two unequal bodies</LessonLink> and <LessonLink id="1.1" anchor="same-size">two equal ones</LessonLink>.
+- **"Equal temperatures mean equal energies."** Each body holds $U = CT$: in equilibrium the larger capacity holds more energy.
+- **"Heat stops flowing in equilibrium."** The net flow stops; energy keeps crossing in both directions at equal rates, more than a third of all steps in figure 1.1a.
+- **"Contact equalizes the temperatures at once."** $\tau$ vanishes only for an infinite conductance; every real contact takes time.
+- **"The temperatures overshoot and swing back."** The rate law is first order and has no momentum: the gap keeps its sign. A single run of a small model does cross the line, by random jitter; the mean never does. See <LessonLink id="1.1" anchor="no-overshoot">no overshoot</LessonLink>.
+- **"A steady temperature is equilibrium."** A wall between a heated room and the cold outdoors is steady because heat flows through it all the time: a steady state, not equilibrium.
+- **"The metal is colder than the wood."** Your hand is not a thermometer; it reports how fast it loses heat. A thermometer reads its own temperature, and that is the other body's only once the two are in equilibrium.
+- **Using the weighted average where the capacity changes.** It assumes constant $C$. When $C$ varies strongly with $T$, or during melting, go back to energy conservation with the true $U(T)$ or the latent heat.
+- **Judging the law by one run, or fitting it into the noise.** The exponential is a law for the mean; a single run of figure 1.1a's pair scatters by $0.15$, and a logarithmic fit carried past about $3\tau$ measures the noise floor. See <LessonLink id="1.1" anchor="log-gap">the logarithmic view</LessonLink> and <LessonLink id="1.1" anchor="scatter-shrinks">the scatter shrinks</LessonLink>.
+- **"The simulation proves Newton's law for real bodies."** It shows that one mechanism is sufficient. Real heat crosses by phonons, electrons, convection and radiation; whether a real contact obeys the law, and its $\kappa$, are for experiment. See <LessonLink id="1.1" anchor="does-not-establish">evidence, not proof</LessonLink>.
+
+## How to solve
+
+1. **Draw the boundary.** Which bodies exchange heat, is the group isolated, and is any work done ($W$ is the work done on the system; a rigid contact has $W = 0$)? List every body whose temperature changes, containers included.
+2. **For where a group ends up, write energy conservation** before any formula: $\sum_i C_i(T_f - T_{i,0}) = 0$ for constant capacities, $\sum_i \Delta U_i = 0$ with the true $U(T)$ otherwise, and $mL$ for anything that melts.
+3. **For how fast, write Newton's law for each body,** $C_A\,\mathrm{d}T_A/\mathrm{d}t = \kappa(T_B - T_A)$ and its mirror, subtract, and solve for the gap. Recover each temperature from the gap and conservation: $T_A = T_\mathrm{eq} + \frac{C_B}{C_A + C_B}\,\Delta T$.
+4. **To read $\tau$ from data,** use the ratio of two gaps an interval $\Delta t$ apart, $\tau = \Delta t/\ln(\Delta T_1/\Delta T_2)$; equal intervals must give equal ratios.
+5. **For the hop model,** convert to quanta: $q = nT$ in units of $\varepsilon/k_B$, $Q$ conserved, $q_A^\mathrm{eq} = Qn_A/(n_A + n_B)$, $\tau \approx Q$ steps, scatter $\sqrt{Qp(1 - p)}$.
+6. **For a simulation, average over seeds** and quote the seed-to-seed error, $\sigma/\sqrt{M}$ for $M$ runs; compare means with the theorem, and spreads at two sizes with $N^{-1/2}$.
+7. **Check limits:** a reservoir ($C_B \to \infty$) does not move and gives $\tau = C_A/\kappa$; equal capacities give the midpoint; $\kappa \to 0$ gives no relaxation at all; the gap never changes sign.
+
+## Checklist before an exam
+
+- I can state the zeroth law, explain why it is an empirical law and not logic, and say why it makes a thermometer meaningful.
+- I can explain what stops and what continues at equilibrium, and compute the two crossing rates of the hop model.
+- I can derive $T_\mathrm{eq}$ from energy conservation, read it as a lever, and say when the constant-capacity assumption fails.
+- I can derive the exponential relaxation from Newton's law, find $\tau$ and each body's temperature at any time, and explain why there is no overshoot.
+- I can say how $\tau$ depends on $\kappa$ and on the two capacities, and find $\tau$ from measured gaps.
+- I can show why the hop model's mean gap falls exactly as $(1 - 1/Q)^n$, and why its scatter falls as $N^{-1/2}$.
+- I can run the model over many seeds, compare it with the prediction with an honest error, and say what the simulation does and does not establish.

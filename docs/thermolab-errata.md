@@ -51,3 +51,9 @@ when it is.
 - Transfer section, module 12 bullet: the canonical Einstein solid does not give "the same number" as
   T = qε/(nk_B). Its partition function gives k_BT = ε/ln(1 + n/q), which approaches ε(q/n + 1/2) only at high
   temperature: 1.44 ε at one quantum per oscillator, 25.50 ε at 25 (the notebook's bodies), against 1 ε and 25 ε.
+- Two epistemic labels are wrong (English lines 267 and 300, Hebrew 249 and 278). "The discrete simulation
+  realises exactly this law" is labelled *numerical-observation*, but what it states, that the mean gap follows
+  (1 − 1/Q)^n exactly, is a theorem about the model, proved in the Advanced section; and "A caution about what
+  the simulation proves" is labelled *open-question*, but it states the scope of the evidence, which is not open.
+  The same box says the ODE derivation "proves the law"; it derives the exponential from Newton's law, which is
+  itself empirical (the page's own label).
