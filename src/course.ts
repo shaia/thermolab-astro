@@ -118,7 +118,54 @@ export const chapters: Chapter[] = [
       },
     ],
   },
-  planned(1, 'thermodynamics', 'Thermal equilibrium', 'שיווי משקל תרמי'),
+  {
+    n: 1,
+    part: 'thermodynamics',
+    title: { en: 'Thermal equilibrium', he: 'שיווי משקל תרמי' },
+    lessons: [
+      {
+        id: '1.1',
+        title: { en: 'What makes two temperatures the same', he: 'מה הופך שתי טמפרטורות לאותה טמפרטורה' },
+        objectives: [
+          {
+            id: 'OBJ-1.1-1',
+            text: {
+              en: 'State the zeroth law of thermodynamics and explain why it is what makes temperature a well-defined, transitive property.',
+              he: 'לנסח את החוק האפס של התרמודינמיקה ולהסביר מדוע הוא זה שהופך את הטמפרטורה לתכונה מוגדרת היטב וטרנזיטיבית.',
+            },
+          },
+          {
+            id: 'OBJ-1.1-2',
+            text: {
+              en: 'Explain thermal equilibrium as the state at which net heat flow between two bodies in contact stops, and identify what continues at the microscopic level.',
+              he: 'להסביר את שיווי המשקל התרמי כמצב שבו נפסקת זרימת החום נטו בין שני גופים במגע, ולזהות מה נמשך ברמה המיקרוסקופית.',
+            },
+          },
+          {
+            id: 'OBJ-1.1-3',
+            text: {
+              en: 'Derive the equilibrium temperature T_eq = (C_A T_A + C_B T_B)/(C_A + C_B) from conservation of energy, and predict how it depends on the two heat capacities.',
+              he: `לגזור משימור האנרגיה את טמפרטורת שיווי המשקל ${f('T_eq = (C_A T_A + C_B T_B)/(C_A + C_B)')}, ולחזות כיצד היא תלויה בשני קיבולי החום.`,
+            },
+          },
+          {
+            id: 'OBJ-1.1-4',
+            text: {
+              en: 'Derive and interpret the exponential relaxation law T_A(t) − T_B(t) = (T_A(0) − T_B(0)) e^(−t/τ), and state what determines the relaxation time τ.',
+              he: `לגזור ולפרש את חוק הרלקסציה המעריכי ${f('T_A(t) − T_B(t) = (T_A(0) − T_B(0)) e^(−t/τ)')}, ולנסח מה קובע את זמן הרלקסציה ${f('τ')}.`,
+            },
+          },
+          {
+            id: 'OBJ-1.1-5',
+            text: {
+              en: 'Verify computationally that a discrete stochastic energy-exchange model converges to the analytic relaxation law as the system size grows, and state what the simulation does and does not establish.',
+              he: 'לאמת חישובית שמודל בדיד והסתברותי של החלפת אנרגיה מתכנס אל חוק הרלקסציה האנליטי ככל שהמערכת גדלה, ולנסח מה הסימולציה מבססת ומה אינה מבססת.',
+            },
+          },
+        ],
+      },
+    ],
+  },
   planned(2, 'thermodynamics', 'Equations of state', 'משוואות מצב'),
   planned(3, 'statistical', 'Probability and emergence', 'הסתברות והתהוות'),
   {
