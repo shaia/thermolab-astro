@@ -44,7 +44,7 @@ questions:
       The first ten rolls of a fair die add up to $50$, an average of $5.0$. The die is then rolled $990$ more times. What do you expect the average of all $1000$ rolls to be?
     answer: 3.515
     unit: ''
-    tolerance: 0.001
+    tolerance: 0.0015
     correctFeedback: >-
       The next $990$ rolls average $3.5$ whatever came before, so the expected sum is $50 + 990 \times 3.5 = 3515$ and the expected average $3.515$. The opening excess, $50 - 35 = 15$, is still in the sum; it has only been divided by $1000$. Simulated, keeping only the runs whose first ten rolls sum to $50$: $3.5145 \pm 0.0005$ over $64$ seeds.
     wrongFeedback: >-
@@ -82,7 +82,7 @@ questions:
       - text: >-
           That the dice compensate: a high roll makes a low roll more likely next.
         feedback: >-
-          The argument never used this, and it is false: dice have no memory. If it were true, successive rolls would be negatively correlated, and the average would settle **faster** than $N^{-1/2}$. It settles exactly as fast as independence predicts.
+          The argument never used this, and it is false: dice have no memory. If it were true, successive rolls would be negatively correlated, and the average would settle with a **smaller** spread than $\sigma_1/\sqrt N$: still $N^{-1/2}$, with a smaller coefficient. It would settle faster than $N^{-1/2}$ only if the excess were paid back exactly. In fact it settles with exactly the spread independence predicts.
         misconception: MC-lln-compensation
 
   # ---------------------------------------------------------------- OBJ-0.1-2: mean and variance
@@ -197,7 +197,7 @@ questions:
           About $0.017$: the typical distance falls as $N^{-1/2}$, so a hundredfold larger $N$ shrinks it tenfold.
         correct: true
         feedback: >-
-          Right, in the number and in the reason. $\sigma_{A_N} = \sigma_1/\sqrt N$, so multiplying $N$ by $100$ divides the spread by $10$: $1.708/100 = 0.0171$. Measured over eight seeds, $0.0173 \pm 0.0002$.
+          Right, in the number and in the reason. $\sigma_{A_N} = \sigma_1/\sqrt N$, so multiplying $N$ by $100$ divides the spread by $10$: $1.708/100 = 0.0171$. Measured over eight seeds, $0.0171$.
       - text: >-
           About $0.017$: the later rolls compensate for the early deviations and cancel them out.
         feedback: >-
@@ -449,7 +449,7 @@ questions:
           That is the integral along the straight line $y = x$. For an inexact form the path matters: along the parabola $\mathrm{d}y = 2x\,\mathrm{d}x$.
       - value: 0.333
         feedback: >-
-          That is $\int_0^1 x^2\,\mathrm{d}x$: you integrated $y\,\mathrm{d}x$, or forgot the factor $\mathrm{d}y/\mathrm{d}x = 2x$.
+          That is $\int_0^1 x^2\,\mathrm{d}x$: you integrated $y\,\mathrm{d}x$ instead of $x\,\mathrm{d}y$, or wrote $\mathrm{d}y = x\,\mathrm{d}x$ and lost the $2$ in $\mathrm{d}y = 2x\,\mathrm{d}x$.
 
   # ---------------------------------------------------------------- OBJ-0.1-6: exactness
   - id: Q-0.1-y-dx-exact
@@ -530,7 +530,7 @@ questions:
     qualitative: true
     objectives: [OBJ-0.1-6, OBJ-0.1-7]
     prompt: >-
-      In units with $Nk_B = 1$, a monatomic ideal gas taken from $(V, T) = (1, 1)$ to $(2, 2)$ takes in the heat $\int \left(\tfrac32\,\mathrm{d}T + (T/V)\,\mathrm{d}V\right)$: $2.193$ if it expands first and is then heated, $2.886$ if it is heated first and then expands. What follows?
+      In units with $Nk_B = 1$, a monatomic ideal gas taken quasistatically from $(V, T) = (1, 1)$ to $(2, 2)$ takes in the heat $\int \left(\tfrac32\,\mathrm{d}T + (T/V)\,\mathrm{d}V\right)$: $2.193$ if it expands first and is then heated, $2.886$ if it is heated first and then expands. What follows?
     choices:
       - text: >-
           No function $Q(V, T)$ has this as its change: the form fails the test, $\partial(T/V)/\partial T = 1/V \ne 0$, so heat is a path function and a small amount of it is written $\dbar Q$. $\Delta U = 1.5$ on both paths; the work makes up the difference.
@@ -540,7 +540,7 @@ questions:
       - text: >-
           One of the two integrals must be wrong: energy is conserved, so the heat between two states is fixed.
         feedback: >-
-          Conservation fixes $\Delta U = Q + W$, not $Q$. Both integrals are exact, $1.5 + \ln 2$ and $1.5 + 2\ln 2$; the works differ by the same $\ln 2$.
+          Conservation fixes $\Delta U = Q + W$, not $Q$. Both integrals are computed without approximation, $1.5 + \ln 2$ and $1.5 + 2\ln 2$; the works differ by the same $\ln 2$.
       - text: >-
           The heat depends on the path, so the first law fails for this gas.
         feedback: >-
@@ -548,14 +548,14 @@ questions:
       - text: >-
           The two paths only take the steps in a different order; computed with fine enough steps, the integrals would agree.
         feedback: >-
-          They were computed exactly. The difference, $\ln 2$, is the integral around the loop formed by the two paths, and it is not zero because the form is not exact.
+          They were computed without approximation. The difference, $\ln 2$, is the integral around the loop formed by the two paths, and it is not zero because the form is not exact.
 
   - id: Q-0.1-entropy-change
     type: numeric
     level: bagrut
     objectives: [OBJ-0.1-6]
     prompt: >-
-      Divide the heat form of a monatomic ideal gas by $T$: $\tfrac32\,\mathrm{d}T/T + \mathrm{d}V/V$, in units with $Nk_B = 1$. Integrate it from $(V, T) = (1, 1)$ to $(3, 2)$.
+      Divide the heat form of a monatomic ideal gas in a quasistatic change by $T$: $\tfrac32\,\mathrm{d}T/T + \mathrm{d}V/V$, in units with $Nk_B = 1$. Integrate it from $(V, T) = (1, 1)$ to $(3, 2)$.
     answer: 2.138
     unit: ''
     tolerance: 0.01
@@ -608,7 +608,7 @@ questions:
       What does the $\delta$ in $\dbar Q$ mark, and why does this course label one statement a "theorem" and another a "numerical observation"?
     choices:
       - text: >-
-          $\dbar Q$ is an inexact differential: there is no function $Q$ of the state, and how much heat crosses depends on the route. The labels separate what follows by mathematics from stated premises from what a computation of one model showed. Both keep a symbol or a claim from promising more than it carries.
+          $\dbar Q$ is an inexact differential: there is no function $Q$ of the state, and how much heat crosses depends on the route. The labels separate what is derived mathematically from stated premises from what a computation of one model showed. Both keep a symbol or a claim from promising more than it carries.
         correct: true
         feedback: >-
           Right. Writing $\mathrm{d}Q$ would assert that a function $Q$ exists to be differentiated; none does. And a reader who cannot tell a theorem from a numerical observation will come to believe that a simulation proved an identity.
@@ -649,10 +649,10 @@ questions:
     qualitative: true
     objectives: [OBJ-0.1-7]
     prompt: >-
-      A million simulated throws of two dice give a variance of the sum equal to $2\sigma_1^2 = 35/6 = 5.833$ to four figures. What has this established?
+      A million simulated throws of two dice give a variance of the sum of $5.83$, against $2\sigma_1^2 = 35/6 = 5.833$, agreeing within its sampling error of about $0.006$. What has this established?
     choices:
       - text: >-
-          That the code and the algebra agree: a numerical observation consistent with the theorem. The theorem is established by its derivation, and whether real dice are independent is a question about real dice, which the simulation cannot answer: its generator makes the draws independent by construction.
+          That the code and the algebra agree: a numerical observation consistent with the theorem. The theorem is established by its derivation, and whether real dice are independent is a question about real dice, which the simulation cannot answer: its generator is built to make the draws behave as independent.
         correct: true
         feedback: >-
           Right. Derivations establish, simulations illustrate and check, experiments decide whether a model describes the world. A disagreement would have been worth a lot, since it would have exposed a bug or a wrong derivation; agreement is evidence, not proof.
@@ -663,8 +663,8 @@ questions:
       - text: >-
           That real dice are independent, since the simulated dice behave like real ones.
         feedback: >-
-          The simulated dice are independent because the generator makes them so; they carry no information about real dice. Real dice are slightly loaded, and only an experiment with real dice can test them.
+          The simulated dice behave as independent because the generator is built to make them so; they carry no information about real dice. Real dice are slightly loaded, and only an experiment with real dice can test them.
       - text: >-
           Nothing at all: a simulation cannot say anything about a theorem.
         feedback: >-
-          Too strong. Agreement to four figures is good evidence that the implementation is right, and it is how a wrong code or a wrong derivation gets caught. It is evidence, not proof.
+          Too strong. Agreement within the sampling error is good evidence that the implementation is right, and it is how a wrong code or a wrong derivation gets caught. It is evidence, not proof.

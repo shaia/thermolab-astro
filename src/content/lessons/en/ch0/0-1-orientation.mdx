@@ -77,7 +77,7 @@ Figure 0.1a rolls one die a thousand times and plots the average of the rolls so
 
 <Step fig="fig-0-1a" set={{ runs: 10, rolls: 1000, view: 'average', envelope: false }} id="many-runs">
 
-Ten runs, each from its own <Term id="random-seed">seed</Term>. Every one starts as jagged as the first, each in its own way, and every one ends near $3.5$. At a thousand rolls they sit within about $\pm 0.05$ of it: the spread of the average of a thousand rolls, measured over $2000$ runs and eight seeds, is $0.0537 \pm 0.0003$. Press "roll again with new seeds" a few times. The paths change completely; the destination does not.
+Ten runs, each from its own <Term id="random-seed">seed</Term>. Every one starts as jagged as the first, each in its own way, and every one ends near $3.5$. At a thousand rolls they sit within about $\pm 0.05$ of it: the spread of the average of a thousand rolls, measured over $2000$ runs and eight seeds, is $0.054$, as $\sigma_1/\sqrt{1000} = 0.0540$ predicts. Press "roll again with new seeds" a few times. The paths change completely; the destination does not.
 
 </Step>
 
@@ -203,7 +203,7 @@ which goes to zero as $N \to \infty$: the weak <Term id="law-of-large-numbers">l
 
 <Step fig="fig-0-1b" set={{ n: 100, samples: 2000, view: 'average' }} id="fit">
 
-**Measure the law; do not assume it.** The right panel measures the relative spread at seven values of $N$ and fits a straight line on the logarithmic axes. Over sixteen seeds, the fitted exponent is $-0.501$, scattering by $0.002$ from seed to seed; for the sum it is $+0.500$, scattering by $0.001$. A slope alone is weak evidence, since many wrong models give something near $-\tfrac12$, so check the height too: the measured spread times $\sqrt N$ comes back as $0.488 \pm 0.002$, the coefficient $\sigma_1/\mu_1$. Press "draw new samples" and watch which digits of the fit survive a change of seed.
+**Measure the law; do not assume it.** The right panel measures the relative spread at seven values of $N$ and fits a straight line on the logarithmic axes. Over sixteen seeds, the fitted exponent is $-0.500$, scattering by $0.002$ from seed to seed; for the sum it is $+0.500$, scattering by $0.002$ too. A slope alone is weak evidence, since many wrong models give something near $-\tfrac12$, so check the height too: the measured spread times $\sqrt N$ comes back as $0.488 \pm 0.003$, the coefficient $\sigma_1/\mu_1$. Press "draw new samples" and watch which digits of the fit survive a change of seed.
 
 </Step>
 
@@ -216,7 +216,7 @@ which goes to zero as $N \to \infty$: the weak <Term id="law-of-large-numbers">l
 **What kind of claim is this?** Thermal physics mixes exact mathematics, empirical laws, modelling choices and numerical evidence, often in one paragraph, and blurring them is how a student comes to believe that a simulation proved an identity. This course labels its claims with one of seven <Term id="epistemic-label">epistemic labels</Term>, here each with an example from this lesson or the next ones:
 
 - A **definition** names something; it is useful or useless, never true or false: *the variance is $\langle (X - \mu)^2 \rangle$.*
-- An **empirical law** summarizes measurement, could have come out otherwise, and holds where it was tested: *at fixed volume, the pressure of a dilute gas is proportional to its absolute temperature.*
+- An **empirical law** summarizes measurement, could have come out otherwise, and holds where it was tested: *heated at fixed volume, every dilute gas raises its pressure in the same proportion, so gas thermometers filled with different gases agree.*
 - A **theorem** follows by mathematics from stated premises: *variances of independent random variables add.*
 - A **model assumption** is a deliberate simplification: *every face of a die is equally likely.*
 - An **approximation** is a controlled error with a range of validity: *Stirling's $\ln N! \approx N\ln N - N$, whose error, about $\tfrac12\ln(2\pi N)$, is negligible beside $N\ln N$ when $N$ is large.*
@@ -241,7 +241,7 @@ The figure's exponent is a numerical observation about a model; the $N^{-1/2}$ l
 
 Two fields do unusual work here. *Dynamics: none* means that whatever makes the average settle cannot be a dynamical mechanism: there is none. And *Ensemble* records a postulate, not a fact; module 8 makes the same kind of postulate about the microstates of a gas. The fields students skip are the two worth reading: **Ignored** says where the model's answers will be wrong, and **Failure modes** where it stops being a description at all.
 
-**Simulation never proves.** Derivations establish; simulations illustrate and check; experiments decide whether a model describes the world. A pseudo-random generator makes its draws independent by construction, so these runs test our algebra, not our assumption. Whether a real source of randomness is independent is a question about that source, which no simulation can settle: real dice are slightly loaded, and molecules in a dense gas are genuinely correlated. Independence is where this chain of reasoning is bolted to the world, and it is the joint to check first when a prediction fails.
+**Simulation never proves.** Derivations establish; simulations illustrate and check; experiments decide whether a model describes the world. A pseudo-random generator is designed so that its draws behave as independent ones, so these runs test our algebra, not our assumption. Whether a real source of randomness is independent is a question about that source, which no simulation can settle: real dice are slightly loaded, and molecules in a dense gas are genuinely correlated. Independence is where this chain of reasoning is bolted to the world, and it is the joint to check first when a prediction fails.
 
 </Step>
 
@@ -252,7 +252,7 @@ Two fields do unusual work here. *Dynamics: none* means that whatever makes the 
 <Spread
   fig="fig-0-1c"
   n="0.1c"
-  caption="A differential form $M\,\mathrm{d}x + N\,\mathrm{d}y$ in the plane, drawn as faint arrows $(M, N)$, and its integral from $A = (1, 1)$ to $B = (2, 2)$ along three paths: $a$, along $x$ first and then $y$; $b$, along $y$ first and then $x$; $c$, the straight line; or around the loop that goes out along $a$ and back along $b$. The running integral is traced along the path. The forms: $y\,\mathrm{d}x + x\,\mathrm{d}y$, which is exact; $y\,\mathrm{d}x$, which is not; the heat taken in by a monatomic ideal gas on the $(V, T)$ plane, in units with $Nk_B = 1$; and that heat divided by $T$. The readout gives the integral along each path drawn, and the mixed partials $\partial M/\partial y$ and $\partial N/\partial x$ at a point, with the verdict exact or not exact."
+  caption="A differential form $M\,\mathrm{d}x + N\,\mathrm{d}y$ in the plane, drawn as faint arrows along $(M, N)$, direction only, and its integral from $A = (1, 1)$ to $B = (2, 2)$ along three paths: $a$, along $x$ first and then $y$; $b$, along $y$ first and then $x$; $c$, the straight line; or around the loop that goes out along $a$ and back along $b$. The running integral is traced along the path. The forms: $y\,\mathrm{d}x + x\,\mathrm{d}y$, which is exact; $y\,\mathrm{d}x$, which is not; the heat taken in by a monatomic ideal gas in a quasistatic change on the $(V, T)$ plane, in units with $Nk_B = 1$; and that heat divided by $T$. The readout gives the integral along each path drawn, and the mixed partials $\partial M/\partial y$ and $\partial N/\partial x$ at a point, with the verdict exact or not exact."
   figure={FormPaths}
   figureProps={{ form: 'heat', path: 'a', tasks: ['two-routes', 'mixed-partials', 'loop', 'integrating-factor'] }}
 >
@@ -263,7 +263,7 @@ Two fields do unusual work here. *Dynamics: none* means that whatever makes the 
 
 **Dimensions.** Every physical quantity is a product of powers of base dimensions; four matter here: length $\mathsf{L}$ (metre), mass $\mathsf{M}$ (kilogram), time $\mathsf{T}$ (second) and temperature $\Theta$ (kelvin). Energy is $\mathsf{M}\mathsf{L}^2\mathsf{T}^{-2}$, the joule; pressure, a force per area, is $\mathsf{M}\mathsf{L}^{-1}\mathsf{T}^{-2}$, the pascal. <Term id="dimensional-analysis">Dimensional analysis</Term> rests on two rules: only quantities of the same dimensions may be added or compared, and the argument of $\exp$, $\ln$ or $\sin$ must be a pure number. That is why $e^{-E/k_BT}$ has the form it does: $k_BT$ is there to make the exponent dimensionless.
 
-The figure shows a form from module 5: the heat a monatomic ideal gas takes in, $\tfrac32 Nk_B\,\mathrm{d}T + (Nk_BT/V)\,\mathrm{d}V$. Both terms must be energies, and they are: $Nk_B\,\mathrm{d}T$ is $(\text{J/K})\cdot\text{K}$, and $(Nk_BT/V)\,\mathrm{d}V$ is a pressure times a volume, $\text{Pa}\cdot\text{m}^3 = \text{J}$.
+The figure shows a form from module 5: the heat a monatomic ideal gas takes in during a quasistatic change, $\tfrac32 Nk_B\,\mathrm{d}T + (Nk_BT/V)\,\mathrm{d}V$. Both terms must be energies, and they are: $Nk_B\,\mathrm{d}T$ is $(\text{J/K})\cdot\text{K}$, and $(Nk_BT/V)\,\mathrm{d}V$ is a pressure times a volume, $\text{Pa}\cdot\text{m}^3 = \text{J}$.
 
 **Reading a constant's units.** From $PV = Nk_BT$, with $N$ a pure count, $[k_B] = \text{Pa}\cdot\text{m}^3/\text{K} = \text{J/K}$: an energy per kelvin. **Checking a formula.** Of $\sqrt{3k_BT/m}$, $\sqrt{3k_BT/m^2}$ and $\sqrt{3k_BTm}$, only the first is a speed: $[k_BT/m] = \mathsf{L}^2\mathsf{T}^{-2}$. Ten seconds, and it catches a large share of all algebra errors.
 
@@ -344,7 +344,7 @@ $$
 
 for every path $C$ from $A$ to $B$ and every closed loop.
 
-On a region without holes, a form is exact exactly when its mixed partials agree, which is the statement that the mixed partials of $f$ commute:
+On a region without holes, a form whose coefficients have continuous derivatives is exact exactly when its mixed partials agree: that they must agree is the statement that the mixed partials of $f$ commute; that agreement suffices is a theorem of calculus:
 
 <Formula tex="\left(\frac{\partial M}{\partial y}\right)_x = \left(\frac{\partial N}{\partial x}\right)_y" label="The exactness test for M dx + N dy" />
 
@@ -358,7 +358,7 @@ For $y\,\mathrm{d}x + x\,\mathrm{d}y$ both sides are $1$: it is exact, it is $\m
 
 <Step fig="fig-0-1c" set={{ form: 'heat', path: 'a' }} id="inexact-d">
 
-**Heat is not a function of the state.** Back to the heat form, on the $(V, T)$ plane, in units with $Nk_B = 1$: $\tfrac32\,\mathrm{d}T + (T/V)\,\mathrm{d}V$. Its mixed partials are $\partial(T/V)/\partial T = 1/V$ and $\partial(\tfrac32)/\partial V = 0$: it is not exact. Taking the gas from $(V, T) = (1, 1)$ to $(2, 2)$ takes in a heat of $1.5 + \ln 2 = 2.193$ along path $a$ (expand at $T = 1$, then heat), $1.5 + 2\ln 2 = 2.886$ along $b$ (heat, then expand at $T = 2$), and $2.5$ along the straight line. Same two states, three heats.
+**Heat is not a function of the state.** Back to the heat form, on the $(V, T)$ plane, in units with $Nk_B = 1$: $\tfrac32\,\mathrm{d}T + (T/V)\,\mathrm{d}V$. Its mixed partials are $\partial(T/V)/\partial T = 1/V$ and $\partial(\tfrac32)/\partial V = 0$: it is not exact. Taking the gas quasistatically from $(V, T) = (1, 1)$ to $(2, 2)$ takes in a heat of $1.5 + \ln 2 = 2.193$ along path $a$ (expand at $T = 1$, then heat), $1.5 + 2\ln 2 = 2.886$ along $b$ (heat, then expand at $T = 2$), and $2.5$ along the straight line. Same two states, three heats.
 
 So a system *has* an internal energy, a volume, a temperature: each is a <Term id="state-function">state function</Term>, and its change depends only on the endpoints. A system does not *have* a heat or a work: those are names for energy in transit, <Term id="path-function">path functions</Term>, and how much of each crosses depends on the route. The course marks the difference in the symbol. An exact differential is written with $\mathrm{d}$: $\mathrm{d}U$, $\mathrm{d}V$, $\mathrm{d}T$. A small amount of heat or work is an <Term id="inexact-differential">inexact differential</Term>, written with a $\delta$: $\dbar Q$, $\dbar W$. Writing $\mathrm{d}Q$ would assert that some function $Q$ of the state exists to be differentiated. None does.
 
@@ -424,7 +424,7 @@ the first for independent dice, the second for one die read twice.
 
 **Substitution:** (a) $\mu_1 = 21/6 = 3.5$; $\langle X^2 \rangle = 91/6$; $\sigma_1^2 = 91/6 - 49/4 = 35/12 = 2.917$. (b) $\mu = (2/15)(1 + 2 + 3 + 4 + 5) + 6/3 = 2 + 2 = 4$; $\langle X^2 \rangle = (2/15)(55) + 36/3 = 7.333 + 12 = 19.333$; $\sigma^2 = 19.333 - 16 = 3.333$. (c) $2 \cdot 2.917 = 5.833$; $4 \cdot 2.917 = 11.667$.
 
-**Result:** (a) $\mu_1 = 3.5$, $\sigma_1^2 = 35/12 = 2.917$. (b) $\mu = 4$, $\sigma^2 = 10/3 = 3.333$: the load moved probability onto six, the face farthest from the old mean, so the spread grew. (c) $5.83$ for independent dice; $11.67$, twice that, for one die read twice. Variances add only when the covariance vanishes.
+**Result:** (a) $\mu_1 = 3.5$, $\sigma_1^2 = 35/12 = 2.917$. (b) $\mu = 4$, $\sigma^2 = 10/3 = 3.333$: the load moved probability onto six, one of the two faces farthest from the old mean, so the spread grew. (c) $5.83$ for independent dice; $11.67$, twice that, for one die read twice. Variances add only when the covariance vanishes.
 
 </Solution>
 

@@ -59,7 +59,7 @@ const TEXT = {
     exponent: 'fitted exponent',
     computing: 'computing…',
     describe: (view: View, n: number, samples: number, measured: number, predicted: number, alpha: number) =>
-      `${num(samples)} experiments of ${num(n)} dice, ${view === 'average' ? 'averages' : 'sums'}: measured spread ${measured.toPrecision(3)}, predicted ${predicted.toPrecision(3)}; fitted exponent ${alpha.toFixed(2).replace('-', MINUS)}.`,
+      `${num(samples)} experiments of ${num(n)} dice, ${view === 'average' ? 'averages' : 'sums'}: measured spread ${measured.toPrecision(3)}, predicted ${predicted.toPrecision(3)}; fitted exponent ${alpha.toFixed(3).replace('-', MINUS)}.`,
   },
   he: {
     task: {
@@ -67,7 +67,7 @@ const TEXT = {
       'sum-grows': 'עברו לסכום. מה קורה לפיזור שלו כש-N גדל?',
       fit: 'הגרילו דגימות חדשות כמה פעמים. עד כמה יציב המעריך המותאם?',
     } satisfies Record<TaskId, string>,
-    label: 'איור חי: הפיזור של הממוצע (או הסכום) של N קוביות בהרבה ניסויים, וכיצד הוא משתנה עם N על צירים לוגריתמיים.',
+    label: 'איור חי: הפיזור של הממוצע (או הסכום) של N קוביות על פני ניסויים רבים, וכיצד הוא משתנה עם N על צירים לוגריתמיים.',
     keys: 'במקלדת: חיצי ימין ושמאל משנים את N, אנטר מגריל דגימות חדשות.',
     n: 'קוביות בניסוי N',
     samples: 'ניסויים',
@@ -76,7 +76,7 @@ const TEXT = {
     histX: { average: 'ממוצע של N קוביות', sum: 'סכום של N קוביות' } satisfies Record<View, string>,
     histY: 'ניסויים',
     lawX: 'N קוביות (לוגריתמי)',
-    lawY: { average: 'פיזור יחסי σ/ממוצע (לוגריתמי)', sum: 'פיזור הסכום (לוגריתמי)' } satisfies Record<View, string>,
+    lawY: { average: 'פיזור יחסי, σ חלקי הממוצע (לוגריתמי)', sum: 'פיזור הסכום (לוגריתמי)' } satisfies Record<View, string>,
     measured: 'נמדד',
     predicted: 'חזוי',
     spread: 'פיזור',
@@ -84,7 +84,7 @@ const TEXT = {
     exponent: 'מעריך מותאם',
     computing: 'בחישוב…',
     describe: (view: View, n: number, samples: number, measured: number, predicted: number, alpha: number) =>
-      `${num(samples)} ניסויים של ${num(n)} קוביות, ${view === 'average' ? 'ממוצעים' : 'סכומים'}: הפיזור הנמדד ${iso(measured.toPrecision(3))}, החזוי ${iso(predicted.toPrecision(3))}; המעריך המותאם ${iso(alpha.toFixed(2).replace('-', MINUS))}.`,
+      `${num(samples)} ניסויים של ${num(n)} קוביות, ${view === 'average' ? 'ממוצעים' : 'סכומים'}: הפיזור הנמדד ${iso(measured.toPrecision(3))}, החזוי ${iso(predicted.toPrecision(3))}; המעריך המותאם ${iso(alpha.toFixed(3).replace('-', MINUS))}.`,
   },
 } satisfies Record<Lang, unknown>;
 
@@ -290,7 +290,7 @@ export default function DiceSpread(props: DiceSpreadProps) {
             ) : null}
           </span>
           <span>
-            {L.exponent}: <bdi class="ltr"><b class="q">{alpha.toFixed(2).replace('-', MINUS)}</b></bdi>
+            {L.exponent}: <bdi class="ltr"><b class="q">{alpha.toFixed(3).replace('-', MINUS)}</b></bdi>
           </span>
         </span>
       }

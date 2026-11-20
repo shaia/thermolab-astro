@@ -12,7 +12,7 @@
   term: { en: random variable, he: משתנה מקרי }
   definition:
     en: A quantity that takes the value $x_k$ with probability $p_k$, where $\sum_k p_k = 1$; the face of a die is one.
-    he: גודל שמקבל את הערך $x_k$ בהסתברות $p_k$, כאשר $\sum_k p_k = 1$; הפאה של קובייה היא דוגמה.
+    he: גודל שמקבל את הערך $x_k$ בהסתברות $p_k$, כאשר $\sum_k p_k = 1$; הפן שקובייה מראה הוא דוגמה.
   lesson: '0.1'
 - id: expectation
   term: { en: mean (expectation), he: תוחלת }
@@ -36,7 +36,7 @@
   term: { en: independence, he: אי-תלות }
   definition:
     en: Two random variables are independent when every joint probability factorizes, $P(X = x, Y = y) = P(X = x)\,P(Y = y)$; knowing one tells nothing about the other. It implies $\langle XY\rangle = \langle X\rangle\langle Y\rangle$, but not conversely.
-    he: שני משתנים מקריים בלתי תלויים כאשר כל הסתברות משותפת מתפרקת למכפלה, $P(X = x, Y = y) = P(X = x)\,P(Y = y)$; ידיעת האחד אינה מלמדת דבר על השני. מכאן נובע $\langle XY\rangle = \langle X\rangle\langle Y\rangle$, אבל לא להפך.
+    he: שני משתנים מקריים הם בלתי תלויים כאשר כל הסתברות משותפת מתפרקת למכפלה, $P(X = x, Y = y) = P(X = x)\,P(Y = y)$; ידיעת האחד אינה מלמדת דבר על השני. מכאן נובע $\langle XY\rangle = \langle X\rangle\langle Y\rangle$, אבל לא להפך.
   reject: ['עצמאות']
   lesson: '0.1'
 - id: covariance
@@ -54,21 +54,21 @@
 - id: random-seed
   term: { en: seed, he: זרע }
   definition:
-    en: The number that starts a pseudo-random generator. The same seed gives the same sequence, so a run can be repeated exactly; a different seed gives an independent run.
-    he: המספר שמתחיל מחולל פסאודו-אקראי. אותו זרע נותן את אותה סדרה, כך שאפשר לחזור על הרצה בדיוק; זרע אחר נותן הרצה בלתי תלויה.
+    en: The number that starts a pseudo-random generator. The same seed gives the same sequence, so a run can be repeated exactly; a different seed gives a run that behaves as an independent one.
+    he: המספר שממנו מתחיל מחולל פסאודו-אקראי. אותו זרע נותן את אותה סדרה, כך שאפשר לחזור על הרצה בדיוק; זרע אחר נותן הרצה שמתנהגת כבלתי תלויה.
   lesson: '0.1'
 - id: dimensional-analysis
   term: { en: dimensional analysis, he: ניתוח ממדי }
   definition:
     en: Checking that both sides of an equation, and every term added, have the same dimensions, and that the argument of every exponential or logarithm is a pure number. It rejects wrong formulas; it cannot supply numerical factors.
-    he: בדיקה ששני אגפי משוואה, וכל איבר שמחברים, הם בעלי אותם ממדים, ושהארגומנט של כל אקספוננט או לוגריתם הוא מספר טהור. היא פוסלת נוסחאות שגויות; היא אינה יכולה לספק מקדמים מספריים.
+    he: בדיקה ששני אגפי משוואה, וכל איבר שמחברים, הם בעלי אותם ממדים, ושהארגומנט של כל פונקציה מעריכית או לוגריתם הוא מספר טהור. היא פוסלת נוסחאות שגויות; היא אינה יכולה לספק מקדמים מספריים.
   reject: ['אנליזה ממדית']
   lesson: '0.1'
 - id: partial-derivative
   term: { en: partial derivative, he: נגזרת חלקית }
   definition:
     en: The derivative with respect to one variable while the others are held fixed, written with the held variables as a subscript, $(\partial f/\partial x)_y$.
-    he: הנגזרת לפי משתנה אחד כשהאחרים מוחזקים קבועים, ונכתבת עם המשתנים המוחזקים כאינדקס תחתון, $(\partial f/\partial x)_y$.
+    he: הנגזרת לפי משתנה אחד כשהאחרים מוחזקים קבועים, ונכתבת עם המשתנים המוחזקים כמציין תחתי, $(\partial f/\partial x)_y$.
   lesson: '0.1'
 - id: mixed-partials
   term: { en: mixed partial derivatives, he: נגזרות מעורבות }
@@ -99,7 +99,7 @@
   term: { en: exact differential, he: דיפרנציאל מדויק }
   definition:
     en: A form that is the total differential of some function $f$. Its integral from $A$ to $B$ is $f(B) - f(A)$ along every path, and zero around every loop; on a simply connected region the test is $\partial M/\partial y = \partial N/\partial x$.
-    he: תבנית שהיא הדיפרנציאל השלם של פונקציה כלשהי $f$. האינטגרל שלה זהה לכל מסלול בין אותן נקודות קצה, ואפס סביב כל לולאה; בתחום פשוט קשר המבחן הוא $\partial M/\partial y = \partial N/\partial x$.
+    he: תבנית שהיא הדיפרנציאל השלם של פונקציה כלשהי $f$. האינטגרל שלה מ-$A$ אל $B$ הוא $f(B) - f(A)$ לאורך כל מסלול, ואפס סביב כל לולאה; בתחום פשוט קשר המבחן הוא $\partial M/\partial y = \partial N/\partial x$.
   lesson: '0.1'
 - id: inexact-differential
   term: { en: inexact differential, he: דיפרנציאל לא מדויק }

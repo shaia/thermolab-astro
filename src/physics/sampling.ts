@@ -3,16 +3,17 @@
  * so the live figures run the model the lesson describes. Tests: tests/physics/sampling.test.ts.
  *
  * MODEL SPECIFICATION
- *   System:        N independent repetitions of one fixed random draw, read as the face of a fair die;
- *                  the observables are the running average, the sample average and its spread
- *   Dynamics:      none beyond accumulation: every draw is independent of every other, with no memory
- *   Boundary:      none; N and the number of experiments are fixed for one experiment
- *   Ensemble:      independent trials, every face equally probable by fiat
- *   Ignored:       all physics: no energy, particles, medium or container, and the bounce dynamics
- *                  that are the actual reason a real throw looks random
- *   Valid when:    draws are independent and have finite variance; a seeded generator gives both
- *   Failure modes: correlated draws, loaded dice, infinite-variance steps, any question about a
- *                  single roll beyond its distribution
+ *   System:        N dice, each showing one of six equally likely faces; the observable is their sum
+ *                  or their average
+ *   Dynamics:      none; each draw is independent of every other, with no memory and nothing
+ *                  evolving in time
+ *   Boundary:      trivially closed; N is fixed for one experiment, and nothing is exchanged
+ *   Ensemble:      every face equally probable, by assumption rather than by proof
+ *   Ignored:       all the physics of real dice: the tumble, the bounce, pip asymmetry, air drag, and
+ *                  the deterministic chaos that is the real reason a throw looks random
+ *   Valid when:    the randomness is well described by independent uniform draws
+ *   Failure modes: correlated draws, loaded dice, and any question about a single roll beyond its
+ *                  distribution
  *
  * Randomness comes from a caller-supplied uniform generator on [0, 1) (`uniform(seed)` in kinetics.ts).
  */

@@ -32,12 +32,9 @@ when it is.
 - Math refresher: "(∂U/∂T)_V and (∂U/∂T)_P … are the heat capacities at constant volume and at constant
   pressure". C_P is (∂H/∂T)_P; for a monatomic ideal gas (∂U/∂T)_P = (3/2)Nk_B = C_V, while C_P = (5/2)Nk_B.
 - Conventions, epistemic labels: Stirling's relative error does not fall as ln N / N. The error is
-  ½ ln(2πN), so the relative error is about 1/(2N): 8.9·10⁻³ at N = 100 (ln N / N = 4.6·10⁻²) and
-  6.1·10⁻⁷ at N = 10⁶ (ln N / N = 1.4·10⁻⁵).
-- Advanced section: the variance tied to a heat capacity, Var(E) = k_B T² C_V, is module 12's result
-  (12-partition-functions, objective 1), not module 18's.
-- Math refresher and orientation: energies in this course are "routinely around 10⁻¹⁸ J". Molecular
-  thermal energies are k_B T ≈ 4·10⁻²¹ J at 300 K, and the problem set's own example is 6.2·10⁻²¹ J.
+  ½ ln(2πN), so the relative error is ln(2πN)/[2N(ln N − 1)], of order 1/N: 8.9·10⁻³ at N = 100
+  (ln N / N = 4.6·10⁻²) and 6.1·10⁻⁷ at N = 10⁶ (ln N / N = 1.4·10⁻⁵). It approaches 1/(2N) only
+  logarithmically slowly (1.8 times it at N = 100, 1.2 times at 10⁶).
 - Hebrew conventions page: its dice model specification drops "and the deterministic chaos that is the
   actual reason a throw looks random" from *Ignored* and "beyond its distribution" from *Failure modes*;
   the English page and both module pages have them.

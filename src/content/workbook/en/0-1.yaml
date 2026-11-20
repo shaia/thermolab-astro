@@ -41,7 +41,7 @@ practice:
       (c) Two fair dice are rolled independently. By enumerating all $36$ equally likely outcomes, compute $\langle X + Y\rangle$ and $\operatorname{Var}(X + Y)$ directly, and check both against the addition rules.
       (d) Now let $Y = X$: the "second die" is the first, read twice. Compute $\operatorname{Var}(X + Y)$ and compare with (c). Which hypothesis of the addition rule has been violated, and by how much does the answer change?
     answer: >-
-      (a) $\mu_1 = 7/2$, $\sigma_1^2 = 35/12 = 2.917$. (b) $\mu = 4$, $\sigma^2 = 10/3 = 3.333$: the load moved probability onto the face farthest from the old mean. (c) $\langle X + Y\rangle = 7$, $\operatorname{Var}(X + Y) = 35/6 = 5.833$, as $\mu_1 + \mu_1$ and $\sigma_1^2 + \sigma_1^2$. (d) $35/3 = 11.67$, twice (c): the covariance is no longer zero but $\sigma_1^2$, which adds $2\sigma_1^2 = 5.83$.
+      (a) $\mu_1 = 7/2$, $\sigma_1^2 = 35/12 = 2.917$. (b) $\mu = 4$, $\sigma^2 = 10/3 = 3.333$: the load moved probability onto six, one of the two faces farthest from the old mean. (c) $\langle X + Y\rangle = 7$, $\operatorname{Var}(X + Y) = 35/6 = 5.833$, as $\mu_1 + \mu_1$ and $\sigma_1^2 + \sigma_1^2$. (d) $35/3 = 11.67$, twice (c): the covariance is no longer zero but $\sigma_1^2$, which adds $2\sigma_1^2 = 5.83$.
     solution:
       - kind: given
         text: >-
@@ -63,7 +63,7 @@ practice:
           (d) $X + Y = 2X$, so $\operatorname{Var}(2X) = 4\sigma_1^2 = 35/3$. In the addition rule, $\operatorname{Cov}(X, X) = \operatorname{Var}(X) = \sigma_1^2$, not zero: the hypothesis of independence (more precisely, of zero covariance) fails.
       - kind: limit
         text: >-
-          Load the die completely, so that six always comes up: the mean goes to $6$ and the variance to $0$, as for any quantity that never varies. The partial load of (b) raised the variance because it moved weight away from the middle faces, to the edge.
+          Load the die completely, so that six always comes up: the mean goes to $6$ and the variance to $0$, as for any quantity that never varies. The partial load of (b) raised the variance because it moved weight from faces 1 to 5 onto 6, an extreme face.
       - kind: units
         text: >-
           Faces are pure numbers; so are every mean and variance here.
@@ -229,7 +229,7 @@ practice:
     solution:
       - kind: reasoning
         text: >-
-          (a) The joule is the unit of energy, whatever form it is in, so a shared unit proves nothing. A state function has a value in each state; heat does not: the same two states can be joined by routes that pass different amounts of heat (the lesson's three routes give $2.193$, $2.886$ and $2.5$ in its units). The brick has an internal energy; "heat" names energy crossing its boundary.
+          (a) The joule is the unit of energy, whatever form it is in, so a shared unit proves nothing. A state function has a value in each state; heat does not: the same two states can be joined by routes that pass different amounts of heat (the lesson's three quasistatic routes give $2.193$, $2.886$ and $2.5$ in its units). The brick has an internal energy; "heat" names energy crossing its boundary.
       - kind: reasoning
         text: >-
           (b) $\oint\mathrm{d}U = 0$ is right, because $U$ is a state function. The first law then gives $\oint\dbar Q = -\oint\dbar W = \oint P\,\mathrm{d}V$, the area of the cycle on the $P$–$V$ plane, which is not zero for a cycle that encloses one. An engine turns that net heat into net work.
@@ -254,7 +254,7 @@ practice:
       (d) Repeat (a) with the loaded die of problem 2 (six with probability $1/3$). Which number changed, the exponent or the coefficient, and why does the derivation predict exactly that?
       (e) State one thing your numerical results do not prove.
     answer: >-
-      (a) About $-0.501$; over 64 seeds $-0.5007$, scattering by $0.004$ from seed to seed ($0.006$ with $500$ repetitions). (b) $0.488 \pm 0.004$, against $\sigma_1/\mu_1 = 0.488$. (c) About $2.5\%$ of the runs are kept, with an opening average of $4.74$; their next $90$ rolls average $3.500 \pm 0.004$ in one batch ($3.5003 \pm 0.0005$ over 64 batches): no compensation. (d) The exponent stays at $-0.500$; the coefficient falls to $0.456$, the loaded die's $\sigma/\mu = \sqrt{10/3}/4 = 0.4564$. (e) For example: that real dice are independent, or that the law holds; the law is a theorem, the runs are evidence.
+      (a) About $-0.501$; over 64 seeds $-0.5007$, scattering by $0.004$ from seed to seed ($0.007$ with $500$ repetitions). (b) $0.488 \pm 0.004$, against $\sigma_1/\mu_1 = 0.488$. (c) About $2.5\%$ of the runs are kept, with an opening average of $4.74$; their next $90$ rolls average $3.500 \pm 0.004$ in one batch ($3.5003 \pm 0.0005$ over 64 batches): no compensation. (d) The exponent stays at $-0.500$; the coefficient falls to $0.456$, the loaded die's $\sigma/\mu = \sqrt{10/3}/4 = 0.4564$. (e) For example: that real dice are independent, or that the law holds; the law is a theorem, the runs are evidence.
     solution:
       - kind: given
         text: >-
@@ -267,7 +267,7 @@ practice:
           $\ln\dfrac{\sigma_{A_N}}{\mu_1} = \ln\dfrac{\sigma_1}{\mu_1} - \tfrac12\ln N$
       - kind: reasoning
         text: >-
-          (a, b) The fit measures the slope of that line, the coefficient its height. Many wrong models give a slope near $-\tfrac12$: any sum of independent draws does, whatever their distribution, so a wrong die, or a bug that rescaled every average, would pass a slope test. The height pins down $\sigma_1/\mu_1$, which depends on the die.
+          (a, b) The fit measures the slope of that line, the coefficient its height. Many wrong models give a slope near $-\tfrac12$: any sum of independent draws does, whatever their distribution, so a wrong die would pass a slope test, and so would a bug that rescaled every sample, since a rescaling changes neither the slope nor, when the spread is divided by the measured mean, the height. The height pins down $\sigma_1/\mu_1$, which depends on the die; only a comparison of the measured mean with $3.5$ catches the rescaling.
       - kind: substitution
         text: >-
           (a, b) With 64 seeds and $2000$ repetitions: exponent $-0.5007$, seed-to-seed scatter $0.0039$; coefficient $0.4879$, scatter $0.0041$, against $\sqrt{35/12}/3.5 = 0.48795$. Each spread is uncertain by $1/\sqrt{3998} = 1.6\%$, and over the five points the slope by about $0.004$, as observed. (c) The first ten rolls sum to $46$ or more with probability $0.02525$ exactly; measured $0.0252$, opening average $4.742$. The kept runs' next $90$ rolls: $3.5003$, scattering by $0.0038$ between batches, so $3.5003 \pm 0.0005$ over 64. (d) Loaded: exponent $-0.5004 \pm 0.0037$ (scatter), coefficient $0.4557 \pm 0.0034$, against $0.4564$.
@@ -282,7 +282,7 @@ practice:
           Faces, spreads, ratios and the exponent are pure numbers; this is why the relative spread, not the absolute one, is what is compared between dice.
       - kind: result
         text: >-
-          (a) $-0.501$, scattering by $0.004$. (b) $0.488$, as predicted; the height is the real test. (c) $3.500 \pm 0.004$ after a hot start: compensation is ruled out. (d) Only the coefficient changes, to $0.456$. (e) The runs check our algebra and code, not our assumptions: a pseudo-random generator is independent by construction, so they cannot show that real dice are, and a numerical observation never proves a theorem.
+          (a) $-0.501$, scattering by $0.004$. (b) $0.488$, as predicted; the height is the real test. (c) $3.500 \pm 0.004$ after a hot start: compensation is ruled out. (d) Only the coefficient changes, to $0.456$. (e) The runs check our algebra and code, not our assumptions: a pseudo-random generator is built so that its draws behave as independent, so they cannot show that real dice are independent, and a numerical observation never proves a theorem.
 
   - id: W-0.1-09
     level: bagrut
@@ -321,7 +321,7 @@ practice:
           $aN^2/V^2$: $\text{Pa m}^6/\text{m}^6 = \text{Pa}$, a pressure, as it must be to be subtracted from one; $aN^2/V$: $\text{Pa m}^3 = \text{J}$; $Nb$: $\text{m}^3$, subtracted from a volume. $Nk_BT$ times a logarithm: joules.
       - kind: substitution
         text: >-
-          $Nk_BT = 2494.2\,\text{J}$; $\ln(1.968/0.968) = 0.7096$, so $Nk_BT\ln(\dots) = 1769.7\,\text{J}$; $aN^2(1/V_1 - 1/V_2) = 0.1355 \times 500 = 67.75\,\text{J}$. $W = -1769.7 + 67.8 = -1702.0\,\text{J}$; $\Delta U = 67.8\,\text{J}$; $Q = 1769.7\,\text{J}$, $\Delta S = 5.90\,\text{J/K}$. Ideal: $W = -2494.2\ln 2 = -1728.8\,\text{J}$.
+          $Nk_BT = 2494.2\,\text{J}$; $\ln(1.968/0.968) = 0.7095$, so $Nk_BT\ln(\dots) = 1769.7\,\text{J}$; $aN^2(1/V_1 - 1/V_2) = 0.1355 \times 500 = 67.75\,\text{J}$. $W = -1769.7 + 67.8 = -1702.0\,\text{J}$; $\Delta U = 67.8\,\text{J}$; $Q = 1769.7\,\text{J}$, $\Delta S = 5.90\,\text{J/K}$. Ideal: $W = -2494.2\ln 2 = -1728.8\,\text{J}$.
       - kind: result
         text: >-
           (a) Not exact: heat is a path function for this gas too. (b) $1/T$ is an integrating factor, and $S = \tfrac32 Nk_B\ln T + Nk_B\ln(V - Nb)$. (c) $W = -1702\,\text{J}$ (the gas does work on its surroundings, so $W < 0$), $\Delta U = +67.8\,\text{J}$ (pulling the attracting molecules apart stores energy), $Q = +1770\,\text{J}$. The gas does $27\,\text{J}$ less work than an ideal gas and takes in $41\,\text{J}$ more heat.
@@ -331,12 +331,12 @@ practice:
     objectives: [OBJ-0.1-1, OBJ-0.1-3]
     prompt: >-
       Chebyshev's inequality says $P(|A_N - \mu_1| \ge \varepsilon) \le \sigma_1^2/(N\varepsilon^2)$ for the average of $N$ independent copies of any quantity with finite variance.
-      (a) For the average of $100$ fair dice, bound $P(|A - 3.5| \ge 0.5)$. Compare with the Gaussian estimate $2\,\Phi(-\varepsilon/\sigma_A)$, where $\Phi$ is the standard normal distribution function, and with the exact value $0.0036$, found by convolving the distribution of one die with itself $100$ times.
-      (b) You want a guarantee that the average of $N$ dice lands within $0.1$ of $3.5$ with probability at least $99\%$. How many dice does Chebyshev's inequality demand? How many does the Gaussian estimate suggest? (Exactly, $1936$ dice miss with probability $0.0100$.)
+      (a) For the average of $100$ fair dice, bound $P(|A - 3.5| \ge 0.5)$. Compare with the Gaussian estimate $2\,\Phi(-\varepsilon/\sigma_A)$, where $\Phi$ is the standard normal distribution function, and with the exact value $0.0036$, found by convolution: the distribution of the sum of $100$ dice, from $99$ convolutions of the distribution of one die with itself.
+      (b) You want a guarantee that the average of $N$ dice lands within $0.1$ of $3.5$ with probability at least $99\%$. How many dice does Chebyshev's inequality demand? How many does the Gaussian estimate suggest? (Exactly, $1936$ dice miss with probability $0.01001$, just over $1\%$; because the sum lives on a lattice, the exact miss probability is not monotone in $N$ near there.)
       (c) Why quote a bound that is so pessimistic? What does each estimate assume?
       (d) What do both say as $N \to \infty$?
     answer: >-
-      (a) Bound $0.117$; Gaussian $0.0034$; exact $0.0036$: the bound is $32$ times too large. (b) Chebyshev: $29\,167$ dice; Gaussian: $1936$ dice, which exactly miss $1.00\%$ of the time, right at the edge. (c) Chebyshev needs only a finite variance and holds at every $N$; the Gaussian needs $N$ large enough for the central limit theorem, and is least reliable in the tails. (d) Both go to zero: the weak law of large numbers.
+      (a) Bound $0.117$; Gaussian $0.0034$; exact $0.0036$: the bound is $32$ times too large. (b) Chebyshev: $29\,167$ dice; Gaussian: $1936$ dice, which exactly miss $1.0015\%$ of the time, a hair short. (c) Chebyshev needs only a finite variance and holds at every $N$; the Gaussian needs $N$ large enough for the central limit theorem, and is least reliable in the tails. (d) Both go to zero: the weak law of large numbers.
     solution:
       - kind: given
         text: >-
@@ -387,7 +387,7 @@ challenge:
           $\dfrac{\sigma_d}{\langle d\rangle} = \dfrac{\sigma_1}{\mu_1}\,n^{-1/2} = \sqrt2\,n^{-1/2} \qquad n = \dfrac{2}{\varepsilon^2}$
       - kind: reasoning
         text: >-
-          (c) A Gaussian with mean $24a$ and width $5.66a$ puts probability below $d = 0$, which is impossible, and is symmetric, while $d$ cannot be negative and has an exponential tail to the right. Near the centre it is good, $0.50$ against an exact $0.53$ for $d < 24a$; in the left tail it overestimates by a factor of two. A sum of $36$ terms is Gaussian in its bulk long before it is Gaussian in its tails.
+          (c) A Gaussian with mean $24a$ and width $5.66a$ puts probability below $d = 0$, which is impossible, and is symmetric, while $d$ cannot be negative and has an exponential tail to the right. Near the centre it is good, $0.50$ against an exact $0.53$ for $d < 24a$; in the left tail it overestimates by a factor of $2.3$. A sum of $36$ terms is Gaussian in its bulk long before it is Gaussian in its tails.
       - kind: limit
         text: >-
           With $n = 1$ the relative scatter is $\sigma_1/\mu_1 = \sqrt{8/9}/(2/3) = \sqrt2 = 1.41$: one sweep is wildly unpredictable. If the impurity always moved ($\tfrac13 \to 0$), one sweep would be exponential, with $\sigma_1/\mu_1 = 1$; the chance of staying put makes each sweep more erratic.

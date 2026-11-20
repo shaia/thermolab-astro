@@ -10,7 +10,7 @@
     he: הממוצע של קוביות רבות מתייצב כי רצף של הטלות גבוהות מתקזז אחר כך ברצף של נמוכות.
   truth:
     en: Dice have no memory. After a hot start the next rolls still average 3.5, and the early excess of the sum is never paid back; it stays, while the sum's random wander grows as √N. The average settles because that excess is divided by an ever larger N. Dilution, not compensation.
-    he: לקוביות אין זיכרון. אחרי פתיחה חמה ההטלות הבאות עדיין מתמצעות ל-⁦3.5⁩, והעודף המוקדם של הסכום לעולם אינו מוחזר; הוא נשאר, בזמן שהשוטטות האקראית של הסכום גדלה כמו ⁦√N⁩. הממוצע מתייצב כי העודף הזה מחולק ב-⁦N⁩ שהולך וגדל. דילול, לא פיצוי.
+    he: לקוביות אין זיכרון. אחרי פתיחה חמה התוחלת של ההטלות הבאות היא עדיין ⁦3.5⁩, והעודף המוקדם של הסכום לעולם אינו מוחזר; הוא נשאר, בזמן שהשיטוט האקראי של הסכום גדל כמו ⁦√N⁩. הממוצע מתייצב כי העודף הזה מחולק ב-⁦N⁩ שהולך וגדל. דילול, לא פיצוי.
   remedy:
     lesson: '0.1'
     anchor: dilution
@@ -44,7 +44,7 @@
     he: מיצוע של פי ⁦N⁩ יותר קוביות מקטין את השגיאה הטיפוסית פי ⁦N⁩, ולכן פי ארבעה קוביות מקטינות אותה פי ארבעה.
   truth:
     en: The variance of the average falls as 1/N; the scatter is its square root and falls as N^(-1/2). Four times the dice halve it; a hundred times the dice divide it by ten.
-    he: השונות של הממוצע קטנה כמו ⁦1/N⁩; הפיזור הוא השורש שלה וקטן כמו ⁦N^(-1/2)⁩. פי ארבעה קוביות מחציות אותו; פי מאה קוביות מקטינות אותו פי עשרה.
+    he: השונות של הממוצע קטנה כמו ⁦1/N⁩; הפיזור הוא השורש שלה וקטן כמו ⁦N^(−1/2)⁩. פי ארבעה קוביות מחציות אותו; פי מאה קוביות מקטינות אותו פי עשרה.
   remedy:
     lesson: '0.1'
     anchor: quadruple
@@ -55,7 +55,7 @@
 - id: MC-work-sign-by-volume
   title:
     en: Compression work is negative because the volume shrinks
-    he: עבודת דחיסה שלילית כי הנפח קטן
+    he: עבודת דחיסה היא שלילית כי הנפח קטן
   belief:
     en: When a gas is compressed, the work in the first law is negative, because the volume decreased.
     he: כשגז נדחס, העבודה בחוק הראשון שלילית, כי הנפח קטן.

@@ -83,7 +83,7 @@ export const chapters: Chapter[] = [
             id: 'OBJ-0.1-3',
             text: {
               en: 'Derive and apply the N^(-1/2) law: the relative scatter of an average falls as N^(-1/2) while the absolute scatter of a sum grows as N^(1/2).',
-              he: `לגזור וליישם את חוק ${f('N^(-1/2)')}: הפיזור היחסי של ממוצע דועך כמו ${f('N^(-1/2)')}, בעוד הפיזור המוחלט של סכום גדל כמו ${f('N^(1/2)')}.`,
+              he: `לגזור וליישם את חוק ${f('N^(−1/2)')}: הפיזור היחסי של ממוצע דועך כמו ${f('N^(−1/2)')}, בעוד הפיזור המוחלט של סכום גדל כמו ${f('N^(1/2)')}.`,
             },
           },
           {
