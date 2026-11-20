@@ -1,0 +1,691 @@
+# Module 15 review problems, from ThermoLab's problem set (content/en/advanced/15-ising-problems.md, problems 1–6).
+# Problems 4 and 5 were laboratory exercises; here they work from data the lesson quotes (ThermoLab's peak positions)
+# or from runs of src/physics/ising.ts (problem 5's ⟨|m|⟩ and τ, problem 4's variance). ThermoLab kept its solutions
+# with the instructor; this platform publishes worked solutions and rubrics. Reduced units: energies in J,
+# temperature as k_BT/J. Ids are shared with the Hebrew file.
+lang: en
+chapter: 15
+questions:
+  - id: Q-15-bagrut-1
+    type: bagrut
+    title: >-
+      The acceptance rule is a choice, within limits
+    prompt: >-
+      A Markov chain on the square lattice at $h = 0$ proposes to flip one spin, chosen uniformly at random, and accepts the proposal with probability $A(\Delta E)$, where $\Delta E$ is the energy change of the flip. Where numbers are needed, $k_BT = 2J$.
+    parts:
+      - label: a
+        type: mc
+        points: 4
+        objectives: [OBJ-15.1-2]
+        prompt: >-
+          Which values can $\Delta E$ take for a single flip?
+        choices:
+          - text: >-
+              $-8J$, $-4J$, $0$, $4J$, $8J$
+            correct: true
+            feedback: >-
+              Right. $\Delta E_i = 2s_iJ\sum_j s_j$, and the sum over four neighbours of $\pm1$ is $-4$, $-2$, $0$, $2$ or $4$. Five values, so the acceptance probabilities can be computed once and looked up.
+          - text: >-
+              $-4J$, $-2J$, $0$, $2J$, $4J$
+            feedback: >-
+              That is the neighbour sum times $J$. Each bond whose state changes goes from $-J$ to $+J$ or back, a change of $2J$, so $\Delta E_i = 2s_iJ\sum_j s_j$.
+          - text: >-
+              Every even multiple of $J$ from $-8J$ to $8J$
+            feedback: >-
+              The neighbour sum of four spins is always even, so $\Delta E$ is a multiple of $4J$: $\pm2J$ and $\pm6J$ cannot occur.
+          - text: >-
+              $0$, $4J$, $8J$
+            feedback: >-
+              A flip can lower the energy too: turning a spin that disagrees with its neighbours gives $\Delta E = -4J$ or $-8J$, and Metropolis accepts those with certainty.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-2]
+        prompt: >-
+          With what probability does the Glauber rule, $A = 1/\left(1 + e^{\Delta E/(k_BT)}\right)$, accept a flip with $\Delta E = 4J$?
+        answer: 0.119
+        unit: ''
+        tolerance: 0.02
+        correctFeedback: >-
+          $1/(1 + e^{2}) = 0.119$, less than Metropolis' $e^{-2} = 0.135$ for the same flip. Glauber accepts less often for every $\Delta E$, and even a $\Delta E = 0$ flip only half the time.
+        wrongFeedback: >-
+          The exponent is $\Delta E/(k_BT) = 4J/2J = 2$.
+        commonWrong:
+          - value: 0.135
+            feedback: >-
+              That is the Metropolis probability, $e^{-2}$. Glauber's is $1/(1 + e^{2})$.
+          - value: 0.881
+            feedback: >-
+              That is $1/(1 + e^{-2})$, the probability for the reverse flip, $\Delta E = -4J$.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-15.1-2]
+        prompt: >-
+          A student proposes $A' = \tfrac12\min\left(1, e^{-\Delta E/(k_BT)}\right)$, "to be safe". What does the chain do?
+        choices:
+          - text: >-
+              It samples the Boltzmann distribution at $T$, and needs about twice as many sweeps to do it.
+            correct: true
+            feedback: >-
+              Right. Detailed balance constrains only the ratio $A(\Delta E)/A(-\Delta E)$, which the factor $\tfrac12$ leaves unchanged. Halving every acceptance halves the rate of every move: the destination is the same, the trip twice as long.
+          - text: >-
+              It samples the Boltzmann distribution at temperature $2T$.
+            feedback: >-
+              A rescaled temperature needs a rescaled exponent, $e^{-\Delta E/(2k_BT)}$. A constant factor in front cancels from the ratio.
+          - text: >-
+              It breaks detailed balance: the acceptance no longer equals the Boltzmann factor.
+            feedback: >-
+              Detailed balance never asked the acceptance to equal the Boltzmann factor, only the ratio of forward and backward acceptances to equal the ratio of Boltzmann weights. The factor $\tfrac12$ cancels from that ratio.
+          - text: >-
+              It describes a more sluggish magnet, whose spins really flip half as often.
+            feedback: >-
+              The chain samples the same equilibrium as Metropolis; only the number of sweeps changes, and no constant converts sweeps into seconds. The rule is a choice of algorithm, not a property of the material.
+            misconception: MC-mc-is-real-dynamics
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-15.1-2]
+        prompt: >-
+          Show that detailed balance with respect to $p_s \propto e^{-E_s/(k_BT)}$ holds if and only if $A(\Delta E)/A(-\Delta E) = e^{-\Delta E/(k_BT)}$ for every $\Delta E$, and explain why the proposal step does not appear. Verify that Metropolis and Glauber satisfy the condition, and explain why no rule can use a constant $c > 1$ in place of the student's $\tfrac12$. Then show, by summing detailed balance over the initial configuration, that the Boltzmann distribution is stationary, and explain why this says nothing about how many sweeps the chain needs. Check the two rules in the limits $T \to \infty$ and $T \to 0$.
+        solution:
+          - kind: law
+            text: >-
+              Detailed balance, $p_s\,P(s \to s') = p_{s'}\,P(s' \to s)$, where a move is proposed and then accepted: $P(s \to s') = g(s \to s')\,A(s \to s')$, with $g = 1/N$ for a flip of one of $N$ spins chosen at random.
+          - kind: manipulation
+            text: >-
+              The proposal is symmetric, $g(s \to s') = g(s' \to s)$, so it cancels, and so does $Z$: $A(s \to s')/A(s' \to s) = p_{s'}/p_s = e^{-\Delta E/(k_BT)}$. The reverse move has energy change $-\Delta E$, so the condition is $A(\Delta E)/A(-\Delta E) = e^{-\Delta E/(k_BT)}$; conversely, if it holds for every $\Delta E$, it holds for every pair of configurations one flip apart, which is detailed balance.
+          - kind: manipulation
+            text: >-
+              Metropolis, with $x = \Delta E/(k_BT) > 0$: $A(\Delta E) = e^{-x}$ and $A(-\Delta E) = 1$, ratio $e^{-x}$; for $x \le 0$ the roles swap. Glauber: $\dfrac{1/(1 + e^{x})}{1/(1 + e^{-x})} = \dfrac{1 + e^{-x}}{1 + e^{x}} = e^{-x}$. A factor $c$ in front cancels from the ratio, but $c\min(1, e^{-x}) = c$ for every downhill move, and $c > 1$ is not a probability: $c \le 1$ is allowed, and a smaller $c$ is only slower.
+          - kind: manipulation
+            text: >-
+              Sum detailed balance over $s$: $\sum_s p_s P(s \to s') = p_{s'}\sum_s P(s' \to s) = p_{s'}$, because from $s'$ the chain must go somewhere (staying put included). So $p$ is carried into itself by one step. That fixes where the chain ends up, not how fast it gets there: the approach is set by the rest of the transition matrix, which differs between Metropolis, Glauber and $A'$ although all three share the same stationary $p$.
+          - kind: formula
+            text: >-
+              $\dfrac{A(\Delta E)}{A(-\Delta E)} = e^{-\Delta E/(k_BT)}, \qquad \sum_s p_s\,P(s \to s') = p_{s'}$
+          - kind: limit
+            text: >-
+              $T \to \infty$: the ratio goes to $1$ and the Boltzmann distribution becomes uniform; Metropolis accepts every move ($A \to 1$), Glauber half of them ($A \to \tfrac12$), and both are uniform random walks over configurations, as they must be. $T \to 0$: uphill moves are never accepted, downhill moves always by Metropolis and almost always by Glauber, so the chain descends into a ground state.
+          - kind: units
+            text: >-
+              $\Delta E$ and $k_BT$ are both energies in units of $J$; $A$ and every ratio are pure numbers.
+          - kind: substitution
+            text: >-
+              At $k_BT = 2J$: Metropolis accepts $1$, $1$, $1$, $e^{-2} = 0.135$, $e^{-4} = 0.018$ for $\Delta E = -8J$, $-4J$, $0$, $4J$, $8J$; Glauber $0.982$, $0.881$, $0.5$, $0.119$, $0.018$. Metropolis accepts more often, which makes it faster, not more correct.
+          - kind: result
+            text: >-
+              Detailed balance is the ratio condition $A(\Delta E)/A(-\Delta E) = e^{-\Delta E/(k_BT)}$, because the symmetric proposal cancels. Metropolis and Glauber satisfy it; $c > 1$ would make a probability exceed $1$. Summing detailed balance shows the Boltzmann distribution is stationary, which fixes the destination of the chain and says nothing about its speed.
+        rubric:
+          - text: >-
+              Shows that the symmetric proposal (and $Z$) cancels, leaving the ratio condition, in both directions of the "if and only if".
+            weight: 2
+          - text: >-
+              Verifies the condition for both Metropolis and Glauber.
+          - text: >-
+              Explains that $c > 1$ gives an acceptance above $1$ for downhill moves.
+          - text: >-
+              Derives stationarity by summing over $s$, and states that it fixes the destination, not the speed.
+            weight: 2
+          - text: >-
+              A limit check: $T \to \infty$ (Metropolis $\to 1$, Glauber $\to \tfrac12$) or $T \to 0$.
+
+  - id: Q-15-bagrut-2
+    type: bagrut
+    title: >-
+      Domain walls in one and two dimensions
+    prompt: >-
+      An open chain of $N$ spins at $h = 0$ is all up. Introducing one domain wall costs $\Delta E = 2J$ and gains an entropy $\Delta S \approx k_B\ln N$, so the wall lowers the free energy once $N > e^{2J/(k_BT)}$. The exact energy per spin of the infinite chain is $E/(NJ) = -\tanh\left(J/(k_BT)\right)$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-3]
+        prompt: >-
+          Evaluate the threshold length $N = e^{2J/(k_BT)}$ at $k_BT = 0.5\,J$.
+        answer: 54.6
+        unit: ''
+        tolerance: 0.03
+        correctFeedback: >-
+          $e^{2/0.5} = e^4 = 54.6$: a chain longer than about $55$ spins is cheaper with a wall in it than without.
+        wrongFeedback: >-
+          The exponent is $2J/(k_BT) = 2/0.5 = 4$.
+        commonWrong:
+          - value: 7.39
+            feedback: >-
+              That is $e^{2}$, as if the wall cost $J$. Breaking one bond takes it from $-J$ to $+J$: $2J$.
+          - value: 77.2
+            feedback: >-
+              That is the threshold for a pair of walls on a ring, $\sqrt2\,e^{2J/(k_BT)}$. An open chain needs only one wall.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-3]
+        prompt: >-
+          Evaluate the same threshold at $k_BT = 0.2\,J$.
+        answer: 2.20e4
+        unit: ''
+        tolerance: 0.03
+        correctFeedback: >-
+          $e^{10} = 2.20\cdot10^4$. Cooling multiplies the threshold enormously, but it stays finite: at any $T > 0$ a long enough chain has walls in it.
+        wrongFeedback: >-
+          The exponent is $2J/(k_BT) = 2/0.2 = 10$.
+        commonWrong:
+          - value: 148
+            feedback: >-
+              That is $e^{5}$: the exponent is $2J/(k_BT) = 10$, not $J/(k_BT)$.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-3]
+        prompt: >-
+          A fraction $n_w$ of the bonds of the infinite chain are walls, so $E/(NJ) = -(1 - n_w) + n_w = -(1 - 2n_w)$. Find $n_w$ at $k_BT = 0.5\,J$.
+        answer: 0.0180
+        unit: ''
+        tolerance: 0.03
+        correctFeedback: >-
+          $n_w = \left(1 - \tanh 2\right)/2 = (1 - 0.9640)/2 = 0.0180$: a wall every $1/n_w = 55.6$ bonds. Since $1 - \tanh x = 2/(1 + e^{2x})$, exactly $1/n_w = 1 + e^{2J/(k_BT)}$: the ordered stretches are as long as the chain at which, in (a), a wall pays for itself.
+        wrongFeedback: >-
+          Solve $-\tanh(J/k_BT) = -(1 - 2n_w)$ for $n_w$.
+        commonWrong:
+          - value: 0.0360
+            feedback: >-
+              That is $1 - \tanh 2$, twice $n_w$: each wall turns a bond from $-J$ to $+J$, a change of $2J$, hence the factor $\tfrac12$.
+          - value: 0.964
+            feedback: >-
+              That is $\tanh 2$, minus the energy per spin. The wall fraction is what is missing from perfect order.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-15.1-3]
+        prompt: >-
+          Now the $L \times L$ square lattice. A domain of reversed spins enclosed by a closed wall of $\ell$ bonds costs $2J\ell$, and the number of closed walls of length $\ell$ through a given bond is at most $3^\ell$. Show that the free energy of such walls is positive for every $\ell$ when $k_BT < 2J/\ln 3$; evaluate this temperature and compare it with Onsager's $T_c$. Explain why this argument permits order in two dimensions but does not prove it, and why it cannot be repeated in one dimension. Check your result in a limit.
+        solution:
+          - kind: law
+            text: >-
+              $\Delta F = \Delta E - T\Delta S$. A wall of $\ell$ broken bonds costs $\Delta E = 2J\ell$; with at most $3^\ell$ shapes, its entropy is at most $\Delta S = k_B\ln 3^\ell = \ell\,k_B\ln 3$.
+          - kind: manipulation
+            text: >-
+              $\Delta F \ge 2J\ell - k_BT\,\ell\ln 3 = \ell\left(2J - k_BT\ln 3\right)$. Energy and entropy both grow in proportion to $\ell$, so the sign is set by the bracket, the same for walls of every length: for $k_BT < 2J/\ln 3$ no wall, however long, pays for itself. In one dimension the wall is a single bond whatever the length of the chain, so its energy is fixed at $2J$ while its entropy, $k_B\ln N$, grows with the system: no temperature makes $\Delta F$ positive for every $N$.
+          - kind: formula
+            text: >-
+              $\Delta F \ge \ell\left(2J - k_BT\ln 3\right) > 0 \quad\text{for}\quad k_BT < \dfrac{2J}{\ln 3}$
+          - kind: limit
+            text: >-
+              As $T \to 0$ the bracket tends to $2J > 0$ and walls are suppressed: the ordered ground state. In one dimension the threshold $e^{2J/(k_BT)}$ of (a) and (b) grows without bound as $T \to 0$ but is finite at every $T > 0$: order survives only at $T = 0$ exactly.
+          - kind: units
+            text: >-
+              $2J/\ln 3$ is an energy, quoted in units of $J$ as $k_BT$; $\ell$ is a count of bonds.
+          - kind: substitution
+            text: >-
+              $2/\ln 3 = 2/1.099 = 1.82$, so walls cannot win below $k_BT = 1.82\,J$, about $20\%$ below Onsager's $2.269\,J$.
+          - kind: result
+            text: >-
+              Below $k_BT = 1.82\,J$ every wall costs more free energy than it gains, consistent with Onsager's $T_c = 2.269\,J$ lying above. The bound counts walls generously ($3^\ell$ overcounts closed paths) and only shows that nothing like the one-dimensional catastrophe forbids order; proving order needs more, and the true $T_c$ is higher than the bound. In one dimension the wall's energy does not grow with the system and its entropy does, so the argument fails at every $T > 0$.
+        rubric:
+          - text: >-
+              $\Delta F \ge \ell(2J - k_BT\ln 3)$, with the point that both terms grow as $\ell$.
+            weight: 2
+          - text: >-
+              $k_BT = 2J/\ln 3 = 1.82\,J$, below Onsager's $2.269\,J$.
+          - text: >-
+              Explains that the bound permits order (no catastrophe) but does not prove it.
+            weight: 2
+          - text: >-
+              Explains why one dimension differs: fixed wall energy, entropy growing with $N$.
+          - text: >-
+              A limit check, for example $T \to 0$.
+
+  - id: Q-15-bagrut-3
+    type: bagrut
+    title: >-
+      Mean field: what it gets right, and how wrong it is
+    prompt: >-
+      Module 12 solved a single spin in a field exactly: $\langle s\rangle = \tanh\left(h_\text{eff}/(k_BT)\right)$. On the square lattice, $q = 4$, mean field turns this into $m = \tanh\left((qJm + h)/(k_BT)\right)$. Onsager's exact transition is at $k_BT_c = 2.269\,J$, and below it $m_0 = \left[1 - \sinh^{-4}(2J/k_BT)\right]^{1/8}$.
+    parts:
+      - label: a
+        type: mc
+        points: 4
+        objectives: [OBJ-15.1-4]
+        prompt: >-
+          What exactly is the approximation that turns the single-spin result into the mean-field equation?
+        choices:
+          - text: >-
+              Each neighbour's spin $s_j$ is replaced by its average $m$, so the field a spin feels, $qJm + h$, ignores the correlations between the spin and its neighbours.
+            correct: true
+            feedback: >-
+              Right. The neighbours enter as a fixed average field, and the spin responds to it like module 12's paramagnet; consistency then demands that the response be the $m$ assumed.
+          - text: >-
+              Each neighbour is replaced by its ground-state value, $+1$.
+            feedback: >-
+              Then the effective field would be $qJ + h$ at every temperature, and $m$ would never vanish. Mean field uses the self-consistent average $m$, not the ground state.
+          - text: >-
+              The coupling is dropped, leaving each spin alone in the field $h$.
+            feedback: >-
+              That is the exact $J = 0$ paramagnet, $m = \tanh(h/k_BT)$, which has no transition. Mean field keeps the coupling, through the term $qJm$.
+          - text: >-
+              The neighbours are replaced by their average, which is exact for a large lattice: with many spins, every neighbour is close to the average.
+            feedback: >-
+              The size of the lattice does not help: a spin still has only $q$ neighbours, and near $T_c$ they are correlated with it over long distances. That is why mean field puts $T_c$ $76\%$ too high and predicts a transition for the chain, which has none.
+            misconception: MC-mean-field-harmless
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-4]
+        prompt: >-
+          Use the expansion $m_0 \approx \sqrt{3\left(1 - T/T_c^\text{MF}\right)}$ to estimate the mean-field magnetization at $k_BT = 3.8\,J$.
+        answer: 0.387
+        unit: ''
+        tolerance: 0.03
+        correctFeedback: >-
+          $\sqrt{3(1 - 3.8/4)} = \sqrt{0.15} = 0.387$; solving $m = \tanh(4m/3.8)$ exactly gives $0.379$. The true lattice, at $3.8\,J$, is far above $T_c = 2.269\,J$ and has $m_0 = 0$.
+        wrongFeedback: >-
+          $T_c^\text{MF} = qJ/k_B = 4J/k_B$, so $1 - T/T_c^\text{MF} = 0.05$.
+        commonWrong:
+          - value: 0.15
+            feedback: >-
+              That is $m_0^2$. Take the square root.
+          - value: 0.224
+            feedback: >-
+              That is $\sqrt{0.05}$, without the factor $3$ that comes from $\tanh x \approx x - x^3/3$.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-4]
+        prompt: >-
+          Find the exact spontaneous magnetization at $k_BT = 1.5\,J$, to three decimals.
+        answer: 0.9865
+        unit: ''
+        tolerance: 0.002
+        correctFeedback: >-
+          $\sinh(2/1.5) = 1.765$, $\sinh^{-4} = 0.1030$, and $0.8970^{1/8} = 0.9865$. Mean field gives $0.990$ here, only $0.3\%$ too high.
+        wrongFeedback: >-
+          Evaluate $\left[1 - \sinh^{-4}(2J/k_BT)\right]^{1/8}$ with $2J/(k_BT) = 1.333$.
+        commonWrong:
+          - value: 0.990
+            feedback: >-
+              That is mean field's value, from $m = \tanh(4m/1.5)$. The question asks for Onsager and Yang's.
+            misconception: MC-mean-field-harmless
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-15.1-4]
+        prompt: >-
+          Derive the mean-field equation, show that at $h = 0$ it has nonzero solutions only below $k_BT_c^\text{MF} = qJ$, and derive $m_0 \approx \sqrt{3(1 - T/T_c^\text{MF})}$; give the mean-field exponent $\beta$ and the exact one. Above $T_c^\text{MF}$, linearize in small $h$ to find the susceptibility $\chi = \partial m/\partial h$, and give the mean-field $\gamma$ against the exact $7/4$. At $k_BT = 2.0\,J$ mean field gives $m_0 = 0.958$ and Onsager and Yang $0.911$; explain why mean field does better at $1.5\,J$, part (c). What does mean field predict for the chain, and what is the truth? Check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              A single spin in a field: $\langle s\rangle = \tanh\left(h_\text{eff}/(k_BT)\right)$. Spin $i$ feels $h_\text{eff} = J\sum_{j \in \text{nn}(i)} s_j + h$.
+          - kind: manipulation
+            text: >-
+              Mean field replaces each $s_j$ by $\langle s_j\rangle = m$, discarding the correlations between spin $i$ and its neighbours: $h_\text{eff} = qJm + h$, and consistency demands $m = \tanh\left((qJm + h)/(k_BT)\right)$. At $h = 0$, $m = 0$ is always a solution; the right side has slope $qJ/(k_BT)$ at the origin and saturates at $\pm1$, so it crosses the line $m$ again exactly when that slope exceeds $1$: $k_BT < qJ$.
+          - kind: manipulation
+            text: >-
+              Below $T_c^\text{MF}$, with $\tanh x \approx x - x^3/3$ and $x = mT_c^\text{MF}/T$: $1 = T_c^\text{MF}/T - m^2(T_c^\text{MF}/T)^3/3$, so $m^2 = 3T^2(T_c^\text{MF} - T)/(T_c^\text{MF})^3 \approx 3(1 - T/T_c^\text{MF})$ near $T_c^\text{MF}$: $\beta = 1/2$, against the exact $1/8$. Above it, for small $h$, $m \approx (qJm + h)/(k_BT)$, so $m = h/(k_BT - qJ)$ and $\chi = 1/\left(k_B(T - T_c^\text{MF})\right)$, the Curie-Weiss law: $\gamma = 1$, against the exact $7/4$.
+          - kind: formula
+            text: >-
+              $m = \tanh\dfrac{qJm + h}{k_BT}, \quad k_BT_c^\text{MF} = qJ, \quad m_0 \approx \sqrt{3\left(1 - \dfrac{T}{T_c^\text{MF}}\right)}, \quad \chi = \dfrac{1}{k_B\left(T - T_c^\text{MF}\right)}$
+          - kind: limit
+            text: >-
+              $T \to 0$: $m = \tanh(\infty) = 1$, the ground state, which mean field gets exactly right because a fully aligned lattice has no fluctuations to neglect; that is why it does better at $1.5\,J$ than at $2.0\,J$, and worst near $T_c$, where the neglected correlations are largest. $T \to T_c^\text{MF}$ from below: $m_0 \to 0$ continuously. $T \to \infty$: $\chi \to 1/(k_BT)$, the Curie law of free spins, as the coupling becomes negligible.
+          - kind: units
+            text: >-
+              $qJm/(k_BT)$ is a pure number; $\chi = \partial m/\partial h$ is in units of $1/J$.
+          - kind: substitution
+            text: >-
+              At $1.5\,J$: $0.990$ against $0.987$, $0.3\%$ high; at $2.0\,J$: $0.958$ against $0.911$, $5\%$ high; at $T_c$: $4J$ against $2.269\,J$, $76\%$ high. For the chain, $q = 2$ gives $k_BT_c^\text{MF} = 2J$, while the exact chain has no transition at any $T > 0$.
+          - kind: result
+            text: >-
+              $m = \tanh\left((qJm + h)/(k_BT)\right)$ orders below $k_BT_c^\text{MF} = qJ$ with $\beta = 1/2$ and $\gamma = 1$; the square lattice has $\beta = 1/8$ and $\gamma = 7/4$, and $T_c$ $76\%$ lower. Mean field is good where the lattice is nearly saturated, bad near $T_c$, and for the chain it predicts a transition at $2J$ that does not exist.
+        rubric:
+          - text: >-
+              Derives the mean-field equation, naming the approximation (neighbours replaced by their average, correlations neglected).
+            weight: 2
+          - text: >-
+              $k_BT_c^\text{MF} = qJ$ from the slope at the origin.
+          - text: >-
+              $m_0 \approx \sqrt{3(1 - T/T_c^\text{MF})}$: $\beta = 1/2$ against the exact $1/8$.
+          - text: >-
+              The Curie-Weiss law $\chi = 1/(k_B(T - T_c^\text{MF}))$: $\gamma = 1$ against $7/4$.
+            weight: 2
+          - text: >-
+              Explains why mean field is better at low $T$, and states its spurious transition for the chain.
+          - text: >-
+              A limit check: $T \to 0$, $T \to T_c^\text{MF}$ or $T \to \infty$.
+
+  - id: Q-15-bagrut-4
+    type: bagrut
+    title: >-
+      Locating T_c from the susceptibility peak
+    prompt: >-
+      ThermoLab's runs (four seeds per size, thousands of sweeps per temperature) put the peak of $\chi' = N\,\text{Var}(|m|)/(k_BT)$ at $k_BT = 2.503$, $2.416$, $2.329$ and $2.311\,J$ for $L = 8$, $16$, $32$ and $64$. Finite-size scaling predicts $T_\text{peak}(L) = T_c + a\,L^{-1/\nu}$ and peak heights growing as $L^{\gamma/\nu}$; for the square lattice $\nu = 1$ and $\gamma/\nu = 7/4$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-5]
+        prompt: >-
+          A $32 \times 32$ run at $k_BT = 2.33\,J$ gives a trace of $|m|$ with $\text{Var}(|m|) = 0.045$. Find $\chi'$, in units of $1/J$.
+        answer: 19.8
+        unit: 1/J
+        tolerance: 0.03
+        correctFeedback: >-
+          $\chi' = 1024 \cdot 0.045/2.33 = 19.8/J$, at the top of the $L = 32$ peak.
+        wrongFeedback: >-
+          $N = L^2$ spins, and the identity divides by $k_BT$ once.
+        commonWrong:
+          - value: 0.618
+            feedback: >-
+              You used $N = 32$, the side. The lattice has $32^2 = 1024$ spins.
+          - value: 8.49
+            feedback: >-
+              That divides by $(k_BT)^2$, as in the heat capacity. The susceptibility divides by $k_BT$ once.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-5]
+        prompt: >-
+          Extrapolate linearly in $1/L$ through the peaks of $L = 32$ and $L = 64$ alone. What is $k_BT_c$, in units of $J$?
+        answer: 2.293
+        unit: J
+        tolerance: 0.003
+        correctFeedback: >-
+          Going from $1/L = 1/32$ to $1/64$ moved the peak down by $0.018$; the remaining step of the same size, from $1/64$ to $0$, moves it by $0.018$ more: $T_c = 2T_{64} - T_{32} = 2.293$. That is $1\%$ above Onsager's $2.269$; part (d) asks why this pair does worse than $L = 16$ and $64$, which give $2.276$.
+        wrongFeedback: >-
+          The line through $(1/32,\ 2.329)$ and $(1/64,\ 2.311)$ has slope $a = 1.152$; its intercept at $1/L = 0$ is $T_c$.
+        commonWrong:
+          - value: 2.311
+            feedback: >-
+              That is the $L = 64$ peak itself, still $a/64$ above $T_c$.
+          - value: 2.305
+            feedback: >-
+              That extrapolates in $1/L^2$, which assumes $\nu = 1/2$. For the square lattice $\nu = 1$: linear in $1/L$.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-5, OBJ-15.1-6]
+        prompt: >-
+          By what factor should the peak height of $\chi'$ grow from $L = 16$ to $L = 64$, if heights grow as $L^{7/4}$?
+        answer: 11.3
+        unit: ''
+        tolerance: 0.03
+        correctFeedback: >-
+          $4^{7/4} = 11.3$. On an infinite lattice the peak is a divergence; on finite ones it grows without bound as $L$ grows, but is finite at every $L$.
+        wrongFeedback: >-
+          The ratio is $(64/16)^{7/4}$.
+        commonWrong:
+          - value: 4
+            feedback: >-
+              That is growth in proportion to $L$. The exponent is $\gamma/\nu = 7/4$.
+          - value: 16
+            feedback: >-
+              That is growth in proportion to $N = L^2$. The exponent is $7/4$, slightly less than $2$.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-15.1-5, OBJ-15.1-6]
+        prompt: >-
+          A classmate fits the peak positions against $1/L^2$ instead of $1/L$ and gets $2.304$ to $2.305\,J/k_B$. Explain what the exponent of the fit assumes and why $1/L$ is the right choice for the square lattice; why the pair $L = 32$, $64$ of part (b) is a weaker lever than $L = 16$, $64$; which conclusions are independent of the exponent; and what the peaks can and cannot establish about the infinite lattice. Check the scaling laws in the limit $L \to \infty$.
+        solution:
+          - kind: law
+            text: >-
+              Finite-size scaling: on a lattice of side $L$ the correlation length cannot exceed $L$, so the peak is rounded and shifted, $T_\text{peak} - T_c \propto L^{-1/\nu}$, and its height grows as $L^{\gamma/\nu}$.
+          - kind: manipulation
+            text: >-
+              The exponent of the fit is $1/\nu$. Fitting against $1/L^2$ assumes $\nu = 1/2$, the mean-field value; Onsager's solution gives $\nu = 1$ for the square lattice, hence $1/L$. With the wrong exponent the extrapolation removes too little of the shift and stops $0.035$ above $T_c$.
+          - kind: manipulation
+            text: >-
+              Two points in $1/L$ give $T_c = 2T_{64} - T_{32}$ from $L = 32$, $64$, but $T_c = (4T_{64} - T_{16})/3$ from $L = 16$, $64$. An error $\delta$ in each peak becomes $\sqrt5\,\delta = 2.2\,\delta$ in the first intercept and $\sqrt{17}\,\delta/3 = 1.4\,\delta$ in the second: the short lever arm amplifies the errors, and the $L = 64$ point, where critical slowing down is worst ($\tau = 174 \pm 38$ sweeps at $T_c$), is the least certain of all.
+          - kind: manipulation
+            text: >-
+              Independent of the exponent: every peak lies above Onsager's $T_c$ and they drift down monotonically as $L$ grows, so $T_c < 2.311\,J/k_B$; and the peaks grow taller and narrower with $L$. These are what a singularity at $N \to \infty$ would produce. What the peaks cannot do is show the singularity itself: every finite lattice has an analytic free energy and a finite peak; the singularity is a statement about the limit, established by Onsager's derivation.
+          - kind: formula
+            text: >-
+              $T_c \approx 2T_{64} - T_{32}, \qquad T_c \approx \tfrac13\left(4T_{64} - T_{16}\right)$
+          - kind: limit
+            text: >-
+              As $L \to \infty$ the shift $a\,L^{-1/\nu} \to 0$, so the peak position goes to $T_c$, and the height $\propto L^{7/4} \to \infty$: the divergence of $\chi$, reached only in the limit. For small $L$ the shift is large ($0.23$ above $T_c$ at $L = 8$) and corrections to scaling matter, which is why $L = 8$ is left out of the fit.
+          - kind: units
+            text: >-
+              Peak positions and $T_c$ are in units of $J/k_B$; $a$ in $J/k_B$ times lattice spacings; heights in $1/J$.
+          - kind: substitution
+            text: >-
+              $1/L$: $2 \cdot 2.311 - 2.329 = 2.293$ and $(4 \cdot 2.311 - 2.416)/3 = 2.276$; $1/L^2$: $2.304$ to $2.305$; Onsager $2.269$. With $\delta = 0.005$ per peak, the two $1/L$ intercepts carry about $\pm0.011$ and $\pm0.007$: both are consistent with $2.269$, the $1/L^2$ ones are not.
+          - kind: result
+            text: >-
+              The exponent of the fit is $1/\nu$, and $\nu = 1$ makes $1/L$ correct; $1/L^2$ assumes mean field's $\nu = 1/2$ and misses $T_c$ by $0.035$. The pair $32$, $64$ has the shortest lever arm and the noisiest point. Whatever the exponent, the peaks lie above $T_c$, drift toward it and grow with $L$: a trend consistent with a singularity at about $2.27\,J/k_B$, which the simulation supports and Onsager's solution establishes.
+        rubric:
+          - text: >-
+              The exponent of the fit is $1/\nu$: $1/L$ for $\nu = 1$, while $1/L^2$ assumes mean field's $\nu = 1/2$.
+            weight: 2
+          - text: >-
+              Explains why $L = 32$, $64$ is the weaker lever (short arm, error amplification, largest $\tau$ at $L = 64$).
+            weight: 2
+          - text: >-
+              Names conclusions independent of the exponent (peaks above $T_c$, drifting down, growing).
+          - text: >-
+              States what the peaks can and cannot establish about the singularity.
+            weight: 2
+          - text: >-
+              A limit check: as $L \to \infty$ the shift vanishes and the height diverges.
+
+  - id: Q-15-bagrut-5
+    type: bagrut
+    title: >-
+      Measuring an exponent, and why the answer is biased
+    prompt: >-
+      A $64 \times 64$ lattice, run with Metropolis for $10^4$ to $2\cdot10^4$ sweeps per temperature after burn-in, gives $\langle|m|\rangle = 0.957$, $0.911$, $0.785$ and $0.694$ at $k_BT = 1.8$, $2.0$, $2.2$ and $2.25\,J$. Onsager and Yang's exact values are $0.957$, $0.911$, $0.785$ and $0.672$. Take $k_BT_c = 2.269\,J$. The effective exponent between two temperatures $T_1 < T_2$ is $\beta_\text{eff} = \ln(m_2/m_1)/\ln\left((T_c - T_2)/(T_c - T_1)\right)$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-6]
+        prompt: >-
+          Find $\beta_\text{eff}$ from the two temperatures furthest from $T_c$, $1.8$ and $2.0\,J$.
+        answer: 0.0887
+        unit: ''
+        tolerance: 0.05
+        correctFeedback: >-
+          $\ln(0.911/0.957)/\ln(0.269/0.469) = (-0.0493)/(-0.556) = 0.089$, well below the exact $1/8$.
+        wrongFeedback: >-
+          $T_c - T$ is $0.469$ and $0.269$; divide the logarithm of the ratio of the magnetizations by the logarithm of the ratio of the distances.
+        commonWrong:
+          - value: 11.3
+            feedback: >-
+              That is the inverse: the exponent is $\ln(m_2/m_1)$ divided by $\ln$ of the ratio of the distances to $T_c$.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-6]
+        prompt: >-
+          Find $\beta_\text{eff}$ from the two simulated values closest to $T_c$, at $2.2$ and $2.25\,J$.
+        answer: 0.0961
+        unit: ''
+        tolerance: 0.05
+        correctFeedback: >-
+          $\ln(0.694/0.785)/\ln(0.0192/0.0692) = (-0.123)/(-1.283) = 0.096$, also below $1/8$. The exact values at the same two temperatures give $0.121$.
+        wrongFeedback: >-
+          $T_c - T$ is $0.0692$ and $0.0192$; use the simulated $0.785$ and $0.694$.
+        commonWrong:
+          - value: 0.121
+            feedback: >-
+              That uses the exact $0.672$ at $2.25\,J$. The question asks what the simulation gives, $0.694$.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-7]
+        prompt: >-
+          The $2.25\,J$ point came from $n = 20\,000$ samples with standard deviation $\sigma = 0.088$ and autocorrelation time $\tau = 56$ sweeps. What is its honest standard error?
+        answer: 0.0066
+        unit: ''
+        tolerance: 0.03
+        correctFeedback: >-
+          $N_\text{eff} = 20\,000/112 = 179$, so $\sigma/\sqrt{N_\text{eff}} = 0.088/13.4 = 0.0066$. The naive $0.088/\sqrt{20\,000} = 0.0006$ is too small by $\sqrt{112} = 10.6$.
+        wrongFeedback: >-
+          $N_\text{eff} = n/(2\tau)$, and the standard error is $\sigma/\sqrt{N_\text{eff}}$.
+        commonWrong:
+          - value: 0.000622
+            feedback: >-
+              That is the naive $\sigma/\sqrt n$, which treats $20\,000$ correlated samples as independent. Near $T_c$ they are worth only $179$.
+            misconception: MC-naive-error-bar
+          - value: 0.00466
+            feedback: >-
+              That uses $N_\text{eff} = n/\tau$; the factor is $2\tau$.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-15.1-6, OBJ-15.1-7]
+        prompt: >-
+          Both effective exponents fall below the exact $1/8$, for different reasons. Name the bias that dominates far from $T_c$ and the one that dominates close to it, using the exact values to tell them apart. Is the excess of the $2.25\,J$ point over the exact $0.672$ a statistical fluctuation? What would you change to measure $\beta$ better, and how would you check the result? Check your reasoning in limits.
+        solution:
+          - kind: law
+            text: >-
+              $m_0 \propto (T_c - T)^\beta$ holds only asymptotically, as $T \to T_c$, and only for the infinite lattice; on a lattice of side $L$ the correlation length is capped at $L$, and near $T_c$ the autocorrelation time, and with it the honest error, is largest.
+          - kind: manipulation
+            text: >-
+              Far from $T_c$ the simulation agrees with the exact values to three decimals, and the exact values themselves give $\beta_\text{eff} = 0.088$ between $1.8$ and $2.0\,J$: the bias is in the law, not in the run. The magnetization saturates toward $1$ as $T$ falls, so a pure power law with a constant prefactor does not describe it there (corrections to scaling).
+          - kind: manipulation
+            text: >-
+              Close to $T_c$ the exact values give $0.121$, almost $1/8$, but the simulated $2.25\,J$ point is $0.694 - 0.672 = 0.022$ too high, $3.3$ honest standard errors: not a fluctuation but a systematic finite-size effect. With $\xi$ approaching $L$, the finite lattice is more ordered than the infinite one ($|m|$ of a finite lattice never falls to zero), which flattens the curve and lowers $\beta_\text{eff}$.
+          - kind: formula
+            text: >-
+              $\beta_\text{eff} = \dfrac{\ln(m_2/m_1)}{\ln\left[(T_c - T_2)/(T_c - T_1)\right]} \;\to\; \beta \quad \text{only as } T_1, T_2 \to T_c \text{ and } L \to \infty$
+          - kind: limit
+            text: >-
+              As $T \to T_c$ on the exact curve, $\beta_\text{eff} \to 1/8$: $0.121$ between $2.2$ and $2.25\,J$, $0.124$ between $2.25$ and $2.26\,J$. As $T \to 0$, $m_0 \to 1$ and $\beta_\text{eff} \to 0$: deep in the ordered phase a power law in $T_c - T$ says nothing. As $L \to \infty$ the finite-size excess vanishes.
+          - kind: units
+            text: >-
+              $m$ and $\beta$ are pure numbers; $T_c - T$ is in units of $J/k_B$, and its unit cancels in the ratio.
+          - kind: substitution
+            text: >-
+              Far: $0.089$ simulated, $0.088$ exact. Near: $0.096$ simulated, $0.121$ exact. Excess at $2.25\,J$: $0.022/0.0066 = 3.3$ standard errors, against a naive error of $0.0006$ that would make it $35$.
+          - kind: result
+            text: >-
+              Far from $T_c$ the power law itself fails (saturation, corrections to scaling); close to $T_c$ the finite lattice is rounded, and its points are the most correlated and least certain. The $2.25\,J$ excess is systematic. To do better: use larger lattices, or several sizes and finite-size scaling, with longer runs near $T_c$ and $\tau$-corrected error bars, and check that the fitted exponent survives a change of seed and of the fitting window.
+        rubric:
+          - text: >-
+              Far from $T_c$: the bias is in the power law (saturation, corrections to scaling), shown by the exact values giving the same $0.088$.
+            weight: 2
+          - text: >-
+              Close to $T_c$: finite-size rounding makes $\langle|m|\rangle$ too large and flattens the curve.
+            weight: 2
+          - text: >-
+              The excess of $0.022$ is about $3$ honest standard errors: systematic, judged with the $\tau$-corrected error, not the naive one.
+            weight: 2
+          - text: >-
+              A remedy (larger $L$, finite-size scaling, longer runs near $T_c$) and a check by changing the seed.
+          - text: >-
+              A limit check: $T \to T_c$ ($\beta_\text{eff} \to 1/8$), $T \to 0$ or $L \to \infty$.
+
+  - id: Q-15-bagrut-6
+    type: bagrut
+    title: >-
+      The paramagnet hidden inside the Ising model
+    prompt: >-
+      With $J = 0$ the Ising energy is $E_s = -h\sum_i s_i$. The exact magnetization of the infinite chain is $m = \sinh(h/k_BT)/\sqrt{\sinh^2(h/k_BT) + e^{-4J/(k_BT)}}$, and the fluctuation identity reads $\chi = \partial\langle m\rangle/\partial h = N\,\text{Var}(m)/(k_BT)$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-1]
+        prompt: >-
+          With $J = 0$ the spins are independent, and each is module 12's paramagnet: $\langle m\rangle = \tanh(h/k_BT)$. Find $\langle m\rangle$ for $h = 0.5\,k_BT$.
+        answer: 0.462
+        unit: ''
+        tolerance: 0.02
+        correctFeedback: >-
+          $\tanh 0.5 = 0.462$. The chain formula gives the same at $J = 0$: $e^{0} = 1$, and $\sinh x/\sqrt{\sinh^2 x + 1} = \sinh x/\cosh x$.
+        wrongFeedback: >-
+          Evaluate $\tanh(h/k_BT)$ at $h/k_BT = 0.5$.
+        commonWrong:
+          - value: 0.5
+            feedback: >-
+              That is the linear response $h/k_BT$, valid only for $h \ll k_BT$. At $h = 0.5\,k_BT$ the saturation of $\tanh$ already shows.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-15.1-3]
+        prompt: >-
+          For the chain with $J > 0$, find $\chi = \partial m/\partial h$ at $h = 0$ from the chain formula, and evaluate it at $k_BT = J$, in units of $1/J$.
+        answer: 7.39
+        unit: 1/J
+        tolerance: 0.03
+        correctFeedback: >-
+          For small $h$, $\sinh(h/k_BT) \approx h/k_BT$ and the root is $e^{-2J/(k_BT)}$, so $m \approx (h/k_BT)\,e^{2J/(k_BT)}$ and $\chi = e^{2J/(k_BT)}/(k_BT) = e^2 = 7.39/J$: more than seven times the free spins' $1/J$.
+        wrongFeedback: >-
+          Expand for small $h$: the square root tends to $\sqrt{e^{-4J/(k_BT)}} = e^{-2J/(k_BT)}$.
+        commonWrong:
+          - value: 1
+            feedback: >-
+              That is the susceptibility of free spins, $1/(k_BT)$. The coupling multiplies it by $e^{2J/(k_BT)}$.
+          - value: 54.6
+            feedback: >-
+              That is $e^{4J/(k_BT)}$: the square root halves the exponent.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-15.1-3]
+        prompt: >-
+          Why does the coupling make the chain **more** susceptible than free spins, at a temperature where it is not ordered?
+        choices:
+          - text: >-
+              Neighbours align into correlated stretches of about $e^{2J/(k_BT)}$ spins, and a field turns each stretch as a unit: a large moment responds more than a single spin.
+            correct: true
+            feedback: >-
+              Right. $k_BT\chi = e^{2J/(k_BT)}$ is the number of spins that move together. The stretches are finite at any $T > 0$, so $\chi$ is large but finite and $m \to 0$ as $h \to 0$: no order.
+          - text: >-
+              At $k_BT = J$ the chain is ordered, and an ordered magnet responds strongly to a field.
+            feedback: >-
+              The chain is ordered at no $T > 0$: $m \to 0$ as $h \to 0$, and $\chi$ is finite. Its response is strong because of correlated stretches, not because of order.
+            misconception: MC-one-dimension-orders
+          - text: >-
+              Each spin feels the external field plus $2J$ from its neighbours, so the field it feels is larger.
+            feedback: >-
+              At $h = 0$ the neighbours are up and down equally often and add no net field on average. The coupling acts through correlations, not through a constant extra field.
+          - text: >-
+              It does not: neighbours resist being turned, so the chain is less susceptible.
+            feedback: >-
+              $\chi = e^{2J/(k_BT)}/(k_BT)$ is larger than $1/(k_BT)$ for every $J > 0$. Neighbours resist turning separately, and so turn together.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-15.1-5, OBJ-15.1-1]
+        prompt: >-
+          For $J = 0$, compute $\text{Var}(m)$ for $N$ independent spins and verify the fluctuation identity $\chi = N\,\text{Var}(m)/(k_BT)$ directly. Then explain why the identity still holds at $J > 0$ for every finite $N$, but why, below $T_c$, the laboratory applies it to $|m|$ instead: what would go wrong in a run of $10^4$ sweeps at $k_BT = 2.0\,J$ on an $8 \times 8$ lattice, if you used $m$? Check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              For one spin in a field, $\langle s\rangle = \tanh(h/k_BT)$ and $s^2 = 1$; for independent spins variances add, and $m = \frac1N\sum_i s_i$.
+          - kind: manipulation
+            text: >-
+              $\text{Var}(s) = \langle s^2\rangle - \langle s\rangle^2 = 1 - \tanh^2(h/k_BT)$, so $\text{Var}(m) = \text{Var}(s)/N$ and $N\,\text{Var}(m)/(k_BT) = \left(1 - \tanh^2(h/k_BT)\right)/(k_BT) = \partial\tanh(h/k_BT)/\partial h$: the identity holds. For any $J$ and finite $N$, $h$ enters the Boltzmann weight as $e^{\beta hM}$, so $\langle M\rangle = \partial\ln Z/\partial(\beta h)$ and its derivative is $\text{Var}(M)$: the identity is exact in the ensemble.
+          - kind: manipulation
+            text: >-
+              But the ensemble at $h = 0$ below $T_c$ has $\langle m\rangle = 0$ and $\text{Var}(m) = \langle m^2\rangle \approx m_0^2$, which a run reproduces only if it visits both signs fairly. An $8 \times 8$ lattice at $2.0\,J$ reverses dozens of times in $10^5$ sweeps, so only a few times in $10^4$: the share of the run spent on each sign is luck. A run with no reversal gives only the small spread about one sign; a run with a few gives anything up to $m_0^2$. $|m|$ does not depend on the sign, and a run samples it.
+          - kind: formula
+            text: >-
+              $\text{Var}(m) = \dfrac{1 - \tanh^2(h/k_BT)}{N}, \qquad \chi = \dfrac{1 - \tanh^2(h/k_BT)}{k_BT} = \dfrac{\partial}{\partial h}\tanh\dfrac{h}{k_BT}$
+          - kind: limit
+            text: >-
+              $h \to \infty$: $\tanh \to 1$, every spin is up, $\text{Var}(m) \to 0$ and $\chi \to 0$: a saturated magnet cannot respond. $T \to \infty$ at $h = 0$: $\chi = 1/(k_BT) \to 0$, the Curie law. $J \to 0$ in the chain: $\chi = e^{2J/(k_BT)}/(k_BT) \to 1/(k_BT)$, the free-spin result.
+          - kind: units
+            text: >-
+              $\text{Var}(m)$ is a pure number; $\chi$, $N\,\text{Var}(m)$ divided by an energy, is in units of $1/J$.
+          - kind: substitution
+            text: >-
+              At $2.0\,J$, $m_0 = 0.911$ and $m_0^2 = 0.830$: sampled fairly, $\chi = 64 \cdot 0.830/2.0 = 26.6/J$; a run that never reverses gives a small fraction of that, and the answer of a given run depends on how many reversals it happened to see.
+          - kind: result
+            text: >-
+              For free spins $\text{Var}(m) = (1 - \tanh^2(h/k_BT))/N$, and $N\,\text{Var}(m)/(k_BT)$ equals $\partial m/\partial h$. The identity is exact for any $J$ and $N$, but below $T_c$ a finite run does not sample both signs fairly, so $\text{Var}(m)$ measures luck (from near zero to $26.6/J$ on the $8 \times 8$ lattice); $\chi' = N\,\text{Var}(|m|)/(k_BT)$ is what a run can estimate.
+        rubric:
+          - text: >-
+              $\text{Var}(s) = 1 - \tanh^2(h/k_BT)$ and $\text{Var}(m) = \text{Var}(s)/N$.
+            weight: 2
+          - text: >-
+              Shows that $N\,\text{Var}(m)/(k_BT)$ equals $\partial\tanh(h/k_BT)/\partial h$.
+            weight: 2
+          - text: >-
+              Explains that below $T_c$ a run reverses rarely, so $\text{Var}(m)$ depends on the number of reversals, and $|m|$ avoids it.
+            weight: 2
+          - text: >-
+              A limit check: $h \to \infty$, $T \to \infty$ or $J \to 0$.

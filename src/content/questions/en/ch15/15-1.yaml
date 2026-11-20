@@ -1,0 +1,724 @@
+# Lesson 15.1 check questions. Ported from ThermoLab's assessment/quizzes/15-ising.en.yml (Q-15-1 … Q-15-10, all ten,
+# adapted to the lesson's notation and numbers; Q-15-6's variance is corrected, see Q-15.1-chi) and extended to cover
+# the seven objectives and the seven misconceptions of src/content/misconceptions/15-1.yaml. Reduced units: energies
+# in J, temperature as k_BT/J. Ids are shared with the Hebrew bank, which must hold the same questions with the same answers.
+lang: en
+chapter: 15
+questions:
+  # ---------------------------------------------------------------- OBJ-15.1-1: energy, order parameter, symmetry breaking
+  - id: Q-15.1-symmetry
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-15.1-1]
+    prompt: >-
+      The Ising energy is $E_s = -J\sum_{\langle ij\rangle} s_is_j - h\sum_i s_i$ with $J > 0$. At $h = 0$, which statement about its symmetry and the order parameter $m = \frac{1}{N}\sum_i s_i$ is correct?
+    choices:
+      - text: >-
+          Flipping every spin leaves $E_s$ unchanged and reverses $m$, so the canonical average $\langle m\rangle$ vanishes at $h = 0$ for any finite $N$; an ordered state must pick a sign the equations do not prefer.
+        correct: true
+        feedback: >-
+          Right. Each bond depends only on the product $s_is_j$, so the all-flipped twin of any configuration has the same Boltzmann weight and the opposite $m$, and the pair averages to zero. Order appears only as spontaneous symmetry breaking: in the limit $N \to \infty$ an infinitesimal field, or the history, selects one sign.
+      - text: >-
+          $J > 0$ favours spins pointing up, so the ground state at $h = 0$ is all up, with $m = +1$.
+        feedback: >-
+          $J > 0$ favours neighbours that **agree**, whichever way they point. All up and all down have exactly the same energy, $-2NJ$ on the square lattice. Only a field breaks the tie, and at $h = 0$ there is none.
+      - text: >-
+          $m$ measures the energy per spin, so it is zero whenever $E_s$ is zero.
+        feedback: >-
+          $m$ counts spins, not bonds. A checkerboard of alternating spins has $m = 0$ and the highest possible energy, $+2NJ$; the all-up lattice has $m = 1$ and the lowest. The order parameter and the energy are different functions of the configuration.
+      - text: >-
+          The symmetry holds only above $T_c$; below $T_c$ the energy itself prefers one sign.
+        feedback: >-
+          The energy function does not depend on the temperature at all, and its up-down symmetry holds at every $T$. What changes below $T_c$ is not the equations but the state the system settles into.
+
+  - id: Q-15.1-magnetometer
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-1]
+    prompt: >-
+      A single large ferromagnetic sample is cooled in zero field to well below its Curie temperature. A magnetometer measures its magnetization. What does it read?
+    choices:
+      - text: >-
+          Close to $+m_0$ or to $-m_0$, one or the other, held for as long as anyone watches. The canonical average is zero, but the sample does not visit both signs.
+        correct: true
+        feedback: >-
+          Right. To reverse, the sample must pass through configurations with a wall running all the way across it, whose cost grows with its size, so the time between reversals grows exponentially with $N$. Figure 15.1a shows it: an $8 \times 8$ lattice at $k_BT = 2.0\,J$ reverses dozens of times in $10^5$ sweeps, a $32 \times 32$ lattice never.
+      - text: >-
+          Zero, because up and down are equally probable and cancel.
+        feedback: >-
+          That is the ensemble average, $\langle m\rangle = 0$, read as if it were the reading of one sample. The average is over both signs; a macroscopic sample sits on one of them for longer than the age of the universe. This is ergodicity breaking.
+        misconception: MC-ensemble-cancellation
+      - text: >-
+          A value that drifts slowly from $+m_0$ to $-m_0$ and back as the sample equilibrates.
+        feedback: >-
+          Reversals, when they happen at all, are abrupt crossings between the two signs, as the $8 \times 8$ lattice's trace shows, not a slow drift. For a macroscopic sample they do not happen on any observable time.
+      - text: >-
+          Exactly $+1$, since below $T_c$ all the spins align.
+        feedback: >-
+          At any $T > 0$ thermal fluctuations keep some spins reversed, so the spontaneous magnetization is less than $1$: at $k_BT = 2.0\,J$ on the square lattice it is $0.911$. And nothing makes $+1$ likelier than $-1$.
+
+  - id: Q-15.1-order-of-limits
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-15.1-1]
+    prompt: >-
+      The spontaneous magnetization is $m_0 = \lim_{h \to 0^+}\lim_{N \to \infty}\langle m\rangle$. A student takes the limits in the other order: first $h \to 0$ at fixed $N$, then $N \to \infty$. Below $T_c$, what does the student get, and what does it mean?
+    choices:
+      - text: >-
+          Zero at every temperature: at finite $N$ and $h = 0$, $\langle m\rangle = 0$ exactly by symmetry, and a limit of zeros is zero. The magnetized phase appears only when the system is made infinite before the field is removed.
+        correct: true
+        feedback: >-
+          Right. The order of limits is the whole content of symmetry breaking. With $N \to \infty$ first, an arbitrarily weak field tips the whole system one way, and the state keeps its magnetization when the field goes; with $h \to 0$ first, the symmetry is never broken.
+      - text: >-
+          Zero, and that is the physical answer: below $T_c$ up and down are equally likely, so a real magnet in zero field has no net magnetization.
+        feedback: >-
+          The student's zero is correct mathematics, but it describes the ensemble, not the magnet. A large lattice below $T_c$ holds one sign for longer than any experiment; the order of limits in $m_0$ is what captures that.
+        misconception: MC-ensemble-cancellation
+      - text: >-
+          $m_0$ again: the order in which two limits are taken never changes the answer.
+        feedback: >-
+          It often does, and here it must. At finite $N$, $\langle m\rangle$ is a smooth odd function of $h$, so it passes through zero at $h = 0$; only in the infinite system does it jump from $-m_0$ to $+m_0$.
+      - text: >-
+          $+1$: the field selected the up state before it was removed, and the lattice remembers.
+        feedback: >-
+          In the student's order the field is removed while the lattice is still finite, and the finite lattice, in equilibrium, has no memory of it. And $m_0 < 1$ at any $T > 0$.
+
+  - id: Q-15.1-reversals
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-1, OBJ-15.1-6]
+    prompt: >-
+      In figure 15.1a an $8 \times 8$ lattice at $k_BT = 2.0\,J$ and $h = 0$, started all up, reverses its whole magnetization every so often. A $32 \times 32$ lattice at the same temperature never does, however long you wait. Why?
+    choices:
+      - text: >-
+          To reverse, a lattice must pass through configurations with walls running all the way across it. Their cost grows with $L$, so the waiting time between reversals grows exponentially with the size.
+        correct: true
+        feedback: >-
+          Right. Both lattices are ordered, and in both the ensemble average of $m$ is zero. What differs is how long the chain takes to get from one sign to the other: dozens of reversals in $10^5$ sweeps at $L = 8$, none at $L = 16$ or $32$.
+      - text: >-
+          The $32 \times 32$ lattice is further below its own transition temperature, which grows with the size.
+        feedback: >-
+          If anything the opposite: the susceptibility peak of the small lattice sits higher ($2.503\,J$ for $L = 8$, $2.311\,J$ for $L = 64$). Both lattices are well below $T_c$ at $2.0\,J$; the size changes how long a reversal takes, not whether the lattice is ordered.
+      - text: >-
+          The large lattice has reached equilibrium, in which $m$ stays fixed; the small one is still relaxing.
+        feedback: >-
+          In equilibrium at $h = 0$ both signs have equal weight, so it is the small lattice whose run samples the ensemble. The large one is stuck on one sign: its run is the one that does not reach the full equilibrium.
+      - text: >-
+          The random numbers of the large lattice happened never to propose the right flips.
+        feedback: >-
+          Every seed gives the same result, so it is not luck. A reversal needs many correlated flips through costly configurations, and their probability falls exponentially with $L$.
+
+  # ---------------------------------------------------------------- OBJ-15.1-2: Metropolis from detailed balance
+  - id: Q-15.1-metropolis-accept
+    type: numeric
+    level: basic
+    objectives: [OBJ-15.1-2]
+    prompt: >-
+      A Metropolis simulation proposes a spin flip that would raise the energy by $\Delta E = 4J$, at temperature $k_BT = 2J$. With what probability is the flip accepted?
+    answer: 0.135
+    unit: ''
+    tolerance: 0.02
+    correctFeedback: >-
+      $A = \min\left(1, e^{-\Delta E/(k_BT)}\right) = e^{-4J/2J} = e^{-2} = 0.135$. A flip that lowered the energy would be accepted with probability $1$.
+    wrongFeedback: >-
+      Use $A = \min\left(1, e^{-\Delta E/(k_BT)}\right)$ with $\Delta E/(k_BT) = 4J/2J = 2$.
+    commonWrong:
+      - value: 0.0183
+        feedback: >-
+          That is $e^{-4}$: you left out the temperature. The exponent is $\Delta E/(k_BT) = 2$.
+      - value: 0.119
+        feedback: >-
+          That is the Glauber rule, $1/(1 + e^{2})$. It satisfies detailed balance too, but the question asks for Metropolis.
+      - value: 1
+        feedback: >-
+          Metropolis accepts with certainty only the flips that lower the energy, or leave it unchanged. This one raises it.
+
+  - id: Q-15.1-flip-cost
+    type: numeric
+    level: mid
+    objectives: [OBJ-15.1-2]
+    prompt: >-
+      On the square lattice in a field $h = 0.5\,J$, an up spin ($s_i = +1$) has three up neighbours and one down neighbour. What is the energy change $\Delta E$ of flipping it, in units of $J$?
+    answer: 5
+    unit: J
+    tolerance: 0.02
+    correctFeedback: >-
+      $\Delta E_i = 2s_i\left(J\sum_{j} s_j + h\right) = 2\cdot(+1)\cdot(2J + 0.5\,J) = 5J$. The flip breaks three agreeing bonds, mends one disagreeing bond, and turns the spin against the field.
+    wrongFeedback: >-
+      Use $\Delta E_i = 2s_i\left(J\sum_{j \in \text{nn}(i)} s_j + h\right)$; the neighbour sum is $3 - 1 = 2$.
+    commonWrong:
+      - value: 4
+        feedback: >-
+          That leaves out the field. Flipping an up spin to down in an upward field costs another $2h = 1J$.
+      - value: 2.5
+        feedback: >-
+          That is missing the factor $2$: each bond goes from $-J$ to $+J$ (or back), a change of $2J$, not $J$.
+      - value: 3
+        feedback: >-
+          The field term has the wrong sign. The spin points along $h$, so turning it over raises the energy by $2h$.
+
+  - id: Q-15.1-sweep-time
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-2]
+    prompt: >-
+      A simulation reports that a $64 \times 64$ lattice quenched below $T_c$ took about $2000$ Metropolis sweeps to order. What does one sweep correspond to physically?
+    choices:
+      - text: >-
+          Nothing fixed. A sweep is one flip attempt per spin, a unit of computation; another rule with the same stationary distribution, such as Glauber, reaches the same equilibrium in a different number of sweeps.
+        correct: true
+        feedback: >-
+          Right. Detailed balance fixes where the chain goes, not how fast. In figure 15.1a, after $20$ sweeps of the same quench the energy per spin is $-1.80\,J$ under Metropolis and $-1.68\,J$ under Glauber; in equilibrium the two agree within their error bars.
+      - text: >-
+          About a picosecond, the time a real spin takes to flip: multiply by $2000$ to get the real ordering time.
+        feedback: >-
+          No physical constant converts sweeps into seconds. The rule was chosen to sample the Boltzmann distribution, and a different valid rule gives a different number of sweeps for the same physics.
+        misconception: MC-mc-is-real-dynamics
+      - text: >-
+          One period of the lattice vibrations that carry heat to the spins.
+        feedback: >-
+          The model has no lattice vibrations; the bath is implicit. Nothing in the chain knows about phonons, so nothing in it can be timed by them.
+      - text: >-
+          The time for a signal to cross the lattice at the speed of light.
+        feedback: >-
+          Nothing propagates in the model. Each flip depends only on the current state of its neighbours, and the order in which sites are visited is a free choice of the algorithm.
+
+  - id: Q-15.1-valid-rule
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-15.1-2]
+    prompt: >-
+      A chain proposes to flip one spin at a time and accepts with probability $A(\Delta E)$. Which of these chains does **not** sample the Boltzmann distribution at temperature $T$?
+    choices:
+      - text: >-
+          $A = \min\left(1, e^{-\Delta E/(2k_BT)}\right)$.
+        correct: true
+        feedback: >-
+          Right. Its ratio is $A(\Delta E)/A(-\Delta E) = e^{-\Delta E/(2k_BT)}$, which is detailed balance for the Boltzmann distribution at temperature $2T$. It samples, perfectly, the wrong temperature.
+      - text: >-
+          Glauber, $A = 1/\left(1 + e^{\Delta E/(k_BT)}\right)$: it relaxes more slowly than Metropolis after the same quench, so it cannot describe the same equilibrium.
+        feedback: >-
+          Slower is not wrong. Its ratio is $e^{-\Delta E/(k_BT)}$, the same as Metropolis', so it samples the same equilibrium, just in more sweeps. The speed of a chain says nothing about the speed of a real magnet, nor about where the chain ends up.
+        misconception: MC-mc-is-real-dynamics
+      - text: >-
+          $A = \tfrac12\min\left(1, e^{-\Delta E/(k_BT)}\right)$, half the Metropolis probability.
+        feedback: >-
+          Halving every acceptance leaves the ratio $A(\Delta E)/A(-\Delta E)$ unchanged, so detailed balance still holds. The chain samples the right distribution and needs about twice as many sweeps.
+      - text: >-
+          Metropolis, with the sites visited in a fixed order (a chessboard, then row by row) rather than at random.
+        feedback: >-
+          Each single-site update satisfies detailed balance and so leaves the Boltzmann distribution unchanged; so does any sequence of them. The order of visits is a free choice that changes the speed, not the destination.
+
+  # ---------------------------------------------------------------- OBJ-15.1-3: no transition in one dimension
+  - id: Q-15.1-chain-vs-square
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-3]
+    prompt: >-
+      Why does the one-dimensional Ising chain have no ordered phase at any $T > 0$, while the square lattice orders below $2.269\,J/k_B$?
+    choices:
+      - text: >-
+          In one dimension a wall costs a fixed energy but can sit almost anywhere, so its free energy turns negative on a long enough chain at any $T > 0$. In two dimensions a wall across the lattice costs energy in proportion to its length, which can beat its entropy at low $T$.
+        correct: true
+        feedback: >-
+          Right. On a ring a pair of walls costs $4J$ and gains $k_B\ln(N^2/2)$ of entropy, which grows without bound; for an open chain, $\Delta F = 2J - k_BT\ln N$. In two dimensions the energy and the entropy of a wall both grow like its length, and the energy wins below a temperature of order $J/k_B$.
+      - text: >-
+          The coupling $J$ is weaker in one dimension.
+        feedback: >-
+          $J$ is the same bond energy in both. The difference is geometric: in one dimension one broken bond splits the system in two, while in two dimensions it takes a whole line of broken bonds.
+      - text: >-
+          The chain does order, but at a temperature too low to simulate.
+        feedback: >-
+          The exact solution has no transition at any $T > 0$: $E/(NJ) = -\tanh(J/k_BT)$ is smooth all the way down, and $m \to 0$ as $h \to 0$ at every $T > 0$. Mean field predicts a transition at $k_BT = 2J$ for the chain, and that prediction is simply wrong.
+        misconception: MC-one-dimension-orders
+      - text: >-
+          A chain has fewer spins, so its fluctuations are larger.
+        feedback: >-
+          A chain can have as many spins as you like; the argument is about $N \to \infty$. What matters is how the cost of breaking the order scales with the system, not how many spins there are.
+
+  - id: Q-15.1-longer-ring
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-15.1-3]
+    prompt: >-
+      A ring of $N$ spins at fixed $T > 0$ and $h = 0$ is replaced by a ring of $2N$ spins. What happens to the free-energy cost $\Delta F$ of a pair of domain walls?
+    choices:
+      - text: >-
+          $\Delta E$ stays $4J$, the number of placements grows from about $N^2/2$ to $(2N)^2/2$, so $\Delta F$ falls by $k_BT\ln 4$.
+        correct: true
+        feedback: >-
+          Right. The energy of the pair does not depend on the length of the ring; its entropy does, and every doubling lowers $\Delta F$ by the same $k_BT\ln4$. Keep doubling and $\Delta F$ turns negative, at any $T > 0$.
+      - text: >-
+          It doubles: a longer ring has twice as many bonds holding it together, so it is harder to disorder.
+        feedback: >-
+          Two walls break two bonds whatever the length of the ring, so $\Delta E = 4J$ stays put. What grows with the length is the number of places the walls can sit, which makes the longer ring **easier** to disorder.
+        misconception: MC-one-dimension-orders
+      - text: >-
+          Nothing changes: the walls cost $4J$ wherever they sit.
+        feedback: >-
+          The energy is the same, but the free energy also counts the entropy, $k_B\ln(N^2/2)$, which grows with $N$.
+      - text: >-
+          It rises by $k_BT\ln4$, because walls further apart cost more energy.
+        feedback: >-
+          A wall costs $2J$ wherever it is; two walls do not interact. The extra room enters through the entropy, with a minus sign.
+
+  - id: Q-15.1-ring-threshold
+    type: numeric
+    level: mid
+    objectives: [OBJ-15.1-3]
+    prompt: >-
+      A ring of spins is held at $k_BT = 0.5\,J$ and $h = 0$. Using $\Delta F \approx 4J - k_BT\ln(N^2/2)$ for a pair of domain walls, how many sites must the ring have before the walls lower its free energy?
+    answer: 77.2
+    unit: ''
+    tolerance: 0.03
+    correctFeedback: >-
+      $\Delta F < 0$ when $N^2/2 > e^{4J/(k_BT)}$, that is $N > \sqrt2\,e^{2J/(k_BT)} = \sqrt2\,e^{4} = 77$. Halving the temperature from $J$ (the lesson's ring example, $10.4$ sites) raised the threshold by $e^2 = 7.4$, but it is still finite: a longer ring is disordered.
+    wrongFeedback: >-
+      Set $4J = k_BT\ln(N^2/2)$ and solve: $N = \sqrt2\,e^{2J/(k_BT)}$.
+    commonWrong:
+      - value: 54.6
+        feedback: >-
+          That is $e^{2J/(k_BT)}$, the threshold for a single wall in an open chain. On a ring walls come in pairs, with the extra $\sqrt2$ from the $N^2/2$ placements.
+      - value: 10.4
+        feedback: >-
+          That is the threshold at $k_BT = J$. At $0.5\,J$ the exponent $2J/(k_BT)$ is $4$, not $2$.
+      - value: 5962
+        feedback: >-
+          That is $N^2 = 2e^{8}$; take the square root.
+
+  - id: Q-15.1-chain-mean-field
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-15.1-3, OBJ-15.1-4]
+    prompt: >-
+      Mean field, with $q = 2$ neighbours, predicts that the Ising chain orders below $k_BT = 2J$. What does the exact solution of the chain say?
+    choices:
+      - text: >-
+          There is no order at any $T > 0$: the magnetization goes to zero as $h \to 0$ at every positive temperature.
+        correct: true
+        feedback: >-
+          Right. The transfer-matrix result $m = \sinh(h/k_BT)/\sqrt{\sinh^2(h/k_BT) + e^{-4J/k_BT}}$ vanishes at $h = 0$ for every $T > 0$, as the domain-wall argument says it must. Mean field's transition here is not inaccurate; it does not exist.
+      - text: >-
+          The chain orders below $2J$, as mean field says: with only two neighbours per spin there are few correlations to neglect.
+        feedback: >-
+          Mean field is worst in low dimensions, not best. In one dimension a single broken bond cuts the chain in two, and the entropy of where to cut it wins at any $T > 0$.
+        misconception: MC-one-dimension-orders
+      - text: >-
+          The chain orders at a lower temperature, near $1.13\,J$: mean field overestimates $T_c$ by $76\%$ here too.
+        feedback: >-
+          The $76\%$ is the square lattice's error, and dividing $2J$ by $1.763$ assumes the chain has a $T_c$ at all. It does not: there is no temperature to correct.
+        misconception: MC-one-dimension-orders
+      - text: >-
+          The chain orders at $2.269\,J$, the same as the square lattice, because critical behaviour is universal.
+        feedback: >-
+          Universality concerns critical exponents within a dimension and a symmetry, not transition temperatures, and the chain has no transition to share.
+
+  # ---------------------------------------------------------------- OBJ-15.1-4: mean field against Onsager
+  - id: Q-15.1-mf-overestimate
+    type: numeric
+    level: basic
+    objectives: [OBJ-15.1-4]
+    prompt: >-
+      Mean field gives $k_BT_c = qJ = 4J$ for the square lattice; Onsager's exact result is $k_BT_c = 2J/\ln\left(1 + \sqrt2\right) = 2.269\,J$. By what percentage does mean field overestimate $T_c$?
+    answer: 76.3
+    unit: '%'
+    tolerance: 0.03
+    correctFeedback: >-
+      $(4 - 2.269)/2.269 = 0.763$, a $76\%$ overestimate. Mean field replaces each neighbour by its average and so discards the correlations that, near $T_c$, decide everything.
+    wrongFeedback: >-
+      Compare the error with the exact value: $(T_c^\text{MF} - T_c)/T_c$.
+    commonWrong:
+      - value: 43.3
+        feedback: >-
+          That divides by the mean-field value, $4$. The overestimate is measured against the exact $T_c$, $2.269$.
+      - value: 176.3
+        feedback: >-
+          That is the ratio $4/2.269 = 1.763$ written as a percentage. The overestimate is the excess over $100\%$.
+
+  - id: Q-15.1-mf-why
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-4]
+    prompt: >-
+      Why does mean field put the square lattice's transition $76\%$ too high?
+    choices:
+      - text: >-
+          Near $T_c$ a spin's neighbours are correlated with it and with each other over long distances; mean field replaces them by an average and throws exactly those correlated fluctuations away, and they are what destroy the order.
+        correct: true
+        feedback: >-
+          Right. Without the fluctuations, nothing opposes the ordering until $k_BT = 4J$. The same omission makes the exponent wrong: $\beta = 1/2$ in mean field against $1/8$ exactly.
+      - text: >-
+          It uses a coupling that is too strong; with $J$ reduced by $43\%$ it would be essentially exact.
+        feedback: >-
+          A rescaled $J$ could move $T_c$ but nothing else: the exponent would still be $1/2$ instead of $1/8$, and the chain would still get a transition that does not exist. The error is structural, not a matter of a constant.
+        misconception: MC-mean-field-harmless
+      - text: >-
+          Mean field is essentially right; the simulations put $T_c$ low because their lattices are finite.
+        feedback: >-
+          The finite lattices' peaks sit **above** $T_c$ and drift down toward it as $L$ grows, and Onsager's $2.269\,J$ is exact for the infinite lattice. Mean field is the one that is off.
+        misconception: MC-mean-field-harmless
+      - text: >-
+          Onsager's result holds for a finite lattice, mean field for the infinite one.
+        feedback: >-
+          Onsager solved the infinite square lattice exactly. Its $T_c$ is the reference value against which both mean field and the simulations are measured.
+
+  - id: Q-15.1-onsager-m0
+    type: numeric
+    level: mid
+    objectives: [OBJ-15.1-4]
+    prompt: >-
+      Use Onsager and Yang's result, $m_0 = \left[1 - \sinh^{-4}(2J/k_BT)\right]^{1/8}$, to find the exact spontaneous magnetization of the square lattice at $k_BT = 2.2\,J$.
+    answer: 0.785
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      $\sinh(2/2.2) = 1.0396$, $\sinh^{-4} = 0.856$, $1 - 0.856 = 0.144$, and $0.144^{1/8} = 0.785$. The eighth root is why $m_0$ stays large so close to $T_c$ and then drops almost vertically. A $64 \times 64$ lattice gives $0.785$ too.
+    wrongFeedback: >-
+      $2.2\,J$ is below $T_c = 2.269\,J$, so the formula applies. Evaluate $\sinh(2J/k_BT)$, raise it to the power $-4$, subtract from $1$, and take the eighth root.
+    commonWrong:
+      - value: 0.936
+        feedback: >-
+          That is mean field's value at $2.2\,J$, from $m = \tanh(4m/2.2)$. It is $19\%$ too high: so close to $T_c$, neglecting correlations is not a small error.
+        misconception: MC-mean-field-harmless
+      - value: 0.144
+        feedback: >-
+          That is $1 - \sinh^{-4}(2J/k_BT)$; the magnetization is its eighth root.
+      - value: 0.379
+        feedback: >-
+          That is a square root. The exponent is $1/8$, not mean field's $1/2$.
+
+  - id: Q-15.1-universality
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-15.1-4]
+    prompt: >-
+      Module 14's van der Waals fluid gave a coexistence curve closing as $(1 - T/T_c)^{1/2}$; measured liquid-gas critical points close with an exponent $\beta \approx 0.32$. What is the best explanation?
+    choices:
+      - text: >-
+          The van der Waals model is a mean-field theory, and every mean-field theory gives $1/2$. Real fluids share the exponent of the three-dimensional Ising model, $0.326$, because the exponents are set by the dimension and the symmetry of the order parameter, not by the forces.
+        correct: true
+        feedback: >-
+          Right. Through the lattice gas, a fluid **is** an Ising model: occupied and empty cells for up and down, the chemical potential for the field. This is universality.
+      - text: >-
+          Mean field gets the exponent right in principle; $0.32$ comes from impurities and gravity in the experiments.
+        feedback: >-
+          The square lattice settles it without any experiment: its exact $\beta$ is $1/8$, against mean field's $1/2$. Mean field's exponent is wrong for the same reason its $T_c$ is: it discards the correlations that dominate near $T_c$.
+        misconception: MC-mean-field-harmless
+      - text: >-
+          Fluids differ from magnets: their exponent is set by the attraction between the molecules, which mean field treats too crudely.
+        feedback: >-
+          Universality is the observation that the forces do not matter: carbon dioxide, xenon, water and binary mixtures, with quite different forces, all have $\beta \approx 0.32$-$0.33$.
+      - text: >-
+          Near the critical point a fluid behaves as if two-dimensional, so its exponent lies between the square lattice's $1/8$ and mean field's $1/2$.
+        feedback: >-
+          A bulk fluid is three-dimensional, and its exponent is the three-dimensional Ising one, $0.326$. Lying between two numbers is not an explanation.
+
+  # ---------------------------------------------------------------- OBJ-15.1-5: fluctuation identities, locating T_c
+  - id: Q-15.1-chi
+    type: numeric
+    level: basic
+    objectives: [OBJ-15.1-5]
+    prompt: >-
+      A $32 \times 32$ lattice above $T_c$, at $k_BT = 2.5\,J$, gives a magnetization trace with $\text{Var}(m) = 0.060$. Using $\chi = N\,\text{Var}(m)/(k_BT)$, find the susceptibility per spin, in units of $1/J$.
+    answer: 24.6
+    unit: 1/J
+    tolerance: 0.03
+    correctFeedback: >-
+      $N = 32^2 = 1024$, so $\chi = 1024 \cdot 0.060/2.5 = 24.6/J$. It is large because $2.5\,J$ is only $10\%$ above $T_c$, where the lattice is a patchwork of large correlated patches. The response to a field is read off the spontaneous fluctuations without one.
+    wrongFeedback: >-
+      $N$ is the number of spins, $L^2$, and the identity divides by $k_BT$ once.
+    commonWrong:
+      - value: 0.768
+        feedback: >-
+          You used $N = 32$, the side. The lattice has $32^2 = 1024$ spins.
+      - value: 9.83
+        feedback: >-
+          That divides by $(k_BT)^2$, as in the heat capacity. The susceptibility divides by $k_BT$ once.
+
+  - id: Q-15.1-heat-capacity
+    type: numeric
+    level: mid
+    objectives: [OBJ-15.1-5]
+    prompt: >-
+      A $16 \times 16$ lattice at $k_BT = 2.3\,J$ gives an energy-per-spin trace with variance $\text{Var}(e) = 0.031\,J^2$. Find the heat capacity per spin, in units of $k_B$.
+    answer: 1.50
+    unit: k_B
+    tolerance: 0.03
+    correctFeedback: >-
+      $c/k_B = N\,\text{Var}(e)/(k_BT)^2 = 256 \cdot 0.031/2.3^2 = 1.50$, near the top of the $L = 16$ heat-capacity peak; at $k_BT = 2.5\,J$, further from $T_c$, the lesson's example finds $0.90$ on a $32 \times 32$ lattice. No derivative was taken: the response to heating is read off the energy fluctuations.
+    wrongFeedback: >-
+      Use $c = N\,\text{Var}(e)/(k_BT^2)$ with $N = L^2$; in reduced units, $c/k_B = N\,\text{Var}(e)/(k_BT)^2$.
+    commonWrong:
+      - value: 3.45
+        feedback: >-
+          That divides by $k_BT$ once. The heat capacity is $\text{Var}(E)/(k_BT^2)$: the temperature enters squared.
+      - value: 0.0938
+        feedback: >-
+          You used $N = 16$, the side. The lattice has $16^2 = 256$ spins.
+
+  - id: Q-15.1-abs-m
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-5]
+    prompt: >-
+      Figure 15.1b applies the fluctuation identity to $|m|$, $\chi' = N\,\text{Var}(|m|)/(k_BT)$, rather than to $m$. Why, below $T_c$?
+    choices:
+      - text: >-
+          A finite run crosses between $+m$ and $-m$ only rarely, so $\text{Var}(m)$ measures how many crossings happened to fit in the run. $|m|$ does not care which sign the lattice is on, and a run can sample it.
+        correct: true
+        feedback: >-
+          Right. Two runs of the same lattice, one with no reversal and one with several, would give wildly different $\text{Var}(m)$. $\chi'$ is the standard estimator for finite lattices, and its peak is all the lesson uses to locate $T_c$.
+      - text: >-
+          Because $\langle m\rangle = 0$ exactly by symmetry, so $\text{Var}(m)$ vanishes below $T_c$.
+        feedback: >-
+          $\langle m\rangle = 0$ makes $\text{Var}(m) = \langle m^2\rangle$, which is close to $m_0^2$, not zero, if both signs are sampled fairly. The trouble is that a run does not sample them fairly.
+      - text: >-
+          Because $|m|$ is the order parameter of the Ising model and $m$ is not.
+        feedback: >-
+          $m$ is the order parameter. $|m|$ is a choice of estimator, made because of what a finite run can and cannot sample.
+      - text: >-
+          Because negative magnetizations are unphysical in zero field.
+        feedback: >-
+          At $h = 0$ the two signs are exactly equivalent; $m = -0.9$ is as physical as $m = +0.9$.
+
+  - id: Q-15.1-extrapolate
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-15.1-5, OBJ-15.1-6]
+    prompt: >-
+      ThermoLab's runs put the peak of $\chi'$ at $k_BT = 2.416\,J$ for $L = 16$ and $2.311\,J$ for $L = 64$. Assuming $T_\text{peak}(L) = T_c + a/L$, extrapolate to $L \to \infty$: what is $k_BT_c$, in units of $J$?
+    answer: 2.276
+    unit: J
+    tolerance: 0.003
+    correctFeedback: >-
+      $a = (2.416 - 2.311)/(1/16 - 1/64) = 2.24$, so $T_c = 2.311 - 2.24/64 = 2.276$, within $0.3\%$ of Onsager's $2.269$. Even the $64 \times 64$ peak is still $a/L = 0.035$ above $T_c$.
+    wrongFeedback: >-
+      Two points fix the line $T_\text{peak} = T_c + a/L$: find the slope $a$ against $1/L$, then the intercept at $1/L = 0$.
+    commonWrong:
+      - value: 2.311
+        feedback: >-
+          That is the $L = 64$ peak itself. Every finite lattice's peak sits above $T_c$; the extrapolation removes the shift $a/L$.
+      - value: 2.304
+        feedback: >-
+          That extrapolates in $1/L^2$. For the square lattice the shift goes as $L^{-1/\nu}$ with $\nu = 1$: linear in $1/L$.
+
+  - id: Q-15.1-what-peaks-show
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-15.1-6, OBJ-15.1-5]
+    prompt: >-
+      The susceptibility peak of a simulated square lattice sits at $2.42\,J/k_B$ for $L = 16$ and $2.31\,J/k_B$ for $L = 64$, and grows taller with $L$. What does this establish about the infinite lattice?
+    choices:
+      - text: >-
+          A trend consistent with a singularity near Onsager's $2.269\,J/k_B$, provided it survives a change of seed with $\tau$-corrected error bars; it cannot prove the singularity, because on any finite lattice every observable is a smooth function of $T$.
+        correct: true
+        feedback: >-
+          Right. The correlation length is capped by $L$, so every peak is finite. The singularity is a property of the limit $N \to \infty$, established by derivation, here Onsager's; the simulation supplies evidence, sometimes overwhelming. And near $T_c$ critical slowing down makes the largest lattices the hardest to equilibrate, so the most important points are the least certain.
+      - text: >-
+          At $L = 64$ the lattice is large enough that $\chi'$ is effectively infinite at its peak, so the transition is at $2.31\,J/k_B$.
+        feedback: >-
+          A sum of $2^{4096}$ exponentials is analytic: its peak is finite and rounded, and it sits $0.04\,J/k_B$ above $T_c$. Neither the height nor the position of one finite peak is the singularity.
+        misconception: MC-simulation-shows-singularity
+      - text: >-
+          A much larger lattice, say $L = 1024$, would show the true divergence at $T_c$ and settle the matter without any theory.
+        feedback: >-
+          Any finite $L$ gives a finite, rounded peak; larger lattices only sharpen it. Settling the matter needs the limit, which is a derivation, not a run.
+        misconception: MC-simulation-shows-singularity
+      - text: >-
+          Nothing: every finite lattice is analytic, so simulations say nothing about the infinite one.
+        feedback: >-
+          Too strong. Peaks that grow, sharpen and converge as $L$ grows, consistent with an exact solution where one exists, are evidence; they are not proof.
+
+  # ---------------------------------------------------------------- OBJ-15.1-6: hysteresis, rounding, slowing down
+  - id: Q-15.1-tau-peak
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-6]
+    prompt: >-
+      A Metropolis simulation of a $32 \times 32$ lattice is run at $k_BT = 1.5\,J$, $2.27\,J$ and $3.5\,J$. At which temperature does the trace of $|m|$ take the longest to decorrelate?
+    choices:
+      - text: >-
+          At $2.27\,J$, near $T_c$: the autocorrelation time peaks there, and grows with $L$.
+        correct: true
+        feedback: >-
+          Right. At $T_c$ the lattice is a patchwork of correlated domains of every size up to $L$, and a local rule rearranges a patch of size $\xi$ in a time growing like $\xi^z$, $z \approx 2$. Figure 15.1b measures about one sweep deep in either phase and $42$ sweeps at $T_c$ for $L = 32$: critical slowing down.
+      - text: >-
+          At $2.27\,J$ it decorrelates fastest: the system is between phases and neither holds it back.
+        feedback: >-
+          Being between phases means domains of both signs at every scale, and large correlated domains are the slowest thing a local update can change. $\tau$ peaks at $T_c$ and keeps growing with $L$.
+        misconception: MC-critical-fastest-settling
+      - text: >-
+          At $1.5\,J$, because the low temperature makes flips rare.
+        feedback: >-
+          Flips are rare deep in the ordered phase, but $|m|$ has little to do: it sits near $0.99$ with small, nearly independent fluctuations, so its trace decorrelates within a sweep or two.
+      - text: >-
+          At $3.5\,J$, because a high temperature means large fluctuations.
+        feedback: >-
+          Large fluctuations are not slow ones. Far above $T_c$ the spins are correlated over only a few sites, and a sweep or two scrambles them.
+
+  - id: Q-15.1-tau-scaling
+    type: numeric
+    level: mid
+    objectives: [OBJ-15.1-6]
+    prompt: >-
+      At $T_c$ the autocorrelation time of $|m|$ is $174$ sweeps for $L = 64$, and it grows as $L^z$ with $z \approx 2$. Estimate it for $L = 128$, in sweeps.
+    answer: 696
+    unit: sweeps
+    tolerance: 0.05
+    correctFeedback: >-
+      $174 \cdot 2^2 = 696$, about $700$ sweeps. Each of those sweeps also costs four times as much, so an equally precise point at $T_c$ costs about $16$ times more computing on the larger lattice: the simulation is slowest exactly where the physics is most interesting.
+    wrongFeedback: >-
+      Doubling $L$ multiplies $\tau$ by $2^z$.
+    commonWrong:
+      - value: 348
+        feedback: >-
+          That makes $\tau$ grow linearly with $L$ ($z = 1$). The measured $3.1$, $9.6$, $42$ and $174$ sweeps for $L = 8$ to $64$ roughly quadruple with each doubling.
+      - value: 2784
+        feedback: >-
+          That multiplies by $16$, as if $\tau$ grew as $L^4$. It grows as $L^z$ with $z \approx 2$: a factor of $4$.
+
+  - id: Q-15.1-loop
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-6]
+    prompt: >-
+      In figure 15.1c, at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice, the hysteresis loop has area $2.20$, $1.48$ and $1.18$ for $5$, $20$ and $80$ sweeps per field step. At $3.0\,J$ the area is $0.013$ to $0.021$. Which conclusion do these measurements support?
+    choices:
+      - text: >-
+          Below $T_c$ the lattice stays in a metastable state until a reversed domain nucleates; slower sweeping gives nucleation more chances, so the loop narrows. On a finite lattice a slow enough sweep would close it: the loop measures metastability on the time scale of the run.
+        correct: true
+        feedback: >-
+          Right. The loop narrows and stays open for any practical sweep. Above $T_c$ there is no ordered state to be stuck in: the curve retraces itself, and its area is noise.
+      - text: >-
+          The loop stays open however slowly the field is swept, so the $32 \times 32$ lattice has a genuine jump in $m$ at $h = 0$: a finite simulation showing a true first-order transition.
+        feedback: >-
+          The partition function of $1024$ spins is analytic in $h$; a run long enough to wait out every nucleation would trace a smooth curve. The jump at $h = 0$ belongs to the infinite lattice, and the loop is evidence for it, not the jump itself.
+        misconception: MC-simulation-shows-singularity
+      - text: >-
+          The area measures how fast a real magnet's domains respond: $20$ sweeps per step correspond to a definite rate of sweeping the field in the laboratory.
+        feedback: >-
+          A sweep is a unit of computation; Glauber's rule would give different areas at the same "rate". The trend with sweeps per step is meaningful, the conversion to seconds is not.
+        misconception: MC-mc-is-real-dynamics
+      - text: >-
+          At $3.0\,J$ there is a loop as well, too small to see; its area is $0.013$ to $0.021$.
+        feedback: >-
+          Areas of $0.01$ to $0.02$ come from the noise of $m$, against $1.2$ to $2.2$ below $T_c$. Above $T_c$ the curve passes through the origin and is the same in both directions.
+
+  # ---------------------------------------------------------------- OBJ-15.1-7: honest error bars
+  - id: Q-15.1-honest-error
+    type: numeric
+    level: basic
+    objectives: [OBJ-15.1-7]
+    prompt: >-
+      A trace of $n = 20\,000$ samples of $|m|$ has standard deviation $\sigma = 0.05$ and autocorrelation time $\tau = 100$ samples. What is the standard error of its mean?
+    answer: 0.005
+    unit: ''
+    tolerance: 0.03
+    correctFeedback: >-
+      $N_\text{eff} = n/(2\tau) = 20\,000/200 = 100$, so $\sigma_{\bar x} = 0.05/\sqrt{100} = 0.005$. The trace holds a hundred independent samples, not twenty thousand.
+    wrongFeedback: >-
+      Count the independent samples first, $N_\text{eff} = n/(2\tau)$, then divide $\sigma$ by $\sqrt{N_\text{eff}}$.
+    commonWrong:
+      - value: 0.000354
+        feedback: >-
+          That is the naive $\sigma/\sqrt n$, which treats every sample as independent. It is too small by $\sqrt{2\tau} = 14$.
+        misconception: MC-naive-error-bar
+      - value: 0.00354
+        feedback: >-
+          That uses $N_\text{eff} = n/\tau$. The factor $2$ in $n/(2\tau)$ is there because correlations run both ways in time.
+
+  - id: Q-15.1-naive-factor
+    type: numeric
+    level: mid
+    objectives: [OBJ-15.1-7]
+    prompt: >-
+      A trace of $10\,000$ samples of $|m|$ has autocorrelation time $\tau = 25$ samples. By what factor is the naive standard error $\sigma/\sqrt n$ too small?
+    answer: 7.07
+    unit: ''
+    tolerance: 0.03
+    correctFeedback: >-
+      $N_\text{eff} = n/(2\tau) = 10\,000/50 = 200$, so the honest error is $\sigma/\sqrt{200}$, and the naive one is too small by $\sqrt{10\,000/200} = \sqrt{50} = 7.07$.
+    wrongFeedback: >-
+      The ratio of the two errors is $\sqrt{n/N_\text{eff}} = \sqrt{2\tau}$.
+    commonWrong:
+      - value: 1
+        feedback: >-
+          That treats the samples as independent. Correlated samples are worth fewer independent ones, $N_\text{eff} = n/(2\tau)$, whatever their number.
+        misconception: MC-naive-error-bar
+      - value: 5
+        feedback: >-
+          That is $\sqrt\tau$. You dropped the factor $2$ in $N_\text{eff} = n/(2\tau)$.
+      - value: 50
+        feedback: >-
+          That is $2\tau$, the ratio of the sample counts. Errors go as the square root: $\sqrt{50}$.
+
+  - id: Q-15.1-seed-check
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-7]
+    prompt: >-
+      Sixteen independent runs at $k_BT = 2.35\,J$ on a $16 \times 16$ lattice each quote $\langle|m|\rangle$ with two error bars: the $\tau$-corrected one and the naive $\sigma/\sqrt n$. The sixteen means scatter about as much as the corrected bars say, and more than twice as much as the naive ones. What follows?
+    choices:
+      - text: >-
+          The $\tau$-corrected error bar is the honest one; the naive bar claims a precision the runs do not have.
+        correct: true
+        feedback: >-
+          Right. A change of seed is the test of an error bar: an honest bar predicts how far an independent run will land. A conclusion that changes when the seed changes was never a conclusion.
+      - text: >-
+          The runs disagree beyond their naive error bars, so some of them are faulty; keep the one with the smallest naive error.
+        feedback: >-
+          None of them is faulty: they scatter exactly as their correlated samples should. The naive bars are what is wrong, and choosing the run with the smallest one only hides it.
+        misconception: MC-naive-error-bar
+      - text: >-
+          Make every run ten times longer: the naive bars will then match the scatter.
+        feedback: >-
+          Both the scatter and the naive bar shrink by $\sqrt{10}$, and the naive one stays too small by the same $\sqrt{2\tau}$. Longer runs do not cure an error bar that ignores correlations.
+        misconception: MC-naive-error-bar
+      - text: >-
+          The random-number generator is faulty: independent runs at the same temperature should agree exactly.
+        feedback: >-
+          Independent runs should disagree, by about their honest error bar. Exact agreement would mean the runs were not independent.
+
+  - id: Q-15.1-single-run
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-15.1-7, OBJ-15.1-6]
+    prompt: >-
+      From a single run, a student finds the $\chi'$ peak of $L = 32$ at $2.33\,J/k_B$ and that of $L = 64$ at $2.35\,J/k_B$, and concludes that at large $L$ the peaks drift away from $T_c$, not toward it. The difference, $0.02\,J/k_B$, is many times the naive error of each point. What is the right response?
+    choices:
+      - text: >-
+          Rerun both sizes with several seeds and compare the difference with $\tau$-corrected error bars. Near $T_c$ the autocorrelation time is longest, and longest for $L = 64$, so those points are the least certain; four-seed runs put the peaks at $2.329$ and $2.311\,J/k_B$.
+        correct: true
+        feedback: >-
+          Right. At $T_c$, $\tau$ is about $42$ sweeps for $L = 32$ and $174$ for $L = 64$, so the naive bars there are too small by a factor of $9$ to $19$. A reversal that does not survive a change of seed was never a finding.
+      - text: >-
+          Accept it: a difference of many naive error bars is statistically significant.
+        feedback: >-
+          The naive bar $\sigma/\sqrt n$ treats every sweep as independent. Near $T_c$ consecutive sweeps are strongly correlated, and the honest bar is larger by $\sqrt{2\tau}$.
+        misconception: MC-naive-error-bar
+      - text: >-
+          Accept it: near $T_c$ the chain decorrelates fastest, so these are the most reliable points of the run.
+        feedback: >-
+          The opposite: the autocorrelation time peaks at $T_c$ and grows with $L$. These are the least reliable points of the run.
+        misconception: MC-critical-fastest-settling
+      - text: >-
+          Discard the $L = 64$ point: large lattices are always less accurate than small ones.
+        feedback: >-
+          Large lattices are closer to the infinite system and essential to the extrapolation. They are harder near $T_c$, which calls for longer runs and honest error bars, not for discarding them.
