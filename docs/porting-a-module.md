@@ -87,7 +87,9 @@ line each, with the evidence. ThermoLab is fixed separately, from that list.
 **Hebrew.**
 - Terms follow ThermoLab's `glossary/terms.yml`. The glossary's `reject` lists are enforced.
   Decided during the pilots: error bar = פס שגיאה, run = הרצה, Onsager = אונסאגר, real (as
-  opposed to model) = ממשי, true = אמיתי.
+  opposed to model) = ממשי, true = אמיתי, envelope = מעטפת, spread or scatter = פיזור,
+  exponent = מעריך, quasistatic = כמו-סטטי, "falls as" (a scaling law, N^(−1/2)) = דועך כמו (never "קטן כמו", which
+  reads "as small as"), reservoir = מאגר חום at first use, then מאגר.
 - Write Hebrew as Hebrew, not as translated English. It must say the same thing as the English;
   the Hebrew review checks meaning, not just grammar.
 - Bidi: in plain-text fields (objectives, Predict choices, Formula labels, misconceptions,
@@ -124,6 +126,10 @@ piece, staging explicit paths.
      workbook and summary, re-measured where measurable. Findings as errors and imprecisions,
      with evidence.
    - *Hebrew*: meaning against the English first, then terminology, bidi, style.
-   Apply both, in both languages, then run the gates again.
+   The physics review also checks that each figure draws what the lesson says it shows (module
+   00's sum view drew nothing the lesson described), and gives a verdict on every errata line
+   the port added. The translators report slips they notice in the English; apply those with
+   the reviews.
+   Apply all of it, in both languages, then run the gates again.
 7. **README**: the module's row in the migration table. **PR**, one per module; merge when every
    gate and both reviews have passed, then start the next module from `master`.

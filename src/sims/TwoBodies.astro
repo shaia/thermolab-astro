@@ -1,0 +1,7 @@
+---
+/** Two Einstein solids exchanging quanta for lesson MDX: <Spread figure={TwoBodies} figureProps={{ nA: 100, nB: 300, tA: 4, tB: 1, tasks: ['unequal'] }}>. */
+import TwoBodies, { type TwoBodiesProps } from './TwoBodies';
+type Props = TwoBodiesProps;
+---
+
+<TwoBodies client:visible {...Astro.props} />

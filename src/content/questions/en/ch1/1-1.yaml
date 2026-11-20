@@ -1,0 +1,628 @@
+# Lesson 1.1 check questions. Ported from ThermoLab's assessment/quizzes/01-equilibrium.en.yml (Q-01-1 … Q-01-8, all
+# eight; Q-01-6, a prediction, and Q-01-7, a short answer, become multiple choice) and extended to cover the five
+# objectives and the misconceptions of src/content/misconceptions/1-1.yaml, plus MC-equilibrium-motion-stops (4.1).
+# Every number was recomputed with ThermoLab's library (thermolab.equilibrium); simulated numbers are multi-seed means.
+# Model temperatures are in units of the quantum, ε/k_B, and model time in steps. Ids are shared with the Hebrew bank,
+# which must hold the same questions with the same answers.
+lang: en
+chapter: 1
+questions:
+  # ---------------------------------------------------------------- OBJ-1.1-1: the zeroth law, temperature
+  - id: Q-1.1-zeroth-law
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-1.1-1]
+    prompt: >-
+      Body A is in thermal equilibrium with body C, and body B, separately, is in thermal equilibrium with C. What can you conclude about A and B?
+    choices:
+      - text: >-
+          A and B are in thermal equilibrium with each other: put in contact, no net heat would flow between them. This is what the zeroth law asserts.
+        correct: true
+        feedback: >-
+          Right. It is why one calibrated thermometer, playing the part of C, can be trusted on any two bodies it touches in turn: equal readings mean the two bodies would be in equilibrium with each other, without ever being brought together.
+      - text: >-
+          Nothing follows: thermal equilibrium need not be transitive.
+        feedback: >-
+          Logic alone would indeed not force it, and that is why the zeroth law is a law: an empirical one, which says that thermal equilibrium is transitive. Experiment has never found otherwise. Without it, a thermometer's reading would say nothing about the two bodies it touched.
+      - text: >-
+          A and B must have the same heat capacity.
+        feedback: >-
+          Heat capacity plays no part here. Bodies of very different heat capacities share a temperature all the time, a teaspoon and the pot of soup it stands in. Heat capacities decide where two bodies meet, not whether they are in equilibrium.
+      - text: >-
+          A and B are each in equilibrium with C, but a thermometer might still read differently on A than on B.
+        feedback: >-
+          A thermometer is just one more third body. A thermometer in equilibrium with A is, by the zeroth law, in equilibrium with C, and so with B: it reads the same on all three. That consistency is what the law guarantees.
+
+  - id: Q-1.1-metal-leg
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-1.1-1]
+    prompt: >-
+      A room has been at $20\,{}^\circ\text{C}$ all night. In the morning you touch a steel railing and the wooden handrail fixed beside it, and the steel feels much colder. Which statement is correct?
+    choices:
+      - text: >-
+          Both are at $20\,{}^\circ\text{C}$, as a thermometer taped to each would show. Steel carries heat away from your hand faster than wood, and the hand reports how fast it loses heat, not the temperature of what it touches.
+        correct: true
+        feedback: >-
+          Right. Both have been in equilibrium with the room's air all night, so by the zeroth law they are in equilibrium with each other. Your hand stays near body temperature and never comes to equilibrium with the railing; it senses its own rate of heat loss, and steel draws heat out of the skin much faster than wood, through its conductivity and its heat capacity per unit volume together.
+      - text: >-
+          The steel is colder than the wood; that is exactly why it feels colder.
+        feedback: >-
+          Nothing in a room held at $20\,{}^\circ\text{C}$ all night can stay below it: a colder body would take in heat from the air until it was at $20\,{}^\circ\text{C}$ too. A thermometer reads the same on both. What differs is how fast each draws heat out of your hand.
+        misconception: MC-touch-tells-temperature
+      - text: >-
+          They are at the same temperature, so they really feel the same; the difference is imagined.
+        feedback: >-
+          The difference is real and measurable: heat leaves your hand much faster through the steel. It is a difference in heat flow, not in temperature.
+      - text: >-
+          The steel is colder because its larger heat capacity makes it lag behind the room's temperature.
+        feedback: >-
+          A large heat capacity slows a body's response to a change, but after a night at a steady $20\,{}^\circ\text{C}$ there is no change left to follow. Both have long since reached the room's temperature.
+
+  - id: Q-1.1-no-zeroth-law
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-1.1-1]
+    prompt: >-
+      Imagine a world in which the zeroth law fails. A thermometer C comes to equilibrium with body A and reads $25$; it comes to equilibrium with body B and reads $25$ again. Yet when A and B are put in contact, heat flows from A to B. What would be lost?
+    choices:
+      - text: >-
+          Temperature as a single number. Equal readings would no longer mean "no net heat flow on contact", so no number could be attached to each body such that equal numbers meant equilibrium, and thermometers of different materials could disagree about which bodies share a temperature.
+        correct: true
+        feedback: >-
+          Right. The zeroth law makes "is in thermal equilibrium with" sort all bodies into classes of mutual equilibrium, and only such classes can be labelled by one number each. Without it, a reading would describe the thermometer and the body together, not the body.
+      - text: >-
+          Energy conservation: heat flowing from A to B with no difference in reading would create energy.
+        feedback: >-
+          Heat that leaves A arrives in B; the total is still conserved. What fails is the link between equal readings and zero net flow, which is the zeroth law's, not the first law's.
+      - text: >-
+          Nothing that matters: the thermometer would still give each body's temperature correctly.
+        feedback: >-
+          Then two bodies with equal temperatures would not be in equilibrium, and "equal temperature" would no longer mean what it is used for: that nothing flows when they touch.
+      - text: >-
+          Only the thermometer's calibration: a better-calibrated thermometer would show A hotter than B.
+        feedback: >-
+          Calibration fixes the scale of the readings, not which bodies get equal readings. C really was in equilibrium with A and with B, so any relabelling of its scale gives them the same number again.
+
+  - id: Q-1.1-thermometer-error
+    type: numeric
+    level: mid
+    objectives: [OBJ-1.1-1, OBJ-1.1-3]
+    prompt: >-
+      A thermometer of heat capacity $8.0\,\text{J/K}$, at $20\,{}^\circ\text{C}$, is dipped into $50\,\text{g}$ of water at $60\,{}^\circ\text{C}$ ($c = 4200\,\text{J/(kg K)}$). Nothing else exchanges heat. Once it has come to equilibrium, by how many kelvin does its reading fall short of the water's temperature before it went in?
+    answer: 1.468
+    unit: K
+    tolerance: 0.02
+    correctFeedback: >-
+      The water has $C_2 = 0.050 \times 4200 = 210\,\text{J/K}$. $T_\mathrm{eq} = (8.0 \times 20 + 210 \times 60)/218 = 58.53\,{}^\circ\text{C}$, so the reading is $(8.0/218) \times 40 = 1.47\,\text{K}$ low. By the zeroth law the thermometer does read the temperature of the water it is in; it is the water that it cooled.
+    wrongFeedback: >-
+      Find the common temperature from energy conservation, $T_\mathrm{eq} = (C_1T_1 + C_2T_2)/(C_1 + C_2)$, and subtract it from $60\,{}^\circ\text{C}$.
+    commonWrong:
+      - value: 1.524
+        feedback: >-
+          That is $(8.0/210) \times 40$: the thermometer's heat capacity over the water's alone. The common temperature divides by the capacity of both, $218\,\text{J/K}$.
+      - value: 20
+        feedback: >-
+          That is $60$ minus the plain average, $40\,{}^\circ\text{C}$, as if the thermometer weighed as much as the water. The water has $26$ times the heat capacity, so it moves $26$ times less.
+        misconception: MC-equal-weight-equilibrium
+      - value: 58.53
+        feedback: >-
+          That is the reading itself. The question asks how far it falls short of $60\,{}^\circ\text{C}$.
+
+  # ---------------------------------------------------------------- OBJ-1.1-2: what stops at equilibrium, and what does not
+  - id: Q-1.1-instant
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-1.1-2, OBJ-1.1-4]
+    prompt: >-
+      Two identical metal blocks, one hot and one cold, are pressed together and then isolated from everything else. Do they reach the same temperature the instant they touch?
+    choices:
+      - text: >-
+          No. Heat has to cross the contact at a finite rate, so the gap closes as $e^{-t/\tau}$, over a relaxation time set by the heat capacities and the conductance of the contact.
+        correct: true
+        feedback: >-
+          Right. $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$ vanishes only as $\kappa \to \infty$ (a contact of infinite conductance) or as a heat capacity goes to zero (a body that holds no energy); nothing has either. $\tau$ may be short; it is never zero.
+      - text: >-
+          Yes: contact alone makes the temperatures equal at once.
+        feedback: >-
+          That leaves out the heat that has to cross the contact, at the rate $\kappa\,(T_A - T_B)$. With a finite conductance $\kappa$ the gap takes a finite time to close, $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$ to shrink by a factor $e$.
+        misconception: MC-instant-equilibrium
+      - text: >-
+          Yes, but only because the blocks are identical; blocks of different materials would take time.
+        feedback: >-
+          Identical blocks still need heat to cross the contact. Matching the materials changes $\tau$, not the fact that it is finite.
+        misconception: MC-instant-equilibrium
+      - text: >-
+          No, but only because they are solids; liquids or gases would equalize at once.
+        feedback: >-
+          Every phase carries heat at a finite rate. Stirring or convection can speed a fluid up a great deal, never to an instant.
+
+  - id: Q-1.1-still-hopping
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-1.1-2, OBJ-1.1-5]
+    prompt: >-
+      In figure 1.1a the two bodies have reached their common temperature, and the curves of $T_A$ and $T_B$ have gone flat apart from a small jitter. What are the quanta doing?
+    choices:
+      - text: >-
+          They keep hopping, between the bodies as well as within them. A quantum crosses from A to B as often, on average, as one crosses from B to A, because the two rates are equal when $q_A/n_A = q_B/n_B$.
+        correct: true
+        feedback: >-
+          Right. What stops is the **net** flow. For the figure's pair at equilibrium each direction happens with probability $0.1875$ per step, so more than a third of all steps still carry a quantum across.
+      - text: >-
+          They have stopped crossing between the bodies, which is why the curves have gone flat.
+        feedback: >-
+          The figure says otherwise: the shading keeps moving between the blocks. The hop rule does not know what the temperatures are; at every step it draws a quantum and a landing oscillator among both bodies, at equilibrium as before it. The curves are flat because the crossings in the two directions balance.
+        misconception: MC-equilibrium-motion-stops
+      - text: >-
+          They still hop within each body, but a quantum that leaves A now always lands back in A.
+        feedback: >-
+          The landing oscillator is chosen among both bodies whatever the state, so a quantum that leaves A lands in B with probability $n_B/(n_A + n_B)$, at equilibrium as at the start. The exchange between the bodies goes on.
+        misconception: MC-equilibrium-motion-stops
+      - text: >-
+          They hop only from the hotter body to the colder, so the jitter is the flow reversing whenever the two temperatures cross.
+        feedback: >-
+          A hop can go either way at every step, whichever body is hotter; being hotter only makes a body's own direction more likely. Equilibrium is where the two directions are equally likely, not where one of them is forbidden.
+
+  - id: Q-1.1-crossing-rate
+    type: numeric
+    level: mid
+    objectives: [OBJ-1.1-2]
+    prompt: >-
+      In the hop model, body A has $200$ oscillators and body B has $300$, and they have reached equilibrium. In what fraction of the steps, on average, does a quantum cross from one body to the other, in either direction?
+    answer: 0.48
+    unit: ''
+    tolerance: 0.02
+    correctFeedback: >-
+      At equilibrium $q_A/Q = n_A/(n_A + n_B) = p = 0.4$. A quantum crosses from A to B with probability $(q_A/Q)(1 - p) = p(1 - p) = 0.24$ and from B to A with $(1 - p)\,p = 0.24$: equal, so the net flow is zero, and together $2p(1 - p) = 0.48$. Measured over eight runs of $200\,000$ steps, $0.4799 \pm 0.0004$. Nearly half of all steps carry a quantum across, at equilibrium, whatever the temperature.
+    wrongFeedback: >-
+      A quantum crosses from A to B when it is drawn from A and lands in B, and at equilibrium $q_A/Q = n_A/(n_A + n_B)$. Add the two directions.
+    commonWrong:
+      - value: 0
+        feedback: >-
+          Zero is the **net** flow. The hop rule still draws a quantum and a landing place at every step, and in about half the steps the quantum changes body; at equilibrium the crossings in the two directions balance.
+        misconception: MC-equilibrium-motion-stops
+      - value: 0.24
+        feedback: >-
+          That is one direction only. The other happens just as often, and that equality is what equilibrium is.
+
+  - id: Q-1.1-net-flow
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-1.1-2, OBJ-1.1-1]
+    prompt: >-
+      In the hop model, body A has $100$ oscillators holding $300$ quanta, and body B has $600$ oscillators holding $900$ quanta. They are put in contact. Which way does energy flow, on balance, and why?
+    choices:
+      - text: >-
+          From A to B. A is the hotter, at $3$ quanta per oscillator against $1.5$, although it holds a third as much energy. Per step a quantum crosses from A to B with probability $(300/1200)(600/700) = 0.214$, and back with $(900/1200)(100/700) = 0.107$.
+        correct: true
+        feedback: >-
+          Right. Energy flows down the temperature difference, not the energy difference: here $T = q\varepsilon/(nk_B)$ is energy per unit of heat capacity. The net flow stops when A holds $1200 \times 100/700 = 171$ quanta, both bodies at $1.71$.
+      - text: >-
+          From B to A: B holds three times the energy, and energy spreads from where there is more of it.
+        feedback: >-
+          Energy does not flow toward equal amounts; it flows toward equal temperatures. Were it to flow from B until both held $600$ quanta, A would end at $6$ quanta per oscillator and B at $1$: the temperature gap would grow, not close.
+      - text: >-
+          Neither, on balance: quanta cross both ways, so the two flows cancel from the start.
+        feedback: >-
+          They cross both ways, but not at equal rates: $0.214$ against $0.107$ per step. The rates balance only when $q_A/n_A = q_B/n_B$, at equal temperatures.
+      - text: >-
+          From B to A at first, because three quarters of the quanta drawn come from B; then back, once A has caught up.
+        feedback: >-
+          Three quarters of the draws do come from B, but most of those quanta land back in B, which holds $6/7$ of the oscillators. With both factors counted, crossings from A win from the first step, and no reversal ever comes: the mean gap keeps its sign.
+
+  # ---------------------------------------------------------------- OBJ-1.1-3: the equilibrium temperature
+  - id: Q-1.1-teq
+    type: numeric
+    level: basic
+    objectives: [OBJ-1.1-3]
+    prompt: >-
+      Body A has heat capacity $300\,\text{J/K}$ and starts at $80\,{}^\circ\text{C}$; body B has $900\,\text{J/K}$ and starts at $20\,{}^\circ\text{C}$. The pair is isolated together. Find the equilibrium temperature.
+    answer: 35
+    unit: °C
+    tolerance: 0.01
+    correctFeedback: >-
+      $T_\mathrm{eq} = (300 \times 80 + 900 \times 20)/1200 = 42\,000/1200 = 35\,{}^\circ\text{C}$. B has three times A's heat capacity, so it moves a third as far: A falls by $45\,\text{K}$ and B rises by $15\,\text{K}$, and they meet three quarters of the way from A's start to B's.
+    wrongFeedback: >-
+      Weight each starting temperature by its own body's heat capacity: $T_\mathrm{eq} = (C_AT_{A,0} + C_BT_{B,0})/(C_A + C_B)$.
+    commonWrong:
+      - value: 50
+        feedback: >-
+          That is the plain average, right only for equal heat capacities. B has three times A's, and pulls the common temperature toward its own start.
+        misconception: MC-equal-weight-equilibrium
+      - value: 65
+        feedback: >-
+          That weights each temperature by the **other** body's heat capacity. The body with the larger capacity moves less, so the result must lie closer to B's $20\,{}^\circ\text{C}$.
+
+  - id: Q-1.1-weighted
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-1.1-3]
+    prompt: >-
+      Two bodies with very different heat capacities are put in contact and isolated together until they reach equilibrium. Which statement is correct?
+    choices:
+      - text: >-
+          $T_\mathrm{eq}$ is the average of the two starting temperatures weighted by the heat capacities, so it lies closer to the starting temperature of the body with the larger heat capacity.
+        correct: true
+        feedback: >-
+          Right. $T_\mathrm{eq} = (C_AT_{A,0} + C_BT_{B,0})/(C_A + C_B)$. The two temperature changes are in inverse proportion to the capacities, like the arms of a lever: the body that needs more energy per kelvin moves less.
+      - text: >-
+          $T_\mathrm{eq}$ is the plain average of the two starting temperatures, whatever the heat capacities.
+        feedback: >-
+          Only when $C_A = C_B$. Energy conservation weights each starting temperature by its own body's heat capacity; in figure 1.1a a body three times larger moves a third as far.
+        misconception: MC-equal-weight-equilibrium
+      - text: >-
+          $T_\mathrm{eq}$ equals the starting temperature of the body with the larger heat capacity.
+        feedback: >-
+          That overshoots the point. The larger body pulls $T_\mathrm{eq}$ toward its own start, and fixes it there only in the limit of an infinite heat capacity, a reservoir.
+      - text: >-
+          $T_\mathrm{eq}$ depends only on which body started hotter, not on the heat capacities.
+        feedback: >-
+          Which body started hotter fixes the direction of the flow. Where between the two starting temperatures $T_\mathrm{eq}$ lands is set by the ratio $C_A/C_B$.
+
+  - id: Q-1.1-double-both
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-1.1-3, OBJ-1.1-4]
+    prompt: >-
+      You double both heat capacities, $C_A$ and $C_B$, and keep the two starting temperatures and the contact's conductance $\kappa$ as they were. What happens to the equilibrium temperature and to the relaxation time?
+    choices:
+      - text: >-
+          $T_\mathrm{eq}$ is unchanged and $\tau$ doubles.
+        correct: true
+        feedback: >-
+          Right. In $T_\mathrm{eq} = (C_AT_{A,0} + C_BT_{B,0})/(C_A + C_B)$ the factor $2$ cancels: only the ratio of the capacities enters. In $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$ the numerator grows fourfold and the denominator twofold. The destination is the same; the contact has twice the energy to pass.
+      - text: >-
+          Both are unchanged: the ratio $C_A/C_B$ is the same, so nothing changes.
+        feedback: >-
+          The ratio is all $T_\mathrm{eq}$ depends on, but not all $\tau$ does. The energy that has to cross, $C_AC_B\,\Delta T(0)/(C_A + C_B)$, doubles, and it crosses through the same contact.
+      - text: >-
+          $T_\mathrm{eq}$ doubles and $\tau$ doubles.
+        feedback: >-
+          $T_\mathrm{eq}$ is a weighted average of the two starting temperatures and always lies between them, whatever the weights. Doubling both weights changes nothing.
+      - text: >-
+          $T_\mathrm{eq}$ is unchanged and $\tau$ grows fourfold.
+        feedback: >-
+          The numerator $C_AC_B$ grows fourfold, but the denominator $C_A + C_B$ grows twofold: $\tau$ doubles.
+
+  - id: Q-1.1-calorimetry
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-1.1-3]
+    prompt: >-
+      To measure a metal's specific heat, a $0.25\,\text{kg}$ block of it is heated to $95.0\,{}^\circ\text{C}$ and dropped into $0.40\,\text{kg}$ of water at $20.0\,{}^\circ\text{C}$ ($c = 4200\,\text{J/(kg K)}$), in an insulated vessel whose own heat capacity is negligible. Block and water settle at $24.0\,{}^\circ\text{C}$. Find the metal's specific heat.
+    answer: 378.6
+    unit: J/(kg K)
+    tolerance: 0.02
+    correctFeedback: >-
+      Energy conservation, read backwards: $C_1(T_\mathrm{eq} - 95.0) + C_2(T_\mathrm{eq} - 20.0) = 0$ with $C_2 = 0.40 \times 4200 = 1680\,\text{J/K}$ gives $C_1 = 1680 \times 4.0/71.0 = 94.6\,\text{J/K}$, and $c = 94.6/0.25 = 379\,\text{J/(kg K)}$, close to copper's. The water moved $4\,\text{K}$ and the block $71\,\text{K}$: the block has $1/17.75$ of the water's heat capacity. This is how heat capacities are measured.
+    wrongFeedback: >-
+      Write energy conservation for the block and the water, $C_1(T_\mathrm{eq} - T_1) + C_2(T_\mathrm{eq} - T_2) = 0$, solve it for the block's heat capacity, and divide by its mass.
+    commonWrong:
+      - value: 119280
+        feedback: >-
+          That inverts the ratio: $1680 \times 71/4$, divided by the mass. The block moved $71\,\text{K}$ and the water $4\,\text{K}$, so the block has the **smaller** heat capacity.
+      - value: 94.6
+        feedback: >-
+          That is the block's heat capacity, in $\text{J/K}$. Divide by its mass for the specific heat.
+      - value: 358.4
+        feedback: >-
+          That uses $95.0 - 20.0 = 75\,\text{K}$ for the block's change. The block ends at $24.0\,{}^\circ\text{C}$, not at the water's starting temperature: it fell by $71\,\text{K}$.
+
+  # ---------------------------------------------------------------- OBJ-1.1-4: exponential relaxation, the relaxation time
+  - id: Q-1.1-one-tau
+    type: mc
+    level: basic
+    objectives: [OBJ-1.1-4]
+    prompt: >-
+      Two bodies in contact start with a temperature gap of $100\,\text{K}$. About how large is the gap after one relaxation time $\tau$?
+    choices:
+      - text: >-
+          About $37\,\text{K}$: a factor $e$ smaller than at the start.
+        correct: true
+        feedback: >-
+          Right. $\Delta T(t) = \Delta T(0)\,e^{-t/\tau}$ and $e^{-1} = 0.368$: after one $\tau$ the gap is $37\%$ of what it was. That factor is how $\tau$ is defined.
+      - text: >-
+          $0\,\text{K}$: one relaxation time is how long equilibrium takes.
+        feedback: >-
+          One $\tau$ shrinks the gap by a factor $e$, not to zero. The exponential never reaches zero; after several $\tau$ the gap is negligible ($5\%$ after three), but $\tau$ is not an arrival time.
+      - text: >-
+          $50\,\text{K}$: one relaxation time halves the gap.
+        feedback: >-
+          Halving takes $\tau\ln 2 = 0.69\,\tau$. The relaxation time is defined by the factor $e$, not by a half.
+      - text: >-
+          Still about $100\,\text{K}$: the gap starts to shrink only after a few relaxation times.
+        feedback: >-
+          The gap shrinks from the first instant, and fastest then: its rate of change is proportional to the gap itself.
+
+  - id: Q-1.1-no-overshoot
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-1.1-4]
+    prompt: >-
+      In figure 1.1a body A starts at $T_A = 4$ and body B at $T_B = 1$, and they meet at $1.75$. Which describes the mean curve of $T_A$, the average over many runs?
+    choices:
+      - text: >-
+          It falls toward $1.75$, ever more slowly, and never goes below it.
+        correct: true
+        feedback: >-
+          Right. The gap decays as $e^{-t/\tau}$ and never changes sign; the mean of $T_A$ is $1.75 + 2.25\,e^{-t/\tau}$, and that of $T_B$ is $1.75 - 0.75\,e^{-t/\tau}$.
+      - text: >-
+          It falls below $1.75$, swings back above it, and settles after a few oscillations of shrinking size.
+        feedback: >-
+          That is a pendulum, which has momentum to carry it past the bottom. Heat flow has none: the rate of change of the gap is set by the gap alone, so it dies away exactly as the gap does, and the gap never changes sign.
+        misconception: MC-temperatures-overshoot
+      - text: >-
+          It falls at a steady rate and stops abruptly at $1.75$.
+        feedback: >-
+          The rate is proportional to the remaining gap, so the fall slows as the gap shrinks. $T_A$ approaches $1.75$ without ever arriving.
+      - text: >-
+          It falls to $2.5$, the midpoint of the two starting temperatures, and stays there.
+        feedback: >-
+          B has three times A's oscillators, so three times its heat capacity: the common temperature lies a quarter of the way from B's start to A's, at $1.75$.
+        misconception: MC-equal-weight-equilibrium
+
+  - id: Q-1.1-half-gap
+    type: numeric
+    level: mid
+    objectives: [OBJ-1.1-4]
+    prompt: >-
+      Two bodies with $C_A = 50\,\text{J/K}$ and $C_B = 200\,\text{J/K}$ are joined by a contact of conductance $\kappa = 0.40\,\text{W/K}$. How long does their temperature gap take to halve?
+    answer: 69.3
+    unit: s
+    tolerance: 0.02
+    correctFeedback: >-
+      $\tau = (50 \times 200)/(0.40 \times 250) = 100\,\text{s}$, and the gap halves in $\tau\ln 2 = 69.3\,\text{s}$. The same time halves it again: after $139\,\text{s}$ a quarter is left.
+    wrongFeedback: >-
+      Find $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$, then solve $e^{-t/\tau} = 1/2$.
+    commonWrong:
+      - value: 100
+        feedback: >-
+          That is $\tau$ itself, after which $37\%$ of the gap is left, not half. Halving takes $\tau\ln 2$.
+      - value: 86.6
+        feedback: >-
+          That is $(C_A/\kappa)\ln 2$, as if B were a reservoir. B's temperature moves too, toward A's, so the gap closes faster: $\tau$ uses $C_AC_B/(C_A + C_B) = 40\,\text{J/K}$, not $C_A$.
+      - value: 433
+        feedback: >-
+          That is $\big((C_A + C_B)/\kappa\big)\ln 2$. The capacities combine as $C_AC_B/(C_A + C_B)$, which is smaller than either of them, not as their sum.
+
+  - id: Q-1.1-same-factor
+    type: mc
+    level: mid
+    objectives: [OBJ-1.1-4]
+    prompt: >-
+      Two bodies in contact start $40\,\text{K}$ apart; six minutes later the gap is $10\,\text{K}$. How much longer until it is $2.5\,\text{K}$?
+    choices:
+      - text: >-
+          Another six minutes: exponential decay shrinks the gap by the same factor, here $4$, in every equal interval of time.
+        correct: true
+        feedback: >-
+          Right. With $\Delta T(t) = \Delta T(0)\,e^{-t/\tau}$, each six minutes multiplies the gap by $1/4$, so $\tau = 6/\ln 4 = 4.33$ minutes. Six minutes more again takes it to $0.63\,\text{K}$.
+      - text: >-
+          A minute and a half: $30\,\text{K}$ took six minutes, $5\,\text{K}$ a minute, so $7.5\,\text{K}$ more takes $1.5$ minutes.
+        feedback: >-
+          That has the gap close at a steady rate. The rate is proportional to the gap: at $10\,\text{K}$ it is a quarter of what it was at $40\,\text{K}$.
+      - text: >-
+          Twenty-four minutes: the gap is four times smaller, so it closes four times more slowly.
+        feedback: >-
+          It does close more slowly, but in proportion to what is left, so each factor of $4$ takes the same time, not a time four times longer.
+      - text: >-
+          It never gets there: an exponential never reaches its end.
+        feedback: >-
+          An exponential never reaches **zero**, but it passes every value above zero, $2.5\,\text{K}$ included, at a definite time.
+
+  - id: Q-1.1-rank-tau
+    type: rank
+    level: mid
+    objectives: [OBJ-1.1-4]
+    prompt: >-
+      Rank these pairs of bodies by their relaxation time, longest first. Tie any that are equal.
+    items:
+      - id: p
+        label: >-
+          $C_A = C_B = 100\,\text{J/K}$, $\kappa = 1.0\,\text{W/K}$
+      - id: q
+        label: >-
+          $C_A = 100\,\text{J/K}$ against a reservoir ($C_B \to \infty$), $\kappa = 1.0\,\text{W/K}$
+      - id: r
+        label: >-
+          $C_A = C_B = 200\,\text{J/K}$, $\kappa = 2.0\,\text{W/K}$
+      - id: s
+        label: >-
+          $C_A = 100\,\text{J/K}$, $C_B = 300\,\text{J/K}$, $\kappa = 0.50\,\text{W/K}$
+      - id: t
+        label: >-
+          $C_A = 10\,\text{J/K}$, $C_B = 1000\,\text{J/K}$, $\kappa = 1.0\,\text{W/K}$
+    order: [s, q, [p, r], t]
+    correctFeedback: >-
+      Right. $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$ gives $150\,\text{s}$, $100\,\text{s}$, $50\,\text{s}$ twice and $9.9\,\text{s}$. Against a reservoir $\tau \to C_A/\kappa$: only A has to move. Doubling both capacities and the conductance leaves $\tau$ alone. And the combination is dominated by the **smaller** capacity, so a small body against a huge one relaxes fastest of all.
+    wrongFeedback: >-
+      Compute $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$ for each pair; against a reservoir it tends to $C_A/\kappa$. The values are $150$, $100$, $50$, $50$ and $9.9\,\text{s}$.
+
+  - id: Q-1.1-thermal-inertia
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-1.1-4]
+    prompt: >-
+      A student argues: "A body with a large heat capacity has thermal inertia. Once it is cooling fast toward $T_\mathrm{eq}$ it cannot stop at once, so it must overshoot a little, like a heavy pendulum." What is wrong with the argument?
+    choices:
+      - text: >-
+          Heat capacity is not inertia. The cooling rate, $\mathrm{d}T_A/\mathrm{d}t = (\kappa/C_A)(T_B - T_A)$, is fixed by the present difference alone, with no memory of how fast the body was cooling a moment before; it is zero when $T_A = T_B$, so the gap can approach zero but not cross it. A large $C_A$ makes the approach slower, not springier.
+        correct: true
+        feedback: >-
+          Right. The equation is first order in time. A pendulum overshoots because its equation is second order: the velocity is a variable of its own, which carries it through the bottom. A temperature has no velocity of its own to carry it anywhere.
+      - text: >-
+          Nothing: large bodies do overshoot slightly, but the overshoot is damped too fast to see.
+        feedback: >-
+          $\Delta T(0)\,e^{-t/\tau}$ keeps its sign for all $t$, at any heat capacity. There is no overshoot to be damped: the gap shrinks toward zero and its rate shrinks with it.
+        misconception: MC-temperatures-overshoot
+      - text: >-
+          Energy conservation forbids it: A cannot fall below $T_\mathrm{eq}$ without energy being destroyed.
+        feedback: >-
+          Energy conservation allows it. A below $T_\mathrm{eq}$ and B above it, at the same moment, conserves energy exactly. It is the rate law, heat flowing only down the present difference, that rules the crossing out.
+      - text: >-
+          The argument holds for the hotter body but not for the colder one, which is heated rather than cooled.
+        feedback: >-
+          The two bodies obey mirror-image equations, $C_B\,\mathrm{d}T_B/\mathrm{d}t = \kappa(T_A - T_B)$ for B, and neither has a velocity term. Neither overshoots.
+        misconception: MC-temperatures-overshoot
+
+  # ---------------------------------------------------------------- OBJ-1.1-5: the stochastic model, and what it establishes
+  - id: Q-1.1-model-tau
+    type: numeric
+    level: basic
+    objectives: [OBJ-1.1-5, OBJ-1.1-4]
+    prompt: >-
+      In the hop model, body A has $50$ oscillators at $T_A = 6$ and body B has $150$ at $T_B = 2$, in units of $\varepsilon/k_B$. What is the relaxation time, in steps?
+    answer: 599.5
+    unit: steps
+    tolerance: 0.01
+    correctFeedback: >-
+      $q_A = 50 \times 6 = 300$ and $q_B = 150 \times 2 = 300$, so $Q = 600$ and $\tau = -1/\ln(1 - 1/600) = 599.5$ steps, about $Q - \tfrac12$. In two batches of $512$ runs the mean gap after $600$ steps is $1.468 \pm 0.012$ and $1.458 \pm 0.013$, against the predicted $4e^{-600/599.5} = 1.470$; single runs scatter about it by $0.28$.
+    wrongFeedback: >-
+      Count the quanta: $q = nT$ for each body. Then $\tau = -1/\ln(1 - 1/Q)$, close to $Q$.
+    commonWrong:
+      - value: 200
+        feedback: >-
+          That is the number of oscillators. The relaxation time is set by the number of **quanta**: each step moves one quantum drawn from all $Q$, so the mean imbalance shrinks by the fraction $1/Q$ per step.
+      - value: 37.5
+        feedback: >-
+          That is $n_An_B/(n_A + n_B)$, the capacity combination of Newton's $\tau$ without the conductance. In the model the conductance is $(k_B/Q)\,n_An_B/(n_A + n_B)$ per step, and dividing by it leaves $\tau \approx Q$.
+      - value: 300
+        feedback: >-
+          That is the quanta of one body. The rule draws from all $Q = 600$ quanta of the pair.
+
+  - id: Q-1.1-model-fails
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-1.1-5]
+    prompt: >-
+      In which situation is the hop model of figure 1.1a least trustworthy as a description of two real solids approaching equilibrium?
+    choices:
+      - text: >-
+          Two bodies both close to absolute zero.
+        correct: true
+        feedback: >-
+          Right. At low temperature an oscillator holds less than one quantum on average, equipartition fails and quantum statistics take over, so $T = q\varepsilon/(nk_B)$ no longer gives a real solid's temperature. That is the model's first stated failure mode.
+      - text: >-
+          Two bodies at very different starting temperatures, both well above the quantum scale.
+        feedback: >-
+          A large gap is a weaker problem than the cold: well above the quantum scale both heat capacities are close to constant, so $T_\mathrm{eq}$ is still right. The model's exponential is exact for any gap, but a real contact's $\kappa$ may depend on the gap, so for real solids the exponential is safest near equilibrium. Near absolute zero even the model's temperature is wrong.
+      - text: >-
+          Two bodies of very different sizes, a large A and a small B.
+        feedback: >-
+          Unequal sizes are what makes the weighted $T_\mathrm{eq}$ interesting, and the model handles them with no special treatment, provided each body is large enough for its temperature to be a macroscopic quantity.
+      - text: >-
+          Two bodies made of the same material.
+        feedback: >-
+          That is the case the model fits best: the same material exchanges quanta of the same size, which is the model's assumption.
+
+  - id: Q-1.1-scatter-size
+    type: numeric
+    level: mid
+    objectives: [OBJ-1.1-5]
+    prompt: >-
+      In figure 1.1b the smallest pair, $20 + 60$ oscillators ($N = 80$), strays from the curve $e^{-t/\tau}$ by an RMS of about $0.11$ of the starting gap over six relaxation times. Predict the RMS for a pair of $80 + 240$ oscillators started at the same temperatures.
+    answer: 0.055
+    unit: ''
+    tolerance: 0.1
+    correctFeedback: >-
+      The scatter falls as $N^{-1/2}$: four times the oscillators, half the scatter, $0.11/2 = 0.055$. Over $2048$ seeds the RMS is $0.108$ at $N = 80$ and $0.0537$ at $N = 320$: a ratio of $2.01$, against the predicted $2$.
+    wrongFeedback: >-
+      The scatter of a single run about the mean curve falls as $N^{-1/2}$, the scatter of a binomial count.
+    commonWrong:
+      - value: 0.0275
+        feedback: >-
+          That has the scatter fall as $1/N$. It is the variance that falls as $1/N$; the RMS, its square root, falls as $N^{-1/2}$.
+        misconception: MC-scatter-one-over-n
+      - value: 0.11
+        feedback: >-
+          On axes in units of each pair's own $\tau$ the mean curve is the same, but the scatter about it is not: there are four times as many quanta to average over.
+
+  - id: Q-1.1-late-crossing
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-1.1-5, OBJ-1.1-4]
+    prompt: >-
+      Late in a run of figure 1.1a ($100 + 300$ oscillators), the trace of $T_A$ dips below that of $T_B$ for a while, then comes back. Does this refute the claim that the temperatures never overshoot?
+    choices:
+      - text: >-
+          No. The claim is about the mean over runs, which follows $3e^{-t/\tau}$ and keeps its sign. A single run of $400$ oscillators jitters about it by about $0.15$ at equilibrium, up as often as down; once the mean gap has shrunk below that, crossings are fluctuations, not a swing.
+        correct: true
+        feedback: >-
+          Right. The binomial law of the quanta gives the jitter of the gap, $\big(1/n_A + 1/n_B\big)\sqrt{Q\,p\,(1 - p)} = 0.153$. It falls as $N^{-1/2}$: for bodies you can hold it is far too small to see.
+      - text: >-
+          Yes: the temperatures do overshoot, and the $e^{-t/\tau}$ law is an approximation that misses it.
+        feedback: >-
+          For the mean, the law is exact in this model, a theorem: $\langle\Delta q_A\rangle$ is linear in $q_A$ at every step. A systematic swing would show in the average over runs, and it does not; the dips come equally on both sides of the line.
+        misconception: MC-temperatures-overshoot
+      - text: >-
+          No: the dip is a fault in the simulation, since energy cannot be conserved while $T_A < T_B$.
+        feedback: >-
+          Energy is conserved exactly at every step: a hop only changes which body owns one quantum. $T_A < T_B$ is a perfectly possible state, here reached by chance.
+      - text: >-
+          Yes: once below, A draws heat from B, which carries it back up past $T_B$ again, an oscillation.
+        feedback: >-
+          While $T_A < T_B$ the mean flow runs toward A, which closes the gap; it does not carry A past B. Each crossing is a fresh random fluctuation, not momentum from the last one.
+        misconception: MC-temperatures-overshoot
+
+  - id: Q-1.1-what-sim-shows
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-1.1-5]
+    prompt: >-
+      The hop model's mean gap follows $e^{-t/\tau}$ exactly, and the scatter of single runs about it falls as $N^{-1/2}$. Which conclusion does that justify?
+    choices:
+      - text: >-
+          That one microscopic mechanism, random exchange weighted by occupation, produces Newton's law of cooling on average: evidence that the macroscopic law does not hinge on microscopic detail, not a proof that every real contact obeys it.
+        correct: true
+        feedback: >-
+          Right. Whether a real mug follows the exponential, and with what $\kappa$, is for an experiment to decide: a kitchen thermometer and a $\tau$ fitted in minutes.
+      - text: >-
+          That Newton's law of cooling holds for every real thermal contact.
+        feedback: >-
+          The model shows one mechanism. Real contacts carry heat by phonons, electrons, convection and radiation, and radiation, for one, is not linear in the temperature difference when that difference is large. The derivation from Newton's law is only as good as Newton's law.
+      - text: >-
+          That a real body relaxes in about $Q$ seconds, where $Q$ is the number of quanta it shares.
+        feedback: >-
+          A step is a hop, not a second, and no physical constant converts one into the other. $\tau \approx Q$ steps says how the model's clock runs; the time scale does not carry over to real bodies.
+      - text: >-
+          That the conductance of a real contact is $\kappa = (k_B/Q)\,n_An_B/(n_A + n_B)$.
+        feedback: >-
+          That is the model's own conductance, per step. It says nothing about the conductance of any real material, which depends on how heat actually crosses that contact.
+
+  - id: Q-1.1-equilibrium-jitter
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-1.1-5]
+    prompt: >-
+      In the hop model at equilibrium, each of the $Q$ quanta sits in A with probability $p = n_A/(n_A + n_B)$, independently of the others. For $n_A = 50$, $n_B = 150$ and $Q = 600$, find the standard deviation of $T_A$, in units of $\varepsilon/k_B$.
+    answer: 0.2121
+    unit: ''
+    tolerance: 0.02
+    correctFeedback: >-
+      $q_A$ is binomial: $\sigma_{q_A} = \sqrt{600 \times 0.25 \times 0.75} = 10.6$ quanta, and $\sigma_{T_A} = 10.6/50 = 0.212$, $7.1\%$ of $\langle T_A\rangle = 3$. Measured over eight runs of $600\,000$ steps, $0.214 \pm 0.002$.
+    wrongFeedback: >-
+      $q_A$ is a binomial count with variance $Q\,p\,(1 - p)$, and $T_A = q_A\varepsilon/(n_Ak_B)$.
+    commonWrong:
+      - value: 10.61
+        feedback: >-
+          That is the standard deviation of $q_A$, in quanta. Divide by $n_A$ for the temperature.
+      - value: 0.245
+        feedback: >-
+          That is $\sqrt{pQ}/n_A$, a variance without its factor $1 - p$. With $Q$ fixed, a quantum in A is one missing from B, and the binomial variance is $Q\,p\,(1 - p)$.
+      - value: 0.0707
+        feedback: >-
+          That is the relative fluctuation, $\sigma_{T_A}/\langle T_A\rangle$. The question asks for $\sigma_{T_A}$ itself.

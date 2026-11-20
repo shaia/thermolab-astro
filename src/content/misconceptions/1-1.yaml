@@ -1,0 +1,72 @@
+# Misconceptions lesson 1.1 is built to catch. MC-instant-equilibrium and MC-equal-weight-equilibrium are ThermoLab's
+# register entries for module 01 (assessment/misconceptions.yml: instant-equilibrium, equal-weight-equilibrium). The
+# other two are new: MC-temperatures-overshoot is the wrong answer ThermoLab's own prediction 2 invites, and
+# MC-touch-tells-temperature is the wrong reading of the hook; the register had no entry for either. The lesson also
+# confronts MC-equilibrium-motion-stops, which lesson 4.1 defines.
+- id: MC-instant-equilibrium
+  title:
+    en: Bodies in contact equalize at once
+    he: גופים במגע משתווים מיד
+  belief:
+    en: Two bodies placed in contact reach the same temperature the instant they touch.
+    he: שני גופים שמוצמדים זה לזה מגיעים לאותה טמפרטורה ברגע שהם נוגעים.
+  truth:
+    en: Heat has to cross the contact, at a rate set by its conductance κ. The gap closes as e^(−t/τ), with τ = C_A C_B/(κ(C_A + C_B)), which is zero only for a contact of infinite conductance or a body of no heat capacity, neither of which exists.
+    he: החום צריך לחצות את המגע, בקצב שנקבע לפי המוליכות התרמית שלו ⁦κ⁩. הפער נסגר כמו ⁦e^(−t/τ)⁩, עם ⁦τ = C_A C_B/(κ(C_A + C_B))⁩, שמתאפס רק במגע בעל מוליכות אינסופית או בגוף חסר קיבול חום, ואף אחד מהם אינו קיים.
+  remedy:
+    lesson: '1.1'
+    anchor: tau
+    label:
+      en: What sets the relaxation time
+      he: מה קובע את זמן הרלקסציה
+
+- id: MC-equal-weight-equilibrium
+  title:
+    en: Equilibrium is the plain average
+    he: שיווי המשקל הוא הממוצע הפשוט
+  belief:
+    en: Two bodies in contact always end at the plain average of their starting temperatures, whatever their sizes.
+    he: שני גופים במגע מגיעים תמיד לממוצע הפשוט של טמפרטורות ההתחלה שלהם, יהיו גודליהם אשר יהיו.
+  truth:
+    en: Energy conservation gives T_eq = (C_A T_A + C_B T_B)/(C_A + C_B), an average weighted by the heat capacities. The body with the larger heat capacity moves less, and the plain average is the special case C_A = C_B.
+    he: שימור האנרגיה נותן ⁦T_eq = (C_A T_A + C_B T_B)/(C_A + C_B)⁩, ממוצע משוקלל לפי קיבולי החום. הגוף בעל קיבול החום הגדול יותר זז פחות, והממוצע הפשוט הוא המקרה הפרטי ⁦C_A = C_B⁩.
+  remedy:
+    lesson: '1.1'
+    anchor: unequal
+    label:
+      en: Put a small hot body against a large cold one
+      he: הצמידו גוף קטן וחם לגוף גדול וקר
+
+- id: MC-temperatures-overshoot
+  title:
+    en: The temperatures overshoot and swing back
+    he: הטמפרטורות חורגות אל מעבר לנקודת המפגש וחוזרות
+  belief:
+    en: Like a pendulum, the hot body cools past the common temperature, and the two temperatures oscillate before they settle.
+    he: כמו מטוטלת, הגוף החם מתקרר אל מעבר לטמפרטורה המשותפת, ושתי הטמפרטורות מתנודדות לפני שהן מתייצבות.
+  truth:
+    en: The heat flow at each moment is set by the present temperature difference alone, so the gap obeys a first-order equation and decays as e^(−t/τ) without changing sign. Heat flow has no inertia. A small body jitters randomly about the common temperature, but never swings past it systematically.
+    he: זרימת החום בכל רגע נקבעת רק לפי הפרש הטמפרטורות הנוכחי, ולכן הפער מקיים משוואה מסדר ראשון ודועך כמו ⁦e^(−t/τ)⁩ בלי להחליף סימן. לזרימת חום אין אינרציה. הטמפרטורה של גוף קטן רועדת באקראי סביב הטמפרטורה המשותפת, אבל לעולם אינה עוברת אותה באופן שיטתי.
+  remedy:
+    lesson: '1.1'
+    anchor: no-overshoot
+    label:
+      en: Watch the gap close without crossing
+      he: צפו כיצד הפער נסגר בלי לחצות את האפס
+
+- id: MC-touch-tells-temperature
+  title:
+    en: What feels colder is colder
+    he: מה שמרגיש קר יותר הוא קר יותר
+  belief:
+    en: A metal table leg in a room is colder than the wooden top beside it, because it feels colder to the touch.
+    he: רגל מתכת של שולחן בחדר קרה יותר ממשטח העץ שלידה, כי היא מרגישה קרה יותר במגע.
+  truth:
+    en: Both are in equilibrium with the room, and so, by the zeroth law, with each other; a thermometer reads the same on both. The hand does not reach equilibrium with what it touches. It senses how fast it loses heat, and metal draws heat away faster, through its conductivity and its heat capacity per unit volume together.
+    he: שתיהן בשיווי משקל עם החדר, ולכן, לפי החוק האפס, גם זו עם זו; מדחום מראה את אותה קריאה על שתיהן. היד אינה מגיעה לשיווי משקל עם מה שהיא נוגעת בו. היא חשה בקצב שבו היא מאבדת חום, ומתכת שואבת חום מן היד מהר יותר, בזכות מוליכות החום וקיבול החום ליחידת נפח יחד.
+  remedy:
+    lesson: '1.1'
+    anchor: zeroth-law
+    label:
+      en: What the thermometer reports, and the hand does not
+      he: מה המדחום מראה, ומה היד אינה מראה
