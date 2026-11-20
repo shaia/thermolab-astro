@@ -61,12 +61,12 @@
   truth:
     en: >-
       The central limit theorem has hypotheses: independent, identically distributed terms of finite variance. A
-      persistent walk breaks independence; standardised by σ₁√n, its sums stay a fixed distance from the Gaussian at every
-      n, because the correlations inflate the variance by (1 + q)/(1 − q). Cauchy steps break finite variance, and their
+      persistent walk breaks independence; standardised by σ₁√n, its sums stay too wide as n grows, their distance from the Gaussian
+      stalling instead of falling, because at long times the correlations inflate the variance by (1 + q)/(1 − q). Cauchy steps break finite variance, and their
       sums never settle onto a Gaussian.
     he: >-
       למשפט הגבול המרכזי יש הנחות: איברים בלתי תלויים, בעלי אותה התפלגות ובעלי שונות סופית. הילוך מתמיד מפר את
-      אי-התלות; כשמתקננים אותו ב-⁦σ₁√n⁩, הסכומים שלו נשארים במרחק קבוע מהגאוסית בכל ⁦n⁩, כי המתאמים מנפחים
+      אי-התלות; כשמתקננים אותו ב-⁦σ₁√n⁩, הסכומים שלו נשארים רחבים מדי כש-⁦n⁩ גדל, והמרחק שלהם מהגאוסית נתקע במקום לרדת, כי בזמנים ארוכים המתאמים מנפחים
       את השונות פי ⁦(1 + q)/(1 − q)⁩. צעדי קושי מפרים את סופיות השונות, והסכומים שלהם לעולם אינם מתייצבים על
       גאוסית.
   remedy:

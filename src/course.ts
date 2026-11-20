@@ -234,7 +234,7 @@ export const chapters: Chapter[] = [
             id: 'OBJ-3.1-1',
             text: {
               en: 'Model a random walk as a sum of independent steps and compute ⟨x_t⟩ = μ₁t and Var(x_t) = σ₁²t, hence the RMS spread σ₁√t, for any step distribution with finite variance.',
-              he: `למדל הילוך אקראי כסכום של צעדים בלתי תלויים ולחשב ${f('⟨x_t⟩ = μ₁t')} ו-${f('Var(x_t) = σ₁²t')}, ומכאן את הפיזור הריבועי הממוצע ${f('σ₁√t')}, עבור כל התפלגות צעדים בעלת שונות סופית.`,
+              he: `למדל הילוך אקראי כסכום של צעדים בלתי תלויים ולחשב ${f('⟨x_t⟩ = μ₁t')} ו-${f('Var(x_t) = σ₁²t')}, ומכאן את שורש ממוצע ריבוע הפיזור ${f('σ₁√t')}, עבור כל התפלגות צעדים בעלת שונות סופית.`,
             },
           },
           {
@@ -255,7 +255,7 @@ export const chapters: Chapter[] = [
             id: 'OBJ-3.1-4',
             text: {
               en: 'Apply the de Moivre–Laplace bridge (approximate the binomial pmf by a Gaussian of mean np and variance np(1 − p)) and state where the approximation is trustworthy.',
-              he: `ליישם את הגשר של דה-מואבר–לפלס (קירוב פונקציית ההסתברות הבינומית בגאוסית בעלת תוחלת ${f('np')} ושונות ${f('np(1 − p)')}), ולנסח היכן הקירוב אמין.`,
+              he: `ליישם את הגשר של דה-מואבר-לפלס (קירוב פונקציית ההסתברות הבינומית בגאוסית בעלת תוחלת ${f('np')} ושונות ${f('np(1 − p)')}), ולנסח היכן הקירוב אמין.`,
             },
           },
           {
@@ -269,7 +269,7 @@ export const chapters: Chapter[] = [
             id: 'OBJ-3.1-6',
             text: {
               en: 'Explain how a reproducible Gaussian profile emerges from an ensemble of individually unpredictable walkers, without invoking a restoring force or compensation.',
-              he: 'להסביר כיצד פרופיל גאוסי בר-שחזור מתהווה מתוך צבר של הולכים בלתי צפויים בנפרד, בלי להיזקק לכוח מחזיר או לקיזוז.',
+              he: 'להסביר כיצד פרופיל גאוסי בר-שחזור מתהווה מתוך צבר של הולכים שכל אחד מהם בלתי צפוי, בלי להיזקק לכוח מחזיר או לפיצוי.',
             },
           },
         ],

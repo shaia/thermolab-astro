@@ -447,7 +447,7 @@ export function binomialToGaussian(n: number, p = 0.5): Binomial {
 
 export interface BinomialError {
   sigma: number;
-  /** the largest |pmf − Gaussian| over all k, and the same times σ (the scale-free number that falls as 1/n) */
+  /** the largest |pmf − Gaussian| over all k, and the same times σ (the scale-free number that falls as 1/n for p = ½, and as n^−1/2 otherwise) */
   maxAbs: number;
   maxAbsScaled: number;
   /** |Gaussian / pmf − 1| at the site nearest np + zσ and np − zσ: the relative error out in the tails */

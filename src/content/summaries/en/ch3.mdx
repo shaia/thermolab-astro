@@ -14,11 +14,11 @@ A walker's position is a sum of independent steps, and that is the whole model. 
 
 <Formula tex="P(k) = \binom{n}{k}\, p^k (1 - p)^{n - k} \qquad \langle k \rangle = np \qquad \operatorname{Var}(k) = np(1 - p) \qquad x = 2k - n" label="The binomial distribution, and the ±1 walk mapped onto it" />
 
-<Formula tex="\binom{n}{k}\, p^k q^{n - k} \approx \frac{1}{\sqrt{2\pi npq}}\, \exp\!\left[-\frac{(k - np)^2}{2npq}\right]" label="De Moivre–Laplace: near the peak, the binomial is a Gaussian of mean np and variance npq" />
+<Formula tex="\binom{n}{k}\, p^k q^{n - k} \approx \frac{1}{\sqrt{2\pi npq}}\, \exp\!\left[-\frac{(k - np)^2}{2npq}\right]" label="De Moivre–Laplace: near the peak, the binomial is a Gaussian of mean np and variance npq, with q = 1 − p" />
 
 <Formula tex="P\!\left(\frac{S_n - n\mu_1}{\sigma_1\sqrt{n}} \le z\right) \longrightarrow \Phi(z) = \int_{-\infty}^{z} \frac{e^{-u^2/2}}{\sqrt{2\pi}}\,\mathrm{d}u" label="The central limit theorem, for independent, identically distributed steps of finite variance" />
 
-<Formula tex="\sigma_{\bar x} = \frac{\sigma}{\sqrt{N}} \qquad \frac{\operatorname{Var}(x_t)}{t} \longrightarrow \frac{1 + q}{1 - q}" label="The standard error of a mean of N independent draws; the variance per step of the persistent walk" />
+<Formula tex="\sigma_{\bar x} = \frac{\sigma}{\sqrt{N}} \qquad \frac{\operatorname{Var}(x_t)}{t} \longrightarrow \frac{1 + q}{1 - q}" label="The standard error of a mean of N independent draws; the variance per step of the persistent walk, with persistence q" />
 
 - **A position is a sum.** Means always add; variances add when the steps are independent. Any step of finite variance gives a spread $\sigma_1\sqrt t$: $31.6$ after $1000$ coin steps, $18.3$ for uniform steps on $[-1, 1]$, $40.8$ for the heavy-tailed ones. See <LessonLink id="3.1" anchor="sum-of-steps">a position is a sum</LessonLink> and <LessonLink id="3.1" anchor="measure">measure the law</LessonLink>.
 - **Two rates.** The mean moves as $t$, the spread grows as $\sqrt t$, so a drift always wins in the end: the biased coin's mean, $200$ after $1000$ steps, lies six and a half spreads out. See <LessonLink id="3.1" anchor="two-rates">two rates</LessonLink> and <LessonLink id="3.1" anchor="ex-3-1-1">four steps, one formula</LessonLink>.
@@ -28,7 +28,7 @@ A walker's position is a sum of independent steps, and that is the whole model. 
 - **The central limit theorem** keeps only $\mu_1$ and $\sigma_1$; the step's shape is forgotten. A finite sample cannot get closer than its own floor, and coin steps stay a staircase, a gap near $1/\sqrt{2\pi n}$ that is the lattice, not a failure. See <LessonLink id="3.1" anchor="clt">the theorem</LessonLink> and <LessonLink id="3.1" anchor="collapse">measure the collapse</LessonLink>.
 - **The hypotheses are the content.** The persistent walk keeps identical steps of finite variance and loses independence: still Gaussian, $\sqrt 3$ times too wide at $q = 0.5$ and $\sqrt{19}$ at $q = 0.9$. Cauchy steps lose finite variance and spread as $t$. See <LessonLink id="3.1" anchor="correlated">break one hypothesis</LessonLink>, <LessonLink id="3.1" anchor="repair">the shape survives</LessonLink> and <LessonLink id="3.1" anchor="ex-3-1-6">the cost of correlation</LessonLink>.
 - **Deviation and error.** The spread of single draws, $\sigma$, does not shrink with more data; the standard error of their mean, $\sigma/\sqrt N$, does. Halving an error bar costs four times the data. See <LessonLink id="3.1" anchor="standard-error">two spreads, two objects</LessonLink> and <LessonLink id="3.1" anchor="ex-3-1-4">a mean of means</LessonLink>.
-- **Coming home.** The chance of being at the origin after $t$ steps falls as $\sqrt{2/(\pi t)}$, yet in one dimension every walker comes home eventually. See <LessonLink id="3.1" anchor="ex-3-1-5">how often is a walker at home?</LessonLink>
+- **Coming home.** The chance of being at the origin after $t$ steps falls as $t^{-1/2}$, close to $\sqrt{2/(\pi t)}$ for even $t$, yet in one dimension every walker comes home eventually. See <LessonLink id="3.1" anchor="ex-3-1-5">how often is a walker at home?</LessonLink>
 - **Where the order comes from:** each histogram bar is an average of $N$ independent yes-or-no draws, scattering by $\sqrt{f(1 - f)/N}$; which histogram they draw is the distribution of one walker. See <LessonLink id="3.1" anchor="emergence">where the order comes from</LessonLink> and <LessonLink id="3.1" anchor="model-spec">the model, specified</LessonLink>.
 
 ## Common mistakes

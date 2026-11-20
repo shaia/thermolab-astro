@@ -199,6 +199,14 @@ export function expectedVarianceRatio(dist: CltDist, n: number, persistence: num
   return dist === 'correlated' ? correlatedVarianceFactor(persistence, n) : 1;
 }
 
+/**
+ * The key a measured row is stored under. The persistence matters only to the correlated walk, so changing it
+ * leaves the other rows' keys, and their measurements, as they were.
+ */
+export function rowKey(seed: number, n: number, persistence: number, dist: CltDist): string {
+  return dist === 'correlated' ? `${seed}|${n}|${persistence}|${dist}` : `${seed}|${n}|${dist}`;
+}
+
 /** The density of the standardised sums as a polyline: lattice-aware bins (spacing 2/√n) for the ±1 walks. */
 export function standardisedDensity(z: ArrayLike<number>, dist: CltDist, n: number, nBins = 30): { x: Float64Array; y: Float64Array } {
   const h = walkerHistogram(z, nBins, [-DENSITY_SPAN, DENSITY_SPAN], latticeOfSums(dist, n));
@@ -241,7 +249,7 @@ export function binomialFrame(n: number, p: number): BinomialFrame {
 }
 
 /**
- * The difference strip under the binomial: σ·(pmf − Gaussian), which is small everywhere and falls as 1/n, or, on
+ * The difference strip under the binomial: σ·(pmf − Gaussian), which is small everywhere and falls as 1/n for p = ½ (as n^−1/2 otherwise), or, on
  * the log view, the relative error (Gaussian − pmf)/pmf clipped to ±1, which is not small out in the tails.
  */
 export function errorStrip(f: BinomialFrame, relative: boolean): Float64Array {

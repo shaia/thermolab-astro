@@ -15,6 +15,7 @@ import {
   measure,
   N_MAX,
   nFromSlider,
+  rowKey,
   sliderFromN,
   standardisation,
   standardisedDensity,
@@ -113,6 +114,26 @@ describe('the ensemble of sums', () => {
     direct.advanceTo(20, ['correlated'], 1e9);
     expect(Array.from(e.standardised('correlated'))).toEqual(Array.from(direct.standardised('correlated')));
     expect(() => new CltEnsemble(S, 2, 0.5).standardised('pm1')).toThrow();
+  });
+});
+
+describe('the key a measured row is stored under', () => {
+  it('changes with n, seed and, for the correlated walk alone, persistence, so a row measured at n = 1 is not current at n = 64', () => {
+    for (const d of CLT_DISTS) {
+      expect(rowKey(1, 64, 0.5, d)).not.toBe(rowKey(1, 1, 0.5, d));
+      expect(rowKey(2, 64, 0.5, d)).not.toBe(rowKey(1, 64, 0.5, d));
+    }
+    expect(rowKey(1, 64, 0.9, 'correlated')).not.toBe(rowKey(1, 64, 0.5, 'correlated'));
+    for (const d of ['pm1', 'uniform', 'heavy'] as const) expect(rowKey(1, 64, 0.9, d)).toBe(rowKey(1, 64, 0.5, d));
+  });
+
+  it('leaves the correlated chain behind after n grows when the budget is spent on the others, which is what the row key detects', () => {
+    const e = new CltEnsemble(200, 1, 0.5);
+    e.advanceTo(1, CLT_DISTS, 1e9);
+    let t = 0;
+    const tick = () => (t += 1);
+    expect(e.advanceTo(64, CLT_DISTS, 3, tick)).toBe(false);
+    expect(e.termsOf('correlated')).toBe(1);
   });
 });
 

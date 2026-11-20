@@ -53,7 +53,7 @@ questions:
     unit: steps
     tolerance: 0.02
     correctFeedback: >-
-      $\operatorname{Var}(x_t) = \sigma_1^2 t$ with $\sigma_1 = 1$, so the typical distance is $\sqrt{400} = 20$ steps. Not $0$: the walk does spread. Not $400$: that is how far he would go if every step went the same way, and the steps cancel far more often than they conspire.
+      $\operatorname{Var}(x_t) = \sigma_1^2 t$ with $\sigma_1 = 1$, so the typical distance is $\sqrt{400} = 20$ steps. Not $0$: the walk does spread. Not $400$: that is how far he would go if every step went the same way, and independent signs add in quadrature: it is the variances that add, not the steps.
     wrongFeedback: >-
       One fair step has $\mu_1 = 0$ and $\sigma_1^2 = \langle s^2 \rangle = 1$. The variances of independent steps add, so $\operatorname{Var}(x_{400}) = 400$; the spread is its square root.
     commonWrong:
@@ -350,7 +350,7 @@ questions:
       Use the de Moivre–Laplace approximation to estimate the probability of exactly $50$ heads in $100$ fair coin flips: evaluate $1/\sqrt{2\pi npq}$ at $n = 100$, $p = q = \tfrac12$, to four significant figures.
     answer: 0.07979
     unit: ''
-    tolerance: 0.002
+    tolerance: 0.001
     correctFeedback: >-
       $1/\sqrt{2\pi \times 25} = 1/\sqrt{50\pi} = 0.07979$. The exact value is $\binom{100}{50}/2^{100} = 0.07959$, so the approximation is a quarter of a percent high at the peak. At $90$ heads it is $74$ times too large: a statement about the central region, not about the tails.
     wrongFeedback: >-
@@ -489,7 +489,7 @@ questions:
       - text: >-
           $\pm 1$ steps of a persistent walk that repeats its previous step with probability $0.5$.
         feedback: >-
-          Each step is still $\pm 1$ with equal chances, so the steps are identically distributed with finite variance, but they are not independent. Standardised by $\sqrt n$, the sums stay a fixed distance from the Gaussian.
+          Each step is still $\pm 1$ with equal chances, so the steps are identically distributed with finite variance, but they are not independent. Standardised by $\sqrt n$, the sums stay too wide, their distance from the Gaussian stalling as $n$ grows.
         misconception: MC-clt-always-applies
       - text: >-
           Independent Cauchy steps, density $1/[\pi(1 + s^2)]$.
@@ -575,7 +575,7 @@ questions:
       - text: >-
           Walkers who have strayed too far are pulled back, which keeps the distribution centred.
         feedback: >-
-          There is no such mechanism, and the test is direct: of $40\,000$ fair walkers, those standing at $+30$ or beyond after $500$ steps move by $-0.04 \pm 0.04$ over their next $500$ ($64$ batches), zero. The ensemble settles by dilution, never by correction.
+          There is no such mechanism, and the test is direct: of $40\,000$ fair walkers, those standing at $+30$ or beyond after $500$ steps move by $-0.04 \pm 0.05$ over their next $500$ ($64$ batches), zero. The ensemble settles by dilution, never by correction.
         misconception: MC-walker-restoring-force
       - text: >-
           The walkers' steps average out to zero, so each walker ends up near the origin.

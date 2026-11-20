@@ -39,6 +39,7 @@ import {
   measure,
   N_MAX,
   nFromSlider,
+  rowKey,
   sliderFromN,
   standardGaussian,
   standardisedDensity,
@@ -65,7 +66,7 @@ const FORMULA = `(S_n ${MINUS} nμ)/(σ√n)`;
 const TEXT = {
   en: {
     task: {
-      collapse: 'Start at n = 1 and raise n to 64 or more. What happens to the three independent distributions?',
+      collapse: 'Start at n = 1 and raise n to 64 or more. What happens to the three distributions of independent steps?',
       correlated: 'Show the correlated walk, set its persistence to 0.7 or more and raise n to 64 or more. Does it collapse too?',
       binomial: 'In the binomial view, compare n = 10 with n = 100 or more. How does the gap between the bars and the curve change?',
       tails: 'In the binomial view at n = 100 or more, read the error at three standard deviations. Is it as small as at the peak?',
@@ -104,19 +105,20 @@ const TEXT = {
     maxGap: 'largest gap',
     scaled: 'times σ',
     tailAt: 'error at ±3σ',
+    row: (name: string, ks: string, variance: string) => `${name}: D ${ks}, variance ${variance}`,
     describeStd: (n: number, rows: string) => `n = ${n}. ${rows}`,
     describeBin: (n: number, p: number, gap: number, tail: number) => `Binomial, n = ${n}, p = ${p}: largest gap between the exact pmf and the Gaussian ${gap.toExponential(2)}, relative error at three standard deviations ${pct(tail)}.`,
   },
   he: {
     task: {
-      collapse: 'התחילו ב-n = 1 והעלו את n ל-64 או יותר. מה קורה לשלוש ההתפלגויות הבלתי תלויות?',
-      correlated: 'הציגו את ההילוך המתמיד, קבעו את ההתמדה ל-0.7 או יותר והעלו את n ל-64 או יותר. האם גם הוא מתלכד?',
-      binomial: 'בתצוגה הבינומית, השוו בין n = 10 ל-n = 100 או יותר. איך משתנה הפער בין העמודות לעקומה?',
-      tails: 'בתצוגה הבינומית ב-n = 100 או יותר, קראו את השגיאה בשלוש סטיות תקן. האם היא קטנה כמו בפסגה?',
+      collapse: `התחילו ב-${iso('n = 1')} והעלו את ${iso('n')} ל-64 או יותר. מה קורה לשלוש ההתפלגויות של הצעדים הבלתי תלויים?`,
+      correlated: `הציגו את ההילוך המתמיד, קבעו את ההתמדה ${iso('q')} ל-0.7 או יותר והעלו את ${iso('n')} ל-64 או יותר. האם גם הוא מתלכד?`,
+      binomial: `בתצוגה הבינומית, השוו בין ${iso('n = 10')} ל-${iso('n = 100')} או יותר. איך משתנה הפער בין העמודות לעקומה?`,
+      tails: `בתצוגה הבינומית ב-${iso('n = 100')} או יותר, קראו את השגיאה בשלוש סטיות תקן. האם היא קטנה כמו בשיא?`,
     } satisfies Record<TaskId, string>,
     label: 'איור חי: סכומים של צעדים אקראיים. התצוגה המתוקננת מראה את צפיפות הסכום המתוקנן של כמה התפלגויות צעד מול הגאוסית הסטנדרטית; התצוגה הבינומית מראה את ההתפלגות הבינומית המדויקת מול הגאוסית של דה-מואבר-לפלס.',
-    keys: 'במקלדת: חיצי ימין ושמאל משנים את n, אנטר מגריל זרע חדש.',
-    n: 'מספר האיברים בסכום n',
+    keys: `במקלדת: מקשי החצים ימינה ושמאלה משנים את ${iso('n')}, מקש Enter מגריל זרע חדש.`,
+    n: `מספר האיברים בסכום ${iso('n')}`,
     view: { standardised: 'מתוקננת', binomial: 'בינומית' } satisfies Record<View, string>,
     dist: 'התפלגות הצעד',
     distName: {
@@ -141,13 +143,14 @@ const TEXT = {
     yStripRel: 'שגיאה יחסית',
     distance: `מרחק ${iso('D')}`,
     variance: 'שונות',
-    expected: 'צפוי',
+    expected: 'צפויה',
     computing: 'בחישוב…',
-    floor: `לדגימה גאוסית אמיתית בגודל כזה ${iso('D ≈ 0.014')}`,
+    floor: `למדגם גאוסי אמיתי בגודל כזה ${iso('D ≈ 0.014')}`,
     lattice: `מטבעות ${iso('±1')} יושבים על סריג, וזה לבדו מוסיף`,
     maxGap: 'הפער הגדול ביותר',
     scaled: `כפול ${iso('σ')}`,
     tailAt: `שגיאה ב-${iso('±3σ')}`,
+    row: (name: string, ks: string, variance: string) => `${name}: ${iso(`D = ${ks}`)}, שונות ${iso(variance)}`,
     describeStd: (n: number, rows: string) => `${iso(`n = ${n}`)}. ${rows}`,
     describeBin: (n: number, p: number, gap: number, tail: number) =>
       `בינומית, ${iso(`n = ${n}, p = ${p}`)}: הפער הגדול ביותר בין ההסתברות המדויקת לגאוסית ${iso(gap.toExponential(2))}, שגיאה יחסית בשלוש סטיות תקן ${iso(pct(tail))}.`,
@@ -267,17 +270,17 @@ export default function CltCollapse(props: CltCollapseProps) {
     ens.setPersistence(persistence);
     let cancelled = false;
     let timer = 0;
-    const key = `${seed}|${persistence}|${n}`;
     const work = () => {
       if (cancelled) return;
       const done = ens.advanceTo(n, dists, 10);
       let changed = false;
       for (const d of dists) {
-        if (ens.termsOf(d) !== n || shown.current[d]?.key === `${key}|${d}`) continue;
+        const key = rowKey(seed, n, persistence, d);
+        if (ens.termsOf(d) !== n || shown.current[d]?.key === key) continue;
         const z = ens.standardised(d);
         const m = measure(z);
         const { x, y } = standardisedDensity(z, d, n);
-        shown.current[d] = { key: `${key}|${d}`, n, x, y, ks: m.ks, variance: m.varianceRatio };
+        shown.current[d] = { key, n, x, y, ks: m.ks, variance: m.varianceRatio };
         changed = true;
       }
       if (changed) setVersion((v) => v + 1);
@@ -304,7 +307,10 @@ export default function CltCollapse(props: CltCollapseProps) {
     if (t?.includes('tails') && view === 'binomial' && n >= 100) markTask(`${props.id}:tails`);
   }, [n, view, distsKey, persistence]);
 
-  const rows = dists.map((d) => ({ d, s: shown.current[d] }));
+  /** the picture each walk last drew, kept while a new one is computed */
+  const pictures = dists.map((d) => ({ d, s: shown.current[d] }));
+  /** the readout and the screen-reader text show only rows measured at the current n, seed and persistence */
+  const rows = pictures.map(({ d, s }) => ({ d, s: s?.key === rowKey(seed, n, persistence, d) ? s : undefined }));
   const summary = () =>
     view === 'binomial' && frame
       ? L.describeBin(nLive, p, frame.error.maxAbs, frame.error.tailUpper)
@@ -312,7 +318,7 @@ export default function CltCollapse(props: CltCollapseProps) {
           n,
           rows
             .filter((r) => r.s)
-            .map((r) => `${L.distShort[r.d]}: D ${fix(r.s!.ks)}, ${L.variance} ${fix(r.s!.variance, 2)}`)
+            .map((r) => L.row(L.distShort[r.d], fix(r.s!.ks), fix(r.s!.variance, 2)))
             .join('; '),
         );
   useEffect(() => {
@@ -326,7 +332,7 @@ export default function CltCollapse(props: CltCollapseProps) {
 
   function drawStandardised(ctx: CanvasRenderingContext2D, vw: { w: number; h: number }, pal: Palette) {
     const box = insetBox({ x: 0, y: 0, w: vw.w, h: vw.h }, { l: 58, r: 14, t: 12, b: 46 });
-    const picked = rows.filter((r) => r.s);
+    const picked = pictures.filter((r) => r.s);
     let top = 0.45;
     for (const r of picked) for (const v of r.s!.y) top = Math.max(top, v * 1.12);
     const plot = makePlot(
@@ -504,7 +510,7 @@ export default function CltCollapse(props: CltCollapseProps) {
                 </span>
               ))}
               <span>{L.floor}</span>
-              {dists.some((d) => d === 'pm1' || d === 'correlated') ? (
+              {dists.includes('pm1') ? (
                 <span>
                   {L.lattice} <bdi class="ltr">D ≥ <b class="q">{fix(latticeFloor(n))}</b></bdi>
                 </span>
