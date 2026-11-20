@@ -422,7 +422,7 @@ export default function VdwIsotherm(props: VdwIsothermProps) {
         <span class="gas-readout">
           <span>
             {swatch('var(--hot)')}
-            {L.vdw} · <bdi class="ltr">T_r = {num(effTr)}</bdi>
+            {L.vdw} · <bdi class="ltr">T_r = {num(effTr, co2 ? 4 : 3)}</bdi>
             {co2 && (
               <>
                 {' '}
