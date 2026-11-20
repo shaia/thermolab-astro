@@ -209,7 +209,7 @@ questions:
               $\Delta F \ge 2J\ell - k_BT\,\ell\ln 3 = \ell\left(2J - k_BT\ln 3\right)$. Energy and entropy both grow in proportion to $\ell$, so the sign is set by the bracket, the same for walls of every length: for $k_BT < 2J/\ln 3$ no wall, however long, pays for itself. In one dimension the wall is a single bond whatever the length of the chain, so its energy is fixed at $2J$ while its entropy, $k_B\ln N$, grows with the system: no temperature makes $\Delta F$ positive for every $N$.
           - kind: formula
             text: >-
-              $\Delta F \ge \ell\left(2J - k_BT\ln 3\right) > 0 \quad\text{for}\quad k_BT < \dfrac{2J}{\ln 3}$
+              $\Delta F \ge \ell\left(2J - k_BT\ln 3\right) > 0 \qquad \left(k_BT < \dfrac{2J}{\ln 3}\right)$
           - kind: limit
             text: >-
               As $T \to 0$ the bracket tends to $2J > 0$ and walls are suppressed: the ordered ground state. In one dimension the threshold $e^{2J/(k_BT)}$ of (a) and (b) grows without bound as $T \to 0$ but is finite at every $T > 0$: order survives only at $T = 0$ exactly.
@@ -336,7 +336,7 @@ questions:
               At $1.5\,J$: $0.990$ against $0.987$, $0.3\%$ high; at $2.0\,J$: $0.958$ against $0.911$, $5\%$ high; at $T_c$: $4J$ against $2.269\,J$, $76\%$ high. For the chain, $q = 2$ gives $k_BT_c^\text{MF} = 2J$, while the exact chain has no transition at any $T > 0$.
           - kind: result
             text: >-
-              $m = \tanh\left((qJm + h)/(k_BT)\right)$ orders below $k_BT_c^\text{MF} = qJ$ with $\beta = 1/2$ and $\gamma = 1$; the square lattice has $\beta = 1/8$ and $\gamma = 7/4$, and $T_c$ $76\%$ lower. Mean field is good where the lattice is nearly saturated, bad near $T_c$, and for the chain it predicts a transition at $2J$ that does not exist.
+              $m = \tanh\left((qJm + h)/(k_BT)\right)$ orders below $k_BT_c^\text{MF} = qJ$ with $\beta = 1/2$ and $\gamma = 1$; the square lattice has $\beta = 1/8$ and $\gamma = 7/4$, and mean field's $T_c$ is $76\%$ too high. Mean field is good where the lattice is nearly saturated, bad near $T_c$, and for the chain it predicts a transition at $2J$ that does not exist.
         rubric:
           - text: >-
               Derives the mean-field equation, naming the approximation (neighbours replaced by their average, correlations neglected).
@@ -450,7 +450,7 @@ questions:
               Peak positions and $T_c$ are in units of $J/k_B$; $a$ in $J/k_B$ times lattice spacings; heights in $1/J$.
           - kind: substitution
             text: >-
-              $1/L$: $2 \cdot 2.311 - 2.329 = 2.293$ and $(4 \cdot 2.311 - 2.416)/3 = 2.276$; $1/L^2$: $2.304$ to $2.305$; Onsager $2.269$. With $\delta = 0.005$ per peak, the two $1/L$ intercepts carry about $\pm0.011$ and $\pm0.007$: both are consistent with $2.269$, the $1/L^2$ ones are not.
+              $1/L$: $2 \cdot 2.311 - 2.329 = 2.293$ and $(4 \cdot 2.311 - 2.416)/3 = 2.276$; $1/L^2$: $2.304$ to $2.305$; Onsager $2.269$. With $\delta = 0.005$ per peak, the two $1/L$ intercepts carry about $\pm0.011$ and $\pm0.007$: $2.276$ lies within one of them of $2.269$, and $2.293$ about two away, which is marginal; the $1/L^2$ intercepts, five to seven away, are excluded.
           - kind: result
             text: >-
               The exponent of the fit is $1/\nu$, and $\nu = 1$ makes $1/L$ correct; $1/L^2$ assumes mean field's $\nu = 1/2$ and misses $T_c$ by $0.035$. The pair $32$, $64$ has the shortest lever arm and the noisiest point. Whatever the exponent, the peaks lie above $T_c$, drift toward it and grow with $L$: a trend consistent with a singularity at about $2.27\,J/k_B$, which the simulation supports and Onsager's solution establishes.
@@ -474,7 +474,7 @@ questions:
     title: >-
       Measuring an exponent, and why the answer is biased
     prompt: >-
-      A $64 \times 64$ lattice, run with Metropolis for $10^4$ to $2\cdot10^4$ sweeps per temperature after burn-in, gives $\langle|m|\rangle = 0.957$, $0.911$, $0.785$ and $0.694$ at $k_BT = 1.8$, $2.0$, $2.2$ and $2.25\,J$. Onsager and Yang's exact values are $0.957$, $0.911$, $0.785$ and $0.672$. Take $k_BT_c = 2.269\,J$. The effective exponent between two temperatures $T_1 < T_2$ is $\beta_\text{eff} = \ln(m_2/m_1)/\ln\left((T_c - T_2)/(T_c - T_1)\right)$.
+      A $64 \times 64$ lattice, run with Metropolis for $10^4$ to $2\cdot10^4$ sweeps per temperature after burn-in, gives $\langle|m|\rangle = 0.957$, $0.911$, $0.785$ and $0.694$ at $k_BT = 1.8$, $2.0$, $2.2$ and $2.25\,J$. Onsager and Yang's exact values are $0.957$, $0.911$, $0.785$ and $0.672$. Take $k_BT_c = 2.2692\,J$. The effective exponent between two temperatures $T_1 < T_2$ is $\beta_\text{eff} = \ln(m_2/m_1)/\ln\left((T_c - T_2)/(T_c - T_1)\right)$.
     parts:
       - label: a
         type: numeric
@@ -549,7 +549,7 @@ questions:
               Close to $T_c$ the exact values give $0.121$, almost $1/8$, but the simulated $2.25\,J$ point is $0.694 - 0.672 = 0.022$ too high, $3.3$ honest standard errors: not a fluctuation but a systematic finite-size effect. With $\xi$ approaching $L$, the finite lattice is more ordered than the infinite one ($|m|$ of a finite lattice never falls to zero), which flattens the curve and lowers $\beta_\text{eff}$.
           - kind: formula
             text: >-
-              $\beta_\text{eff} = \dfrac{\ln(m_2/m_1)}{\ln\left[(T_c - T_2)/(T_c - T_1)\right]} \;\to\; \beta \quad \text{only as } T_1, T_2 \to T_c \text{ and } L \to \infty$
+              $\beta_\text{eff} = \dfrac{\ln(m_2/m_1)}{\ln\left[(T_c - T_2)/(T_c - T_1)\right]} \;\xrightarrow[\;L\,\to\,\infty\;]{\;T_1,\,T_2\,\to\,T_c\;}\; \beta$
           - kind: limit
             text: >-
               As $T \to T_c$ on the exact curve, $\beta_\text{eff} \to 1/8$: $0.121$ between $2.2$ and $2.25\,J$, $0.124$ between $2.25$ and $2.26\,J$. As $T \to 0$, $m_0 \to 1$ and $\beta_\text{eff} \to 0$: deep in the ordered phase a power law in $T_c - T$ says nothing. As $L \to \infty$ the finite-size excess vanishes.
