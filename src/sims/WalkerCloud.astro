@@ -1,0 +1,7 @@
+---
+/** An ensemble of random walkers for lesson MDX: <Spread figure={WalkerCloud} figureProps={{ step: 'biased', panel: 'spread', tasks: ['drift'] }}>. */
+import WalkerCloud, { type WalkerCloudProps } from './WalkerCloud';
+type Props = WalkerCloudProps;
+---
+
+<WalkerCloud client:visible {...Astro.props} />

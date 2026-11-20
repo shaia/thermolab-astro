@@ -1,0 +1,7 @@
+---
+/** Sums collapsing onto the Gaussian for lesson MDX: <Spread figure={CltCollapse} figureProps={{ n: 64, dists: ["pm1", "heavy"], tasks: ["collapse"] }}>. */
+import CltCollapse, { type CltCollapseProps } from './CltCollapse';
+type Props = CltCollapseProps;
+---
+
+<CltCollapse client:visible {...Astro.props} />

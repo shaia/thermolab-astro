@@ -1,0 +1,497 @@
+# Module 03 review problems, from ThermoLab's problem set (content/en/statistical-mechanics/03-random-walks-problems.md,
+# problems 4, 6, 7 and 8; problems 1, 2, 3 and 5 are the lesson's worked examples 2, 3, 4 and 5, and the workbook's).
+# Problem 4 (the exponent for a different step) uses a lazy, lopsided step, +1, 0 or -1, that neither the lesson nor
+# ThermoLab measures, and adds the trap of fitting the distance from the origin instead of the spread. Problem 6 (two
+# dimensions) uses uniform steps in x and y. Problem 7 (the cost of correlation) is the lesson's example 6 taken further:
+# a different q, the standard error and effective number of correlated readings, an anti-persistent sequence, and the
+# exact variance at finite t, whose limits include the alternating sequence. Problem 8 (the Cauchy walk) keeps all of
+# ThermoLab's questions. Every number was recomputed with ThermoLab's library (thermolab.sampling: random_walk with a
+# custom StepDist and dim=2, walker_spread, correlated_walk; thermolab.validation.scaling_exponent) and numpy's
+# standard_cauchy; simulated numbers are multi-seed means with their seed-to-seed error. ThermoLab kept its solutions
+# with the instructor; this platform publishes worked solutions and rubrics. Ids are shared with the Hebrew file.
+lang: en
+chapter: 3
+questions:
+  - id: Q-3-bagrut-1
+    type: bagrut
+    title: >-
+      The exponent for a lazy, lopsided step
+    prompt: >-
+      A walker's step is $+1$ with probability $0.5$, $0$ with probability $0.3$ (he stays put) and $-1$ with probability $0.2$, independently at every tick. A simulation runs $5000$ such walkers for $1024$ steps and measures the spread of the cloud, the standard deviation of the positions about their mean, at $t = 4$, $16$, $64$, $256$ and $1024$. One seed gives $1.54$, $3.14$, $6.32$, $12.56$ and $25.23$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-3.1-1]
+        prompt: >-
+          Find the mean of one step, $\mu_1$.
+        answer: 0.3
+        unit: steps
+        tolerance: 0.01
+        correctFeedback: >-
+          $\mu_1 = (+1)(0.5) + 0 \times 0.3 + (-1)(0.2) = 0.3$. After $1024$ steps the cloud's centre is at $307.2$; measured over $64$ seeds, $307.22 \pm 0.04$.
+        wrongFeedback: >-
+          $\mu_1 = \sum_s s\,P(s)$ over the three values $+1$, $0$ and $-1$.
+        commonWrong:
+          - value: 0.5
+            feedback: >-
+              That counts the right steps only. The left steps, with probability $0.2$, pull the mean down: $0.5 - 0.2 = 0.3$.
+          - value: 0.375
+            feedback: >-
+              That averages over the ticks on which he moves, $(0.5 - 0.2)/0.8$. A tick on which he stays put is a step of size $0$, and it counts in the mean like any other.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-3.1-1]
+        prompt: >-
+          Find the standard deviation of one step, $\sigma_1$.
+        answer: 0.7810
+        unit: steps
+        tolerance: 0.01
+        correctFeedback: >-
+          $\langle s^2 \rangle = 0.5 + 0.2 = 0.7$, so $\sigma_1^2 = 0.7 - 0.3^2 = 0.61$ and $\sigma_1 = 0.781$. The predicted spread at $t = 1024$ is $0.781 \times 32 = 24.99$.
+        wrongFeedback: >-
+          $\sigma_1^2 = \langle s^2 \rangle - \mu_1^2$, with $\langle s^2 \rangle = \sum_s s^2 P(s)$; then take the square root.
+        commonWrong:
+          - value: 0.8367
+            feedback: >-
+              That is $\sqrt{\langle s^2 \rangle} = \sqrt{0.7}$, the RMS step about $0$. The spread is measured about the mean: subtract $\mu_1^2 = 0.09$ first.
+          - value: 0.61
+            feedback: >-
+              That is the variance, $\sigma_1^2$. The standard deviation is its square root.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-3.1-1, OBJ-3.1-5]
+        prompt: >-
+          Over $64$ seeds, the exponent fitted to the five spreads is $0.5002 \pm 0.0004$ (a scatter of $0.003$ from seed to seed). A student fits instead the RMS distance from the start, $\sqrt{\langle x_t^2 \rangle}$, at the same times, and gets $0.917$. Which statement is correct?
+        choices:
+          - text: >-
+              The spread about the mean grows as $\sigma_1\sqrt t$, exponent $\tfrac12$, as for every step of finite variance. $\langle x_t^2 \rangle = \sigma_1^2 t + \mu_1^2 t^2$ mixes the drift into the width, so its fitted exponent lies between $\tfrac12$ and $1$ and depends on the range of $t$.
+            correct: true
+            feedback: >-
+              Right. At $t = 4$ the drift, $1.2$, is smaller than the spread, $1.56$; at $t = 1024$ it is twelve times larger, and $\sqrt{\langle x_t^2 \rangle}$ has turned from the spread's law to the drift's. The exponent of the spread is universal; the coefficient, $\sigma_1$, is the step's own.
+          - text: >-
+              A drifting walk widens faster than a fair one: its true exponent is $0.917$, and the spread's $0.5002$ misses the drift.
+            feedback: >-
+              The drift moves the cloud; it does not widen it. Each walker's position is $\mu_1 t$ plus a sum of independent fluctuations of variance $\sigma_1^2 t$; the width is the second part only.
+            misconception: MC-spread-means-drift
+          - text: >-
+              $0.5002$ differs from $\tfrac12$ by more than its error, so the $\sqrt t$ law fails slightly for steps that can be zero.
+            feedback: >-
+              $0.5002 - 0.5 = 0.0002$ is less than one standard error, $0.0004$: no difference has been measured. Steps that can be zero are steps of variance $0.61$, and the theorem covers every finite variance.
+          - text: >-
+              The exponent of the spread depends on the step: a walker who sometimes stays put spreads more slowly than $\sqrt t$.
+            feedback: >-
+              Staying put lowers the coefficient, $\sigma_1 = 0.781$ against the fair coin's $1$, not the exponent. Variances add for any independent steps, so the variance grows as $t$ and the spread as $\sqrt t$.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-3.1-1, OBJ-3.1-5]
+        prompt: >-
+          For a step that is $+1$, $0$ or $-1$ with probabilities $p_+$, $p_0$ and $p_-$, derive $\sigma_1^2$. Show why the exponent of the spread is $\tfrac12$ whatever the step, while the coefficient is the step's own. Predict this walk's spread at $t = 1024$ and the seed-to-seed scatter of a spread measured with $5000$ walkers; over $64$ seeds the measured spread is $24.94 \pm 0.03$, with a scatter of $0.25$ from seed to seed. Check your formula in limits.
+        solution:
+          - kind: law
+            text: >-
+              For independent steps, means always add and variances add: $\langle x_t \rangle = \mu_1 t$, $\operatorname{Var}(x_t) = \sigma_1^2 t$, so the spread about the mean is $\sigma_1\sqrt t$. Then $\ln \sigma_{x_t} = \ln \sigma_1 + \tfrac12 \ln t$: on logarithmic axes a line of slope $\tfrac12$ for any $\sigma_1$, whose height is set by $\sigma_1$.
+          - kind: manipulation
+            text: >-
+              $\mu_1 = p_+ - p_-$ and $\langle s^2 \rangle = p_+ + p_-$, since $s^2 = 1$ for either move and $0$ for staying put. So $\sigma_1^2 = p_+ + p_- - (p_+ - p_-)^2$.
+          - kind: formula
+            text: >-
+              $\sigma_1^2 = p_+ + p_- - (p_+ - p_-)^2 \qquad \sigma_{x_t} = \sigma_1\sqrt t$
+          - kind: substitution
+            text: >-
+              $\sigma_1^2 = 0.7 - 0.09 = 0.61$, $\sigma_1 = 0.781$, and at $t = 1024$ the spread is $0.781 \times 32 = 24.99$. A standard deviation measured from $N$ draws of a near-Gaussian quantity scatters by about $\sigma/\sqrt{2N} = 24.99/100 = 0.25$, the measured scatter. The mean of $64$ seeds, $24.94 \pm 0.03$, is $1.8$ standard errors from $24.99$: consistent within $2$ standard errors, and $0.2\%$ away.
+          - kind: limit
+            text: >-
+              $p_0 = 0$, $p_+ = p_- = \tfrac12$: $\sigma_1^2 = 1$, the fair coin. $p_0 = 0$, $p_+ = p$: $\sigma_1^2 = 1 - (2p - 1)^2 = 4p(1 - p)$, the biased coin of the lesson. $p_+ = 1$: $\sigma_1 = 0$, a walker who marches with no spread. $p_0 \to 1$: $\sigma_1 \to 0$, nobody moves. $t = 1$ gives back one step's own spread.
+          - kind: units
+            text: >-
+              Positions and $\sigma_1$ are in steps; the probabilities and the exponent are pure numbers, and $\sigma_1^2$ is a sum of probabilities times squared step sizes, so it is in steps squared.
+          - kind: result
+            text: >-
+              $\sigma_1^2 = p_+ + p_- - (p_+ - p_-)^2 = 0.61$ here. The exponent is $\tfrac12$ because variances of independent steps add, whatever the step; the coefficient is $\sigma_1 = 0.781$, and the predicted spread at $t = 1024$, $25.0 \pm 0.25$ for one seed, is what is measured.
+        rubric:
+          - text: >-
+              Derives $\mu_1 = p_+ - p_-$, $\langle s^2 \rangle = p_+ + p_-$ and $\sigma_1^2 = p_+ + p_- - (p_+ - p_-)^2$.
+            weight: 3
+          - text: >-
+              Explains the exponent from the additivity of variances of independent steps, and that $\sigma_1$ sets only the line's height on logarithmic axes.
+            weight: 3
+          - text: >-
+              Predicts the spread $\sigma_1\sqrt{1024} = 25.0$ and compares it with the measurement.
+            weight: 2
+          - text: >-
+              Estimates the seed-to-seed scatter as about $\sigma/\sqrt{2N} = 0.25$.
+            weight: 2
+          - text: >-
+              A limit check: the fair or biased coin, $p_+ = 1$, $p_0 \to 1$ or $t = 1$, with what each means.
+            weight: 2
+
+  - id: Q-3-bagrut-2
+    type: bagrut
+    title: >-
+      A walker on a plane
+    prompt: >-
+      A walker on a plane takes independent steps in $x$ and in $y$: at every tick, each coordinate changes by a fresh draw from the uniform distribution on $[-1, 1]$, of mean $0$ and variance $\sigma_1^2 = \tfrac13$. After $t = 300$ ticks his distance from the start is $r = \sqrt{x^2 + y^2}$. A simulation follows $20\,000$ walkers for each of $64$ seeds.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-3.1-1]
+        prompt: >-
+          Find the RMS distance from the start, $\sqrt{\langle r^2 \rangle}$, after $300$ ticks.
+        answer: 14.14
+        unit: steps
+        tolerance: 0.01
+        correctFeedback: >-
+          $\langle r^2 \rangle = \langle x^2 \rangle + \langle y^2 \rangle = 2\sigma_1^2 t = 200$, so $\sqrt{\langle r^2 \rangle} = 14.14$. Measured: $\langle r^2 \rangle = 200.1 \pm 0.2$.
+        wrongFeedback: >-
+          $r^2 = x^2 + y^2$, and each coordinate is a one-dimensional walk with $\langle x^2 \rangle = \sigma_1^2 t$.
+        commonWrong:
+          - value: 10
+            feedback: >-
+              That is the spread of one coordinate, $\sigma_1\sqrt t$. The distance has contributions from both: $\langle r^2 \rangle = \langle x^2 \rangle + \langle y^2 \rangle$.
+          - value: 20
+            feedback: >-
+              That adds the two coordinates' spreads, $10 + 10$. It is the squares that add, by Pythagoras: $\sqrt{100 + 100} = 14.1$.
+          - value: 200
+            feedback: >-
+              That is $\langle r^2 \rangle$. The RMS distance is its square root.
+      - label: b
+        type: mc
+        points: 4
+        objectives: [OBJ-3.1-1, OBJ-3.1-3]
+        prompt: >-
+          The density of walkers per unit area is highest at the start. Where is the histogram of the distance $r$ highest?
+        choices:
+          - text: >-
+              At $r = \sigma_1\sqrt t = 10$: the walkers at distance $r$ fill a ring of area $2\pi r\,\mathrm{d}r$, which grows with $r$ while the density per unit area falls, and their product peaks there.
+            correct: true
+            feedback: >-
+              Right. Near the start the density is highest, but the ring is tiny; far out the ring is large, but nearly empty. Measured: the tallest bar of the histogram is at $r = 9.98 \pm 0.10$.
+          - text: >-
+              At $r = 0$, where the density per unit area is highest.
+            feedback: >-
+              Density per unit area and probability per unit distance are different things. A ring of radius $r$ and width $\mathrm{d}r$ has area $2\pi r\,\mathrm{d}r$, which vanishes at $r = 0$: almost no walkers stand within a small distance of the start.
+          - text: >-
+              At $r = \sqrt{\langle r^2 \rangle} = 14.1$, the RMS distance.
+            feedback: >-
+              The RMS distance is an average that weights the far walkers by $r^2$, and the distribution of $r$ is skewed to the right. Its mean, $12.5$, and its RMS value, $14.1$, both lie beyond its peak.
+          - text: >-
+              At $r = 0$: the distance is built from $300$ independent steps, so by the central limit theorem it is Gaussian, centred on the mean step, zero.
+            feedback: >-
+              The coordinates are sums of independent steps, and each is close to Gaussian. The distance is not a sum: $\sqrt{x^2 + y^2}$ is never negative, and the theorem says nothing about it directly.
+            misconception: MC-clt-always-applies
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-3.1-1, OBJ-3.1-3]
+        prompt: >-
+          What fraction of the walkers stands within $r < 10$ of the start? Treat each coordinate as Gaussian of variance $\sigma_1^2 t$, as the central limit theorem allows, and integrate over the disc.
+        answer: 0.3935
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          $P(r < R) = 1 - e^{-R^2/(2\sigma_1^2 t)}$, and with $R = \sigma_1\sqrt t$ this is $1 - e^{-1/2} = 0.393$. Measured: $0.3932 \pm 0.0005$. In one dimension, $68.3\%$ of the walkers are within one spread of the start; in two dimensions, $39\%$ are within one spread of it in distance.
+        wrongFeedback: >-
+          The joint density is $e^{-(x^2 + y^2)/(2s^2)}/(2\pi s^2)$ with $s^2 = \sigma_1^2 t = 100$. In polar coordinates the area element is $2\pi r\,\mathrm{d}r$; integrate from $0$ to $10$.
+        commonWrong:
+          - value: 0.6827
+            feedback: >-
+              That is the one-dimensional answer, the fraction with $|x| < 10$. The disc needs both coordinates to be small together, and in the right combination.
+          - value: 0.4661
+            feedback: >-
+              That is $0.6827^2$, the fraction inside the square $|x| < 10$, $|y| < 10$. The disc $r < 10$ is smaller than the square: it leaves out its corners.
+          - value: 0.6321
+            feedback: >-
+              That is $1 - e^{-1}$, from $e^{-r^2/s^2}$ without the $2$. The Gaussian of variance $s^2$ is $e^{-r^2/(2s^2)}$, so the answer is $1 - e^{-1/2}$.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-3.1-1, OBJ-3.1-3]
+        prompt: >-
+          Show that $\langle r_t^2 \rangle = 2\sigma_1^2 t$. Then, treating $x$ and $y$ as independent Gaussians of variance $s^2 = \sigma_1^2 t$, derive the probability density of $r$, find its most probable value and its mean, and explain why $r$ is not Gaussian although $x$ and $y$ are. Check your result in limits.
+        solution:
+          - kind: law
+            text: >-
+              Each coordinate is a one-dimensional walk of independent steps: $\langle x_t \rangle = 0$, $\langle x_t^2 \rangle = \sigma_1^2 t$, and the same for $y$. So $\langle r_t^2 \rangle = \langle x_t^2 \rangle + \langle y_t^2 \rangle = 2\sigma_1^2 t$, with no assumption about the shape of the steps.
+          - kind: manipulation
+            text: >-
+              $x$ and $y$ are independent, so their joint density is the product, $e^{-(x^2 + y^2)/(2s^2)}/(2\pi s^2)$, which depends on $r$ only. The walkers at distance between $r$ and $r + \mathrm{d}r$ fill a ring of area $2\pi r\,\mathrm{d}r$, so $p(r) = (r/s^2)\,e^{-r^2/(2s^2)}$. Its derivative vanishes where $1 - r^2/s^2 = 0$, at $r = s$; $\int_0^R p\,\mathrm{d}r = 1 - e^{-R^2/(2s^2)}$, and $\langle r \rangle = \int_0^\infty r\,p\,\mathrm{d}r = s\sqrt{\pi/2}$.
+          - kind: formula
+            text: >-
+              $p(r) = \dfrac{r}{s^2}\,e^{-r^2/(2s^2)} \qquad r^* = s \qquad \langle r \rangle = s\sqrt{\pi/2} \qquad \langle r^2 \rangle = 2s^2$
+          - kind: limit
+            text: >-
+              $r \to 0$: $p \to 0$ in proportion to $r$, because the ring's area does; the most probable point is the start, but the most probable distance is not zero. $r \gg s$: $p$ falls as a Gaussian tail. $\int_0^\infty r^2 p\,\mathrm{d}r = 2s^2$, as the first line requires. In one dimension the same argument gives $|x|$ a half-Gaussian, highest at $0$, because there the "ring" is two points and does not grow; in $d$ dimensions $\langle r^2 \rangle = d\sigma_1^2 t$. $t \to 0$: $s \to 0$, and every walker is at the start.
+          - kind: units
+            text: >-
+              $r$ and $s$ are in steps; $p(r)$ is a probability per unit distance, $r/s^2$ in inverse steps, as a density in $r$ must be.
+          - kind: substitution
+            text: >-
+              $s = 10$: the peak at $10$, measured $9.98 \pm 0.10$; $\langle r \rangle = 12.53$, measured $12.538 \pm 0.006$; $\langle r^2 \rangle = 200$, measured $200.1 \pm 0.2$.
+          - kind: result
+            text: >-
+              $\langle r_t^2 \rangle = 2\sigma_1^2 t$, and $r$ has the density $(r/s^2)e^{-r^2/(2s^2)}$, peaked at $s = \sigma_1\sqrt t$ with mean $s\sqrt{\pi/2}$. It is not Gaussian because $r$ is not a sum of independent terms but a nonlinear function of two of them, never negative, whose small values are suppressed by the vanishing area near the start. The central limit theorem makes $x$ and $y$ Gaussian; what $r$ does follows from that by geometry.
+        rubric:
+          - text: >-
+              Derives $\langle r_t^2 \rangle = 2\sigma_1^2 t$ from the independent coordinates.
+            weight: 2
+          - text: >-
+              Writes the joint density as a product and converts to $r$ with the ring area $2\pi r\,\mathrm{d}r$, obtaining $p(r) = (r/s^2)e^{-r^2/(2s^2)}$.
+            weight: 4
+          - text: >-
+              Finds the peak at $r = s$ and the mean $s\sqrt{\pi/2}$, and compares them with the measurements.
+            weight: 2
+          - text: >-
+              Explains why $r$ is not Gaussian: not a sum, never negative, small values suppressed by the area.
+            weight: 2
+          - text: >-
+              A limit check: $r \to 0$, $r \gg s$, one dimension, $d$ dimensions or $t \to 0$, with what each means.
+            weight: 2
+
+  - id: Q-3-bagrut-3
+    type: bagrut
+    title: >-
+      The cost of correlation, counted in readings
+    prompt: >-
+      A detector produces readings $s_i = \pm 1$. Each reading repeats the previous one with probability $q$ and is otherwise a fresh $\pm 1$ with equal chances, so every reading has $\langle s_i \rangle = 0$ and $\langle s_i^2 \rangle = 1$, and readings $j$ apart have correlation $q^j$ (the persistent walk of the lesson, example 6). The mean of $t$ readings, $m = x_t/t$ with $x_t = s_1 + \cdots + s_t$, estimates the true mean, $0$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-3.1-5, OBJ-3.1-3]
+        prompt: >-
+          At $q = 0.8$, with $t = 10\,000$ readings, find the standard error of $m$.
+        answer: 0.0300
+        unit: ''
+        tolerance: 0.02
+        correctFeedback: >-
+          At long times $\operatorname{Var}(x_t) = t(1 + q)/(1 - q) = 9t$, so the standard error is $\sqrt{9t}/t = 3/\sqrt{10\,000} = 0.030$, three times the $0.010$ of independent readings. Measured with ThermoLab's correlated_walk, $4000$ sequences for each of $8$ seeds: $0.0299 \pm 0.0001$.
+        wrongFeedback: >-
+          $\operatorname{Var}(m) = \operatorname{Var}(x_t)/t^2$, and for this sequence $\operatorname{Var}(x_t) \to t(1 + q)/(1 - q)$ at long times.
+        commonWrong:
+          - value: 0.01
+            feedback: >-
+              That is $1/\sqrt t$, the standard error of independent readings. These are correlated: the covariances inflate the variance of the sum ninefold.
+          - value: 0.02236
+            feedback: >-
+              That uses $\operatorname{Var}(x_t) = t/(1 - q) = 5t$, which counts each covariance once. The double sum $\sum_i\sum_j \langle s_is_j \rangle$ holds every pair twice, $i < j$ and $i > j$: $t[1 + 2q/(1 - q)] = t(1 + q)/(1 - q)$.
+          - value: 0.09
+            feedback: >-
+              That multiplies the independent standard error by the variance factor, $9$. The standard error is a square root: it grows by $\sqrt 9 = 3$.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-3.1-5]
+        prompt: >-
+          How many independent readings would give the same standard error as these $10\,000$?
+        answer: 1111
+        unit: ''
+        tolerance: 0.02
+        correctFeedback: >-
+          $1/\sqrt{t'} = 0.030$ gives $t' = t(1 - q)/(1 + q) = 10\,000/9 = 1111$ independent readings. Nine readings in a row carry the information of one: an error bar computed as if they were independent is three times too small.
+        wrongFeedback: >-
+          Set $1/\sqrt{t'}$, the standard error of $t'$ independent readings, equal to the standard error of part (a).
+        commonWrong:
+          - value: 3333
+            feedback: >-
+              That divides by the factor on the standard error, $3$. The number of readings goes with the variance, so it is divided by the variance factor, $9$.
+          - value: 2000
+            feedback: >-
+              That is $t(1 - q)$, from the variance $t/(1 - q)$ that counts each covariance once. With both orders of every pair, the factor is $(1 + q)/(1 - q) = 9$.
+          - value: 10000
+            feedback: >-
+              That is the number of readings, not the number of independent ones. Correlated readings repeat each other, and a repeat adds no new information.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-3.1-3, OBJ-3.1-5]
+        prompt: >-
+          A second detector's readings do the opposite: each one reverses the previous reading with probability $a = 0.5$, and is otherwise fresh. Compared with independent readings, how large is the standard error of the mean of many of its readings?
+        choices:
+          - text: >-
+              Smaller, by a factor $\sqrt 3$: successive readings have correlation $-a$, readings $j$ apart $(-a)^j$, and the long-time variance per reading is $(1 - a)/(1 + a) = \tfrac13$.
+            correct: true
+            feedback: >-
+              Right. Neighbouring readings tend to cancel, so their sum wanders less than an independent one. Measured at $t = 2000$, $5000$ sequences for each of $8$ seeds: $\operatorname{Var}(x_t)/t = 0.332 \pm 0.003$, with correlations $-0.507 \pm 0.005$ and $0.260 \pm 0.002$ at lags $1$ and $2$. A broken independence changes the width in either direction.
+          - text: >-
+              Larger, by a factor $\sqrt 3$: correlation between readings always costs precision.
+            feedback: >-
+              Positive correlation costs: repeated readings add little. Negative correlation pays: a reading that tends to undo the one before makes the sum wander less, and $\sum_j (-a)^j$ makes the factor $(1 - a)/(1 + a)$, below $1$.
+          - text: >-
+              The same: each reading is still $\pm 1$ with equal chances, so the standard error is $1/\sqrt t$.
+            feedback: >-
+              The distribution of one reading is unchanged, but the variance of a sum depends on the covariances as well, and here they do not vanish: successive readings have correlation $-0.5$.
+          - text: >-
+              Zero: a sequence that reverses itself keeps returning to where it started.
+            feedback: >-
+              That is the limit $a \to 1$, the strictly alternating sequence $+1, -1, +1, \dots$, whose sum is $0$ or $\pm 1$ forever. At $a = 0.5$ half the readings are fresh, and the sum still wanders as $\sqrt t$, only more slowly.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-3.1-3, OBJ-3.1-1]
+        prompt: >-
+          Starting from $\operatorname{Var}(x_t) = t + 2\sum_{j=1}^{t-1}(t - j)\,q^j$, derive the exact variance for every $t$ in closed form. Use it to say how long a sequence must be before the long-time form $t(1 + q)/(1 - q)$ can be used: evaluate both at $q = 0.8$ for $t = 10$, $100$ and $10\,000$ (for $t = 10$, $8$ seeds of $20\,000$ sequences give $54.19 \pm 0.09$). Check your result in limits, including $q = -1$.
+        solution:
+          - kind: law
+            text: >-
+              For readings of mean zero, $\operatorname{Var}(x_t) = \sum_i\sum_j \langle s_is_j \rangle$: lesson 0.1's variance of a sum with the covariances kept. With $\langle s_is_{i+j} \rangle = q^j$, the $t$ diagonal terms give $t$, and the $t - j$ pairs at each lag $j$, counted in both orders, give $2\sum_j (t - j)q^j$.
+          - kind: manipulation
+            text: >-
+              $\sum_{j=1}^{t-1}(t - j)q^j = t\sum_{j=1}^{t-1} q^j - \sum_{j=1}^{t-1} jq^j$, with $\sum_{j=1}^{t-1} q^j = q(1 - q^{t-1})/(1 - q)$ and $\sum_{j=1}^{t-1} jq^j = q[1 - tq^{t-1} + (t - 1)q^t]/(1 - q)^2$. Over the common denominator $(1 - q)^2$ the numerator collapses to $tq(1 - q) - q(1 - q^t)$, so the sum is $tq/(1 - q) - q(1 - q^t)/(1 - q)^2$.
+          - kind: formula
+            text: >-
+              $\operatorname{Var}(x_t) = t\,\dfrac{1 + q}{1 - q} - \dfrac{2q(1 - q^t)}{(1 - q)^2}$
+          - kind: substitution
+            text: >-
+              $q = 0.8$: at $t = 10$, $90 - 40(1 - 0.8^{10}) = 54.29$ against the long-time $90$, and the measured $54.19 \pm 0.09$; at $t = 100$, $860$ against $900$; at $t = 10\,000$, $89\,960$ against $90\,000$. The correction is $40\%$ of the long-time term at $t = 10$, $4.4\%$ at $100$ and $0.04\%$ at $10\,000$; once $q^t$ is negligible it is $2q/[(1 - q^2)t]$, falling as $1/t$. The long-time form needs $t$ many times the memory, $1/(1 - q) = 5$ readings; part (a), at $t = 10\,000$, is safely there.
+          - kind: limit
+            text: >-
+              $t = 1$: $(1 + q)/(1 - q) - 2q/(1 - q) = 1$, one reading. $q = 0$: $t$, independent readings. $q \to 1$: the sum itself gives $t + 2\sum_j (t - j) = t^2$, a sequence that never changes, $x_t = \pm t$. $q = -1$, a reading that always reverses: $(1 - (-1)^t)/2$, which is $0$ for even $t$ and $1$ for odd $t$, exactly the alternating sequence $+1, -1, +1, \dots$, whose sum is $0$ or $\pm 1$. The same formula with $q = -a$ gives the reversing detector of part (c).
+          - kind: units
+            text: >-
+              Readings and sums are pure counts; $q$ and both terms of the formula are pure numbers, the first growing as $t$ and the second bounded.
+          - kind: result
+            text: >-
+              $\operatorname{Var}(x_t) = t(1 + q)/(1 - q) - 2q(1 - q^t)/(1 - q)^2$. The second term is a bounded correction, so the long-time form overshoots by at most about $2q/[(1 - q^2)t]$ of itself: at $q = 0.8$ by $40\%$ of its own value at $t = 10$ ($90$ against $54.3$, which is $66\%$ of the true value), by $4.4\%$ at $100$ and by $0.04\%$ at $10\,000$, the bound being $44\%$, $4.4\%$ and $0.044\%$. Correlation costs width, and the cost is the full factor $(1 + q)/(1 - q)$ only once the sequence is much longer than its memory.
+        rubric:
+          - text: >-
+              Writes the variance as the double sum of covariances, with each pair counted in both orders.
+            weight: 2
+          - text: >-
+              Evaluates the geometric sums and reaches the closed form.
+            weight: 4
+          - text: >-
+              Evaluates the exact and long-time forms at $t = 10$, $100$, $10\,000$ and compares $t = 10$ with the measurement.
+            weight: 2
+          - text: >-
+              States when the long-time form holds: $t$ much longer than the memory $1/(1 - q)$.
+            weight: 1
+          - text: >-
+              A limit check: $t = 1$, $q = 0$, $q \to 1$ and $q = -1$, with what each means.
+            weight: 3
+
+  - id: Q-3-bagrut-4
+    type: bagrut
+    title: >-
+      A failure of a different kind: the Cauchy walk
+    prompt: >-
+      A walk takes independent steps from the Cauchy distribution, density $1/[\pi(1 + s^2)]$. Its median is $0$ and its quartiles are $\pm 1$, so one step has an interquartile range of $2$; it has no finite variance. A simulation builds $5000$ such walks of $256$ steps, measures the cloud at $t = 4$, $16$, $64$ and $256$, and fits the exponent of $t$ to a measure of its width on logarithmic axes.
+    parts:
+      - label: a
+        type: mc
+        points: 4
+        objectives: [OBJ-3.1-3]
+        prompt: >-
+          First, the sample variance of single Cauchy draws, six seeds at each sample size $n$: at $n = 10^3$, $1.7 \times 10^7$, $8.8 \times 10^3$, $2.2 \times 10^3$, $820$, $1.2 \times 10^3$, $2.8 \times 10^4$; at $n = 10^5$, $1.8 \times 10^5$, $3.7 \times 10^4$, $4.8 \times 10^7$, $6.8 \times 10^5$, $1.5 \times 10^5$, $2.5 \times 10^6$. What do they show?
+        choices:
+          - text: >-
+              They never settle. The variance does not exist, and each estimate is ruled by the few largest draws, which are of order $n$, so the estimates scatter over decades and their typical size grows with $n$.
+            correct: true
+            feedback: >-
+              Right. A Cauchy draw exceeds $m$ in size with probability about $2/(\pi m)$, so the largest of $n$ draws is of order $n$, and its square alone, divided by $n$, contributes of order $n$ to the sample variance. More data make the estimate larger and no more reproducible.
+          - text: >-
+              They converge, slowly: the median at $n = 10^5$ is a few times $10^5$, and more draws will settle it there.
+            feedback: >-
+              There is nothing to converge to: $\int s^2/[\pi(1 + s^2)]\,\mathrm{d}s$ diverges. Each tenfold increase in $n$ brings in larger draws, and the estimate moves with them.
+          - text: >-
+              The variance is near $1$, as the quartiles $\pm 1$ suggest; the large values are rare outliers that should be discarded.
+            feedback: >-
+              The large values are draws from the distribution itself, as genuine as any other. Discarding them would describe a different distribution; the tails are exactly what makes the variance infinite.
+          - text: >-
+              The generator must be faulty, since a sample variance of independent draws always settles as $n$ grows.
+            feedback: >-
+              The law of large numbers for the sample variance needs a finite variance to converge to. The generator is fine; the hypothesis fails.
+      - label: b
+        type: mc
+        points: 4
+        objectives: [OBJ-3.1-3]
+        prompt: >-
+          The spread of the cloud is measured with the sample standard deviation, and the exponent fitted under six seeds: $1.10$, $0.83$, $0.25$, $0.91$, $1.27$, $0.44$. What do you conclude?
+        choices:
+          - text: >-
+              The measurement is not reproducible, so it measures nothing about the walk: the sample standard deviation of a cloud with no variance follows its few most extreme walkers, and the fitted exponent with them.
+            correct: true
+            feedback: >-
+              Right: a conclusion about the estimator, not the walk. Over $64$ seeds the same fit ranges from $0.17$ to $1.99$. A statistic that ignores the tails is needed.
+          - text: >-
+              The exponent is $0.80 \pm 0.16$, the mean of the six and its standard error.
+            feedback: >-
+              Averaging helps only when each value scatters about a fixed limit. Here the estimator has none: another six seeds would give another mean, and $64$ seeds range from $0.17$ to $1.99$.
+          - text: >-
+              Within the scatter the walk spreads as $\sqrt t$, like every other walk of many independent steps.
+            feedback: >-
+              The $\sqrt t$ law needs a finite $\sigma_1$, and Cauchy steps have none. Part (c) measures the width with a statistic that does settle, and the exponent is not $\tfrac12$.
+            misconception: MC-clt-always-applies
+          - text: >-
+              The walk's spreading law differs from seed to seed.
+            feedback: >-
+              Every seed draws from the same distribution, and the law of the walk is the same in all of them. What changes from seed to seed is the handful of extreme draws, which the sample standard deviation follows.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-3.1-3, OBJ-3.1-1]
+        prompt: >-
+          Measured with the interquartile range instead, the fitted exponent under six seeds is $1.010$, $1.009$, $1.005$, $0.990$, $0.990$, $0.996$. Taking the exponent to be exact, predict the interquartile range of the cloud at $t = 256$.
+        answer: 512
+        unit: steps
+        tolerance: 0.02
+        correctFeedback: >-
+          A width proportional to $t$: $2 \times 256 = 512$. Measured over $64$ seeds: $510 \pm 1.5$, and an exponent of $1.000 \pm 0.001$. The cloud widens as $t$, like a walker who never turns, although every step is independent of every other.
+        wrongFeedback: >-
+          The interquartile range grows as $t^1$, and at $t = 1$ it is one step's, $2$.
+        commonWrong:
+          - value: 32
+            feedback: >-
+              That is $2\sqrt{256}$, the $\sqrt t$ law. The measured exponent is $1$: the Cauchy cloud widens as $t$.
+            misconception: MC-clt-always-applies
+          - value: 256
+            feedback: >-
+              That takes one step's interquartile range as $1$. Its quartiles are $\pm 1$, so its range is $2$, and the cloud's is $2t$.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-3.1-3]
+        prompt: >-
+          One Cauchy step has the characteristic function $\langle e^{iks} \rangle = e^{-|k|}$. Show that the sum of $t$ independent steps is a Cauchy distribution $t$ times wider, so that the exponent of part (c) is exactly $1$. Say what the sums divided by $\sqrt t$ do as $t$ grows, and what the sums divided by $t$ do. Contrast this failure with the persistent walk's: which hypothesis each breaks and how each fails, and which you are more likely to meet without noticing in real data. Check your result in limits.
+        solution:
+          - kind: law
+            text: >-
+              The characteristic function of a sum of independent terms is the product of theirs: $\langle e^{ikx_t} \rangle = \prod_i \langle e^{iks_i} \rangle$. A distribution is fixed by its characteristic function.
+          - kind: manipulation
+            text: >-
+              $\langle e^{ikx_t} \rangle = (e^{-|k|})^t = e^{-t|k|} = e^{-|tk|}$, the characteristic function of one step evaluated at $tk$: so $x_t$ has the distribution of $t$ times one step, density $t/[\pi(t^2 + x^2)]$, with quartiles $\pm t$ and interquartile range $2t$. Every quantile scales as $t^1$, exactly.
+          - kind: formula
+            text: >-
+              $p(x_t) = \dfrac{t}{\pi(t^2 + x_t^2)} \qquad \dfrac{x_t}{t} \sim \dfrac{1}{\pi(1 + u^2)} \qquad P\!\left(\left|\dfrac{x_t}{\sqrt t}\right| < 1\right) = \dfrac{2}{\pi}\arctan\dfrac{1}{\sqrt t}$
+          - kind: substitution
+            text: >-
+              Divided by $\sqrt t$, the sums are Cauchy of width $\sqrt t$: the fraction within $1$ of the origin is $0.295$, $0.079$ and $0.020$ at $t = 4$, $64$ and $1024$, falling as $t^{-1/2}$; the histogram flattens and never collapses. Divided by $t$, they have the same Cauchy distribution at every $t$: a limit, but not a Gaussian one. Even the average step $x_t/t$ does not settle: it is as uncertain after a million steps as after one.
+          - kind: limit
+            text: >-
+              $t = 1$ gives back one step. Replace $e^{-|k|}$ by a Gaussian step's $e^{-\sigma_1^2k^2/2}$: the product is $e^{-t\sigma_1^2k^2/2}$, a Gaussian of width $\sigma_1\sqrt t$; it is $|k|$ against $k^2$ at small $k$, a step with no variance against one with, that turns $\sqrt t$ into $t$. Cauchy is Student's distribution with one degree of freedom; with $\nu$ degrees of freedom the variance is $\nu/(\nu - 2)$, finite for $\nu > 2$: the lesson's heavy step, $\nu = 5$, has variance $5/3$ and collapses onto the Gaussian, and the variance diverges as $\nu \to 2$.
+          - kind: units
+            text: >-
+              $s$, $x_t$ and the widths are in steps; $k$ is in inverse steps, so $|k|$ and $t|k|$ are pure numbers, as an exponent must be.
+          - kind: result
+            text: >-
+              The sum of $t$ Cauchy steps is Cauchy, $t$ times wider; divided by $\sqrt t$ it spreads without limit, divided by $t$ it is the Cauchy distribution itself. The persistent walk breaks independence and keeps a finite variance: it is still Gaussian, only wider than $\sigma_1\sqrt t$ by $\sqrt{(1 + q)/(1 - q)}$. The Cauchy walk breaks finite variance: no $\sigma_1$, a width growing as $t$, and a shape that is never Gaussian. The persistent kind is the one met unnoticed: its histograms look perfectly Gaussian and only its error bars are wrong, while Cauchy data announce themselves with wild outliers and variances that will not repeat.
+        rubric:
+          - text: >-
+              Uses the product of characteristic functions to show that the sum is Cauchy of width $t$, so the exponent is exactly $1$.
+            weight: 4
+          - text: >-
+              States that the sums divided by $\sqrt t$ spread without limit, and that divided by $t$ they have the one-step Cauchy distribution at every $t$.
+            weight: 2
+          - text: >-
+              Contrasts the two failures: independence broken, Gaussian of the wrong width; finite variance broken, width as $t$, never Gaussian.
+            weight: 3
+          - text: >-
+              Says which failure is met unnoticed, with a reason.
+            weight: 1
+          - text: >-
+              A limit check: $t = 1$, the Gaussian step's characteristic function, or Student's distribution as $\nu$ crosses $2$, with what each means.
+            weight: 2

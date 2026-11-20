@@ -12,6 +12,7 @@ const PAGES = [
   'practice/ch0/', 'test/ch0/', 'summary/ch0/', 'workbook/0-1/',
   'practice/ch1/', 'test/ch1/', 'summary/ch1/', 'workbook/1-1/',
   'practice/ch2/', 'test/ch2/', 'summary/ch2/', 'workbook/2-1/',
+  'practice/ch3/', 'test/ch3/', 'summary/ch3/', 'workbook/3-1/',
   'practice/ch4/', 'test/ch4/', 'summary/ch4/', 'workbook/4-1/',
   'practice/ch15/', 'test/ch15/', 'summary/ch15/', 'workbook/15-1/',
   'me/', 'formulas/', 'glossary/', 'search/',

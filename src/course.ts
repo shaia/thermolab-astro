@@ -221,7 +221,61 @@ export const chapters: Chapter[] = [
       },
     ],
   },
-  planned(3, 'statistical', 'Probability and emergence', 'הסתברות והתהוות'),
+  {
+    n: 3,
+    part: 'statistical',
+    title: { en: 'Probability and emergence', he: 'הסתברות והתהוות' },
+    lessons: [
+      {
+        id: '3.1',
+        title: { en: 'Order out of nothing but noise: random walks', he: 'סדר מתוך רעש בלבד: הילוכים אקראיים' },
+        objectives: [
+          {
+            id: 'OBJ-3.1-1',
+            text: {
+              en: 'Model a random walk as a sum of independent steps and compute ⟨x_t⟩ = μ₁t and Var(x_t) = σ₁²t, hence the RMS spread σ₁√t, for any step distribution with finite variance.',
+              he: `למדל הילוך אקראי כסכום של צעדים בלתי תלויים ולחשב ${f('⟨x_t⟩ = μ₁t')} ו-${f('Var(x_t) = σ₁²t')}, ומכאן את שורש ממוצע ריבוע הפיזור ${f('σ₁√t')}, עבור כל התפלגות צעדים בעלת שונות סופית.`,
+            },
+          },
+          {
+            id: 'OBJ-3.1-2',
+            text: {
+              en: 'Define the binomial distribution P(k) = C(n,k) p^k (1 − p)^(n−k), compute its mean np and variance np(1 − p), and map the ±1 coin walk onto it exactly.',
+              he: `להגדיר את ההתפלגות הבינומית ${f('P(k) = C(n,k) p^k (1 − p)^(n−k)')}, לחשב את התוחלת ${f('np')} ואת השונות ${f('np(1 − p)')}, ולמפות עליה במדויק את הילוך המטבע ${f('±1')}.`,
+            },
+          },
+          {
+            id: 'OBJ-3.1-3',
+            text: {
+              en: 'State the central limit theorem with its hypotheses (independent, identically distributed steps of finite variance) and its conclusion, that (S_n − nμ)/(σ√n) approaches a standard Gaussian; identify which hypothesis fails in a given counterexample.',
+              he: `לנסח את משפט הגבול המרכזי על הנחותיו (צעדים בלתי תלויים, בעלי אותה התפלגות ובעלי שונות סופית) ואת מסקנתו, ש-${f('(S_n − nμ)/(σ√n)')} שואף להתפלגות גאוסית סטנדרטית; ולזהות איזו הנחה מופרת בדוגמת נגד נתונה.`,
+            },
+          },
+          {
+            id: 'OBJ-3.1-4',
+            text: {
+              en: 'Apply the de Moivre–Laplace bridge (approximate the binomial pmf by a Gaussian of mean np and variance np(1 − p)) and state where the approximation is trustworthy.',
+              he: `ליישם את הגשר של דה-מואבר-לפלס (קירוב פונקציית ההסתברות הבינומית בגאוסית בעלת תוחלת ${f('np')} ושונות ${f('np(1 − p)')}), ולנסח היכן הקירוב אמין.`,
+            },
+          },
+          {
+            id: 'OBJ-3.1-5',
+            text: {
+              en: 'Distinguish the standard deviation of one quantity from the standard error of an estimated mean, and absolute spread growing as √N from relative spread falling as N^(−1/2).',
+              he: `להבחין בין סטיית התקן של גודל בודד לבין שגיאת התקן של תוחלת מוערכת, ובין פיזור מוחלט הגדל כמו ${f('√N')} לבין פיזור יחסי הדועך כמו ${f('N^(−1/2)')}.`,
+            },
+          },
+          {
+            id: 'OBJ-3.1-6',
+            text: {
+              en: 'Explain how a reproducible Gaussian profile emerges from an ensemble of individually unpredictable walkers, without invoking a restoring force or compensation.',
+              he: 'להסביר כיצד פרופיל גאוסי בר-שחזור מתהווה מתוך צבר של הולכים שכל אחד מהם בלתי צפוי, בלי להיזקק לכוח מחזיר או לפיצוי.',
+            },
+          },
+        ],
+      },
+    ],
+  },
   {
     n: 4,
     part: 'thermodynamics',

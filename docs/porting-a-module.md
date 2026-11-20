@@ -98,6 +98,11 @@ line each, with the evidence. ThermoLab is fixed separately, from that list.
   כלפי מעלה (the school usage), gentlest descent (the smallest −∂P/∂v) = הירידה המתונה ביותר
   (never "שיפוע מתון ביותר" with a negative value: a negative slope reads as falling), gas
   cylinder = בלון but storage tank = מכל, press Enter = מקש Enter (Latin, as Home).
+  Decided in module 03: RMS = שורש ממוצע ריבוע המרחק (or "…הפיזור"), never "הריבועי הממוצע", which is the
+  mean square, ⟨x²⟩, not its root; the objective in `src/course.ts` and both lessons' frontmatter must stay identical
+  (the linter compares them); compensation (the fallacy) = פיצוי, never קיזוז, as in lesson 0.1; skewness = צידוד;
+  drift = סחיפה (in figures too, not סחף); de Moivre–Laplace = דה-מואבר-לפלס, hyphens only, in `course.ts` as
+  well; a bare "n = …" in a figure's task string or label gets an isolate, as everywhere in plain text.
 - Say what a figure's readout actually shows, in both languages, and run the figure to check it
   before writing a sentence about it (module 02's flattest slope was never displayed).
 - Write Hebrew as Hebrew, not as translated English. It must say the same thing as the English;

@@ -1,0 +1,69 @@
+---
+lang: en
+chapter: 3
+title: 'Module 03 in one page: random walks'
+---
+
+## The big idea
+
+A walker's position is a sum of independent steps, and that is the whole model. One walker goes nowhere you can predict; ten thousand of them draw the same bell curve every time. Two facts make the bell, and they are separate. Its **width** is lesson 0.1's law with time in the place of the number of dice: variances of independent steps add, so the spread grows as $\sigma_1\sqrt t$ while the mean moves as $\mu_1 t$, and widening says nothing about drifting. Its **shape** is the central limit theorem: for independent, identically distributed steps of finite variance, the standardised sum approaches the standard Gaussian, and only the step's mean and variance survive. For coin steps the whole distribution is the binomial, a count of equally likely routes, and de Moivre–Laplace turns it into the Gaussian near its peak, though not in its far tails. Nothing pulls a walker back and nothing compensates: the order is in the counting and the averaging. The theorem's hypotheses are its content. A walk with a memory is still Gaussian, but wider than the formula says; steps of infinite variance never settle at all.
+
+## What to remember
+
+<Formula tex="x_t = s_1 + s_2 + \cdots + s_t \qquad \langle x_t \rangle = \mu_1 t \qquad \operatorname{Var}(x_t) = \sigma_1^2 t \qquad \sigma_{x_t} = \sigma_1 \sqrt{t}" label="A walk is a sum of independent steps: its mean, variance and spread after t steps" />
+
+<Formula tex="P(k) = \binom{n}{k}\, p^k (1 - p)^{n - k} \qquad \langle k \rangle = np \qquad \operatorname{Var}(k) = np(1 - p) \qquad x = 2k - n" label="The binomial distribution, and the ±1 walk mapped onto it" />
+
+<Formula tex="\binom{n}{k}\, p^k q^{n - k} \approx \frac{1}{\sqrt{2\pi npq}}\, \exp\!\left[-\frac{(k - np)^2}{2npq}\right]" label="De Moivre–Laplace: near the peak, the binomial is a Gaussian of mean np and variance npq, with q = 1 − p" />
+
+<Formula tex="P\!\left(\frac{S_n - n\mu_1}{\sigma_1\sqrt{n}} \le z\right) \longrightarrow \Phi(z) = \int_{-\infty}^{z} \frac{e^{-u^2/2}}{\sqrt{2\pi}}\,\mathrm{d}u" label="The central limit theorem, for independent, identically distributed steps of finite variance" />
+
+<Formula tex="\sigma_{\bar x} = \frac{\sigma}{\sqrt{N}} \qquad \frac{\operatorname{Var}(x_t)}{t} \longrightarrow \frac{1 + q}{1 - q}" label="The standard error of a mean of N independent draws; the variance per step of the persistent walk, with persistence q" />
+
+- **A position is a sum.** Means always add; variances add when the steps are independent. Any step of finite variance gives a spread $\sigma_1\sqrt t$: $31.6$ after $1000$ coin steps, $18.3$ for uniform steps on $[-1, 1]$, $40.8$ for the heavy-tailed ones. See <LessonLink id="3.1" anchor="sum-of-steps">a position is a sum</LessonLink> and <LessonLink id="3.1" anchor="measure">measure the law</LessonLink>.
+- **Two rates.** The mean moves as $t$, the spread grows as $\sqrt t$, so a drift always wins in the end: the biased coin's mean, $200$ after $1000$ steps, lies six and a half spreads out. See <LessonLink id="3.1" anchor="two-rates">two rates</LessonLink> and <LessonLink id="3.1" anchor="ex-3-1-1">four steps, one formula</LessonLink>.
+- **Nothing pulls a walker back.** His expected displacement over the next $m$ steps is $\mu_1 m$ wherever he stands; fair walkers at $+30$ stay there on average. See <LessonLink id="3.1" anchor="no-pull">nothing pulls a walker back</LessonLink>.
+- **The coin walk is binomial.** The middle is tall because more of the equally likely sequences end there: $\binom{100}{50} \approx 10^{29}$ of them end at $x = 0$, one at $x = 100$. See <LessonLink id="3.1" anchor="binomial">the whole distribution</LessonLink> and <LessonLink id="3.1" anchor="ex-3-1-2">the binomial from the ground up</LessonLink>.
+- **De Moivre–Laplace** is an approximation with a range: near the peak its relative error is of order $1/n$ for a fair coin and $n^{-1/2}$ otherwise; at a fixed fraction of the steps it runs away, $74$ times too large at $90$ heads in $100$. See <LessonLink id="3.1" anchor="de-moivre">from binomial to Gaussian</LessonLink>, <LessonLink id="3.1" anchor="tails">not in the tails</LessonLink> and <LessonLink id="3.1" anchor="ex-3-1-3">de Moivre–Laplace by hand</LessonLink>.
+- **The central limit theorem** keeps only $\mu_1$ and $\sigma_1$; the step's shape is forgotten. A finite sample cannot get closer than its own floor, and coin steps stay a staircase, a gap near $1/\sqrt{2\pi n}$ that is the lattice, not a failure. See <LessonLink id="3.1" anchor="clt">the theorem</LessonLink> and <LessonLink id="3.1" anchor="collapse">measure the collapse</LessonLink>.
+- **The hypotheses are the content.** The persistent walk keeps identical steps of finite variance and loses independence: still Gaussian, $\sqrt 3$ times too wide at $q = 0.5$ and $\sqrt{19}$ at $q = 0.9$. Cauchy steps lose finite variance and spread as $t$. See <LessonLink id="3.1" anchor="correlated">break one hypothesis</LessonLink>, <LessonLink id="3.1" anchor="repair">the shape survives</LessonLink> and <LessonLink id="3.1" anchor="ex-3-1-6">the cost of correlation</LessonLink>.
+- **Deviation and error.** The spread of single draws, $\sigma$, does not shrink with more data; the standard error of their mean, $\sigma/\sqrt N$, does. Halving an error bar costs four times the data. See <LessonLink id="3.1" anchor="standard-error">two spreads, two objects</LessonLink> and <LessonLink id="3.1" anchor="ex-3-1-4">a mean of means</LessonLink>.
+- **Coming home.** The chance of being at the origin after $t$ steps falls as $t^{-1/2}$, close to $\sqrt{2/(\pi t)}$ for even $t$, yet in one dimension every walker comes home eventually. See <LessonLink id="3.1" anchor="ex-3-1-5">how often is a walker at home?</LessonLink>
+- **Where the order comes from:** each histogram bar is an average of $N$ independent yes-or-no draws, scattering by $\sqrt{f(1 - f)/N}$; which histogram they draw is the distribution of one walker. See <LessonLink id="3.1" anchor="emergence">where the order comes from</LessonLink> and <LessonLink id="3.1" anchor="model-spec">the model, specified</LessonLink>.
+
+## Common mistakes
+
+- **"The cloud is widening, so the walkers are drifting outward."** Spread and drift are separate: a fair walk widens forever with its mean at zero. See <LessonLink id="3.1" anchor="sqrt">the spread view</LessonLink>.
+- **"A walker far from the origin is drawn back."** Nothing in the model refers to the origin; his expected next displacement is zero wherever he is. See <LessonLink id="3.1" anchor="no-pull">nothing pulls a walker back</LessonLink>.
+- **"After nine heads, tails is due."** The next flip is independent of the last nine; an early excess is diluted by later flips, never cancelled.
+- **"More walkers make the cloud narrower."** The spread is $\sigma_1\sqrt t$ for any number of walkers; more walkers pin down the mean and the spread more precisely. See <LessonLink id="3.1" anchor="fewer-walkers">ten times fewer walkers</LessonLink>.
+- **"With $400$ measurements, my data scatter by $\sigma/20$."** $\sigma/20$ is the standard error of the mean; the data still scatter by $\sigma$.
+- **"The middle is tall because walkers prefer it."** Every sequence of steps is equally likely; more of them end in the middle.
+- **"The Gaussian is fitted to the histogram."** It is predicted from the step's exact mean and variance, before any walker moves; a curve fitted to its own data tests nothing.
+- **"De Moivre–Laplace is good everywhere for large $n$."** Only near the peak, a few standard deviations wide. For a rare event far in the tail, compute the binomial exactly.
+- **"The coin's sums fail the central limit theorem: their distance from the Gaussian stalls."** It falls as $n^{-1/2}$, the lattice spacing; that is the staircase of a discrete distribution, not a failure. See <LessonLink id="3.1" anchor="collapse">measure the collapse</LessonLink>.
+- **"Every sum of many terms is Gaussian."** Only when the hypotheses hold: independence, identical distribution (or none dominating), finite variance. The persistent walk is too wide, Cauchy steps never settle, and a maximum or a product is not a sum. See <LessonLink id="3.1" anchor="what-it-shows">why the Gaussian turns up so often</LessonLink>.
+- **"Correlated steps destroy the Gaussian."** They change its width, not its shape, when the correlations decay. See <LessonLink id="3.1" anchor="repair">the shape survives</LessonLink>.
+- **"A simulation proved the central limit theorem."** A finite computation supports it and shows what it is about; the proof is what establishes it.
+
+## How to solve
+
+1. **Write the quantity as a sum** of steps, and say what the steps are: their distribution, and whether they are independent.
+2. **Moments of one step** from the definitions: $\mu_1 = \langle s \rangle$, $\sigma_1^2 = \langle s^2 \rangle - \mu_1^2$. For a coin with $P(+1) = p$: $\mu_1 = 2p - 1$, $\sigma_1^2 = 4p(1 - p)$.
+3. **Mean and spread of the sum:** $\mu_1 t$ and $\sigma_1\sqrt t$, for independent steps. If they are correlated, keep the covariances: $\operatorname{Var}(\sum s_i) = \sum_{i,j}\langle s_is_j \rangle - (\sum\langle s_i \rangle)^2$.
+4. **Drift against spread:** compare $\mu_1 t$ with $\sigma_1\sqrt t$; they are equal at $t = \sigma_1^2/\mu_1^2$.
+5. **Coin steps, exact:** $k$ right steps of $n$ is binomial, $x = 2k - n$. Use $P(k)$ itself for a single value or a far tail.
+6. **Coin steps, Gaussian:** mean $np$, variance $np(1 - p)$, near the peak. For a probability of a range, integrate from the half-integer, and remember $x$ moves in steps of $2$.
+7. **The central limit theorem:** standardise, $z = (S_n - n\mu_1)/(\sigma_1\sqrt n)$, and read $\Phi(z)$. First check the hypotheses, and say which one fails if any.
+8. **Deviation or error:** a spread of single values is $\sigma$; an uncertainty of a mean of $N$ is $\sigma/\sqrt N$. A $95\%$ margin is $1.96$ standard errors.
+9. **Check limits:** $t = 1$ gives one step; $p \to 0$ or $1$ removes the scatter; $p = \tfrac12$ removes the drift; $q = 0$ gives back the independent walk.
+
+## Checklist before an exam
+
+- I can write a walk as a sum of independent steps and compute $\langle x_t \rangle = \mu_1 t$ and $\operatorname{Var}(x_t) = \sigma_1^2 t$ for any step of finite variance, including in two or three dimensions.
+- I can derive the binomial's mean and variance from additivity, say where independence is used, and map the $\pm 1$ walk onto it.
+- I can state the central limit theorem with its three hypotheses and its conclusion, and name the hypothesis that fails for correlated steps, Cauchy steps, a dominant step, a maximum or a product.
+- I can apply de Moivre–Laplace, estimate its error near the peak, and explain why it fails in the far tails.
+- I can tell the standard deviation of single values from the standard error of a mean, and absolute spread growing as $\sqrt N$ from relative spread falling as $N^{-1/2}$.
+- I can explain how a reproducible Gaussian profile comes out of independent, unpredictable walkers without a restoring force or compensation.
+- I can compute the variance of a persistent walk and say what correlation costs: the width, not the shape.

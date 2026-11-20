@@ -1,0 +1,456 @@
+# Lesson 3.1 workbook. Problem 09 is ThermoLab's problem 5 (how often a walker comes home), taken past the lesson's
+# example 5: the number of visits home, why it forces every walker back, the probability of still being away, the
+# infinite mean waiting time, and the "starts afresh" property tested. ThermoLab's problems 1 to 3 are the lesson's
+# examples 2 to 4, and its problems 4, 6, 7 and 8 are review problems; none is repeated here. ThermoLab kept its
+# solutions with the instructor; this platform publishes them, by the author's decision.
+# Every number was recomputed with ThermoLab's Python (numpy 2.5, scipy 1.18): exact binomial sums where they exist,
+# and seeded simulations (numpy default_rng, seeds 0..7 unless stated, 64 seeds where a conclusion rests on it) for
+# the rest, quoted as the multi-seed mean ± its standard error. Problem 08's water viscosity, 0.890 mPa s at 25 °C, is
+# the standard reference value; its D ≈ 4e-10 m^2/s for a small dye molecule is the lesson's.
+# Challenges: MIT 8.333 (Fall 2013) Problem Set 2, Problems 5 and 2, downloaded and read on 2026-11-20. Problem 2's
+# part (d), the force-extension relation, needs Boltzmann weights the course has not met yet and was left out; its
+# angle distribution was replaced by a general symmetric one, with the source's Boltzmann case as one example.
+lang: en
+lesson: '3.1'
+practice:
+  - id: W-3.1-01
+    level: basic
+    qualitative: true
+    objectives: [OBJ-3.1-2, OBJ-3.1-6]
+    prompt: >-
+      Every sequence is equally likely. A fair coin is flipped $10$ times.
+      (a) A student says that the sequence HHHHHHHHHH is less likely than HTTHTHHTHT, "because it does not look random". Compare the probabilities of the two sequences. Then compare the probabilities of the two outcomes "ten heads" and "five heads, in any order".
+      (b) The first nine flips all came up heads. What is the probability of heads on the tenth? A second student says that tails is now due. Answer from the model.
+      (c) A fair $\pm 1$ walker takes $100$ steps. Which is more likely, that he ends exactly at $x = 0$ or exactly at $x = +20$, and by what factor? Does the walker prefer the origin?
+      (d) $x = 0$ is the most likely final position. Is it likely that he ends there? Compare $P(x_{100} = 0)$ with $P(|x_{100}| \ge 10)$.
+    answer: >-
+      (a) Each sequence has probability $2^{-10} = 1/1024$. "Ten heads" is one sequence, $1/1024$; "five heads" is $\binom{10}{5} = 252$ of them, $0.246$. (b) $\tfrac12$: the flips are independent, and nothing is due. (c) $x = 0$, $0.0796$ against $0.0108$, $7.34$ times as likely. No: every one of the $2^{100}$ paths has the same probability, and $7.34$ times as many end at $0$. (d) No: $P(x_{100} = 0) = 0.080$, while $P(|x_{100}| \ge 10) = 0.368$, four and a half times larger.
+    solution:
+      - kind: law
+        text: >-
+          Independent fair flips: every sequence of $n$ flips has probability $2^{-n}$, whatever it looks like. An outcome that many sequences share is as likely as the number of those sequences times $2^{-n}$; for $k$ heads that number is $\binom{n}{k}$, and for a walk $x = 2k - n$.
+      - kind: formula
+        text: >-
+          $P(k) = \dfrac{1}{2^n}\dbinom{n}{k} \qquad \dfrac{P(x_{100} = 0)}{P(x_{100} = 20)} = \dfrac{\binom{100}{50}}{\binom{100}{60}}$
+      - kind: reasoning
+        text: >-
+          (a) HHHHHHHHHH and HTTHTHHTHT are each one sequence: $1/1024$ each. "Looking random" is a property of a *class* of sequences: there are $252$ ways to have five heads and one way to have ten, so a sequence chosen at random almost always belongs to the large class. (b) The tenth flip is independent of the first nine, so the probability of heads is $\tfrac12$. The nine heads are not cancelled later; they are diluted by later flips, the lesson's point about compensation.
+      - kind: substitution
+        text: >-
+          (c) $x = 0$ needs $k = 50$, $x = 20$ needs $k = 60$: $P = \binom{100}{50}/2^{100} = 0.07959$ and $\binom{100}{60}/2^{100} = 0.01084$, a ratio of $7.34$. (d) $P(|x_{100}| \ge 10) = P(|k - 50| \ge 5)$, summed exactly from the binomial: $0.3682$.
+      - kind: limit
+        text: >-
+          For $n = 1$ both outcomes are single sequences and equally likely; the gap between the middle and the edge opens only as $n$ grows, because $\binom{n}{n/2}$ grows like $2^n\sqrt{2/(\pi n)}$ while the edge stays at $1$. And the most likely site holds a share of order $1/\sqrt n$, which goes to zero: the peak is the tallest bar, not a likely result.
+      - kind: result
+        text: >-
+          (a) Both sequences $1/1024$; five heads is $252$ times as likely as ten. (b) $\tfrac12$. (c) $x = 0$ is $7.34$ times as likely as $x = 20$, because $7.34$ times as many equally likely paths end there; no walker prefers anything. (d) Ending at home has probability $0.08$, ending at least $10$ away $0.37$.
+
+  - id: W-3.1-02
+    level: basic
+    qualitative: true
+    objectives: [OBJ-3.1-3]
+    prompt: >-
+      Which hypothesis fails? For each quantity below, say whether the central limit theorem predicts that it is close to Gaussian. If it does not, say which hypothesis fails (independence, identical distribution, finite variance) or whether the quantity is not a sum at all, and say what you can about its distribution instead.
+      (a) The total mass of $400$ apples picked at random from a large harvest.
+      (b) The number of heads in $10\,000$ fair coin flips.
+      (c) The position of a walker whose $k$-th step is $\pm 2^{-k}$, with a fair coin choosing the sign, after $40$ steps.
+      (d) The mean of $1000$ independent draws from the Cauchy distribution.
+      (e) The position of the persistent walk with $q = 0.9$ after $10^4$ steps, standardised by $\sqrt n$.
+      (f) The largest of $1000$ independent draws, each uniform on $[0, 1]$.
+      (g) Your wealth after $100$ even-odds bets, each of which multiplies it by $1.5$ or by $0.6$.
+    answer: >-
+      (a) Gaussian. (b) Gaussian, by de Moivre–Laplace. (c) Not Gaussian: the steps are not identically distributed, and the first carries three quarters of the variance; the position is uniform on $[-1, 1]$. (d) Not Gaussian: no finite variance; the mean of $n$ Cauchy draws is again a standard Cauchy draw. (e) Independence fails: Gaussian, but $\sqrt{19} = 4.4$ times wider than $\sqrt n$ assumes. (f) Not a sum: piled up just below $1$, with $1 - \max$ close to exponential of mean $1/1001$. (g) A product, not a sum: its logarithm is a sum and close to Gaussian, so the wealth is lopsided, with median $0.005$ of the stake, mean $131.5$, and $13.6\%$ of gamblers ahead.
+    solution:
+      - kind: law
+        text: >-
+          The central limit theorem: a sum of $n$ independent, identically distributed terms of finite variance, standardised by $n\mu$ and $\sigma\sqrt n$, approaches the standard Gaussian. Weaker versions allow non-identical terms under conditions (Lindeberg's) that, among other things, keep any one term from dominating, and correlations that die away; they are other theorems with their own conditions.
+      - kind: reasoning
+        text: >-
+          (a) The masses are independent draws from one harvest, with finite variance: the theorem applies. (b) A sum of $10^4$ independent Bernoulli terms: the theorem applies, and here it is de Moivre–Laplace. (c) The step variances are $4^{-k}$, summing to $\tfrac13$; the first alone is $\tfrac14$, three quarters of the total, so one term dominates however many follow, and no version of the theorem applies. The signs are the binary digits of a uniform number: $x = \sum_k b_k 2^{-k}$ with $b_k = \pm 1$ is $2U - 1$, $U$ uniform on $[0, 1]$. Simulated, $2 \times 10^5$ such walkers have variance $0.333$ and lie $0.002$ from the uniform distribution in Kolmogorov distance.
+      - kind: reasoning
+        text: >-
+          (d) Independent and identical, but with no variance: the sum of $n$ Cauchy draws is a Cauchy distribution $n$ times wider, so the mean is exactly as wide as one draw. Averaging does not narrow it, let alone make it Gaussian. (e) The steps are identical with $\sigma_1 = 1$ but correlated; the variance is $(1 + q)/(1 - q) = 19$ times $n$. The shape is still Gaussian, by a theorem for decaying correlations, but standardised by $\sqrt n$ it stays $\sqrt{19}$ too wide. (f) A maximum is not a sum. $P(\max \le x) = x^{1000}$, so $1 - \max$ is close to exponential with mean $1/1001$, a one-sided, skewed distribution.
+      - kind: reasoning
+        text: >-
+          (g) $W = \prod_i f_i$ is a product, but $\ln W = \sum_i \ln f_i$ is a sum of $100$ independent terms, each $\ln 1.5 = 0.405$ or $\ln 0.6 = -0.511$: mean $-0.0527$, standard deviation $0.458$. So $\ln W$ is close to Gaussian with mean $-5.27$ and spread $4.58$, and $W$ itself is lognormal: median $e^{-5.27} = 0.0052$, mean $(\tfrac{1.5 + 0.6}{2})^{100} = 1.05^{100} = 131.5$. Being ahead needs at least $56$ wins in $100$; the binomial gives $13.6\%$, and $2 \times 10^5$ simulated gamblers give $13.6\%$ too.
+      - kind: limit
+        text: >-
+          In (c), let the step sizes shrink more slowly, as $k^{-1/4}$ say, and the variance diverges with no single step dominating: the theorem for non-identical terms then applies again. In (g), as the two factors approach $1$, $\ln f \approx f - 1$ and the product becomes, to first order, a sum: lognormal and Gaussian merge.
+      - kind: result
+        text: >-
+          Gaussian: (a), (b). Not Gaussian: (c) one term dominates (uniform on $[-1, 1]$); (d) infinite variance (Cauchy, no narrowing); (e) independence fails (Gaussian, $\sqrt{19}$ times too wide); (f) not a sum (piled against $1$); (g) a product, whose logarithm is Gaussian.
+
+  - id: W-3.1-03
+    level: basic
+    objectives: [OBJ-3.1-1]
+    prompt: >-
+      A walk in two dimensions. A walker on a square lattice of spacing $1$ moves at each tick to one of its four neighbours, each with probability $\tfrac14$, independently of everything before.
+      (a) For one step $(\Delta x, \Delta y)$, find $\langle \Delta x \rangle$, $\langle \Delta x^2 \rangle$, $\langle \Delta y^2 \rangle$ and $\langle \Delta x\,\Delta y \rangle$. Are $\Delta x$ and $\Delta y$ independent?
+      (b) Show that $\langle r_t^2 \rangle = t$, where $r_t^2 = x_t^2 + y_t^2$, so that the RMS distance from the start is $\sqrt t$. Which independence does the derivation use, and which does it not need?
+      (c) What is the RMS distance after $10^4$ steps? How many steps for an RMS distance of $1000$? How far would a walker get in $10^4$ steps if he never turned?
+      (d) A second walker steps diagonally, $(\pm 1, \pm 1)$, the four choices equally likely. Find his RMS distance after $t$ steps, and state the law for any step of zero mean in terms of its length.
+    answer: >-
+      (a) $0$, $\tfrac12$, $\tfrac12$, $0$. Not independent: if $\Delta x \ne 0$ then $\Delta y = 0$, so $P(\Delta x = 1, \Delta y = 1) = 0$, not $\tfrac1{16}$; they are uncorrelated. (b) Each coordinate is a one-dimensional walk with independent steps of variance $\tfrac12$, so $\langle x_t^2 \rangle = \langle y_t^2 \rangle = t/2$. It uses independence between different ticks, not between $x$ and $y$ within one tick. (c) $100$; $10^6$ steps; $10^4$, a hundred times farther. (d) $\sqrt{2t}$; in general $\langle r_t^2 \rangle = t\,\langle \ell^2 \rangle$ and the RMS distance is $\ell\sqrt t$ for steps of fixed length $\ell$.
+    solution:
+      - kind: given
+        text: >-
+          Steps $(1, 0)$, $(-1, 0)$, $(0, 1)$, $(0, -1)$, each with probability $\tfrac14$, independent from tick to tick; $x_t$ and $y_t$ are the sums of the $\Delta x$ and $\Delta y$.
+      - kind: law
+        text: >-
+          Means add; variances add for independent terms. $r_t^2 = x_t^2 + y_t^2$, so $\langle r_t^2 \rangle$ is the sum of the two coordinates' mean squares, each of which is a one-dimensional walk.
+      - kind: manipulation
+        text: >-
+          (a) $\Delta x$ is $\pm 1$ with probability $\tfrac14$ each and $0$ with probability $\tfrac12$: $\langle \Delta x \rangle = 0$, $\langle \Delta x^2 \rangle = \tfrac12$; likewise for $\Delta y$. In every step one of the two is zero, so $\Delta x\,\Delta y = 0$ always and $\langle \Delta x\,\Delta y \rangle = 0$. (b) The $\Delta x$ of different ticks are independent, with mean $0$ and variance $\tfrac12$, so $\langle x_t^2 \rangle = t/2$, and the same for $y$. Adding, $\langle r_t^2 \rangle = t$. Nothing in this used the joint distribution of $\Delta x$ and $\Delta y$ within a tick, so their dependence costs nothing. (d) For the diagonal walker $\Delta x$ and $\Delta y$ are independent $\pm 1$: $\langle x_t^2 \rangle = \langle y_t^2 \rangle = t$ and $\langle r_t^2 \rangle = 2t$.
+      - kind: formula
+        text: >-
+          $\langle r_t^2 \rangle = t\,\langle \Delta x^2 + \Delta y^2 \rangle = t\,\langle \ell^2 \rangle \qquad r_\mathrm{rms} = \ell\sqrt t$
+      - kind: limit
+        text: >-
+          $t = 1$: $r_1 = 1$ exactly, and the formula gives $1$. In one dimension with $\pm 1$ steps it reduces to the lesson's $\sigma_1\sqrt t$. A walker who never turns covers $\ell t$; the walk covers $\ell\sqrt t$, a fraction $t^{-1/2}$ of it, as in the lesson.
+      - kind: units
+        text: >-
+          Distances in lattice spacings; $\langle r_t^2 \rangle = t\langle \ell^2 \rangle$ is a squared length on both sides, since $t$ is a count.
+      - kind: substitution
+        text: >-
+          (c) $\sqrt{10^4} = 100$; $1000^2 = 10^6$ steps; a straight walker covers $10^4$. Measured over $64$ seeds of $4000$ walkers at $t = 1000$: $\langle r_t^2 \rangle/t = 0.998 \pm 0.002$ and $\langle x_ty_t \rangle/t = 0.001 \pm 0.001$; at $t = 10^4$ the RMS distance is $99.9 \pm 0.2$ ($8$ seeds). (d) $\sqrt{2 \times 10^4} = 141.4$ after $10^4$ steps; measured $141.7 \pm 0.4$.
+      - kind: result
+        text: >-
+          (a) Uncorrelated but not independent components. (b) $\langle r_t^2 \rangle = t$, from independence between ticks alone. (c) $100$ after $10^4$ steps; $10^6$ steps to reach $1000$; a straight walker would be at $10^4$. (d) $\sqrt{2t}$: the RMS distance is the step length times $\sqrt t$, in any dimension.
+
+  - id: W-3.1-04
+    level: mid
+    objectives: [OBJ-3.1-5, OBJ-3.1-4]
+    prompt: >-
+      Polling and the factor $1.96$. A poll asks $N = 1000$ randomly chosen voters a yes-or-no question, and $520$ say yes. Treat each answer as an independent draw, yes with probability $p$, the true fraction in a large population.
+      (a) Code an answer as $1$ for yes and $0$ for no. What is the standard deviation of a single answer? What is the standard error of the poll's fraction $\hat p = k/N$? Use $p \approx 0.52$.
+      (b) Pollsters quote a "margin of error at $95\%$". Using the de Moivre–Laplace approximation, find the $z$ for which a standard Gaussian has $P(|Z| \le z) = 0.95$, and the margin. For $p = \tfrac12$ the exact binomial gives $P(|k - 500| \le 31) = 0.954$ and $P(|k - 500| \le 30) = 0.946$; does that support it?
+      (c) A newspaper writes: "a poll of $1000$ has a margin near $3\%$, because $1/\sqrt{1000} \approx 0.032$." The number is about right. Is the reason?
+      (d) The poll shows $52\%$ against $48\%$. Is the lead established at $95\%$? (The lead is $2\hat p - 1$.)
+      (e) How many voters would give a margin of one percentage point? Does it matter whether the country has $9$ million voters or $300$ million?
+    answer: >-
+      (a) $\sqrt{p(1 - p)} = 0.50$, which no number of voters changes; the standard error is $0.0158$. (b) $z = 1.96$; the margin is $\pm 0.031$, so $0.489$ to $0.551$. Yes: $31$ voters is $1.96$ standard deviations of $k$, and the exact probability within it is $0.954$. (c) No: the standard error is $0.016$, half that; the $95\%$ margin is $1.96 \times 0.5/\sqrt N$, and $1.96 \times 0.5 \approx 1$ by coincidence. At $p = 0.1$ the margin would be $0.019$. (d) No: the lead, $0.04$, has a standard error of $0.032$, and is $1.27$ of them, short of $1.96$. (e) $9604$ voters; the size of the country does not enter, as long as the sample is a small part of it.
+    solution:
+      - kind: given
+        text: >-
+          $N = 1000$, $k = 520$, $\hat p = 0.52$. Each answer $a_i$ is $1$ with probability $p$ and $0$ otherwise, independently.
+      - kind: law
+        text: >-
+          A single $0$-or-$1$ answer has mean $p$ and variance $p(1 - p)$ (example 2). The mean of $N$ independent draws of standard deviation $\sigma$ has standard error $\sigma/\sqrt N$. By de Moivre–Laplace, $k$ is close to a Gaussian of mean $Np$ and variance $Np(1 - p)$, so $\hat p$ is close to a Gaussian of mean $p$ and standard deviation $\sqrt{p(1 - p)/N}$.
+      - kind: formula
+        text: >-
+          $\sigma_{\hat p} = \sqrt{\dfrac{p(1 - p)}{N}} \qquad \hat p \pm 1.96\,\sigma_{\hat p} \qquad \sigma_{2\hat p - 1} = 2\sigma_{\hat p} \qquad N = \dfrac{1.96^2\,p(1 - p)}{m^2}$
+      - kind: substitution
+        text: >-
+          (a) $\sqrt{0.52 \times 0.48} = 0.4996$; $\sigma_{\hat p} = 0.4996/\sqrt{1000} = 0.0158$. (b) $\Phi(1.96) - \Phi(-1.96) = 0.950$, so $z = 1.960$ and the margin is $1.96 \times 0.0158 = 0.031$. For $p = \tfrac12$, $\sigma_k = \sqrt{250} = 15.8$ and $1.96\sigma_k = 31.0$. In $8$ runs of $20\,000$ simulated polls with $p = 0.52$, the interval $\hat p \pm 1.96\sqrt{\hat p(1 - \hat p)/N}$ contained the true $p$ in $94.6\% \pm 0.1\%$ of them, the exact binomial value $94.65\%$: a shade under $95\%$, because $k$ is an integer. (d) $\sigma_{2\hat p - 1} = 0.0316$; $0.04/0.0316 = 1.27$. If the population were split exactly evenly, a poll of $1000$ would show $52\%$ or more for one side or the other with probability $0.217$ (exact binomial). (e) With the worst case $p(1 - p) = \tfrac14$ and $m = 0.01$: $N = 3.8416 \times 0.25/10^{-4} = 9604$.
+      - kind: reasoning
+        text: >-
+          (c) Two different quantities hide in the newspaper's sentence. The standard deviation of one answer, $0.50$, describes voters, and stays $0.50$ however many are asked. The standard error, $0.50/\sqrt{1000} = 0.016$, describes the poll, and falls as $N^{-1/2}$. The quoted $3\%$ is the $95\%$ margin, $1.96 \times 0.016$, and agrees with $1/\sqrt{1000}$ only because $1.96 \times \sqrt{p(1 - p)} \approx 1$ near $p = \tfrac12$. (e) Nothing in $\sqrt{p(1 - p)/N}$ refers to the population size: each answer is a draw with probability $p$, whether the country is large or small, as long as removing the sampled voters does not change $p$ noticeably.
+      - kind: limit
+        text: >-
+          $p \to 0$ or $1$: everyone answers alike and the standard error goes to zero, and the rule of thumb $1/\sqrt N$ overstates the margin badly. $N \to \infty$: the margin goes to zero as $N^{-1/2}$, while the spread of one answer stays $\sqrt{p(1 - p)}$. Far in the tails, beyond a few standard errors, the Gaussian is no longer trustworthy (example 3), which is why margins are quoted at $95\%$ and not at $99.9999\%$.
+      - kind: result
+        text: >-
+          (a) One answer scatters by $0.50$; the poll's fraction by $0.016$. (b) The $95\%$ margin is $1.96 \times 0.016 = \pm 3.1$ points. (c) The $3\%$ is right; $1/\sqrt{1000}$ is not the reason, only a coincidence at $p$ near $\tfrac12$. (d) A $4$-point lead is $1.27$ standard errors: not established. (e) $9604$ voters for $\pm 1$ point, whatever the size of the country.
+
+  - id: W-3.1-05
+    level: mid
+    objectives: [OBJ-3.1-1, OBJ-3.1-4]
+    prompt: >-
+      The house edge. A European roulette wheel has $37$ pockets, $18$ of them red. A gambler bets one chip on red at every spin: he wins one chip with probability $18/37$ and loses one otherwise. His net gain after $t$ spins is a biased random walk.
+      (a) Find $\mu_1$ and $\sigma_1$.
+      (b) Give his mean gain and its spread after $t = 100$ and $t = 10^4$ spins. Which of the two dominates at each, and after how many spins are they equal?
+      (c) Estimate the probability that he is ahead, $x_t > 0$, after $t = 100$, $1000$ and $10^4$ spins, using the Gaussian. Mind that $x_t$ moves in steps of $2$, and that $x_t = 0$ is not ahead. Compare with the exact binomial values, $0.35535$, $0.18763$ and $0.003331$.
+      (d) A casino takes $10^6$ such bets a night. What are its mean take, its spread and its relative spread? How many standard deviations from the mean is a losing night?
+    answer: >-
+      (a) $\mu_1 = -1/37 = -0.0270$, $\sigma_1 = 0.9996$. (b) $t = 100$: mean $-2.7$, spread $10.0$, luck dominates. $t = 10^4$: mean $-270$, spread $100$, the edge dominates. Equal at $t = \sigma_1^2/\mu_1^2 = 1368$ spins. (c) $0.3555$, $0.1876$, $0.00333$, matching the exact values; without the correction, $0.393$ at $t = 100$. (d) $27\,027$ chips, spread $1000$, relative spread $3.7\%$; a losing night is $27$ standard deviations away, with probability near $10^{-160}$.
+    solution:
+      - kind: given
+        text: >-
+          $p = 18/37$ for $s = +1$, $1 - p = 19/37$ for $s = -1$; independent spins; $x_t = s_1 + \cdots + s_t$.
+      - kind: law
+        text: >-
+          For independent steps, $\langle x_t \rangle = \mu_1 t$ and $\sigma_{x_t} = \sigma_1\sqrt t$; the number of wins is binomial, and by de Moivre–Laplace $x_t$ is close to a Gaussian of that mean and spread. Its values are spaced by $2$, so a probability of the form $P(x_t \ge x_0)$ is read off the Gaussian at the midpoint between allowed values.
+      - kind: formula
+        text: >-
+          $\mu_1 = 2p - 1 \qquad \sigma_1^2 = 1 - \mu_1^2 \qquad P(x_t > 0) \approx 1 - \Phi\!\left(\dfrac{1 - \mu_1 t}{\sigma_1\sqrt t}\right) \qquad t_\times = \dfrac{\sigma_1^2}{\mu_1^2}$
+      - kind: substitution
+        text: >-
+          (a) $\mu_1 = 36/37 - 1 = -0.02703$, $\sigma_1^2 = 1 - 1/1369 = 0.99927$, $\sigma_1 = 0.99963$. (b) $t = 100$: $-2.70$ and $10.00$; $t = 10^4$: $-270.3$ and $99.96$; $t_\times = 0.99927 \times 1369 = 1368$. (c) For even $t$, $x_t$ is even; ahead means $x_t \ge 2$, and the midpoint is $1$. $t = 100$: $z = (1 + 2.703)/9.996 = 0.370$, $P = 0.3555$. $t = 1000$: $z = (1 + 27.03)/31.61 = 0.887$, $P = 0.1876$. $t = 10^4$: $z = (1 + 270.3)/99.96 = 2.714$, $P = 0.00333$. The naive $\Phi(\mu_1\sqrt t/\sigma_1)$ gives $0.393$ at $t = 100$, too high by about half of $P(x_{100} = 0) = 0.077$, the ties it counts as wins. Simulated, $8$ seeds of $20\,000$ gamblers are ahead after $1000$ spins with frequency $0.1870 \pm 0.0009$. (d) Mean take $10^6/37 = 27\,027$; spread $0.99963 \times 1000 = 999.6$; relative spread $999.6/27\,027 = 3.7\%$; a loss needs a deviation of $27\,027/999.6 = 27.0$ standard deviations.
+      - kind: reasoning
+        text: >-
+          (b) The edge grows as $t$, the luck as $\sqrt t$. Over an evening of a hundred spins the gambler's result is mostly luck, and a third of gamblers go home ahead; over a lifetime of $10^4$ spins, three in a thousand. (d) The casino is the same walk seen from the other side, with a very large $t$: its relative spread is $(\sigma_1/|\mu_1|)\,t^{-1/2}$, and at $10^6$ bets that is $3.7\%$. At $27$ standard deviations the exact binomial gives $10^{-160.5}$ and the Gaussian $10^{-160.6}$. The Gaussian survives even here because the deviation is small as a fraction of the bets: breaking even needs a win fraction of $0.500$ instead of $0.486$, a shift of $0.014$, whereas example 3's $90$ heads in $100$ was a shift of $0.4$.
+      - kind: limit
+        text: >-
+          A fair wheel, $p = \tfrac12$: $\mu_1 = 0$, $t_\times \to \infty$, and $P(x_t > 0) = \tfrac12(1 - P(x_t = 0))$ exactly, by symmetry, which approaches $\tfrac12$ for long sessions. A wheel with no red, $p = 0$: $\sigma_1 = 0$ and the gambler loses one chip per spin with certainty.
+      - kind: result
+        text: >-
+          (a) $\mu_1 = -0.027$, $\sigma_1 = 0.9996$. (b) Luck dominates for $t \ll 1368$ spins and the edge beyond. (c) Ahead with probability $0.36$, $0.19$ and $0.003$ after $100$, $1000$ and $10^4$ spins, Gaussian and exact agreeing to the digits shown. (d) The casino's take, $27\,027 \pm 1000$ chips a night, is $3.7\%$ uncertain, and a losing night is $27$ standard deviations away.
+
+  - id: W-3.1-06
+    level: mid
+    objectives: [OBJ-3.1-2, OBJ-3.1-4]
+    prompt: >-
+      A lopsided binomial. A fair die is rolled $n = 60$ times, and $k$ is the number of sixes.
+      (a) Explain why $k$ is binomial, and find its mean, variance and standard deviation.
+      (b) Compute the exact $P(k = 10)$, $P(k = 5)$ and $P(k = 15)$, and their de Moivre–Laplace approximations.
+      (c) The exact tails are $P(k \le 5) = 0.0512$ and $P(k \ge 15) = 0.0648$. What does the Gaussian give for each? Which way does the binomial lean, and why must it?
+      (d) For $p \ne \tfrac12$ the binomial's skewness, $\langle (k - np)^3 \rangle/\sigma_k^3$, is $(1 - 2p)/\sqrt{np(1 - p)}$. Evaluate it at $n = 60$, $600$ and $6000$. The exact ratio of the right tail to the left, each about $1.7$ standard deviations out, is $1.265$, $1.102$ and $1.032$. How fast does the lean fade, and what does that say about de Moivre–Laplace for a die compared with a fair coin?
+    answer: >-
+      (a) $60$ independent trials, each a six with probability $\tfrac16$: mean $10$, variance $8.33$, standard deviation $2.89$. (b) Exact $0.1370$, $0.0310$, $0.0309$; Gaussian $0.1382$, $0.0308$, $0.0308$. (c) $0.0595$ each; the right tail is $27\%$ heavier than the left. The binomial leans right: $k$ cannot go below $0$, $3.5$ standard deviations under the mean, but can reach $60$, $17$ above. (d) $0.231$, $0.073$, $0.023$; the excess ratios $0.265$, $0.102$, $0.032$ fall by about $\sqrt{10}$ for each tenfold $n$, as $n^{-1/2}$. For the die the approximation's leading error is this lean, of order $n^{-1/2}$; for a fair coin it is absent, and the error is of order $1/n$.
+    solution:
+      - kind: given
+        text: >-
+          $n = 60$, $p = \tfrac16$, $q = \tfrac56$; each roll independent.
+      - kind: law
+        text: >-
+          $k$ counts successes in $n$ independent trials of equal probability $p$: the binomial, with $\langle k \rangle = np$ and $\operatorname{Var}(k) = npq$. De Moivre–Laplace: $P(k) \approx e^{-(k - np)^2/(2npq)}/\sqrt{2\pi npq}$ near the peak; for a tail, the Gaussian integrated from the half-integer.
+      - kind: formula
+        text: >-
+          $P(k) = \dbinom{60}{k}\left(\tfrac16\right)^k\left(\tfrac56\right)^{60 - k} \qquad P(k) \approx \dfrac{1}{\sqrt{2\pi \cdot 8.33}}\,e^{-(k - 10)^2/16.67} \qquad \gamma_1 = \dfrac{1 - 2p}{\sqrt{npq}}$
+      - kind: substitution
+        text: >-
+          (a) $np = 10$, $npq = 50/6 = 8.333$, $\sigma_k = 2.887$. (b) Exact: $P(10) = 0.13701$, $P(5) = 0.03102$, $P(15) = 0.03093$. Gaussian: $1/\sqrt{2\pi \times 8.333} = 0.13820$ at the peak, $+0.9\%$; at $k = 5$ and $15$, both $0.13820\,e^{-1.5} = 0.03084$, $-0.6\%$ and $-0.3\%$. (c) $P(k \le 5) \approx \Phi(-4.5/2.887) = \Phi(-1.559) = 0.0595$, and the same for $P(k \ge 15)$. (d) $\gamma_1 = (2/3)/2.887 = 0.231$; at $n = 600$, $(2/3)/9.129 = 0.073$; at $6000$, $(2/3)/28.87 = 0.023$.
+      - kind: reasoning
+        text: >-
+          (b) Five away from the mean on either side, the single probabilities are nearly equal and the Gaussian is good to a percent; the lean shows further out and in the sums. Two further out, at $k = 4$ and $16$, the exact values are $0.0139$ and $0.0174$, and the Gaussian's $0.0159$ is $15\%$ high on one side and $8\%$ low on the other. (c) The Gaussian is symmetric about $10$ and cannot tell left from right. The binomial is bounded by $0$ on the left, only $3.5\sigma_k$ away, and by $60$ on the right, $17\sigma_k$ away; with the mean fixed at $10$, the probability squeezed out on the left must sit in a longer right tail. (d) The excess of the ratio over $1$ tracks the skewness and falls by $2.6$ and $3.2$ for the two tenfold steps, approaching $\sqrt{10} = 3.16$. The lesson's statement about $p \ne \tfrac12$, that the cubic term of the expansion survives and the relative error falls only as $n^{-1/2}$, is this skewness.
+      - kind: limit
+        text: >-
+          $p = \tfrac12$: $\gamma_1 = 0$, the binomial is symmetric, and the Gaussian's leading error is of order $1/n$. $p \to 0$ at fixed $n$: $\gamma_1 \to 1/\sqrt{np}$, large, and the Gaussian fails entirely; that is the regime where $np$ stays small and the count is better described by other distributions. At fixed $p$, $n \to \infty$ sends $\gamma_1 \to 0$, and de Moivre–Laplace becomes exact near the peak.
+      - kind: result
+        text: >-
+          (a) $10 \pm 2.89$ sixes. (b) $0.1370$, $0.0310$, $0.0309$ exact against $0.1382$, $0.0308$, $0.0308$. (c) Gaussian $0.0595$ for both tails, exact $0.0512$ and $0.0648$: the count leans right because it is bounded at $0$. (d) Skewness $0.23$, $0.073$, $0.023$; the lean fades as $n^{-1/2}$, while for a fair coin the leading error is of order $1/n$.
+
+  - id: W-3.1-07
+    level: mid
+    qualitative: true
+    objectives: [OBJ-3.1-6, OBJ-3.1-5]
+    prompt: >-
+      Claims about a cloud. A cloud of $N = 10^4$ fair $\pm 1$ walkers is run to $t = 1000$. Say whether each claim is right, and correct the wrong ones with a number.
+      (a) "With $10^6$ walkers instead, the cloud would be narrower."
+      (b) "The bar of the histogram from $x = 0$ to just under $10$ holds $12.5\%$ of the walkers in every run, and the bar from $60$ to just under $70$ is just as reproducible."
+      (c) "The cloud's spread, $31.6$, comes back to three significant figures from run to run."
+      (d) "The ensemble's mean stays at zero because walkers who stray far are pulled back."
+      (e) "Instead of $10^4$ walkers, I can follow one walker for $10^7$ steps and histogram the positions he visits; that gives the same profile."
+    answer: >-
+      (a) Wrong: the spread is $\sigma_1\sqrt t = 31.6$ for any $N$; more walkers only pin it down better, to about $1/\sqrt{2N}$: $0.7\%$, then $0.07\%$. (b) Half right: the first bar holds $f = 0.125$ and scatters by $0.0033$, $2.7\%$ of itself; the second holds $0.0165$ and scatters by $0.0013$, $7.7\%$: the tails are less reproducible. (c) Wrong: two figures; $31.6 \pm 0.24$. Bringing the scatter down to $0.05$ takes $2 \times 10^5$ walkers. (d) Wrong: every walker's expected next displacement is zero wherever he is; nothing pulls. (e) Wrong: one walker's positions over time are not draws from the distribution at $t = 1000$; eight such walkers gave histograms centred anywhere from $-1100$ to $+2100$, with widths from $470$ to $1830$.
+    solution:
+      - kind: law
+        text: >-
+          The cloud's profile is the distribution of one walker's position at time $t$, sampled $N$ times independently. Its width is a property of that distribution, $\sigma_1\sqrt t$; how well a finite cloud reproduces it is a matter of standard errors. A bar holding a fraction $f$ of the distribution is the mean of $N$ independent yes-or-no draws, so it scatters by $\sqrt{f(1 - f)/N}$. The sample standard deviation of $N$ Gaussian draws scatters by about $\sigma/\sqrt{2N}$.
+      - kind: reasoning
+        text: >-
+          (a) The spread is set by the step and by $t$, not by how many walkers are counted. With $10^4$ walkers it is known to $1/\sqrt{2 \times 10^4} = 0.71\%$; with $10^6$, to $0.071\%$. Over $64$ seeds of $10^4$ walkers the measured spread was $31.66$ with a scatter of $0.76\%$; over $8$ seeds of $10^6$, $31.627$ with a scatter of $0.08\%$. (d) The model refers to the origin nowhere: each step is independent of position. The mean stays at zero because it is the average of displacements each of mean zero; walkers at $+30$ stay at $+30$ on average (the lesson measured it).
+      - kind: substitution
+        text: >-
+          (b) At $t = 1000$ the walkers sit on even sites; the first bar holds the sites $0$ to $8$, and the exact binomial gives $f = 0.1246$, with scatter $\sqrt{0.1246 \times 0.8754/10^4} = 0.0033$. The bar from $60$ to $68$ holds $f = 0.0165$, with scatter $\sqrt{0.0165 \times 0.9835/10^4} = 0.0013$. Over $16$ seeds: $0.1250$ with scatter $0.0029$, and $0.0162$ with scatter $0.0012$. (c) $31.6 \times 0.0071 = 0.22$, measured $0.24$. To reach $0.05$, $N = 1/\big(2 \times (0.05/31.6)^2\big) = 2.0 \times 10^5$.
+      - kind: reasoning
+        text: >-
+          (e) The ensemble at $t = 1000$ is $10^4$ independent copies of one random variable, $x_{1000}$. One walker's positions at $t = 1, 2, \dots, 10^7$ are something else: draws at all times, from distributions that keep widening, and each strongly correlated with the last. Run eight walkers for $10^7$ steps each: their visited positions are centred at $-1122$, $-221$, $448$, $1147$, $1616$, $1618$, $1667$ and $2093$, with spreads from $468$ to $1827$. That histogram is not reproducible at all, because it depends on where this one walker happened to wander. Replacing an ensemble average by a time average needs a stationary process with a short memory, and the free walk is neither.
+      - kind: limit
+        text: >-
+          $N \to \infty$: the histogram becomes the binomial exactly, with no scatter at all, while each walker stays as unpredictable as before. $N = 1$: the "histogram" is one spike, and its spread is meaningless. The bars far in the tails, where $f \ll 1$, have relative scatter $1/\sqrt{fN}$: the rarer the event, the more walkers it takes to see its frequency.
+      - kind: result
+        text: >-
+          (a) The width does not depend on $N$; its uncertainty does, as $N^{-1/2}$. (b) Central bars are reproducible to a few percent, tail bars less so: relative scatter $\sqrt{(1 - f)/(fN)}$. (c) Two figures at $N = 10^4$; three need about $2 \times 10^5$ walkers. (d) No restoring force: the mean is an average of zero-mean displacements. (e) A time history of one free walker is not an ensemble.
+
+  - id: W-3.1-08
+    level: bagrut
+    objectives: [OBJ-3.1-1, OBJ-3.1-6]
+    prompt: >-
+      Ink in water. Model a dye molecule in still water as a random walk: every time $\tau$ it moves by $\pm\ell$ along each of $x$, $y$ and $z$, the three signs independent and each equally likely to be $+$ or $-$.
+      (a) Show that $\langle x^2 \rangle = 2Dt$ with $D = \ell^2/(2\tau)$, and that $\langle r^2 \rangle = 6Dt$. $D$ is the diffusion coefficient.
+      (b) A small dye molecule such as fluorescein has $D \approx 4 \times 10^{-10}\,\text{m}^2/\text{s}$ in water at room temperature. How long does it take to spread an RMS distance of $1\,\text{mm}$, $1\,\text{cm}$ and $1\,\text{m}$ along one axis?
+      (c) Einstein's relation, in the form Stokes and Einstein gave it for a sphere of radius $a$ in a liquid of viscosity $\eta$, is $D = k_BT/(6\pi\eta a)$. With $\eta = 0.890\,\text{mPa}\,\text{s}$ and $T = 298\,\text{K}$, what radius does the measured $D$ imply? Is it plausible for a molecule of molar mass $332\,\text{g/mol}$?
+      (d) A drop of ink in a glass of water visibly spreads across a centimetre within minutes. What does (b) say about that? Compare with a gentle current of $1\,\text{mm/s}$.
+      (e) Nothing pushes the dye from where it is concentrated to where it is not. Show that a net flow appears anyway: take two neighbouring slabs of thickness $\ell$, holding $N_1$ and $N_2$ molecules per unit area, and count the molecules that cross the plane between them in one time $\tau$. Derive $J = -D\,\mathrm{d}n/\mathrm{d}x$ for the net flow per unit area and time, with $n$ the number density.
+      (f) The molecule's thermal velocity along $x$ is $\sqrt{k_BT/m} = 86\,\text{m/s}$. If each step were a free flight at that speed, how long would $\ell$ be? What does that say about what a "step" is?
+    answer: >-
+      (a) Each axis is an independent $\pm\ell$ walk of $t/\tau$ steps: $\langle x^2 \rangle = \ell^2t/\tau = 2Dt$; three axes give $6Dt$. (b) $L^2/(2D)$: $1250\,\text{s}$, $21$ minutes; $1.25 \times 10^5\,\text{s}$, a day and a half; $1.25 \times 10^9\,\text{s}$, $40$ years. (c) $a = 0.61\,\text{nm}$: about the size of a molecule of that mass. (d) The spreading in a glass is not diffusion but flow: at $1\,\text{mm/s}$ a centimetre takes $10\,\text{s}$, against $1.4$ days by diffusion. (e) In time $\tau$ half of each slab's molecules cross the plane, so the net flow is $(N_1 - N_2)/(2\tau) = -(\ell^2/2\tau)\,\mathrm{d}n/\mathrm{d}x$. (f) $\ell = 2D/v = 9\,\text{pm}$, a hundredth of the molecule's size: the steps are not flights; the molecule's velocity is forgotten within about $5 \times 10^{-14}\,\text{s}$, and the walk describes it only on longer scales.
+    solution:
+      - kind: given
+        text: >-
+          Steps of $\pm\ell$ on each axis every $\tau$, independent; $D = 4 \times 10^{-10}\,\text{m}^2/\text{s}$; $\eta = 0.890 \times 10^{-3}\,\text{Pa}\,\text{s}$, $T = 298.15\,\text{K}$, $k_BT = 4.116 \times 10^{-21}\,\text{J}$; $m = 0.33231\,\text{kg/mol}/N_A = 5.52 \times 10^{-25}\,\text{kg}$.
+      - kind: law
+        text: >-
+          A random walk of $n$ independent steps of zero mean and variance $\sigma_1^2$ has $\langle x_n^2 \rangle = n\sigma_1^2$. After a time $t$ the number of steps is $t/\tau$. The three axes are independent walks, and $r^2 = x^2 + y^2 + z^2$.
+      - kind: manipulation
+        text: >-
+          (a) $\sigma_1^2 = \ell^2$ on each axis, so $\langle x^2 \rangle = (t/\tau)\ell^2 = 2\,\dfrac{\ell^2}{2\tau}\,t = 2Dt$, and $\langle r^2 \rangle = 3 \times 2Dt$. (e) Each molecule in the left slab steps right with probability $\tfrac12$ and crosses the plane; each in the right slab steps left with probability $\tfrac12$. The net number crossing to the right per unit area in time $\tau$ is $\tfrac12(N_1 - N_2)$. With $N_1 = n(x)\ell$ and $N_2 = n(x + \ell)\ell \approx \big(n(x) + \ell\,\mathrm{d}n/\mathrm{d}x\big)\ell$, the net flow is $J = -\dfrac{\ell^2}{2\tau}\dfrac{\mathrm{d}n}{\mathrm{d}x}$. (f) A free flight of duration $\tau$ at speed $v$ has $\ell = v\tau$; then $D = \ell^2/(2\tau) = v\ell/2$, so $\ell = 2D/v$.
+      - kind: formula
+        text: >-
+          $\langle x^2 \rangle = 2Dt \qquad D = \dfrac{\ell^2}{2\tau} \qquad t_L = \dfrac{L^2}{2D} \qquad a = \dfrac{k_BT}{6\pi\eta D} \qquad J = -D\,\dfrac{\mathrm{d}n}{\mathrm{d}x}$
+      - kind: limit
+        text: >-
+          Uniform concentration: $\mathrm{d}n/\mathrm{d}x = 0$ and $J = 0$, although every molecule keeps moving; equal numbers cross each way. $t_L \propto L^2$: a hundred times farther takes ten thousand times longer, the $\sqrt t$ law read backwards. In (c), a larger particle or a more viscous liquid diffuses more slowly, and a hotter one faster, as $D \propto T/(\eta a)$. And as $\ell$ and $\tau$ shrink together with $\ell^2/(2\tau)$ fixed, the walk becomes the continuous diffusion of module 18.
+      - kind: units
+        text: >-
+          $D = \ell^2/\tau$ in $\text{m}^2/\text{s}$; $L^2/D$ in $\text{s}$. $k_BT/(\eta D)$: $\text{J}/(\text{Pa}\,\text{s} \cdot \text{m}^2/\text{s}) = \text{J}/(\text{N}) = \text{m}$. $J$: $\text{m}^2/\text{s} \times \text{m}^{-3}/\text{m}$, molecules per square metre per second.
+      - kind: substitution
+        text: >-
+          (b) $2D = 8 \times 10^{-10}\,\text{m}^2/\text{s}$: $(10^{-3})^2/(8 \times 10^{-10}) = 1250\,\text{s}$; $(10^{-2})^2/(8 \times 10^{-10}) = 1.25 \times 10^5\,\text{s} = 1.45$ days; $1/(8 \times 10^{-10}) = 1.25 \times 10^9\,\text{s} = 39.6$ years. (c) $a = 4.116 \times 10^{-21}/(6\pi \times 0.890 \times 10^{-3} \times 4 \times 10^{-10}) = 6.1 \times 10^{-10}\,\text{m}$. (d) $10^{-2}/10^{-3} = 10\,\text{s}$; the ratio of the two times, $vL/(2D) = 1.25 \times 10^4$, says that over a centimetre the slightest current wins. (f) $\ell = 8 \times 10^{-10}/86.4 = 9.3 \times 10^{-12}\,\text{m}$.
+      - kind: reasoning
+        text: >-
+          (c) A molecule of $332\,\text{g/mol}$ with a liquid's density, about $10^3\,\text{kg/m}^3$, occupies about $5.5 \times 10^{-28}\,\text{m}^3$, a sphere of radius $0.5\,\text{nm}$: the Stokes radius is the right size, which is as much as a continuum formula applied to one molecule can promise. (e) The flow comes from counting, not from a force: each molecule is as likely to step left as right wherever it is, and more molecules on one side means more crossings from that side. This is the lesson's ensemble without a restoring force, read as a flux. (f) Nine picometres is a hundredth of the molecule's own size. Its velocity is randomised by collisions with water within $\tau_c = D/v^2 = 5.4 \times 10^{-14}\,\text{s}$, which equals $m/(6\pi\eta a)$, the time friction takes to stop it. The walk with steps $\ell$ and $\tau$ is a description on scales much longer than that, where only $D$ survives: the central limit theorem at work on the many tiny displacements that make up one observable step.
+      - kind: result
+        text: >-
+          (a) $\langle x^2 \rangle = 2Dt$, $\langle r^2 \rangle = 6Dt$, $D = \ell^2/(2\tau)$. (b) $21$ minutes for a millimetre, $1.4$ days for a centimetre, $40$ years for a metre. (c) A Stokes radius of $0.61\,\text{nm}$, molecular size. (d) Ink that spreads in minutes is carried by currents, which cross a centimetre in seconds. (e) $J = -D\,\mathrm{d}n/\mathrm{d}x$ from counting crossings, with no force. (f) $\ell = 9\,\text{pm}$: the steps are a coarse-grained description, not flights.
+
+  - id: W-3.1-09
+    level: bagrut
+    objectives: [OBJ-3.1-6, OBJ-3.1-1, OBJ-3.1-2]
+    prompt: >-
+      ThermoLab's problem 5, taken further than example 5: how often does a walker come home? A fair $\pm 1$ walker starts at the origin. Let $u_t = P(x_t = 0) = \binom{t}{t/2}2^{-t}$ for even $t$; example 5 found $u_t \approx \sqrt{2/(\pi t)}$.
+      (a) The expected number of visits home in the first $T$ steps is $V(T) = u_2 + u_4 + \cdots + u_T$. Show that $V(T) \approx \sqrt{2T/\pi}$ for large $T$, and evaluate it at $T = 100$ and $10^4$. (Exactly, $V(T) = (T + 1)u_T - 1$.)
+      (b) Suppose a walker who has left home comes back with probability $R$. A walker who has just come home starts afresh, his later steps independent of everything before. Show that the number of returns then has mean $R/(1 - R)$. What does (a) say about $R$?
+      (c) A theorem states that the probability of not having come home during the first $2m$ steps is $u_{2m}$. Check it by listing the paths for $2m = 2$ and $2m = 4$. What fraction of walkers is still away from home after $1000$ steps? After $10^6$?
+      (d) Every walker comes home, yet the mean time until he does is infinite. Explain, using (c).
+      (e) Test "starts afresh". Run $2 \times 10^4$ walkers for $1000$ steps and keep those standing at home at $t = 500$. Predict the spread of their displacement $x_{1000} - x_{500}$, and the fraction of them home again at $t = 502$.
+    answer: >-
+      (a) $V(T) \approx \tfrac12\int_0^T\sqrt{2/(\pi t)}\,\mathrm{d}t = \sqrt{2T/\pi}$; exactly $7.04$ at $T = 100$ and $78.8$ at $10^4$, against $7.98$ and $79.8$. It grows without bound. (b) the number of returns $J$ has $P(J = j) = R^j(1 - R)$, with mean $R/(1 - R)$; that is finite unless $R = 1$, so $R = 1$: every walker comes home. (c) $2$ of $4$ paths and $6$ of $16$ never return, $u_2 = \tfrac12$ and $u_4 = \tfrac38$. Still away: $u_{1000} = 0.0252$; $u_{10^6} = 8.0 \times 10^{-4}$. (d) The mean waiting time is the sum over $t$ of the probability of still being away at $t$, whose terms fall only as $t^{-1/2}$: it diverges. (e) $\sqrt{500} = 22.4$, and $\tfrac12$; measured $22.3 \pm 0.2$ and $0.500 \pm 0.006$.
+    solution:
+      - kind: given
+        text: >-
+          A fair $\pm 1$ walk from $x_0 = 0$; returns are possible only at even $t$; $u_t = \binom{t}{t/2}2^{-t} \approx \sqrt{2/(\pi t)}$, with relative error near $1/(4t)$.
+      - kind: law
+        text: >-
+          The expected number of visits is the sum of the probabilities of being home at each time, since a count is a sum of indicators and means always add. The model's steps are independent of the past, so from any time at which the walker stands at home the future is a fresh walk from the origin.
+      - kind: manipulation
+        text: >-
+          (a) With $t = 2j$, $V(T) = \sum_{j=1}^{T/2}\sqrt{1/(\pi j)} \approx \int_0^{T/2}\dfrac{\mathrm{d}j}{\sqrt{\pi j}} = 2\sqrt{\dfrac{T}{2\pi}} = \sqrt{\dfrac{2T}{\pi}}$. (b) Each return is a fresh start, so the chance of a further return is $R$ again, independently: the probability of at least $j$ returns is $R^j$, and the mean number of returns is $\sum_{j \ge 1}R^j = R/(1 - R)$. That mean is $V(\infty)$, which (a) shows is infinite; $R/(1 - R) = \infty$ only for $R = 1$. (c) $2m = 2$: of $++$, $+-$, $-+$, $--$, only $++$ and $--$ avoid $0$ at $t = 2$: $\tfrac24$. $2m = 4$: paths starting $++$ stand at $2$ and avoid $0$ at $t = 4$ unless they go $--$, three of four; likewise from $--$: $6$ of $16$. (d) The waiting time $T_\mathrm{r}$ is even, and $\langle T_\mathrm{r} \rangle = \sum_{t \ge 0}P(T_\mathrm{r} > t) = 2\sum_{m \ge 0}P(T_\mathrm{r} > 2m) = 2\sum_m u_{2m}$, which diverges with $V$.
+      - kind: formula
+        text: >-
+          $V(T) = \sum_{j=1}^{T/2} u_{2j} \approx \sqrt{\dfrac{2T}{\pi}} \qquad \langle J \rangle = \dfrac{R}{1 - R} \qquad P(T_\mathrm{r} > 2m) = u_{2m} \approx \dfrac{1}{\sqrt{\pi m}}$
+      - kind: limit
+        text: >-
+          Small $T$: $V(2) = u_2 = \tfrac12$, while $\sqrt{4/\pi} = 1.13$; the integral overcounts the first terms, and $V(T)$ trails $\sqrt{2T/\pi}$ by about $1$ at every large $T$. In three dimensions the probability of being home falls as $t^{-3/2}$, the sum of visits converges, $R < 1$ (about $0.34$, a result of Pólya's), and a walker may never come back. The square root in one dimension is exactly what makes the sum diverge.
+      - kind: substitution
+        text: >-
+          (a) Exact sums: $V(100) = 7.04$, $V(10^4) = 78.79$, each equal to $(T + 1)u_T - 1$; $\sqrt{200/\pi} = 7.98$ and $\sqrt{2 \times 10^4/\pi} = 79.79$. At $T = 1000$, $V = 24.25$, and $8$ seeds of $2 \times 10^4$ walkers counted $24.27 \pm 0.04$ visits each. (c) $u_{1000} = 0.02523$; measured, $0.0253 \pm 0.0004$ of the walkers had not come home ($8$ seeds). $u_{10^6} = 7.98 \times 10^{-4}$. (e) About $710$ walkers per seed stand at home at $t = 500$ ($u_{500} = 0.0357$). Their next $500$ steps spread by $22.34 \pm 0.22$, against $\sqrt{500} = 22.36$, and $0.500 \pm 0.006$ of them are home again at $t = 502$, against $u_2 = \tfrac12$.
+      - kind: reasoning
+        text: >-
+          Being home at a given late time is unlikely, and being home ever is certain; they are different questions, and (a) and (b) connect them. Nothing draws the walker home: he returns because a one-dimensional walk's cloud spreads so slowly that the origin is never left behind, while the time between returns has no finite mean. (e) confirms the model's assumption that the walk has no memory of having come home.
+      - kind: result
+        text: >-
+          (a) $V(T) \approx \sqrt{2T/\pi}$, unbounded: $7.0$ visits by $T = 100$, $79$ by $10^4$. (b) Unbounded visits force $R = 1$. (c) The fraction still away after $2m$ steps is $u_{2m}$: $2.5\%$ after $1000$ steps, $0.08\%$ after $10^6$. (d) $\langle T_\mathrm{r} \rangle = 2\sum_m u_{2m} = \infty$. (e) A walker just home behaves as a new one: spread $22.4$ over the next $500$ steps, home again at $t = 502$ with probability $\tfrac12$.
+
+  - id: W-3.1-10
+    level: bagrut
+    objectives: [OBJ-3.1-3, OBJ-3.1-4]
+    prompt: >-
+      A lopsided step, and how slowly its lean fades. A step is $+3$ with probability $\tfrac14$ and $-1$ with probability $\tfrac34$.
+      (a) Find $\mu_1$, $\sigma_1^2$, the third central moment $\langle (s - \mu_1)^3 \rangle$ and the skewness $\gamma_1 = \langle (s - \mu_1)^3 \rangle/\sigma_1^3$.
+      (b) Show that for independent steps the third central moments add, as the variances do, and hence that the skewness of $S_n = s_1 + \cdots + s_n$ is $\gamma_1/\sqrt n$. The excess kurtosis, a measure of the tails' weight, falls as $1/n$; for this step it is $-\tfrac23$. Which of the two fades more slowly?
+      (c) How many steps bring the skewness below $0.1$, and below $0.01$?
+      (d) $S_n = 4k - n$, with $k$ the binomial number of $+3$ steps. For $z = S_n/\sqrt{3n}$ the exact tails are: at $n = 100$, $P(z \ge 3) = 2.75 \times 10^{-3}$ and $P(z \le -3) = 1.03 \times 10^{-3}$; at $n = 1000$, $1.42 \times 10^{-3}$ and $1.02 \times 10^{-3}$; at $n = 10^4$, $1.46 \times 10^{-3}$ and $1.32 \times 10^{-3}$. The Gaussian gives $1.35 \times 10^{-3}$ for each. Explain which tail is heavy, and how fast the difference fades.
+      (e) The lesson found that de Moivre–Laplace has a relative error of order $1/n$ for a fair coin and of order $n^{-1/2}$ otherwise. Connect that with this problem.
+    answer: >-
+      (a) $\mu_1 = 0$, $\sigma_1^2 = 3$, $\langle s^3 \rangle = 6$, $\gamma_1 = 6/3^{3/2} = 1.155$. (b) Every cross term in $\langle (\sum s_i)^3 \rangle$ holds some step to the first power alone and averages to zero, so $\langle S_n^3 \rangle = 6n$ and the skewness is $6n/(3n)^{3/2} = \gamma_1/\sqrt n$. The skewness, as $n^{-1/2}$, fades more slowly than the excess kurtosis, as $1/n$. (c) $n \ge 134$ and $n \ge 13\,334$. (d) The right tail, from the rare $+3$ steps: twice the Gaussian at $n = 100$. The asymmetry $(P_+ - P_-)/(2 \times 1.35 \times 10^{-3})$ is $0.64$, $0.15$, $0.052$: it falls by $4.3$ and then $2.9$ per tenfold $n$, approaching $\sqrt{10}$, as $n^{-1/2}$. (e) A binomial with $p \ne \tfrac12$ has skewness $(1 - 2p)/\sqrt{np(1 - p)}$, the leading error of order $n^{-1/2}$; for the fair coin it vanishes, and the first error left is the kurtosis, of order $1/n$.
+    solution:
+      - kind: given
+        text: >-
+          $s = +3$ with probability $\tfrac14$, $s = -1$ with probability $\tfrac34$; steps independent.
+      - kind: law
+        text: >-
+          The central limit theorem says the standardised sum approaches the Gaussian; it does not say how fast. The rate is set by the moments beyond the second: for independent steps of zero mean, the third central moment of the sum is the sum of the third moments, just as for variances, because a term that holds one step to the first power alone averages to zero.
+      - kind: manipulation
+        text: >-
+          (a) $\mu_1 = \tfrac34 - \tfrac34 = 0$; $\langle s^2 \rangle = \tfrac94 + \tfrac34 = 3$; $\langle s^3 \rangle = \tfrac{27}4 - \tfrac34 = 6$; $\langle s^4 \rangle = \tfrac{81}4 + \tfrac34 = 21$, so the excess kurtosis is $(21 - 3 \times 9)/9 = -\tfrac23$. (b) $\langle S_n^3 \rangle = \sum_{i,j,l}\langle s_is_js_l \rangle$. If one index differs from the other two, or all three differ, the average factorises and contains a lone $\langle s_i \rangle = 0$. Only $i = j = l$ survives: $\langle S_n^3 \rangle = n\langle s^3 \rangle$. With $\sigma_{S_n} = \sigma_1\sqrt n$, the skewness is $n\langle s^3 \rangle/(\sigma_1^3n^{3/2}) = \gamma_1/\sqrt n$.
+      - kind: formula
+        text: >-
+          $\gamma_1 = \dfrac{\langle s^3 \rangle}{\sigma_1^3} = \dfrac{6}{3^{3/2}} = \dfrac{2}{\sqrt 3} \qquad \gamma_1(S_n) = \dfrac{\gamma_1}{\sqrt n} \qquad \gamma_2(S_n) = -\dfrac{2}{3n} \qquad n > \left(\dfrac{\gamma_1}{\epsilon}\right)^2$
+      - kind: substitution
+        text: >-
+          (c) $(1.1547/0.1)^2 = 133.3$, so $n \ge 134$; $(1.1547/0.01)^2 = 13\,333$, so $n \ge 13\,334$. At $n = 100$ the predicted skewness is $0.1155$; $8$ seeds of $20\,000$ simulated sums give $0.116 \pm 0.009$. (d) $(2.75 - 1.03)/2.70 = 0.64$; $(1.42 - 1.02)/2.70 = 0.15$; $(1.46 - 1.32)/2.70 = 0.052$. The skewness at those $n$ is $0.115$, $0.037$, $0.012$: the asymmetry is about $4.4$ times the skewness once $n$ is large, and falls with it.
+      - kind: reasoning
+        text: >-
+          (d) The sum is pushed far to the right only by an excess of $+3$ steps, which are rare but large; far to the left, only by an excess of $-1$ steps, which are common but small, and that is harder at the same distance. The Gaussian, symmetric by construction, cannot represent this, so the right tail exceeds it and the left falls short. The difference fades with the skewness, as $n^{-1/2}$: at $n = 100$ the rare event $z \ge 3$ is twice as likely as the Gaussian says, at $n = 10^4$ still $8\%$ more likely. A sum that "has converged" in its middle can still be wrong in its tails by a factor of two. (e) Here $k$ is binomial with $p = \tfrac14$, and its skewness $(1 - 2p)/\sqrt{np(1 - p)} = 0.5/\sqrt{3n/16} = 1.155/\sqrt n$ is exactly that of $S_n = 4k - n$, since a linear change of variable does not change a skewness. The cubic term that de Moivre–Laplace drops is this skewness; at $p = \tfrac12$ it is zero.
+      - kind: limit
+        text: >-
+          $n = 1$: the step itself, two spikes at $+3$ and $-1$, skewness $1.15$, nothing Gaussian about it. A symmetric step ($+1$ and $-1$ equally likely) has $\gamma_1 = 0$, and its sums approach the Gaussian as $1/n$. As the rare step grows ($+a$ with probability $1/(a + 1)$, $-1$ otherwise), $\gamma_1$ grows as $\sqrt a$ and the number of steps needed for a given skewness grows as $a$: the more lopsided the step, the longer the theorem takes, though it always arrives while the variance is finite.
+      - kind: result
+        text: >-
+          (a) $\mu_1 = 0$, $\sigma_1^2 = 3$, third moment $6$, $\gamma_1 = 1.155$. (b) Third moments add, so the skewness of the sum falls as $\gamma_1/\sqrt n$, more slowly than the excess kurtosis, $-2/(3n)$. (c) $134$ steps for $0.1$, $13\,334$ for $0.01$. (d) The right tail is heavy; the asymmetry at three standard deviations is $0.64$, $0.15$ and $0.052$ at $n = 100$, $1000$ and $10^4$, fading as $n^{-1/2}$. (e) The $n^{-1/2}$ error of de Moivre–Laplace for $p \ne \tfrac12$ is the binomial's skewness; the fair coin has none.
+
+challenge:
+  - id: W-3.1-c1
+    stars: 1
+    objectives: [OBJ-3.1-3, OBJ-3.1-1]
+    prompt: >-
+      The book of records: a walk whose steps are not identical. Take a sequence of independent draws $x_1, x_2, \dots$, all from the same continuous distribution $p(x)$. The draw $x_n$ is a record if it is larger than every draw before it; let $R_n = 1$ if it is, and $0$ if not ($R_1 = 1$). The number of records after $N$ draws, $S_N = R_1 + \cdots + R_N$, is a walk whose steps are $0$ or $1$.
+      (a) Show that, whatever $p(x)$ is, the probability that $x_n$ is a record is $P_n = 1/n$.
+      (b) Find the mean number of records $\langle S_N \rangle$, and how it grows for $N \gg 1$. Evaluate it for $N = 1000$ and $10^6$. If the number of competitors in a sport doubles every year, how does the number of records grow with time?
+      (c) Show that $\langle R_nR_m \rangle - \langle R_n \rangle\langle R_m \rangle = 0$ for $n \ne m$. (The indicators are in fact independent, though not identically distributed.)
+      (d) Find the variance and the third cumulant (the third central moment) of $S_N$, and evaluate the skewness at $N = 1000$, $10^6$ and $10^9$. The central limit theorem of the lesson needs identically distributed steps; these are not. Does $S_N$ approach a Gaussian, and how fast?
+      (e) At $N = 1000$, the exact distribution gives $P(S \le 3) = 0.036$ and $P(S \ge 12) = 0.056$. Compare with the Gaussian of the same mean and variance, and explain the difference.
+    answer: >-
+      (a) Among the first $n$ draws each is equally likely to be the largest, so $P_n = 1/n$. (b) $\langle S_N \rangle = \sum_{n=1}^N 1/n \approx \ln N + 0.577$: $7.49$ at $N = 1000$, $14.39$ at $10^6$. Doubling the competitors each year adds $\ln 2 = 0.69$ expected records per year: linear growth in time. (c) For $n < m$, $P(R_n = R_m = 1) = \tfrac1m \cdot \tfrac1n$. (d) $\operatorname{Var}(S_N) = \sum(1/n - 1/n^2) \approx \ln N + 0.577 - 1.645$; $\kappa_3 = \sum(1/n - 3/n^2 + 2/n^3)$; skewness $0.35$, $0.26$, $0.22$. Yes, because the variance grows without bound while each step is at most $1$, so no step dominates; but the skewness falls only as $(\ln N)^{-1/2}$. (e) The Gaussian gives $0.050$ and $0.048$: the true distribution has a light left tail and a heavy right one, the skewness $0.35$.
+    solution:
+      - kind: law
+        text: >-
+          For independent draws from one continuous distribution, every ordering of the first $n$ draws is equally likely, whatever the distribution. Means always add; variances and third cumulants add for independent terms. A central limit theorem holds for independent terms that are not identically distributed, provided Lindeberg's condition holds, which among other things requires that no single term carry a finite share of the variance of the sum; bounded terms with a diverging total variance satisfy it.
+      - kind: manipulation
+        text: >-
+          (a) By symmetry the largest of $x_1, \dots, x_n$ is any one of them with probability $1/n$, and $x_n$ is a record exactly when it is the largest. Ties have probability zero for a continuous distribution. (c) Take $n < m$. $R_m = 1$ says $x_m$ is the largest of the first $m$, probability $1/m$. Given that, the first $m - 1$ draws are still in a uniformly random order among themselves, so $x_n$ is the largest of the first $n$ with probability $1/n$. So $\langle R_nR_m \rangle = 1/(nm) = \langle R_n \rangle\langle R_m \rangle$. (d) A $0$-or-$1$ variable with mean $p$ has variance $p(1 - p)$ and third central moment $p(1 - p)(1 - 2p)$; with $p = 1/n$ these are $1/n - 1/n^2$ and $1/n - 3/n^2 + 2/n^3$. Summed, with $\sum 1/n^2 \to \pi^2/6 = 1.645$ and $\sum 1/n^3 \to 1.202$.
+      - kind: formula
+        text: >-
+          $\langle S_N \rangle = H_N = \sum_{n=1}^N \frac1n \approx \ln N + \gamma \qquad \operatorname{Var}(S_N) \approx \ln N + \gamma - \frac{\pi^2}{6} \qquad \kappa_3 \approx \ln N + \gamma - \frac{\pi^2}{2} + 2\zeta(3) \qquad \frac{\kappa_3}{\operatorname{Var}^{3/2}} \sim \frac{1}{\sqrt{\ln N}}$
+      - kind: limit
+        text: >-
+          $N = 1$: one record, with no scatter, and indeed $H_1 = 1$ and $\operatorname{Var} = 1 - 1 = 0$. $N = 2$: a second record with probability $\tfrac12$, variance $\tfrac14$, as the formula gives. If the steps were identical, with $p$ fixed, the skewness would fall as $N^{-1/2}$; here the effective number of steps is the variance, $\ln N$, and the approach is logarithmically slow: even $10^9$ draws leave a skewness of $0.22$.
+      - kind: substitution
+        text: >-
+          (b) $H_{1000} = 7.4855$, $H_{10^6} = 14.3927$, against $\ln N + \gamma = 7.4850$ and $14.3927$. With competitors $N_0 2^y$ after $y$ years, $\langle S \rangle \approx \ln N_0 + y\ln 2 + \gamma$. (d) $N = 1000$: $\operatorname{Var} = 5.842$, $\kappa_3 = 4.958$, skewness $4.958/5.842^{3/2} = 0.351$. $N = 10^6$: $12.748$, $11.862$, $0.261$. $N = 10^9$: $19.656$, $18.770$, $0.215$. Simulated at $N = 1000$, $8$ seeds of $20\,000$ sequences, from uniform, exponential and Cauchy draws alike: $\langle S \rangle = 7.483 \pm 0.007$, $7.486 \pm 0.006$, $7.482 \pm 0.004$; variance $5.82 \pm 0.02$, $5.84 \pm 0.02$, $5.83 \pm 0.01$; skewness $0.359 \pm 0.005$, $0.356 \pm 0.005$, $0.361 \pm 0.006$; and the covariance of $R_{10}$ and $R_{50}$ within $0.0002$ of zero in each. (e) With mean $7.485$ and standard deviation $2.417$: $\Phi\big((3.5 - 7.485)/2.417\big) = 0.050$ and $1 - \Phi\big((11.5 - 7.485)/2.417\big) = 0.048$. The largest gap between the exact and the Gaussian cumulative distributions is $0.024$ with the half-integer correction, and $0.106$ without it.
+      - kind: reasoning
+        text: >-
+          (d) The steps are independent but not identical: the $n$-th is a coin that comes up $1$ with probability $1/n$. The lesson's theorem does not apply as stated, but the version for non-identical terms does, because each term is at most $1$ while the total variance grows as $\ln N$ without bound. The cost of non-identical steps here is the rate: the variance, not $N$, plays the role of the number of steps. (e) The Gaussian puts too much probability on few records and too little on many, as a positive skewness requires: the records come mostly early, and late records, though rare, are not bounded. That the distribution of $S_N$ does not depend on $p(x)$ at all, Cauchy included, is part (a): only the ordering of the draws matters.
+      - kind: result
+        text: >-
+          (a) $P_n = 1/n$ for any continuous distribution. (b) $\langle S_N \rangle \approx \ln N + 0.577$: $7.5$ records in $1000$ draws, $14.4$ in $10^6$; a doubling field adds $0.69$ records a year. (c) The indicators are uncorrelated (in fact independent). (d) $\operatorname{Var}(S_N) \approx \ln N - 1.07$; skewness $0.35$, $0.26$, $0.22$ at $10^3$, $10^6$, $10^9$: Gaussian in the limit, by the theorem for non-identical independent terms, at the slow rate $(\ln N)^{-1/2}$. (e) $0.036$ and $0.056$ exact against $0.050$ and $0.048$: skewed to the right.
+    source:
+      name: 'MIT 8.333 Statistical Mechanics I: Statistical Mechanics of Particles (OpenCourseWare)'
+      year: 2013
+      problem: 'Problem Set 2, Problem 5 (The book of records)'
+      url: 'https://ocw.mit.edu/courses/8-333-statistical-mechanics-i-statistical-mechanics-of-particles-fall-2013/b22c2236479dd3e2d4b9a05a3420a1fc_MIT8_333F13_pset2.pdf'
+      verified: '2026-11-20'
+      adapted: true
+
+  - id: W-3.1-c2
+    stars: 2
+    objectives: [OBJ-3.1-3, OBJ-3.1-1]
+    prompt: >-
+      A stiff chain in two dimensions: the persistent walk with a continuous memory. A polymer in a plane is a chain of $N$ bonds $\mathbf t_1, \dots, \mathbf t_N$, each a vector of length $a$. The angle $\theta_i$ from $\mathbf t_i$ to $\mathbf t_{i+1}$ is drawn independently for each $i$ from one distribution, symmetric about $\theta = 0$, with $c = \langle \cos\theta \rangle$. The first bond points in a uniformly random direction. (In the source, the angles carry a weight set by the chain's bending stiffness and its temperature; any such weight gives one particular $c$.) The end-to-end vector is $\mathbf R = \mathbf t_1 + \cdots + \mathbf t_N$.
+      (a) Show that $\langle \mathbf t_m \cdot \mathbf t_n \rangle = a^2c^{|n - m|} = a^2e^{-|n - m|/\xi}$, and find $\xi$, the number of bonds over which the chain remembers its direction. The persistence length is $\xi a$.
+      (b) Find $\langle R^2 \rangle$ exactly, and its form for $N \gg \xi$. Compare with the lesson's persistent $\pm 1$ walk. What are the limits $c = 0$, and $c \to 1$ at fixed $N$? For a stiff chain, $\xi \gg 1$, express the result through the persistence length and the chain's length $L = Na$.
+      (c) Find the probability density of $\mathbf R$ for $N \gg \xi$, and say which theorem justifies it, given that the bonds are not independent.
+      (d) Take $\theta$ uniform on $[-\pi/4, \pi/4]$. Find $c$, $\xi$ and the long-chain factor. A simulation of $8 \times 4000$ chains of $N = 1000$ bonds gives $\langle R^2 \rangle/(Na^2) = 18.83 \pm 0.14$, $\langle \mathbf t_{100} \cdot \mathbf t_{110} \rangle/a^2 = 0.352 \pm 0.003$ and $\langle R^4 \rangle/\langle R^2 \rangle^2 = 1.977 \pm 0.010$. Compare each with your predictions.
+    answer: >-
+      (a) $\mathbf t_{m+k}$ is $\mathbf t_m$ turned by $\theta_m + \cdots + \theta_{m+k-1}$, so $\langle \mathbf t_m \cdot \mathbf t_{m+k} \rangle = a^2\langle \cos(\theta_m + \cdots) \rangle = a^2c^k$; $\xi = -1/\ln c$. (b) $\langle R^2 \rangle = a^2\big[N + 2\sum_{k=1}^{N-1}(N - k)c^k\big] = Na^2\frac{1 + c}{1 - c} - 2a^2\frac{c(1 - c^N)}{(1 - c)^2} \to Na^2\frac{1 + c}{1 - c}$, the lesson's factor with $q$ replaced by $c$. $c = 0$: $Na^2$; $c \to 1$: $N^2a^2$, a rod. For $\xi \gg 1$, $\frac{1 + c}{1 - c} \approx 2\xi$ and $\langle R^2 \rangle \approx 2(\xi a)L$. (c) A two-dimensional Gaussian, $p(\mathbf R) = e^{-R^2/\langle R^2 \rangle}/(\pi\langle R^2 \rangle)$, by a central limit theorem for terms whose correlations decay exponentially. (d) $c = 0.9003$, $\xi = 9.52$, factor $19.06$; exactly $18.88$ at $N = 1000$; $c^{10} = 0.350$; a two-dimensional Gaussian has $\langle R^4 \rangle/\langle R^2 \rangle^2 = 2$. All three agree within their errors, the last to within the finite-$N$ correction.
+    solution:
+      - kind: law
+        text: >-
+          The variance of a sum is the sum of all covariances, $\langle R^2 \rangle = \sum_{m,n}\langle \mathbf t_m \cdot \mathbf t_n \rangle$, for terms of zero mean. In two dimensions a turn by $\phi$ changes the dot product with the original vector to $a^2\cos\phi$. For independent angles, $\langle e^{\mathrm{i}(\theta_1 + \cdots + \theta_k)} \rangle = \langle e^{\mathrm{i}\theta} \rangle^k$, and for a symmetric distribution $\langle e^{\mathrm{i}\theta} \rangle = \langle \cos\theta \rangle = c$, since $\langle \sin\theta \rangle = 0$.
+      - kind: manipulation
+        text: >-
+          (a) $\langle \mathbf t_m \cdot \mathbf t_{m+k} \rangle = a^2\,\mathrm{Re}\,\langle e^{\mathrm{i}(\theta_m + \cdots + \theta_{m+k-1})} \rangle = a^2c^k$, and $c^k = e^{k\ln c} = e^{-k/\xi}$ with $\xi = -1/\ln c$. Each bond has zero mean because the first points in a random direction. (b) There are $N - k$ pairs at separation $k$, counted twice: $\langle R^2 \rangle = a^2\big[N + 2\sum_{k=1}^{N-1}(N - k)c^k\big]$. With $\sum_{k \ge 1}c^k = c/(1 - c)$ and $\sum_{k \ge 1}kc^k = c/(1 - c)^2$, the sum gives the closed form, whose first term grows as $N$ and whose second stays bounded. For $c = 1 - \epsilon$, $\xi = -1/\ln(1 - \epsilon) \approx 1/\epsilon$ and $(1 + c)/(1 - c) \approx 2/\epsilon \approx 2\xi$. (c) Over a stretch of many $\xi$, the chain's direction is forgotten: blocks of bonds much longer than $\xi$ are nearly independent of one another, and $\mathbf R$ is a sum of many such blocks. By isotropy $R_x$ and $R_y$ have equal variances, $\langle R^2 \rangle/2$, and zero covariance.
+      - kind: formula
+        text: >-
+          $\langle \mathbf t_m \cdot \mathbf t_n \rangle = a^2c^{|n - m|} \qquad \langle R^2 \rangle = Na^2\,\frac{1 + c}{1 - c} - 2a^2\,\frac{c(1 - c^N)}{(1 - c)^2} \qquad p(\mathbf R) = \frac{1}{\pi\langle R^2 \rangle}\,e^{-R^2/\langle R^2 \rangle}$
+      - kind: limit
+        text: >-
+          $c = 0$, angles with no memory (for instance uniform on the whole circle): $\langle R^2 \rangle = Na^2$, the independent walk of problem 03. $c \to 1$ at fixed $N$: every term of the double sum is $a^2$, and $\langle R^2 \rangle \to N^2a^2$, a straight rod; the long-chain form diverges instead because it assumes $N \gg \xi$, which fails. $N = 1$: $\langle R^2 \rangle = a^2$, as the closed form gives. And the Gaussian of (c) cannot be right for $R > Na$, where the true density is zero: it describes the bulk of a long chain, not its full extension.
+      - kind: substitution
+        text: >-
+          (d) $c = \sin(\pi/4)/(\pi/4) = 0.9003$; $\xi = -1/\ln 0.9003 = 9.52$; $(1 + c)/(1 - c) = 19.06$, against $2\xi = 19.05$. The exact finite sum at $N = 1000$ gives $\langle R^2 \rangle/(Na^2) = 18.88$, and the simulation $18.83 \pm 0.14$. $c^{10} = 0.350$, measured $0.352 \pm 0.003$. For a Gaussian $\mathbf R$ in two dimensions, $\langle R^4 \rangle = \langle (R_x^2 + R_y^2)^2 \rangle = (3 + 2 + 3)s^4$ with $s^2 = \langle R^2 \rangle/2$, so the ratio is $2$; the measured $1.977 \pm 0.010$ is close, and the remaining gap is of the size $1/N_\mathrm{eff}$ that an independent walk of $N_\mathrm{eff} = N/19 \approx 53$ steps would show.
+      - kind: reasoning
+        text: >-
+          This is the lesson's persistent walk with a continuous memory instead of a two-valued one, and the same accounting: identically distributed bonds, finite variance, but not independent. The cost is the width, $\sqrt{19}$ times the independent walk's, and not the shape, because correlations that decay exponentially leave the sum of many persistence lengths a sum of nearly independent pieces. The source treats the chain at a temperature $T$, with angles weighted by its bending stiffness; that only changes $c$, and every result here holds with the $c$ it gives.
+      - kind: result
+        text: >-
+          (a) $\langle \mathbf t_m \cdot \mathbf t_n \rangle = a^2c^{|n - m|}$, memory $\xi = -1/\ln c$ bonds. (b) $\langle R^2 \rangle \to Na^2(1 + c)/(1 - c) \approx 2\xi aL$ for a stiff chain; $Na^2$ for a free chain, $N^2a^2$ for a rod. (c) $\mathbf R$ is a two-dimensional Gaussian of variance $\langle R^2 \rangle$, by a central limit theorem for decaying correlations. (d) $c = 0.900$, $\xi = 9.5$ bonds, $\langle R^2 \rangle/(Na^2) = 18.9$ at $N = 1000$, all confirmed by the simulation; correlation costs width, not shape.
+    source:
+      name: 'MIT 8.333 Statistical Mechanics I: Statistical Mechanics of Particles (OpenCourseWare)'
+      year: 2013
+      problem: 'Problem Set 2, Problem 2 (Semi-flexible polymer in two dimensions)'
+      url: 'https://ocw.mit.edu/courses/8-333-statistical-mechanics-i-statistical-mechanics-of-particles-fall-2013/b22c2236479dd3e2d4b9a05a3420a1fc_MIT8_333F13_pset2.pdf'
+      verified: '2026-11-20'
+      adapted: true

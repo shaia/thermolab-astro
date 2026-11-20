@@ -121,3 +121,75 @@ when it is.
   baseless (OBJ-02-2 includes forming per-particle densities, which 5(a)'s per-molecule b loosely touches), but no
   part asks to classify a quantity as extensive or intensive. The port's version (workbook W-2.1-07) adds one, on b
   and Nb.
+
+## Module 03: probability and emergence
+
+- Verify, "What the collapse measures" (English line 392, Hebrew 361): the distances at n = 256, heavy-tailed 0.004,
+  uniform 0.012, coin 0.029, are one seed's (seed 17 of `test_standardized_sums_converge_onto_one_gaussian` gives
+  0.0043, 0.0121, 0.0292). Over 8 seeds of 20,000 sums: heavy-tailed 0.0061 ± 0.0006, uniform 0.0060 ± 0.0006, coin
+  0.0285 ± 0.0007, against a Gaussian floor of 0.0061 (0.87/√N; 256 seeds give 0.00606 ± 0.00011, a scatter of 0.0018
+  per seed, so an 8-seed mean is good to about 0.0006). The uniform steps' 0.012 is a fluctuation to twice the floor
+  and contradicts the box's own "two distributions have reached the sampling floor"; the 0.004 is below it by chance.
+- Derive, the de Moivre–Laplace box (English line 288, Hebrew 266): "the terms discarded are of relative size
+  1/√n" holds only for p ≠ 1/2. For the fair coin, the page's only case, the cubic term vanishes by symmetry and the
+  error is of order 1/n: 1/(4n) at the peak, the page's own 0.25% at n = 100, where 1/√n would be 10%. From the
+  exact pmf, the largest gap within 3σ falls as n^(−1.48) at p = 1/2 and n^(−1.01) at p = 0.2 (n = 25 to 1600). For
+  p ≠ 1/2 the error at k = np itself is also of order 1/n, because the cubic term vanishes there; the n^(−1/2) lives
+  across the central region, not at the peak.
+- Epistemic labels (English lines 411, 429, 458; Hebrew 378, 396, 424). "What simulation can and cannot settle here"
+  is labelled *open-question*, but it states the scope of numerical evidence, which is not open (as in module 01).
+  "Independence is a hypothesis, not a decoration" is labelled *model-assumption*, but what it states is a numerical
+  observation (the distance stalls) and a theorem about the persistent walk (the factor (1 + q)/(1 − q)).
+  "Why 'Gaussian' turns up everywhere" is labelled *definition*; it defines nothing. It is the central limit
+  theorem's consequence, and its "regardless of what the contributions look like" needs the theorem's hypotheses
+  (independent contributions of finite variance, none dominant). One more box belongs on the list: "The walk is not
+  pulled back" (English line 229, Hebrew 209), labelled *model-assumption*. Besides the assumption, it states a
+  theorem (the expected displacement μ₁ × 500) and the compensation sentence of the Q-03-2 and Q-03-7 item below.
+- Transfer (English line 449, Hebrew 414): "a drop of ink takes minutes to cross a centimetre and years to cross a
+  metre". By diffusion, a small dye molecule in water (D ≈ 4·10⁻¹⁰ m²/s) spreads 1 cm in L²/(2D) ≈ 1.3·10⁵ s, a day
+  and a half, and 1 m in about 40 years. The ratio 10⁴ is right; minutes is what convection takes. Qualify it as the
+  RMS distance along one axis: the RMS distance in three dimensions reaches 1 cm in L²/(6D) = 0.48 days.
+- Transfer (English line 455, Hebrew 421): a poll of 1000 has a margin near 3% "because 1/√1000 ≈ 0.032". The
+  standard error of a proportion near 1/2 is √(0.25/1000) = 0.016; the 3% is the 95% margin, 1.96 × 0.016 = 0.031,
+  and matches 1/√1000 only because 1.96 × 0.5 ≈ 1 (exactly, P(|k − 500| ≤ 31) = 0.954). On a page that separates
+  deviation from error, an imprecision worth fixing.
+- The puzzle (English line 41–43, Hebrew 41): ten thousand walkers' histogram is "the same to a precision you can set
+  your watch by … reproducible to three figures". Its width at t = 1000 scatters by 0.6% from seed to seed (31.67,
+  scatter 0.19, 8 seeds; 1/√(2N) = 0.7% expected): two figures. Three (a scatter of half a unit in the third figure,
+  0.05 on 31.6) need N = 1/(2(0.05/31.6)²) = 2 × 10⁵ walkers, not a million; a million gives a scatter of 0.022.
+- Quiz Q-03-2 (feedback on "About −30", English line 37) and Q-03-7 (feedback on "Growing", line 160): the ensemble
+  mean stays at zero "because walkers who stray right are matched by walkers who stray left". That is the compensation
+  across walkers that Q-03-9's last distractor rejects ("no walker can compensate for another"). The same sentence is
+  in ThermoLab's lesson itself, in the "The walk is not pulled back" box: English lines 233–234 ("walkers who wander
+  right are matched by walkers who wander left"), and the Hebrew box at about line 209. The mean is zero
+  because each walker's expected displacement is μ₁t = 0; a finite cloud's mean is not matched to zero but scatters by
+  σ₁√(t/N) (0.57 measured against 0.60 predicted for 2500 walkers at t = 900, 64 seeds).
+- Quiz Q-03-5 (English lines 103–120): "stays far too wide at every n" and "the true variance is t(1+q)/(1−q) = 19t"
+  are long-time statements. At n = 1 the persistent walk is the coin (variance 1), and at q = 0.9 the exact Var(x_n)/n
+  is 1.9 at n = 2, 9.8 at n = 16 and 18.3 at n = 256 (from Var = t(1+q)/(1−q) − 2q(1−q^t)/(1−q)², checked against the
+  direct sum of covariances). "Too wide, and stays too wide as n grows" is what holds; the distance from the Gaussian
+  stalls at 0.35 (n = 16) and 0.31 (n = 256), 8 seeds of 20,000 sums. "Collapse perfectly", for the sums standardised
+  by the true variance, overstates a distance that falls with n (the module's own repair numbers). The Advanced
+  section, "The persistent walk recovers… the repair is exact" (English lines 529–538), has the same slip: it
+  standardises with the long-time variance t(1 + q)/(1 − q), which at q = 0.9 leaves D = 0.18 at n = 16 (0.13 with the
+  exact 9.8n) and 0.033 at n = 64. "Exact" and "collapse … after all" need "at long times".
+- Quiz Q-03-9: the question asks where a "smooth, reproducible" histogram comes from, and the correct choice gives only
+  the shape (more step sequences end near the middle, and only for coin steps). The reproducibility is the other half:
+  each bar is the mean of N independent yes-or-no draws and scatters by √(f(1 − f)/N) (relative scatter 1.85%
+  measured against 2.0% predicted for f = 0.1977 (exactly), N = 10,000, 64 runs). The port's correct choice names both.
+- Problem set, problem 6(a) (English line 117, Hebrew 114): "show that ⟨r_t²⟩ = 2σ₁²t", under the page's own preamble
+  that steps have mean μ₁, holds only for μ₁ = 0. With x and y steps of mean μ₁ each, ⟨r_t²⟩ = 2σ₁²t + 2μ₁²t²; for
+  the biased step (μ₁ = 0.2, σ₁² = 0.96) at t = 1000 that is 1920 + 80,000. The spread about the mean, which
+  `walker_spread` measures in (b), is what equals 2σ₁²t; state μ₁ = 0, or ask for ⟨|r_t − ⟨r_t⟩|²⟩. The same claim is in
+  ThermoLab's Advanced section, "Walks in two dimensions" (English lines 518–526: "Every result above applies… =
+  2σ₁²t"), under the page's general μ₁.
+- `thermolab.sampling.walker_histogram` docstring: it says that with `span`, "walkers outside the span are dropped, so
+  the displayed area is then the retained fraction rather than exactly 1". `np.histogram(…, range=…, density=True)`
+  normalises to the retained counts, so the area is exactly 1 (checked: 1.0 with 20% of the points outside). The
+  docstring is wrong; the port's is right.
+- Quiz Q-03-3, feedback: "the number of heads in 100 flips sits at 50 ± 5 about 68% of the time". For the binomial,
+  P(45 ≤ k ≤ 55) = 0.729 and P(46 ≤ k ≤ 54) = 0.632; the 68% is the continuous Gaussian's. The port dropped the clause;
+  ThermoLab should qualify it.
+- The puzzle (English line 52): "The width … is module 0's law of large numbers, read in the other direction." The
+  √t width is the additivity of variances (module 0's N^(−1/2) law), not the law of large numbers. An imprecision; the
+  port says "lesson 0.1's law".
