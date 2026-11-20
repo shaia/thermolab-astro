@@ -9,8 +9,10 @@
  *   Boundary:      closed, N fixed
  *   Ensemble:      not applicable (macroscopic thermodynamics)
  *   Ignored:       all microscopic detail; a and b are phenomenological constants
- *   Valid when:    dilute classical (ideal) and moderate-density near-critical (vdW) regimes
- *   Failure modes: the sub-critical (∂P/∂v)_T > 0 region (module 14) and quantum-degenerate regimes (module 17)
+ *   Valid when:    the dilute classical regime (ideal); van der Waals qualitatively over the whole fluid, quantitatively
+ *                  at moderate densities away from the critical point
+ *   Failure modes: the sub-critical (∂P/∂v)_T > 0 region (module 14); the critical neighbourhood (Z_c = 3/8, mean-field
+ *                  exponents); the dense liquid (b ≈ v); quantum-degenerate regimes (module 17); the solid
  *
  * CONVENTION: per-particle volume v = V/N and per-particle constants a = a_m/N_A², b = b_m/N_A, so
  * P = k_B T/(v − b) − a/v².

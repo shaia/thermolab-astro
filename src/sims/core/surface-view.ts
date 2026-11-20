@@ -170,6 +170,19 @@ export function surfaceCells(m: number, nv: number, nt: number): Cell[] {
 /** The share of the surface's cells (by count) where ∂P/∂v > 0 */
 export const foldShare = (cells: Cell[]) => cells.filter((c) => c.fold).length / cells.length;
 
+/** The fold cells the figure paints: those that keep at least three corners inside the pressure window, the draw loop's own test. */
+export const drawnFoldCells = (cells: Cell[]): Cell[] => cells.filter((c) => c.fold && clipPolygonZ(c.corners, -HALF[2], HALF[2]).length >= 3);
+
+/**
+ * What the figure can honestly say about the fold: 'drawn' when fold cells are painted, 'outside' when the gas has a fold
+ * (any m > 0 does, at every T_r < 1) but it lies outside the drawn box and its pressure window, 'none' for the ideal gas (m = 0).
+ */
+export type FoldState = 'drawn' | 'outside' | 'none';
+export function foldState(cells: Cell[], m: number): FoldState {
+  if (drawnFoldCells(cells).length > 0) return 'drawn';
+  return m > 0 ? 'outside' : 'none';
+}
+
 /** An isotherm (constant T_r) across the v range, in box coordinates and unclipped. */
 export function isothermLine(m: number, t: number, nv: number): Vec3[] {
   return vNodes(nv).map((v) => toBox(v, t, morphedPressureReduced(v, t, m)));

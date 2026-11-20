@@ -90,6 +90,16 @@ line each, with the evidence. ThermoLab is fixed separately, from that list.
   opposed to model) = ממשי, true = אמיתי, envelope = מעטפת, spread or scatter = פיזור,
   exponent = מעריך, quasistatic = כמו-סטטי, "falls as" (a scaling law, N^(−1/2)) = דועך כמו (never "קטן כמו", which
   reads "as small as"), reservoir = מאגר חום at first use, then מאגר.
+  Decided in module 02: legs of a path = שלבים (never קטעים, which is a stretch of a curve, an
+  interval or a plateau), arrow keys = מקשי החצים (never "חצי המקלדת", which reads "half the
+  keyboard"), cancel (algebra) = מתבטלים (never מצטמצמים, which belongs to מצומצם, "reduced"),
+  condensation as a noun = עיבוי (ThermoLab's glossary; the verb מתעבה stays), obeys = מציית ל,
+  isotherm, isochore, isobar as nouns = איזותרמה, איזוכורה, איזוברה, convex (bending up) = קעורה
+  כלפי מעלה (the school usage), gentlest descent (the smallest −∂P/∂v) = הירידה המתונה ביותר
+  (never "שיפוע מתון ביותר" with a negative value: a negative slope reads as falling), gas
+  cylinder = בלון but storage tank = מכל, press Enter = מקש Enter (Latin, as Home).
+- Say what a figure's readout actually shows, in both languages, and run the figure to check it
+  before writing a sentence about it (module 02's flattest slope was never displayed).
 - Write Hebrew as Hebrew, not as translated English. It must say the same thing as the English;
   the Hebrew review checks meaning, not just grammar.
 - Bidi: in plain-text fields (objectives, Predict choices, Formula labels, misconceptions,

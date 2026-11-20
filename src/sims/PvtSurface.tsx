@@ -33,9 +33,11 @@ import {
   legPoint,
   project,
   shadowOf,
+  foldState,
   surfaceCells,
   toBox,
   wrapAzimuth,
+  type FoldState,
   type Vec3,
   type ViewAngles,
 } from './core/surface-view';
@@ -77,42 +79,58 @@ const TEXT = {
     point: 'state point',
     walls: 'shadows on the walls',
     view: 'view',
-    foldNone: 'no fold on the surface',
-    foldSome: 'the surface has a fold',
-    describe: (morph: number, legs: boolean, az: number, el: number, pt: string) =>
-      `a and b at ${Math.round(100 * morph)}% of their values; ${morph > 0.4 ? 'the surface has a fold below the critical temperature' : 'no fold on the surface'}; viewed at ${Math.round(az)} degrees turn and ${Math.round(el)} degrees tilt.${legs ? ` State point ${pt}.` : ''}`,
+    fold: {
+      drawn: 'the surface has a fold',
+      outside: 'the fold lies outside the drawn box',
+      none: 'no fold: the ideal gas',
+    } satisfies Record<FoldState, string>,
+    foldDescribe: {
+      drawn: 'the surface has a fold below the critical temperature',
+      outside: 'the fold lies outside the drawn box',
+      none: 'no fold: the ideal gas',
+    } satisfies Record<FoldState, string>,
+    describe: (fold: string, morph: number, legs: boolean, az: number, el: number, pt: string) =>
+      `a and b at ${Math.round(100 * morph)}% of their values; ${fold}; viewed at ${Math.round(az)} degrees turn and ${Math.round(el)} degrees tilt.${legs ? ` State point ${pt}.` : ''}`,
   },
   he: {
     task: {
       fold: `הגבירו את ${iso('a')} ואת ${iso('b')} מאפס עד לערכיהם המלאים. היכן מתפתח קפל במשטח, ובאילו טמפרטורות?`,
       'ideal-flat': `קבעו את ${iso('a')} ואת ${iso('b')} על אפס. האם נשאר קפל כלשהו, בטמפרטורה כלשהי?`,
-      shadows: 'הפעילו את שלושת הקטעים והתבוננו בצללים על הדפנות. איזו דופן מראה איזותרמה, איזו איזוכורה ואיזו איזוברה?',
-      rotate: 'סובבו את המשטח בגרירה או בחצי המקלדת, עד שהקפל נראה מן הצד.',
+      shadows: 'הפעילו את המסלול בן שלושת השלבים והתבוננו בצללים על הדפנות. איזו דופן מראה איזותרמה, איזו איזוכורה ואיזו איזוברה?',
+      rotate: 'סובבו את המשטח בגרירה או במקשי החצים, עד שהקפל נראה מן הצד.',
     } satisfies Record<TaskId, string>,
     label: 'איור חי: הלחץ של גז כפונקציה של הנפח והטמפרטורה במשתנים מצומצמים, משטח תלת-ממדי שאפשר לסובב, מן הגז האידיאלי ועד גז ואן דר ואלס.',
-    keys: `במקלדת: חצי המקלדת מסובבים את המשטח, Home מחזיר את התצוגה; המחוונים שלמטה קובעים את עוצמת ${iso('a')} ו-${iso('b')}, את שתי הזוויות ואת מקום הנקודה על שלושת הקטעים.`,
+    keys: `במקלדת: מקשי החצים מסובבים את המשטח, Home מחזיר את התצוגה; המחוונים שלמטה קובעים את עוצמת ${iso('a')} ו-${iso('b')}, את שתי הזוויות ואת מקום הנקודה במסלול בן שלושת השלבים.`,
     morph: `${iso('a, b')} (חלק מערכיהם המלאים)`,
     azimuth: 'סיבוב',
     elevation: 'הטיה',
-    legs: 'נקודת מצב על שלושה קטעים',
+    legs: 'נקודת מצב במסלול בן שלושה שלבים',
     play: 'הפעלה',
     pause: 'עצירה',
-    replay: 'שוב',
+    replay: 'הפעלה חוזרת',
     progress: 'הנקודה לאורך מסלולה',
     morphReadout: (pct: number) => `${iso('a, b')} ב-${iso(`${pct}%`)} מערכיהם`,
     foldKey: (t: string) => `קפל: ${iso('∂P/∂v > 0')}, רק מתחת ל-${iso(t)}`,
     critKey: (t: string) => `איזותרמה קריטית ${iso(t)}`,
     clipNote: `המשטח נחתך היכן ש-${iso('P_r')} יוצא מתחומו`,
     axes: `צירים: ${iso('v_r')} מ-${iso('0.4')} עד ${iso('5')} (ימינה), ${iso('T_r')} מ-${iso('0.8')} עד ${iso('1.6')} (פנימה), ${iso('P_r')} מ-${iso(`${MINUS}0.5`)} עד ${iso('2.5')} (למעלה)`,
-    legName: ['טמפרטורה קבועה (איזותרמי)', 'נפח קבוע (איזוכורי)', 'לחץ קבוע (איזוברי)'],
+    legName: ['טמפרטורה קבועה (איזותרמה)', 'נפח קבוע (איזוכורה)', 'לחץ קבוע (איזוברה)'],
     legWall: ['דופן P–v', 'דופן P–T', 'רצפת v–T'],
     point: 'נקודת מצב',
     walls: 'צללים על הדפנות',
     view: 'תצוגה',
-    foldNone: 'אין קפל במשטח',
-    foldSome: 'יש קפל במשטח',
-    describe: (morph: number, legs: boolean, az: number, el: number, pt: string) =>
-      `${iso('a')} ו-${iso('b')} ב-${iso(`${Math.round(100 * morph)}%`)} מערכיהם; ${morph > 0.4 ? 'יש קפל במשטח מתחת לטמפרטורה הקריטית' : 'אין קפל במשטח'}; התצוגה בסיבוב ${iso(`${Math.round(az)}°`)} ובהטיה ${iso(`${Math.round(el)}°`)}.${legs ? ` נקודת המצב ${pt}.` : ''}`,
+    fold: {
+      drawn: 'יש קפל במשטח',
+      outside: 'הקפל נמצא מחוץ לתיבה המצוירת',
+      none: 'אין קפל: הגז האידיאלי',
+    } satisfies Record<FoldState, string>,
+    foldDescribe: {
+      drawn: 'יש קפל במשטח מתחת לטמפרטורה הקריטית',
+      outside: 'הקפל נמצא מחוץ לתיבה המצוירת',
+      none: 'אין קפל: הגז האידיאלי',
+    } satisfies Record<FoldState, string>,
+    describe: (fold: string, morph: number, legs: boolean, az: number, el: number, pt: string) =>
+      `${iso('a')} ו-${iso('b')} ב-${iso(`${Math.round(100 * morph)}%`)} מערכיהם; ${fold}; התצוגה בסיבוב ${iso(`${Math.round(az)}°`)} ובהטיה ${iso(`${Math.round(el)}°`)}.${legs ? ` נקודת המצב ${pt}.` : ''}`,
   },
 } satisfies Record<Lang, unknown>;
 
@@ -159,6 +177,7 @@ export default function PvtSurface(props: PvtSurfaceProps) {
   const tasks: TaskDef[] = (props.tasks ?? []).map((id) => ({ id, label: L.task[id] }));
 
   const cells = useMemo(() => surfaceCells(morph, NV, NT), [morph]);
+  const fold = useMemo(() => foldState(cells, morph), [cells, morph]);
   const critical = useMemo(() => isothermLine(morph, 1, 2 * NV), [morph]);
   const fullPath = useMemo(() => legPath(morph, 150), [morph]);
   const here = legPoint(morph, progress);
@@ -226,8 +245,8 @@ export default function PvtSurface(props: PvtSurfaceProps) {
 
   const ptText = `P_r = ${signed(here.p)}, v_r = ${signed(here.v)}, T_r = ${signed(here.t)}`;
   useEffect(() => {
-    setLive(L.describe(morph, legs, azimuth, elevation, iso(ptText)));
-  }, [morph, legs, Math.round(azimuth / 15), Math.round(elevation / 15), Math.round(progress * 6)]);
+    setLive(L.describe(L.foldDescribe[fold], morph, legs, azimuth, elevation, iso(ptText)));
+  }, [morph, fold, legs, Math.round(azimuth / 15), Math.round(elevation / 15), Math.round(progress * 6)]);
 
   const rotateBy = (da: number, de: number, byReader = true) => {
     setAzimuth((a) => wrapAzimuth(a + da));
@@ -490,7 +509,7 @@ export default function PvtSurface(props: PvtSurfaceProps) {
     <SimShell
       fig={props.id}
       lang={props.lang}
-      label={`${L.label} ${L.describe(morph, legs, azimuth, elevation, ptText)} ${L.keys}`}
+      label={`${L.label} ${L.describe(L.foldDescribe[fold], morph, legs, azimuth, elevation, ptText)} ${L.keys}`}
       canvasRef={canvasRef}
       aspect={narrow ? 1 : 1.55}
       live={live}
@@ -515,7 +534,7 @@ export default function PvtSurface(props: PvtSurfaceProps) {
           <span>{L.morphReadout(pct)}</span>
           <span>
             {swatch('var(--accent)')}
-            {L.foldKey('T_c')} · {morph > 0.4 ? L.foldSome : L.foldNone}
+            {L.foldKey('T_c')} · {L.fold[fold]}
           </span>
           <span>{L.critKey('T_r = 1')}</span>
           {legs && (

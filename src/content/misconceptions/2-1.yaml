@@ -7,10 +7,10 @@
 - id: MC-ideal-gas-universal
   title:
     en: Every gas obeys the ideal gas law
-    he: כל גז מקיים את חוק הגזים האידיאליים
+    he: כל גז מציית לחוק הגזים האידיאליים
   belief:
     en: PV = Nk_BT is a law of nature that every gas obeys, at any density and any temperature.
-    he: ⁦PV = Nk_BT⁩ הוא חוק טבע שכל גז מקיים, בכל צפיפות ובכל טמפרטורה.
+    he: ⁦PV = Nk_BT⁩ הוא חוק טבע שכל גז מציית לו, בכל צפיפות ובכל טמפרטורה.
   truth:
     en: It is an empirical law of the dilute classical regime, exact only as the density goes to zero. Compressed at 280 K, real CO₂ already has a pressure 14% below the ideal one at 2 MPa (Z = 0.86), and then holds its pressure fixed at 4.16 MPa while it condenses, which no law without a molecular size or attraction in it can produce.
     he: זהו חוק אמפירי של המשטר הדליל והקלאסי, המדויק רק כשהצפיפות שואפת לאפס. ⁦CO₂⁩ ממשי הנדחס ב-⁦280 K⁩ נמצא כבר ב-⁦2 MPa⁩ בלחץ נמוך ב-⁦14%⁩ מהלחץ האידיאלי (⁦Z = 0.86⁩), ואחר כך שומר על לחץ קבוע של ⁦4.16 MPa⁩ בזמן שהוא מתעבה, דבר שחוק שאין בו גודל מולקולה או משיכה אינו יכול לתת.
@@ -19,7 +19,7 @@
     anchor: co2
     label:
       en: Put real CO₂ beside the ideal and van der Waals isotherms
-      he: הציבו ⁦CO₂⁩ ממשי לצד האיזותרמות האידיאלית ושל ואן דר ואלס
+      he: הציבו ⁦CO₂⁩ ממשי לצד האיזותרמה האידיאלית ואיזותרמת ואן דר ואלס
 
 - id: MC-any-gas-liquefies
   title:
@@ -30,7 +30,7 @@
     he: אם דוחסים כל גז חזק מספיק, בכל טמפרטורה, הוא הופך לנוזל.
   truth:
     en: Only below its critical temperature. Above T_c every isotherm falls steadily, so compression raises the density smoothly and no separate liquid ever forms. Nitrogen, with T_c = 126 K, cannot be liquefied at room temperature by any pressure; butane, with T_c = 425 K, sloshes in a lighter.
-    he: רק מתחת לטמפרטורה הקריטית שלו. מעל ⁦T_c⁩ כל איזותרמה יורדת ברציפות, ולכן דחיסה מעלה את הצפיפות בהדרגה ואף פעם אינו נוצר נוזל נפרד. חנקן, שה-⁦T_c⁩ שלו ⁦126 K⁩, אינו מתנזל בטמפרטורת החדר בשום לחץ; בוטאן, שה-⁦T_c⁩ שלו ⁦425 K⁩, משכשך במצית.
+    he: רק מתחת לטמפרטורה הקריטית שלו. מעל ⁦T_c⁩ כל איזותרמה יורדת בהתמדה, ולכן דחיסה מעלה את הצפיפות ברציפות, ונוזל נפרד לעולם אינו נוצר. חנקן, שה-⁦T_c⁩ שלו ⁦126 K⁩, אינו מתנזל בטמפרטורת החדר בשום לחץ; בוטאן, שה-⁦T_c⁩ שלו ⁦425 K⁩, משכשך במצית.
   remedy:
     lesson: '2.1'
     anchor: supercritical

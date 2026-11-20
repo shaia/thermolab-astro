@@ -225,7 +225,7 @@ questions:
               $\dfrac{v_c'}{v_c} = \dfrac{P_c'}{P_c} = \dfrac{3}{8Z_c} \qquad \dfrac{T_c'}{T_c} = \dfrac{8Z_c}{3}$
           - kind: limit
             text: >-
-              $Z_c \to 3/8$: all three factors go to $1$, and a substance with the van der Waals $Z_c$ could be fitted at its whole critical point at once. The further $Z_c$ is from $3/8$, the worse every choice of fit; two constants cannot place three numbers, because the model ties them by $Z_c = 3/8$. The factors are reciprocal pairs: the volume and the pressure miss in the same direction, the temperature in the other, so that the product $P_c'v_c'/(k_BT_c')$ always returns $3/8$.
+              $Z_c \to 3/8$: all three factors go to $1$, and a substance with the van der Waals $Z_c$ could be fitted at its whole critical point at once. The further $Z_c$ is from $3/8$, the worse every choice of fit; two constants cannot place three numbers, because the model ties them by $Z_c = 3/8$. The factors are reciprocal pairs: the volume and the pressure miss in the same direction, the temperature in the other. Within each fit, the two fitted constants and the predicted third satisfy $Pv/(k_BT) = 3/8$, for instance $P_cv_c'/(k_BT_c) = 3/8$.
           - kind: units
             text: >-
               $Z_c$ and all three factors are pure numbers: $\text{Pa}\cdot\text{m}^3/\text{J} = 1$.
@@ -247,7 +247,7 @@ questions:
           - text: >-
               Evaluates the three predictions for water: $91.4\,\text{cm}^3/\text{mol}$, $36.1\,\text{MPa}$, $396\,\text{K}$.
           - text: >-
-              A limit check: $Z_c \to 3/8$ makes every fit exact, or the product of the predictions returns $3/8$.
+              A limit check: $Z_c \to 3/8$ makes every fit exact, or, within one fit, the two fitted constants and the predicted third give back $Z = 3/8$.
             weight: 2
 
   - id: Q-2-bagrut-3
@@ -454,7 +454,7 @@ questions:
               $B \approx (Z - 1)\,V_\mathrm{m} \qquad B' = b_\mathrm{m} - \dfrac{a_\mathrm{m}}{RT}$
           - kind: limit
             text: >-
-              $P \to 0$, $V_\mathrm{m} \to \infty$: $Z - 1 \approx B/V_\mathrm{m} \to 0$ for the data and the model alike, and the ideal law becomes exact; at $0.40\,\text{MPa}$ the data are already within $2.5\%$ of it. $T \to T_B = a_\mathrm{m}/(Rb_\mathrm{m})$, $1026\,\text{K}$ for the fitted model: $B \to 0$. At $280\,\text{K}$, far below it, $B < 0$: attraction wins in the dilute vapour, which is why the ideal law overestimates every vapour pressure in the table.
+              $P \to 0$, $V_\mathrm{m} \to \infty$: $Z - 1 \approx B/V_\mathrm{m} \to 0$ for the data and the model alike, and the ideal law becomes exact; at $0.40\,\text{MPa}$ the data are already within $2.5\%$ of it. $T \to T_B = a_\mathrm{m}/(Rb_\mathrm{m})$, $1026\,\text{K}$ for the fitted model: $B \to 0$. At $280\,\text{K}$, far below it, $B < 0$: attraction wins in the dilute vapour, which is why the ideal law overestimates the dilute vapour's pressure; denser, the higher virial terms add to the deficit.
           - kind: units
             text: >-
               $Z$ is a pure number, so $B$ has the units of $V_\mathrm{m}$, $\text{cm}^3/\text{mol}$; $a_\mathrm{m}/(RT)$ is $\text{Pa}\,\text{m}^6\,\text{mol}^{-2}/(\text{J}\,\text{mol}^{-1}) = \text{m}^3/\text{mol}$, as $b_\mathrm{m}$ is.

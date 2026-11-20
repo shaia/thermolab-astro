@@ -179,7 +179,7 @@ export const chapters: Chapter[] = [
             id: 'OBJ-2.1-1',
             text: {
               en: 'State the state postulate for a simple compressible substance (fixing two independent intensive variables fixes every other equilibrium property), and explain why all equilibrium states therefore form a single surface in (P, v, T) space.',
-              he: `לנסח את הנחת המצב עבור חומר דחיס פשוט (קיבוע שני משתנים אינטנסיביים בלתי תלויים מקבע כל תכונת שיווי משקל אחרת), ולהסביר מדוע כל מצבי שיווי המשקל מרכיבים לפיכך משטח יחיד במרחב ${f('(P, v, T)')}.`,
+              he: `לנסח את הנחת המצב עבור חומר דחיס פשוט (קיבוע שני משתנים אינטנסיביים בלתי תלויים מקבע כל תכונת שיווי משקל אחרת), ולהסביר מדוע, כתוצאה מכך, כל מצבי שיווי המשקל מרכיבים משטח יחיד במרחב ${f('(P, v, T)')}.`,
             },
           },
           {

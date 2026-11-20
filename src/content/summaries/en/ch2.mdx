@@ -46,7 +46,7 @@ Fix two independent intensive variables of a simple compressible substance and e
 
 ## How to solve
 
-1. **Locate the state first.** Compute $T_r$ and $P_r$ (or $v_r$). Dilute and far above $T_c$: the ideal law, and say how good it is. Moderate density near $T_c$: van der Waals. Inside the fold below $T_c$: the bare equation does not describe the substance.
+1. **Locate the state first.** Compute $T_r$ and $P_r$ (or $v_r$). Dilute and far above $T_c$: the ideal law, and say how good it is. At temperatures of order $T_c$ and densities well below the critical density: van der Waals, to about $10\%$. Near the critical point itself, or in the dense liquid, it fails. Inside the fold below $T_c$: the bare equation does not describe the substance.
 2. **Pick one convention and keep it:** per particle with $k_B$, $v = V/N$, $a$, $b$; or per mole with $R$, $V_\mathrm{m}$, $a_\mathrm{m}$, $b_\mathrm{m}$. Convert densities from $\text{mol/L}$ to $\text{mol/m}^3$.
 3. **Constants from a critical point:** $b = k_BT_c/(8P_c)$, $a = 27(k_BT_c)^2/(64P_c)$. After that, $T_c$ and $P_c$ come back by construction; only $v_c$ and $Z_c$ test anything.
 4. **Pressure at given $v$ and $T$:** evaluate the ideal term, the rise $\frac{k_BT}{v}\frac{b}{v - b}$ and the drop $a/v^2$ separately, and say which wins.

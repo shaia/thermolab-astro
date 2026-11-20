@@ -66,13 +66,18 @@ when it is.
 
 ## Module 02: equations of state
 
-- `data/co2-isotherm-280k.csv` (and its two notebook copies) is presented as NIST data ("the NIST CO2 isotherm",
-  "NIST (measured)") but is hand-built, and its stated NIST reference values are wrong. NIST Chemistry WebBook
-  (fluid.cgi, CO₂, 280 K): P_sat = 4.1607 MPa (CSV 4.1663), saturated vapour 121.74 kg/m³ (CSV 114.8), saturated
-  liquid 883.58 kg/m³ (CSV 827). So the plateau runs from 361.5 to 49.8 cm³/mol, not 383.4 to 53.2. The vapour rows
-  have round Z (0.97, 0.94, 0.90, 0.85, 0.80, 0.75, 0.71) and lie 0.8–2.9% above NIST's isotherm at the same molar
-  volume (1.2e-3 m³/mol: 1.746 against 1.718 MPa; 4.2e-4: 3.935 against 3.828 MPa). The row 5.0e-5 m³/mol at 6.5 MPa
-  is inside NIST's two-phase region (880 kg/m³ < 883.58), so it should be 4.16 MPa. The port quotes NIST's isotherm.
+- `data/co2-isotherm-280k.csv` (and its two notebook copies) is hand-built: its own header says "Hand-constructed
+  for this course … this is not a live pull from NIST" and "illustrative", and the page and notebook call it
+  "representative published values". The mislabelling is in the headings and labels: "The NIST CO2 isotherm" (page
+  and notebook Part 5), the legend "NIST (measured)", and the quiz Q-02-4/5 feedback ("NIST CO2 isotherm data").
+  Three of its five stated NIST reference values are wrong (T_c = 304.13 K and P_c = 7.3773 MPa are right). NIST
+  Chemistry WebBook (fluid.cgi, CO₂, 280 K): P_sat = 4.1607 MPa (CSV 4.1663), saturated vapour 121.74 kg/m³ (CSV
+  114.8), saturated liquid 883.58 kg/m³ (CSV 827). So the plateau runs from 361.5 to 49.8 cm³/mol, not 383.4 to
+  53.2. The vapour rows have round Z (0.97, 0.94, 0.90, 0.85, 0.80, 0.75, 0.71); the first two lie 0.2–0.4% below
+  NIST's isotherm at the same molar volume and the other five 1.7–2.9% above (NIST: 0.45248, 0.87907, 1.71725,
+  2.41651, 3.01643, 3.42834 and 3.82865 MPa at the seven volumes; for example 1.2e-3 m³/mol: 1.746 against 1.717
+  MPa; 4.2e-4: 3.935 against 3.829 MPa). The row 5.0e-5 m³/mol at 6.5 MPa is inside NIST's two-phase region (880
+  kg/m³ < 883.58), so it should be 4.16 MPa. The port quotes NIST's isotherm.
 - Explore, alt text of `gases-surface.mp4`: the fold is "a region where the surface is no longer single-valued in
   pressure for a given volume and temperature". P(v, T) of the van der Waals equation is single-valued everywhere;
   it is v at given (P, T) that has three values below T_c.
@@ -110,6 +115,9 @@ when it is.
 - Advanced: "At low T, B(T) < 0 — attraction dominates and Z < 1; at high T, B(T) > 0 — excluded volume dominates and
   Z > 1." The sign of B fixes the sign of Z − 1 only in the dilute limit. Below T_B a van der Waals gas has Z < 1 only
   for v > b/(1 − T/T_B) and Z > 1 denser (T_r = 1.2: Z returns to 1 at v_r = 0.517). Real nitrogen at 300 K has
-  B = −4.4 cm³/mol (NIST isotherm, 0.05–1 MPa) and Z = 1.057 at 20 MPa. An imprecision.
-- Problem set, problem 5 is tagged OBJ-02-2 (the doubling test); no part of it asks about extensive or intensive
-  quantities. The port's version (workbook W-2.1-07) adds one, on b and Nb.
+  B of about −4.5 cm³/mol (a fit to NIST's 0.05–1 MPa isotherm gives −4.0 to −4.6, depending on the fit) and
+  Z = 1.057 at 20 MPa. An imprecision.
+- Problem set, problem 5 is tagged OBJ-02-2 (the doubling test) as well as OBJ-02-4. The tag is weak rather than
+  baseless (OBJ-02-2 includes forming per-particle densities, which 5(a)'s per-molecule b loosely touches), but no
+  part asks to classify a quantity as extensive or intensive. The port's version (workbook W-2.1-07) adds one, on b
+  and Nb.

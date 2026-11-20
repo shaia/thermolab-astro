@@ -27,7 +27,7 @@ questions:
           Over every $(v, T)$ there is still one pressure, as an equation $P(v, T)$ must give. It is the volume at given $P$ and $T$ that has three values.
         correct: true
         feedback: >-
-          Right. The surface is single-valued as a height over the $(v, T)$ floor and multi-valued only as seen from the $P$–$T$ wall. Two densities at one pressure and temperature are what a liquid and its vapour are; the third, the middle one, lies on the stretch where $(\partial P/\partial v)_T > 0$, which is not a stable state.
+          Right. The surface is single-valued as a height over the $(v, T)$ floor and multi-valued only as seen from the $P$–$T$ wall. Of the three volumes at one pressure and temperature, the outer two are the would-be liquid and vapour (whether they coexist at that pressure is module 14's question); the third, the middle one, lies on the stretch where $(\partial P/\partial v)_T > 0$, which is not a stable state.
       - text: >-
           At those points the surface gives three pressures for one $(v, T)$.
         feedback: >-

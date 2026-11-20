@@ -1,6 +1,6 @@
 /**
  * Pure helpers for the VdwIsotherm figure (lesson 2.1, fig-2-1b): where ∂P/∂v > 0 on a sub-critical isotherm, the
- * flattest slope on a curve, Z along it, and ThermoLab's CO₂ isotherm in reduced variables. No canvas in here; unit-tested
+ * the slope readout of an isotherm, Z along it, and NIST's CO₂ isotherm (src/physics/co2-isotherm.ts) in reduced variables. No canvas in here; unit-tested
  * in tests/unit/isotherm-view.test.ts.
  *
  * Everything is in reduced variables (P_r, v_r, T_r), measured in units of the gas's own critical point, so one curve
@@ -28,7 +28,7 @@ export function co2Constants() {
   return { a, b, vC: vdwCriticalPoint(a, b).vC };
 }
 
-/** The 280 K CO₂ data in reduced variables, in the CSV's order (v_r falls as the gas is compressed). */
+/** The 280 K CO₂ data in reduced variables, in the table's order (v_r falls as the gas is compressed). */
 export function co2Reduced(): DataPoint[] {
   const { vC } = co2Constants();
   return CO2_ISOTHERM_280K.map(([p, vm]) => ({ vR: vm / N_A / vC, pR: p / CO2_CRITICAL.pC, z: (p * vm) / (R_GAS * CO2_T) }));
@@ -87,7 +87,7 @@ export type SlopeReadout =
   | { kind: 'interval'; from: number; to: number };
 
 /**
- * What the figure reads off the isotherm's flatness, following ThermoLab: below T_r = 1 the interval where ∂P/∂v > 0;
+ * What the figure reads off the isotherm's flatness: below T_r = 1 the interval where ∂P/∂v > 0;
  * from T_r = 1 up to 1.068 the slope at the inflection point, where ∂²P/∂v² = 0 means T_r = (3v − 1)³/(8v⁴) (the root
  * on the side below v_r = 4/3, where that function rises to its maximum 1.068); above that there is no inflection.
  */

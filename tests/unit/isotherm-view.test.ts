@@ -81,7 +81,7 @@ describe('the stretch where ∂P/∂v > 0', () => {
     }
     expect(width).toBeLessThan(0.05);
   });
-  it('contains the CO₂ condensation volumes at 280 K: v_r from 0.74 to 1.49 or so', () => {
+  it('has the stretch where ∂P/∂v > 0 at T_r = 280/304.13 run from v_r ≈ 0.74 to 1.45', () => {
     const [a, b] = unstableInterval(TR_CO2)!;
     expect(a).toBeGreaterThan(0.7);
     expect(a).toBeLessThan(0.8);

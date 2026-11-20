@@ -43,8 +43,8 @@
   term: { en: excluded volume, he: נפח מודר }
   reject: ['נפח מוצא', 'נפח נמנע']
   definition:
-    en: The volume per molecule, $b$, that other molecules cannot enter; for hard spheres of diameter $d$, $b = \tfrac23\pi d^3$, half the sphere of radius $d$ that each pair excludes.
-    he: הנפח לכל מולקולה, $b$, שמולקולות אחרות אינן יכולות להיכנס אליו; לכדורים קשיחים בקוטר $d$, $b = \tfrac23\pi d^3$, מחצית הכדור ברדיוס $d$ שכל זוג מדיר.
+    en: The volume, $b$, that the centres of other molecules cannot enter, counted per molecule; for hard spheres of diameter $d$, $b = \tfrac23\pi d^3$, half the sphere of radius $d$ that each pair excludes.
+    he: הנפח, $b$, שמרכזיהן של מולקולות אחרות אינם יכולים להיכנס אליו, ביחס למולקולה אחת; לכדורים קשיחים בקוטר $d$, $b = \tfrac23\pi d^3$, מחצית הכדור ברדיוס $d$ שכל זוג מדיר.
   lesson: '2.1'
 - id: critical-point
   term: { en: critical point, he: נקודה קריטית }
@@ -62,8 +62,8 @@
   term: { en: supercritical fluid, he: זורם על-קריטי }
   reject: ['נוזל על-קריטי', 'פלואיד על-קריטי']
   definition:
-    en: A substance above its critical temperature, where compression raises the density smoothly and there is no separate liquid and vapour.
-    he: חומר מעל הטמפרטורה הקריטית שלו, שבו דחיסה מעלה את הצפיפות ברציפות ואין נוזל ואדים נפרדים.
+    en: A substance above its critical temperature and pressure; above $T_c$, at any pressure, compression raises the density smoothly and there is no separate liquid and vapour.
+    he: חומר מעל הטמפרטורה והלחץ הקריטיים שלו; מעל $T_c$, בכל לחץ, דחיסה מעלה את הצפיפות ברציפות ואין נוזל ואדים נפרדים.
   lesson: '2.1'
 - id: reduced-variables
   term: { en: reduced variables, he: משתנים מצומצמים }

@@ -72,7 +72,7 @@ Figure 2.1a is a gas's whole equilibrium life on one sheet. Pick a volume per pa
 
 <Step fig="fig-2-1a" set={{ morph: 0, legs: false }} id="ideal-flat">
 
-Slide the morph to $0$. Both constants are off, and the sheet is the ideal gas, $P = k_BT/v$, in units of the full gas's critical point $P_r = 8T_r/(3v_r)$. It is curved, but it has no fold: every isotherm falls the whole way, at every temperature in the box, and nothing marks out one temperature from another. That is what "flat" means here, and it is why the ideal gas cannot condense.
+Slide the morph to $0$. Both constants are off, and the sheet is the ideal gas, $P = k_BT/v$, in units of the full gas's critical point $P_r = 8T_r/(3v_r)$. It is curved, but it has no fold: every isotherm falls the whole way, at every temperature in the box, and nothing marks out one temperature from another. That is what the ideal surface lacks, and it is why the ideal gas cannot condense.
 
 </Step>
 
@@ -90,7 +90,7 @@ Turn the legs on. A state point moves on the sheet in three legs, and the figure
 
 <Step fig="fig-2-1a" set={{ morph: 1, legs: false }} id="rotate">
 
-Drag the surface round until you look along the $v$ axis, onto the $P$–$T$ wall. Above $T_c$ the sheet seen edge-on is a single layer. Below $T_c$ it folds over itself, in a wedge whose point is the critical point. Inside the wedge one pair $(P, T)$ is met by the sheet three times, at three different volumes. The sheet is still single-valued in the other direction, one pressure over every $(v, T)$, as an equation $P(v, T)$ must be. It is the volume at given pressure and temperature that has three answers, and two densities at one pressure and temperature are what a liquid and its vapour are.
+Drag the surface round until you look along the $v$ axis, onto the $P$–$T$ wall. Above $T_c$ the sheet seen edge-on is a single layer. Below $T_c$ it folds over itself, in a wedge whose point is the critical point. Inside the wedge one pair $(P, T)$ is met by the sheet three times, at three different volumes. The sheet is still single-valued in the other direction, one pressure over every $(v, T)$, as an equation $P(v, T)$ must be. It is the volume at given pressure and temperature that has three answers, and two densities at one pressure and temperature are what a liquid in coexistence with its vapour requires; at which pressure that happens is module 14's question.
 
 </Step>
 
@@ -124,7 +124,7 @@ does not change when the bottles are joined: it is a property of the substance a
 
 <Step fig="fig-2-1a" set={{ morph: 0, legs: false }} id="ideal-law">
 
-**The ideal gas law.** The simplest equation of state is the <Term id="ideal-gas-law">ideal gas law</Term>, which <LessonLink id="4.1" anchor="derive">lesson 4.1</LessonLink> derived from point particles that never interact:
+**The ideal gas law.** The simplest equation of state is the <Term id="ideal-gas-law">ideal gas law</Term>, which <LessonLink id="4.1" anchor="derive">lesson 4.1</LessonLink> derives from point particles that never interact:
 
 <Formula tex="PV = Nk_BT \qquad Pv = k_BT" label="The ideal gas law, extensive and per particle" />
 
@@ -146,7 +146,7 @@ $$
 b = \frac12 \cdot \frac43\pi d^3 = \frac23\pi d^3
 $$
 
-four times the volume of the molecule itself. The room a centre can actually move in is $v - b$, not $v$, and the ideal law with that replacement reads $P = k_BT/(v - b)$. Since $v - b < v$, this always *raises* the pressure: the same molecules, crowded into less usable room, reach the wall more often. For hard spheres it is right to first order in the density, where both give $Pv/k_BT = 1 + b/v$.
+four times the volume of the molecule itself. The room a centre can actually move in is $v - b$, not $v$, and the ideal law with that replacement reads $P = k_BT/(v - b)$. Since $v - b < v$, this always *raises* the pressure: the same molecules, crowded into less usable room, reach the wall more often. For hard spheres it is right to first order in the density: there the exact hard-sphere equation of state and $P = k_BT/(v - b)$ both give $Pv/k_BT = 1 + b/v$.
 
 </Step>
 
@@ -175,7 +175,7 @@ the <Term id="van-der-waals-equation">van der Waals equation</Term>, the sheet o
 <Spread
   fig="fig-2-1b"
   n="2.1b"
-  caption="One van der Waals isotherm, computed live in reduced variables. In the $P$–$v$ view: $P_r$ against $v_r$ on a logarithmic volume axis, the isotherm at the reduced temperature $T_r$ of the slider, the critical isotherm faint for reference, the critical point marked, and, below $T_c$, the stretch where $(\partial P/\partial v)_T > 0$ shaded and marked as not a stable state. The ideal isotherm $P_r = 8T_r/(3v_r)$ at the same temperature is dashed. In the $Z$ view: the compressibility factor $Z = Pv/(k_BT) = 3P_rv_r/(8T_r)$ along the same isotherm, with $Z = 1$ and $Z_c = 3/8$ marked. With CO₂ on, the isotherm is set to $T_r = 280/304.13$ and the reference data for carbon dioxide at $280\,\text{K}$ are overlaid as points, reduced with the van der Waals constants fitted to CO₂'s critical point. The readout gives $T_r$, the flattest slope on the curve, the smallest $-\partial P_r/\partial v_r$, and where it is, $Z$ at the cursor, and, with CO₂ on, the ideal and van der Waals pressures against the datum at the cursor."
+  caption="One van der Waals isotherm, computed live in reduced variables. In the $P$–$v$ view: $P_r$ against $v_r$ on a logarithmic volume axis, the isotherm at the reduced temperature $T_r$ of the slider, the critical isotherm faint for reference, the critical point marked, and, below $T_c$, the stretch where $(\partial P/\partial v)_T > 0$ shaded and marked as not a stable state. The ideal isotherm $P_r = 8T_r/(3v_r)$ at the same temperature is dashed. In the $Z$ view: the compressibility factor $Z = Pv/(k_BT) = 3P_rv_r/(8T_r)$ along the same isotherm, with $Z_c = 3/8$ marked and, when the ideal gas is on, its $Z = 1$ dashed. With CO₂ on, the isotherm is set to $T_r = 280/304.13$ and the reference data for carbon dioxide at $280\,\text{K}$ are overlaid as points, reduced with the van der Waals constants fitted to CO₂'s critical point. The readout gives $T_r$; below $T_c$, the stretch of $v_r$ on which the pressure rises with volume; between $T_c$ and $T_r = 1.068$, the slope $-\partial P_r/\partial v_r$ at the isotherm's inflection point, and where it is; above $1.068$, that the isotherm has no inflection point; $Z$ at the cursor; and, with CO₂ on, the ideal and van der Waals pressures against the datum at the cursor."
   figure={VdwIsotherm}
   figureProps={{ tr: 1.2, view: 'pv', ideal: true, co2: false, tasks: ['wiggle', 'critical', 'co2', 'z-dilute'] }}
 >
@@ -184,7 +184,7 @@ the <Term id="van-der-waals-equation">van der Waals equation</Term>, the sheet o
 
 <Step fig="fig-2-1b" set={{ tr: 0.9, view: 'pv', ideal: true, co2: false }} id="wiggle">
 
-**Below $T_c$, the isotherm wiggles.** Figure 2.1b shows one slice of the surface at a time. At $T_r = 0.9$ the van der Waals isotherm falls, then *rises* from $v_r = 0.72$ to $v_r = 1.53$, the pressure climbing from $P_r = 0.42$ to $0.72$ as the gas expands, then falls again. The readout's flattest slope is negative, $-0.78$ at $v_r = 0.86$: there the curve climbs. That is the fold of figure 2.1a, cut through.
+**Below $T_c$, the isotherm wiggles.** Figure 2.1b shows one slice of the surface at a time. At $T_r = 0.9$ the van der Waals isotherm falls, then *rises* from $v_r = 0.72$ to $v_r = 1.53$, the pressure climbing from $P_r = 0.42$ to $0.72$ as the gas expands, then falls again. The readout gives the rising stretch, $0.72 < v_r < 1.53$: there the curve climbs, most steeply at $v_r = 0.86$, where $\partial P_r/\partial v_r = +0.78$. That is the fold of figure 2.1a, cut through.
 
 On the shaded stretch $(\partial P/\partial v)_T > 0$, and no state there is stable. Lower the slider and the stretch widens; by $T_r = 0.8$ the bottom of the wiggle dips below zero pressure. What a real substance does instead, and where, is an <LessonLink id="0.1" anchor="epistemic-labels">open question</LessonLink> in this lesson: module 14 answers it, with the Maxwell construction and these same isotherms. Here the wiggle is a feature of the bare equation, real and checkable, and unexplained.
 
@@ -192,7 +192,7 @@ On the shaded stretch $(\partial P/\partial v)_T > 0$, and no state there is sta
 
 <Step fig="fig-2-1b" set={{ tr: 1, view: 'pv', ideal: true, co2: false }} id="critical">
 
-**The critical isotherm.** Raise the slider and the wiggle shrinks, until at $T_r = 1$ it has closed to a single point, $v_r = 1$, where the readout's flattest slope is $0$. There the isotherm is momentarily flat *and* has stopped curving one way before curving the other: an inflection with zero slope. That pair of conditions defines the <Term id="critical-point">critical point</Term>:
+**The critical isotherm.** Raise the slider and the wiggle shrinks, until at $T_r = 1$ it has closed to a single point, $v_r = 1$, where the readout's slope at the inflection point is $0$. There the isotherm is momentarily flat *and* has stopped curving one way before curving the other: an inflection with zero slope. That pair of conditions defines the <Term id="critical-point">critical point</Term>:
 
 $$
 \left(\frac{\partial P}{\partial v}\right)_T = -\frac{k_BT}{(v - b)^2} + \frac{2a}{v^3} = 0 \qquad \left(\frac{\partial^2 P}{\partial v^2}\right)_T = \frac{2k_BT}{(v - b)^3} - \frac{6a}{v^4} = 0
@@ -202,19 +202,19 @@ Move the $T$ terms to one side in each and divide the first by the second: $(v -
 
 <Formula tex="v_c = 3b \qquad k_BT_c = \frac{8a}{27b} \qquad P_c = \frac{a}{27b^2}" label="The critical point of a van der Waals gas" />
 
-This is a theorem about the model. $T_c$ is the <Term id="critical-temperature">critical temperature</Term>, and it depends on $a/b$ alone: attraction against size. With $a = 0$ it is zero; the formula's $b \to 0$ limit sends the whole critical point off to infinity, and indeed neither correction alone gives a critical point. Without the algebra, $T_c$ can be measured: sweep down from above and stop at the first isotherm whose flattest slope falls below a small threshold, which is what the readout lets you do by hand. ThermoLab's laboratory does it for CO₂, and its error bar is honest only if the threshold is tightened along with the temperature grid. With the threshold fixed and the grid refined from $200$ to $1600$ temperatures, the quoted uncertainty, half a grid step, falls from $0.46$ to $0.06\,\text{K}$ while the result stays $0.2$ to $0.5\,\text{K}$ high, ending seven error bars from the closed form; with the threshold tightened in step, it stays within one. That is a numerical observation, and it checks the theorem; it does not prove it.
+This is a theorem about the model. $T_c$ is the <Term id="critical-temperature">critical temperature</Term>, and it depends on $a/b$ alone: attraction against size. With $a = 0$ it is zero; the formula's $b \to 0$ limit sends $T_c$ and $P_c$ off to infinity and $v_c$ to zero, and indeed neither correction alone gives a critical point. Without the algebra, $T_c$ can be measured: sweep down from $T_r = 1.06$, where the readout first gives the slope at the inflection point, and stop at the first isotherm whose slope there falls below a small threshold, which is what the readout lets you do by hand. ThermoLab's laboratory does it for CO₂, and its error bar is honest only if the threshold is tightened along with the temperature grid. With the threshold fixed and the grid refined from $200$ to $1600$ temperatures, the quoted uncertainty, half a grid step, falls from $0.46$ to $0.06\,\text{K}$ while the result stays $0.2$ to $0.5\,\text{K}$ high, ending seven error bars from the closed form; with the threshold tightened in step, it stays at one error bar. That is a numerical observation, and it checks the theorem; it does not prove it.
 
 </Step>
 
 <Step fig="fig-2-1b" set={{ tr: 1.5, view: 'pv', ideal: true, co2: false }} id="supercritical">
 
-**Above $T_c$, no liquid.** At $T_r = 1.5$ the isotherm falls everywhere; the readout's flattest slope is positive, and lies at the dilute end of the curve. Each pressure is met at one volume only. Compress the gas and its density rises smoothly, without ever splitting into a dense part and a thin part: there is no separate liquid to condense into. Above $T_c$ the substance is a <Term id="supercritical-fluid">supercritical fluid</Term>, and no pressure liquefies it.
+**Above $T_c$, no liquid.** At $T_r = 1.5$ the isotherm falls everywhere and is convex: the readout says it has no inflection point at all. Each pressure is met at one volume only. Compress the gas and its density rises smoothly, without ever splitting into a dense part and a thin part: there is no separate liquid to condense into. Above $T_c$ there is no separate liquid and vapour at any pressure, and no pressure liquefies the substance; above $P_c$ as well, it is a <Term id="supercritical-fluid">supercritical fluid</Term>.
 
 That settles the hook. Nitrogen's critical temperature is $126.19\,\text{K}$ and butane's $425.13\,\text{K}$ (NIST Chemistry WebBook). At $293\,\text{K}$ nitrogen is at $T_r = 2.32$, far above its critical isotherm, and butane at $T_r = 0.69$, far below: the cylinder holds a supercritical fluid, the lighter a liquid under its own vapour. Which side of its critical temperature room temperature falls on is the whole difference, and $a/b$ sets it.
 
 <Note kind="warn">
 
-Liquefies, not solidifies. A supercritical fluid compressed hard enough does freeze: the melting line does not end at a critical point. Room-temperature nitrogen freezes at pressures thousands of times atmospheric. The van der Waals model contains no solid, and nothing in this lesson is about freezing.
+Liquefies, not solidifies. A supercritical fluid compressed hard enough does freeze: the melting line does not end at a critical point. Room-temperature nitrogen freezes at pressures tens of thousands of times atmospheric, about $2.4\,\text{GPa}$. The van der Waals model contains no solid, and nothing in this lesson is about freezing.
 
 </Note>
 
@@ -238,7 +238,7 @@ $$
 Z_c = \frac{P_cv_c}{k_BT_c} = \frac{a}{27b^2} \cdot 3b \cdot \frac{27b}{8a} = \frac38
 $$
 
-the same for every van der Waals gas. The measured values are not $0.375$: from NIST's critical constants, $0.290$ for argon and $0.275$ for carbon dioxide. The model's critical point is in the right place in $T$ and $P$ when $a$ and $b$ are fitted to put it there, but its critical volume is too large, by $29\%$ for argon and $37\%$ for CO₂.
+the same for every van der Waals gas. The measured values are not $0.375$: from NIST's critical constants, $0.290$ for argon and $0.275$ for carbon dioxide. The model's critical point is in the right place in $T$ and $P$ when $a$ and $b$ are fitted to put it there, but its critical volume is too large, by about $30\%$ for argon and $37\%$ for CO₂.
 
 </Step>
 
@@ -256,7 +256,7 @@ $$
 Z = 1 + \frac{B(T)}{v} + \frac{b^2}{v^2} + \cdots \qquad B(T) = b - \frac{a}{k_BT}
 $$
 
-Its second coefficient $B(T)$ is negative at low temperature, where attraction dominates and $Z < 1$, and positive at high temperature, where size dominates. It vanishes at the <Term id="boyle-temperature">Boyle temperature</Term> $k_BT_B = a/b = \tfrac{27}{8}k_BT_c$, where $Z$ departs from $1$ only at second order in the density: at $T_r = 27/8$ and $v_r = 5$ it is $1.005$, against $0.88$ at $T_r = 1.2$. The series is the systematic version of the van der Waals idea, and its coefficients can be computed from a molecular force law, term by term.
+Its second coefficient $B(T)$ is negative at low temperature, where attraction dominates and $Z < 1$ in the dilute gas, and positive at high temperature, where size dominates. It vanishes at the <Term id="boyle-temperature">Boyle temperature</Term> $k_BT_B = a/b = \tfrac{27}{8}k_BT_c$, where $Z$ departs from $1$ only at second order in the density: at $T_r = 27/8$ and $v_r = 5$ it is $1.005$, against $0.88$ at $T_r = 1.2$. The series is the systematic version of the van der Waals idea, and its coefficients can be computed from a molecular force law, term by term.
 
 </Step>
 
@@ -354,13 +354,13 @@ $$
 P = \frac{k_BT}{v - b} - \frac{a}{v^2} \qquad v = \frac{V}{N} = \frac{2V}{2N} \qquad P_\mathrm{f} = \frac{(N_1 + N_2)\,k_BT}{V_1 + V_2} = \frac{P_1V_1 + P_2V_2}{V_1 + V_2}
 $$
 
-**Limit check:** in (c), make the second bottle identical to the first, $V_2 = V_1$: $P_\mathrm{f} = P_1$, the doubling test. Let the second bottle hold almost no gas, $N_2 \to 0$: $P_\mathrm{f} \to P_1V_1/(V_1 + V_2)$, the first gas spread into both volumes. The final pressure is an average weighted by volume, never outside the range of the two starting pressures.
+**Limit check:** in (c), make the second bottle identical to the first, $V_2 = V_1$ and $N_2 = N_1$: $P_\mathrm{f} = P_1$, the doubling test. Let the second bottle hold almost no gas, $N_2 \to 0$: $P_\mathrm{f} \to P_1V_1/(V_1 + V_2)$, the first gas spread into both volumes. The final pressure is an average weighted by volume, never outside the range of the two starting pressures.
 
 **Units:** $k_BT/v$ is $\text{J/m}^3 = \text{Pa}$; $a/v^2$ is $\text{Pa}\,\text{m}^6/\text{m}^6 = \text{Pa}$.
 
 **Substitution:** (a) $v = 0.010/(6.022 \times 10^{23}) = 1.661 \times 10^{-26}\,\text{m}^3$; ideal $k_BT/v = 249.43\,\text{kPa}$; van der Waals $250.23 - 1.36 = 248.88\,\text{kPa}$, $0.22\%$ lower. (b) $v = 0.020/(1.204 \times 10^{24})$, unchanged, so $P$ is $248.88\,\text{kPa}$ again. (c) $P_1 = 249.43\,\text{kPa}$, $P_2 = 83.14\,\text{kPa}$; $P_\mathrm{f} = 2 \times 6.022 \times 10^{23} \times 1.380649 \times 10^{-23} \times 300/0.040 = 124.72\,\text{kPa}$.
 
-**Result:** (a) $249.4\,\text{kPa}$ ideal, $248.9\,\text{kPa}$ van der Waals. (b) $N$, $V$ and $U$ double; $T$, $P$ and $v$ do not, and that holds for the van der Waals gas as much as the ideal one, because its pressure too depends on $v$ alone. (c) $124.7\,\text{kPa}$, not the plain average $166.3\,\text{kPa}$: two bottles in *different* states make a new state, and an intensive variable does not survive that unchanged.
+**Result:** (a) $249.4\,\text{kPa}$ ideal, $248.9\,\text{kPa}$ van der Waals. (b) $N$, $V$ and $U$ double; $T$, $P$ and $v$ do not, and that holds for the van der Waals gas as much as the ideal one, because its pressure too depends on $v$ and $T$ alone. (c) $124.7\,\text{kPa}$, not the plain average $166.3\,\text{kPa}$: two bottles in *different* states make a new state, and an intensive variable does not survive that unchanged.
 
 </Solution>
 

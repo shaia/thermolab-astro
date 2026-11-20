@@ -11,6 +11,7 @@
  * pressure_MPa, density_kg_m3, phase
  *
  * Columns below: pressure [MPa], density [kg/m³], phase. The two rows at 4.1607 MPa are the saturated vapour and liquid.
+ * The pull's PHigh was 12, but the table stops at 10.2 MPa: the rows above 10.2 MPa are not carried here.
  * This replaces ThermoLab's hand-built data/co2-isotherm-280k.csv, which disagrees with NIST (P_sat 4.1663 against
  * 4.1607 MPa, the liquid density, vapour rows up to 2.9% off).
  */

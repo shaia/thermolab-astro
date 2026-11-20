@@ -2,7 +2,7 @@
  * An isotherm of the van der Waals gas (lesson 2.1, figure fig-2-1b), in reduced variables. The P–v plane: the isotherm at
  * T_r, the ideal-gas isotherm at the same T, the critical isotherm faint for reference, the critical point, and where
  * T_r < 1 the stretch with (∂P/∂v)_T > 0 shaded and labelled as not a stable state. Or Z = P v/(k_B T) against v_r, with
- * Z = 1 and the critical Z_c = 3/8 marked. With `co2`, ThermoLab's CO₂ isotherm at 280 K (T_r = 280/304.13, with CO₂'s
+ * Z = 1 and the critical Z_c = 3/8 marked. With `co2`, NIST's CO₂ isotherm at 280 K (T_r = 280/304.13, with CO₂'s
  * critical constants) is laid over it and the temperature is held at that T_r. A cursor along v reads off P_r and Z.
  * Pure model, from src/physics/gases.ts; the helpers are in core/isotherm-view.ts. The v axis is logarithmic.
  * Steps may set { tr, view, ideal, co2, cursor }. Tasks: wiggle, critical, co2, z-dilute.
@@ -78,11 +78,11 @@ const TEXT = {
     task: {
       wiggle: 'הורידו את הטמפרטורה מתחת לערך הקריטי. מה קורה לאיזותרמה, והיכן היא כבר אינה מצב אפשרי?',
       critical: `הביאו את ${iso('T_r')} בדיוק ל-1. מה מיוחד באיזותרמה בנקודה הקריטית, ומה מראה השיפוע בנקודת הפיתול?`,
-      co2: `הפעילו את נתוני ${iso('CO₂')}. היכן הגז האידיאלי והגז של ואן דר ואלס נבדלים כל אחד מן המדידות?`,
+      co2: `הפעילו את נתוני ${iso('CO₂')}. היכן כל אחד מהם, הגז האידיאלי וגז ואן דר ואלס, מתחיל להתרחק מן המדידות?`,
       'z-dilute': `עברו לתצוגת ${iso('Z')} והזיזו את הסמן לנפחים גדולים. לאן שואף ${iso('Z')}, ומדוע?`,
     } satisfies Record<TaskId, string>,
-    label: `איור חי: איזותרמה של גז ואן דר ואלס במשתנים מצומצמים, הלחץ כפונקציה של הנפח או מקדם הדחיסות כפונקציה של הנפח, עם הגז האידיאלי, האיזותרמה הקריטית ואפשר גם מדידות ${iso('CO₂')} ב-${iso('280 K')}.`,
-    keys: 'במקלדת: חיצי ימין ושמאל מזיזים את הסמן לאורך ציר הנפח, חיצי למעלה ולמטה משנים את הטמפרטורה, אנטר מחליף בין לחץ ל-Z.',
+    label: `איור חי: איזותרמה של גז ואן דר ואלס במשתנים מצומצמים, הלחץ כפונקציה של הנפח או מקדם הדחיסות כפונקציה של הנפח, עם הגז האידיאלי, האיזותרמה הקריטית ולפי בחירה גם מדידות ${iso('CO₂')} ב-${iso('280 K')}.`,
+    keys: `במקלדת: חיצי ימין ושמאל מזיזים את הסמן לאורך ציר הנפח, חיצי למעלה ולמטה משנים את הטמפרטורה, מקש Enter מחליף בין לחץ ל-${iso('Z')}.`,
     xAxis: `נפח מצומצם ${iso('v_r')} (סולם לוגריתמי)`,
     yAxis: { pv: `לחץ מצומצם ${iso('P_r')}`, z: `מקדם הדחיסות ${iso('Z = P v/(k_B T)')}` } satisfies Record<View, string>,
     tr: `טמפרטורה ${iso('T_r')}`,
@@ -99,9 +99,9 @@ const TEXT = {
     co2: `${iso('CO₂')} ב-${iso('280 K')}`,
     co2Switch: `נתוני ${iso('CO₂')}`,
     slopeAt: 'השיפוע בנקודת הפיתול',
-    flatAt: 'ב',
-    convex: `אין נקודת פיתול: מעל ${iso('T_r = 1.068')} האיזותרמה קמורה בכל מקום`,
-    risesOn: 'הלחץ עולה עם הנפח (∂P/∂v > 0) עבור',
+    flatAt: 'בנקודה',
+    convex: `אין נקודת פיתול: מעל ${iso('T_r = 1.068')} האיזותרמה קעורה כלפי מעלה בכל מקום`,
+    risesOn: `הלחץ עולה עם הנפח (${iso('∂P/∂v > 0')}) עבור`,
     cursorLine: 'בסמן',
     datum: `${iso('CO₂')} ממשי בסמן`,
     noDatum: `אין נתון ${iso('CO₂')} בנפח הזה`,

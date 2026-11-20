@@ -11,8 +11,10 @@ import {
   clipPolygonZ,
   clipPolylineZ,
   criticalPoint,
+  drawnFoldCells,
   fitScale,
   foldShare,
+  foldState,
   isochoreLine,
   isothermLine,
   legPath,
@@ -196,6 +198,21 @@ describe('the surface', () => {
     const f = cells.find((c) => c.fold)!;
     expect(f.p).toBeGreaterThan(P_RANGE[0]);
     expect(dPdvReduced(1, 0.9)).toBeGreaterThan(0);
+  });
+  it('says what the figure draws about the fold: none for the ideal gas, outside the box while every fold cell is cut off, drawn once cells show', () => {
+    expect(foldState(surfaceCells(0, 56, 18), 0)).toBe('none');
+    expect(foldState(surfaceCells(0.2, 56, 18), 0.2)).toBe('outside');
+    expect(foldState(surfaceCells(0.25, 56, 18), 0.25)).toBe('drawn');
+    expect(foldState(surfaceCells(1, 56, 18), 1)).toBe('drawn');
+  });
+  it('derives the fold state from the cells the draw loop paints, at every morph', () => {
+    for (const m of [0, 0.05, 0.1, 0.15, 0.2, 0.22, 0.25, 0.3, 0.4, 0.6, 1]) {
+      const cells = surfaceCells(m, 56, 18);
+      const painted = cells.filter((c) => c.fold && clipPolygonZ(c.corners, -HALF[2], HALF[2]).length >= 3);
+      expect(drawnFoldCells(cells)).toEqual(painted);
+      expect(foldState(cells, m) === 'drawn').toBe(painted.length > 0);
+      if (m > 0 && painted.length === 0) expect(foldState(cells, m)).toBe('outside');
+    }
   });
   it('finds the critical point at (m, 1, 1/m) inside the box, null once it leaves', () => {
     expect(criticalPoint(1)).toEqual({ v: 1, t: 1, p: 1 });
