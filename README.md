@@ -115,5 +115,10 @@ claims the lesson makes:
 - **The platform's standards cost content.** unimech requires at least three questions per
   objective. Module 04 had six questions for five objectives, so the pilot wrote six more, in both
   languages.
-- **One correction to the original.** ThermoLab's module 04 says the relative pressure fluctuation of
-  a mole is about 4·10⁻¹³. N^(-1/2) for 6.02·10²³ is 1.3·10⁻¹². The pilot uses the corrected value.
+- **Corrections to the original.** ThermoLab's module 04 said the relative pressure fluctuation of a
+  mole is about 4·10⁻¹³; N^(-1/2) for 6.02·10²³ is 1.3·10⁻¹² (fixed in ThermoLab, PR #23). An
+  independent physics review of the pilot then found that the lesson, following ThermoLab, explained
+  a steady gauge by the N^(-1/2) spread between gases. A gauge is steady because it averages an
+  astronomical number of impacts, which is a different count, and its jitter does depend on the
+  temperature and the mass. The lesson now separates the two. ThermoLab's module 04 still conflates
+  them.

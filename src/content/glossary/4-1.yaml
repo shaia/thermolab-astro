@@ -3,7 +3,7 @@
   term: { en: pressure, he: לחץ }
   definition:
     en: The force a fluid exerts per unit area of a surface, normal to it. In a gas, the momentum the molecules hand the surface per unit time and area.
-    he: הכוח שזורם מפעיל על יחידת שטח של משטח, בניצב לו. בגז, התנע שהמולקולות מעבירות למשטח ליחידת זמן וליחידת שטח.
+    he: הכוח ליחידת שטח שזורם (נוזל או גז) מפעיל על משטח, בניצב לו. בגז, התנע שהמולקולות מעבירות למשטח ליחידת זמן וליחידת שטח.
   lesson: '4.1'
 - id: kinetic-theory
   term: { en: kinetic theory, he: תורה קינטית }
@@ -40,7 +40,7 @@
   reject: ['התפלגות מקסוול בולצמן']
   definition:
     en: The distribution of molecular velocities in a classical gas in equilibrium; each velocity component is Gaussian with variance $k_BT/m$.
-    he: התפלגות מהירויות המולקולות בגז קלאסי בשיווי משקל; כל רכיב מהירות גאוסי, עם שונות $k_BT/m$.
+    he: התפלגות מהירויות המולקולות בגז קלאסי בשיווי משקל; כל רכיב מהירות מתפלג גאוסית, עם שונות $k_BT/m$.
   lesson: '4.1'
 - id: microstate
   term: { en: microstate, he: מיקרו-מצב }
@@ -54,11 +54,11 @@
   reject: ['תנודה סטטיסטית']
   definition:
     en: The deviation of a quantity from its mean; its relative size usually falls as $N^{-1/2}$.
-    he: הסטייה של גודל מהממוצע שלו; הגודל היחסי שלה קטן בדרך כלל כמו $N^{-1/2}$.
+    he: הסטייה של גודל פיזיקלי מהממוצע שלו; הגודל היחסי שלה דועך בדרך כלל כמו $N^{-1/2}$.
   lesson: '4.1'
 - id: internal-energy
   term: { en: internal energy, he: אנרגיה פנימית }
   definition:
     en: The total energy of a system's particles in its own rest frame; for a monatomic ideal gas, all of it kinetic.
-    he: האנרגיה הכוללת של חלקיקי מערכת במערכת המנוחה שלה; בגז אידיאלי חד-אטומי, כולה קינטית.
+    he: האנרגיה הכוללת של חלקיקי מערכת במערכת הייחוס שבה המערכת נמצאת במנוחה; בגז אידיאלי חד-אטומי, כולה קינטית.
   lesson: '4.1'

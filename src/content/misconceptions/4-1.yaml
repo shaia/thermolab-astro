@@ -9,7 +9,7 @@
     he: בגז בשיווי משקל, כשהמד יציב, המולקולות נעצרו.
   truth:
     en: Equilibrium is steady averages, not stillness. The molecules keep moving and colliding; the pressure is steady because there are so many collisions.
-    he: שיווי משקל הוא ממוצעים יציבים, לא דממה. המולקולות ממשיכות לנוע ולהתנגש; הלחץ יציב כי ההתנגשויות רבות כל כך.
+    he: שיווי משקל הוא ממוצעים יציבים, לא קיפאון. המולקולות ממשיכות לנוע ולהתנגש; הלחץ יציב כי ההתנגשויות רבות כל כך.
   remedy:
     lesson: '4.1'
     anchor: many
@@ -26,7 +26,7 @@
     he: יותר חלקיקים, או יותר אנרגיה פנימית, פירושם טמפרטורה גבוהה יותר.
   truth:
     en: Temperature fixes the mean energy per particle. The internal energy is the total, N times that; two gases at one temperature can hold very different energies.
-    he: הטמפרטורה קובעת את האנרגיה הממוצעת לחלקיק. האנרגיה הפנימית היא הסך הכול, פי N מזה; לשני גזים באותה טמפרטורה יכולות להיות אנרגיות שונות מאוד.
+    he: הטמפרטורה קובעת את האנרגיה הממוצעת לחלקיק. האנרגיה הפנימית היא האנרגיה הכוללת, פי N מזה; לשני גזים באותה טמפרטורה יכולות להיות אנרגיות שונות מאוד.
   remedy:
     lesson: '4.1'
     anchor: derive
@@ -49,7 +49,7 @@
     anchor: heavy
     label:
       en: Run the gas four times heavier
-      he: הריצו את הגז כבד פי ארבעה
+      he: הריצו את הסימולציה עם גז כבד פי ארבעה
 
 - id: MC-doubling-doubles-everything
   title:
@@ -76,11 +76,11 @@
     en: A hotter gas, or heavier molecules, make the pressure jitter more in relative terms.
     he: גז חם יותר, או מולקולות כבדות יותר, גורמים ללחץ לרעוד יותר באופן יחסי.
   truth:
-    en: The relative fluctuation of the pressure is N^(-1/2), whatever the temperature or the mass. Only the number of particles sets it.
-    he: הפלוקטואציה היחסית של הלחץ היא N^(-1/2), בכל טמפרטורה ובכל מסה. רק מספר החלקיקים קובע אותה.
+    en: The relative spread of a sample's pressure is about N^(-1/2), whatever the temperature or the mass; only the number of particles sets it. A gauge's short-term jitter is set the same way by the number of impacts it averages, which for any real gauge is astronomically large.
+    he: הפיזור היחסי של הלחץ של מדגם הוא בערך ⁦N^(-1/2)⁩, בכל טמפרטורה ובכל מסה; רק מספר החלקיקים קובע אותו. הרעד לטווח קצר של מד לחץ נקבע באותו אופן על ידי מספר הפגיעות שהוא ממצע, ובכל מד אמיתי המספר הזה אסטרונומי.
   remedy:
     lesson: '4.1'
     anchor: steady
     label:
       en: See the spread shrink with N, and nothing else
-      he: ראו את הפיזור קטן עם N, ועם שום דבר אחר
+      he: ראו איך הפיזור קטן ככל ש-N גדל, ושום דבר אחר לא משנה אותו

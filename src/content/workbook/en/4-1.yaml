@@ -163,7 +163,7 @@ practice:
     prompt: >-
       At $300\,\text{K}$ and one atmosphere, argon atoms ($0.34\,\text{nm}$ across) fill about $5.0\cdot10^{-4}$ of the volume. At what pressure, at the same temperature, would they fill $1\%$ of it? Is the ideal gas law still trustworthy there?
     answer: >-
-      About $2.0\cdot10^6\,\text{Pa}$, twenty atmospheres. The size correction is then about $1\%$, and the attraction correction is of the same order: the law is still a good first estimate, but no longer exact to the percent.
+      About $2.0\cdot10^6\,\text{Pa}$, twenty atmospheres. The size correction is then about $4\%$, because the volume an atom excludes to others is four times its own; the attraction pulls the other way and is larger, and for argon at $300\,\text{K}$ the two leave the pressure about $1\%$ below the ideal value. The law is still a good first estimate, but no longer exact to the percent.
     solution:
       - kind: law
         text: >-
@@ -179,7 +179,7 @@ practice:
           As $P \to 0$ the fraction goes to zero and the gas becomes ideal; the fraction would reach order one only near liquid densities, where the model fails completely.
       - kind: result
         text: >-
-          About $2.0\cdot10^6\,\text{Pa}$; corrections of order one percent, so the ideal gas law is still a fair estimate but not exact.
+          About $2.0\cdot10^6\,\text{Pa}$; a size correction of about $4\%$ and a larger attraction correction of opposite sign, about $1\%$ net, so the ideal gas law is still a fair estimate but not exact.
 
   - id: W-4.1-09
     level: bagrut
@@ -266,7 +266,7 @@ challenge:
     stars: 2
     objectives: [OBJ-4.1-5]
     prompt: >-
-      A classical monatomic gas that is not ideal obeys $P = \dfrac{Nk_BT}{V - bN} - a\dfrac{N^2}{V^2}$, with $a, b > 0$: $b$ accounts for the atoms' own volume, $a$ for their mutual attraction, which also gives the gas a potential energy $-aN^2/V$. Neither correction changes the heat capacity at constant volume. The gas sits in an isolated container of negligible mass, held by a partition in a third of the volume $V_0$ at temperature $T_i$. A hole is opened in the partition and the gas expands into the whole container.
+      A classical monatomic gas that is not ideal obeys $P = \dfrac{Nk_BT}{V - bN} - a\dfrac{N^2}{V^2}$, with $a, b > 0$: $b$ accounts for the atoms' own volume, $a$ for their mutual attraction, which also gives the gas a potential energy $-aN^2/V$. Neither correction changes the heat capacity at constant volume. The gas sits in an isolated container of negligible mass, initially confined by a partition to a third of the volume $V_0$, at temperature $T_i$. A hole is opened in the partition and the gas expands into the whole container.
       (a) Which thermodynamic quantity is conserved?
       (b) What is the temperature once equilibrium is restored?
     answer: >-

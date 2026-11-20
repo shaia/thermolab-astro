@@ -11,7 +11,7 @@
  *   Ensemble:      energy is exactly conserved; initial velocities are Maxwell–Boltzmann at T,
  *                  rescaled to the exact energy N k_B T (fixTemperature) or left as drawn
  *   Ignored:       intermolecular forces, particle size, quantum effects, gravity
- *   Valid when:    dilute classical gas: mean free path ≫ particle size, de Broglie wavelength ≫ spacing
+ *   Valid when:    dilute classical gas: mean free path ≫ particle size, de Broglie wavelength ≪ spacing
  *   Failure modes: high density, low temperature, strong interactions
  *
  * In two dimensions "volume" is an area and the "area" of a wall is a length, so pressure is a
