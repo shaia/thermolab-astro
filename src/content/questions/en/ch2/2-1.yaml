@@ -1,0 +1,604 @@
+# Lesson 2.1 check questions. Ported from ThermoLab's assessment/quizzes/02-equations-of-state.en.yml (Q-02-1 … Q-02-8,
+# all eight) and extended to cover the six objectives and the misconceptions of src/content/misconceptions/2-1.yaml, plus
+# MC-doubling-doubles-everything (4-1.yaml). Ported: Q-02-1 → state-postulate (the example pair is T and v, not P and
+# T, which are not independent on the condensation plateau); Q-02-2 → join-bottles; Q-02-3 → classroom (new numbers:
+# the lesson's example 1 is ThermoLab's room); Q-02-4 → co2-gauge; Q-02-5 → co2-vdw-deviation; Q-02-6 → critical-volume
+# and circular-check (its T_c agreement is circular: tabulated constants are computed from the critical point, so the
+# test is v_c); Q-02-7 → same-z (stated above T_c, where a (T_r, P_r) has one v_r); Q-02-8, a short answer, → why-fold,
+# multiple choice, without the nonexistent "Problem 5(d)" and without the claim that b = 0 removes the fold.
+# Every number was recomputed with ThermoLab's library (thermolab.gases) and numpy. Real-substance data: NIST Chemistry
+# WebBook, SRD 69 (CO₂ at 280 K: the Span–Wagner isotherm; critical points of CO₂, O₂ from the fluid pages). The
+# tabulated CO₂ constants a_m = 0.3640, b_m = 4.267e-5 are the CRC Handbook of Chemistry and Physics' (3.640 bar L²/mol²,
+# 0.04267 L/mol), the ones ThermoLab's Q-02-6 converted. Ids are shared with the Hebrew bank, which must hold the same
+# questions with the same answers.
+lang: en
+chapter: 2
+questions:
+  # ---------------------------------------------------------------- the surface (Explore, rotate)
+  - id: Q-2.1-three-volumes
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-2.1-1]
+    prompt: >-
+      Turned to look along the $v$ axis, the van der Waals surface of figure 2.1a folds over itself below $T_c$, and inside the wedge one pair $(P, T)$ is met by the surface three times. Which statement is correct?
+    choices:
+      - text: >-
+          Over every $(v, T)$ there is still one pressure, as an equation $P(v, T)$ must give. It is the volume at given $P$ and $T$ that has three values.
+        correct: true
+        feedback: >-
+          Right. The surface is single-valued as a height over the $(v, T)$ floor and multi-valued only as seen from the $P$–$T$ wall. Two densities at one pressure and temperature are what a liquid and its vapour are; the third, the middle one, lies on the stretch where $(\partial P/\partial v)_T > 0$, which is not a stable state.
+      - text: >-
+          At those points the surface gives three pressures for one $(v, T)$.
+        feedback: >-
+          $P = k_BT/(v - b) - a/v^2$ returns one number for each $v$ and $T$; no equation of that form can give three. Count again from the other side: it is one $(P, T)$ that is met at three volumes.
+      - text: >-
+          The three volumes are the solid, the liquid and the gas.
+        feedback: >-
+          The van der Waals model contains no solid. Of the three volumes, the outer two are a dense and a thin fluid, the would-be liquid and vapour; the middle one is on the stretch where $(\partial P/\partial v)_T > 0$, where no state is stable.
+      - text: >-
+          A gas compressed at that temperature passes through all three volumes in turn, its pressure rising, falling and rising again along the fold.
+        feedback: >-
+          That is the bare equation's isotherm, not what a substance does. Real CO₂ compressed below $T_c$ holds its pressure flat while it condenses; on the stretch where the van der Waals pressure rises with volume no state is stable. What replaces the wiggle is module 14's subject.
+        misconception: MC-vdw-loop-is-real
+
+  # ---------------------------------------------------------------- OBJ-2.1-1: the state postulate
+  - id: Q-2.1-state-postulate
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-2.1-1]
+    prompt: >-
+      The state postulate says that the equilibrium states of a simple compressible substance form a single two-dimensional surface in $(P, v, T)$ space. You fix two independent intensive variables, say $T$ and $v$. What does the postulate say about the rest?
+    choices:
+      - text: >-
+          $P$, and every other equilibrium property, is already fixed: the two values pick out one point on the surface, and the point has no freedom left.
+        correct: true
+        feedback: >-
+          Right. That is what a two-dimensional surface means: two coordinates locate a point on it, and the third is read off, not chosen. The equation of state is the equation of that surface.
+      - text: >-
+          $P$, $v$ and $T$ are three independent knobs, so $P$ must still be measured separately.
+        feedback: >-
+          This is what the postulate denies. If $P$, $v$ and $T$ were independent, equilibrium states would fill a three-dimensional region rather than lie on a surface, and there would be no equation of state to write down.
+      - text: >-
+          Only extensive variables such as $V$ and $N$ fix the state; intensive ones are not enough.
+        feedback: >-
+          The other way round. $N$ says how much substance there is, not where on the per-particle surface it sits; two intensive variables such as $T$ and $v = V/N$ are exactly what fix the point.
+      - text: >-
+          This holds for the ideal gas only; a real gas needs a third independent variable.
+        feedback: >-
+          The postulate is a claim about any simple compressible substance, real CO₂ included. The van der Waals equation, like every measured equation of state, is a surface over two variables; what differs from the ideal gas is its shape, not its dimension.
+
+  # ---------------------------------------------------------------- OBJ-2.1-2: the doubling test
+  - id: Q-2.1-join-bottles
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-2.1-2]
+    prompt: >-
+      A bottle of gas is in the state $(N, V, T)$. You open a valve to an identical second bottle in the same state, making one system with twice the gas in twice the volume at the same $T$. Which list of what changes is correct?
+    choices:
+      - text: >-
+          $N$, $V$ and the internal energy $U$ double; $P$, $T$ and $v = V/N$ stay the same.
+        correct: true
+        feedback: >-
+          Right: the doubling test. Extensive quantities double; intensive ones do not move. The pressure depends on $v$ and $T$ alone, and $v = 2V/(2N)$ has not changed.
+      - text: >-
+          $P$, $V$, $T$ and $N$ all double.
+        feedback: >-
+          Then the pressure of a gas would depend on how much of it happened to be in the room, and two adjacent litres of one gas at one temperature would read differently on the same gauge. Twice the molecules strike twice the wall area: the force per unit area is unchanged.
+        misconception: MC-doubling-doubles-everything
+      - text: >-
+          Nothing changes: joining two identical systems only makes a bigger copy of the same state.
+        feedback: >-
+          The intensive state is the same, but $N$, $V$ and $U$ really do double: there is twice the substance. "Same state" means the same $P$, $T$ and $v$, not the same totals.
+      - text: >-
+          Only $T$ changes, while heat flows between the two halves until they equilibrate.
+        feedback: >-
+          The two halves start at the same temperature, so nothing flows between them: $T$ never moves, and neither does $P$.
+
+  - id: Q-2.1-classify
+    type: multi
+    level: mid
+    qualitative: true
+    objectives: [OBJ-2.1-2]
+    prompt: >-
+      Two identical samples of a gas, in the same equilibrium state, are joined into one. Select every quantity that is intensive, unchanged by the joining.
+    choices:
+      - text: >-
+          The temperature $T$
+        correct: true
+        feedback: >-
+          Intensive: both halves were at $T$, and so is the whole.
+      - text: >-
+          The mass density $\rho = Nm/V$
+        correct: true
+        feedback: >-
+          Intensive: a ratio of two extensive quantities, the mass and the volume, both of which double.
+      - text: >-
+          The internal energy per particle $U/N$
+        correct: true
+        feedback: >-
+          Intensive, for the same reason: $U$ and $N$ both double, and their ratio does not change.
+      - text: >-
+          The product $PV$
+        feedback: >-
+          $P$ is unchanged and $V$ doubles, so $PV$ doubles: it is extensive, as $PV = Nk_BT$ says, since $N$ doubles.
+      - text: >-
+          The heat capacity $C$ of the sample
+        feedback: >-
+          Twice the substance needs twice the energy per kelvin: $C$ is extensive. The heat capacity per particle, or per kilogram, is the intensive one.
+      - text: >-
+          The square of the volume, $V^2$
+        feedback: >-
+          $V^2$ quadruples: it is neither extensive nor intensive. The doubling test sorts many variables, not all of them.
+
+  - id: Q-2.1-unequal-bottles
+    type: numeric
+    level: mid
+    objectives: [OBJ-2.1-2, OBJ-2.1-3]
+    prompt: >-
+      A $5.0\,\text{L}$ bottle holds nitrogen at $300\,\text{kPa}$ and a $15.0\,\text{L}$ bottle holds nitrogen at $100\,\text{kPa}$, both at $293\,\text{K}$. A valve between them is opened, and the gas settles back to $293\,\text{K}$. Treating the gas as ideal, find the final pressure.
+    answer: 150
+    unit: kPa
+    tolerance: 0.01
+    correctFeedback: >-
+      $N_1k_BT = P_1V_1 = 1500\,\text{kPa L}$ and $N_2k_BT = P_2V_2 = 1500\,\text{kPa L}$: the bottles hold the same number of molecules. After the joining, $P_\mathrm{f} = (P_1V_1 + P_2V_2)/(V_1 + V_2) = 3000/20 = 150\,\text{kPa}$. The bottles were in different states, with different $v$, so the result is an average weighted by volume, not either starting pressure.
+    wrongFeedback: >-
+      Count the molecules: $Nk_BT = PV$ for each bottle. Add them, and divide by the total volume at the same $T$.
+    commonWrong:
+      - value: 200
+        feedback: >-
+          That is the plain average of the two pressures. The larger bottle weighs three times as much: $P_\mathrm{f}$ is an average weighted by volume, $(P_1V_1 + P_2V_2)/(V_1 + V_2)$.
+      - value: 400
+        feedback: >-
+          That adds the pressures as if pressure were extensive. Joining adds molecules and volumes; the pressure follows from their ratio, $P = Nk_BT/V$, which lies between the two starting values.
+        misconception: MC-doubling-doubles-everything
+      - value: 250
+        feedback: >-
+          That weights each pressure by the other bottle's volume. Each bottle's gas spreads into the total volume in proportion to its own $P_iV_i$.
+
+  # ---------------------------------------------------------------- OBJ-2.1-3: the ideal gas law and its status
+  - id: Q-2.1-ideal-status
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-2.1-3]
+    prompt: >-
+      What kind of statement is the ideal gas law, $PV = Nk_BT$?
+    choices:
+      - text: >-
+          A theorem of the kinetic model of non-interacting point particles, and for real gases an empirical law of the dilute limit: every gas approaches it as its density goes to zero, and departs from it when compressed or cooled.
+        correct: true
+        feedback: >-
+          Right. It is the limit every gas approaches, not a law every gas obeys. Real CO₂ at $280\,\text{K}$ has $Z = Pv/(k_BT) = 0.975$ at $0.4\,\text{MPa}$ and $0.864$ at $2\,\text{MPa}$, and then condenses at constant pressure, which the law cannot describe.
+      - text: >-
+          A law of nature that every gas obeys, at any density and any temperature.
+        feedback: >-
+          Compressed CO₂ at $280\,\text{K}$ falsifies it: its pressure is $14\%$ below the ideal one at $2\,\text{MPa}$, and at $4.16\,\text{MPa}$ it stops rising altogether while the gas condenses. A law with no constant of the substance in it cannot know where any gas condenses.
+        misconception: MC-ideal-gas-universal
+      - text: >-
+          A definition of temperature, so it cannot fail.
+        feedback: >-
+          Temperature is defined through thermal equilibrium, by the zeroth law of lesson 1.1, and measured by any thermometer. The ideal gas law relates that temperature to $P$ and $v$, and the relation fails measurably for dense gases.
+      - text: >-
+          An approximation that works for light gases such as helium and hydrogen, and for no others.
+        feedback: >-
+          Every gas approaches it as the density goes to zero, heavy ones included: CO₂, at $0.4\,\text{MPa}$ and $280\,\text{K}$, is within $2.5\%$ of it. What decides is the density relative to the gas's own critical point, not the mass of the molecule.
+
+  - id: Q-2.1-classroom
+    type: numeric
+    level: basic
+    objectives: [OBJ-2.1-3]
+    prompt: >-
+      A classroom of $50\,\text{m}^3$ holds air at $99.0\,\text{kPa}$ and $295\,\text{K}$. How many molecules does it hold? ($k_B = 1.380649 \times 10^{-23}\,\text{J/K}$.)
+    answer: 1.2153e27
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      $N = PV/(k_BT) = 99\,000 \times 50/(1.380649 \times 10^{-23} \times 295) = 1.22 \times 10^{27}$, about $2018$ moles. At this density air is within a tenth of a percent of ideal, so the law needs no correction.
+    wrongFeedback: >-
+      Solve $PV = Nk_BT$ for $N$, with $P$ in pascals, $V$ in cubic metres and $T$ in kelvin.
+    commonWrong:
+      - value: 2018
+        feedback: >-
+          That is $PV/(RT)$, the number of moles. The question asks for molecules: multiply by $N_A$, or use $k_B$ instead of $R$.
+      - value: 1.2153e24
+        feedback: >-
+          That puts the pressure in kilopascals. $k_B$ is in joules per kelvin, so $P$ must be in pascals: $99.0\,\text{kPa} = 99\,000\,\text{Pa}$.
+      - value: 1.6297e28
+        feedback: >-
+          That uses the temperature in degrees Celsius, $22$. The gas law needs the absolute temperature, $295\,\text{K}$.
+
+  # ---------------------------------------------------------------- OBJ-2.1-4: the two corrections
+  - id: Q-2.1-b-raises-pressure
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-2.1-4]
+    prompt: >-
+      Give the molecules a size but no attraction: $a = 0$, $b > 0$. At the same $v$ and $T$, how does the pressure compare with the ideal gas's?
+    choices:
+      - text: >-
+          It is higher: $k_BT/(v - b) > k_BT/v$. The same molecules, crowded into the smaller room $v - b$ their centres can reach, strike the walls more often.
+        correct: true
+        feedback: >-
+          Right. Excluded volume always raises the pressure; it is attraction, the $a/v^2$ term, that lowers it. Which wins at a given density decides whether $Z$ is above or below $1$.
+      - text: >-
+          It is lower: the molecules take up room that would otherwise carry momentum to the wall.
+        feedback: >-
+          The room the molecules take is room their centres cannot use, so the usable volume shrinks to $v - b$ and the pressure $k_BT/(v - b)$ rises. Lowering the pressure is the attraction's work, not the size's.
+      - text: >-
+          It is the same: the pressure depends only on the momentum the molecules carry, which size does not change.
+        feedback: >-
+          Size does not change each impact, but it changes how often impacts come: the same molecules in less usable room strike the wall more often. At $a = 0$ the pressure is $k_BT/(v - b)$, higher than $k_BT/v$ at every $v$.
+      - text: >-
+          It is higher by exactly the fraction $b/v$, at every density.
+        feedback: >-
+          Only to first order. $v/(v - b) = 1 + b/v + b^2/v^2 + \cdots$, so the excess grows faster than $b/v$ as the gas is compressed and diverges as $v \to b$.
+
+  - id: Q-2.1-attraction-squared
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-2.1-4]
+    prompt: >-
+      Why does the van der Waals attraction lower the pressure by $a/v^2$, with the density squared, rather than by an amount proportional to $1/v$?
+    choices:
+      - text: >-
+          Two factors of the density: the number of molecules striking a unit area of wall per unit time is proportional to $1/v$, and the backward pull on each, from the neighbours behind it, is proportional to the number of neighbours, also $1/v$.
+        correct: true
+        feedback: >-
+          Right. It is a mean-field estimate: it counts the neighbours as if they were spread uniformly, ignoring that attraction itself makes them cluster.
+      - text: >-
+          Dimensional analysis requires it: only $a/v^2$ can be a pressure.
+        feedback: >-
+          Dimensions fix the units of $a$ once the power of $v$ is chosen, not the power itself: $c/v$ is a pressure too, if $c$ is an energy. The power comes from counting what the pull acts on and what it comes from.
+      - text: >-
+          Because the attractive force between two molecules falls as the square of their distance.
+        feedback: >-
+          The argument uses no force law at all. The square counts two densities, of the molecules hitting the wall and of the neighbours pulling them back; the van der Waals force between real molecules falls much faster than $1/r^2$.
+      - text: >-
+          Because a molecule about to strike the wall is pulled toward the wall's own molecules.
+        feedback: >-
+          The model ignores the wall's attraction. The deficit comes from the gas behind the molecule: neighbours on one side only, so a net pull back into the gas.
+
+  - id: Q-2.1-co2-vdw-deviation
+    type: numeric
+    level: mid
+    objectives: [OBJ-2.1-4]
+    prompt: >-
+      With van der Waals constants fitted to CO₂'s critical point ($T_c = 304.13\,\text{K}$, $P_c = 7.3773\,\text{MPa}$, through $b = k_BT_c/(8P_c)$ and $a = 27(k_BT_c)^2/(64P_c)$), compute the van der Waals pressure at a molar volume of $1.2 \times 10^{-3}\,\text{m}^3/\text{mol}$ and $280\,\text{K}$. Give its signed fractional deviation from the ideal pressure $k_BT/v$ at the same state (negative if the van der Waals pressure is lower).
+    answer: -0.0939
+    unit: ''
+    tolerance: 0.03
+    correctFeedback: >-
+      $b = 7.115 \times 10^{-29}\,\text{m}^3$, $a = 1.008 \times 10^{-48}\,\text{Pa}\,\text{m}^6$, $v = 1.993 \times 10^{-27}\,\text{m}^3$. Ideal: $1.940\,\text{MPa}$. Excluded volume, $b/v = 0.036$, raises it to $2.012\,\text{MPa}$; attraction takes away $a/v^2 = 0.254\,\text{MPa}$, leaving $1.758\,\text{MPa}$, $9.4\%$ below ideal. At this density attraction outweighs size three and a half times over.
+    wrongFeedback: >-
+      Fit $a$ and $b$, convert the molar volume to $v = V_\mathrm{m}/N_A$, evaluate $k_BT/(v - b) - a/v^2$, and divide by $k_BT/v$, minus one.
+    commonWrong:
+      - value: 0.1036
+        feedback: >-
+          That is the ideal pressure over the van der Waals one, minus one. The question measures the van der Waals pressure against the ideal: $1.758/1.940 - 1$.
+      - value: 0.0939
+        feedback: >-
+          The size is right, the sign is not: the van der Waals pressure is the lower one, because attraction outweighs excluded volume here.
+      - value: -0.1309
+        feedback: >-
+          That keeps the attraction and drops the excluded volume, $k_BT/v - a/v^2$. The size of the molecules adds back $3.7\%$ of the ideal pressure.
+      - value: 0.0370
+        feedback: >-
+          That keeps only the excluded volume, $k_BT/(v - b)$. Attraction lowers the pressure by $a/v^2 = 0.254\,\text{MPa}$, more than size raises it.
+
+  - id: Q-2.1-why-fold
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-2.1-1, OBJ-2.1-4]
+    prompt: >-
+      Why can the van der Waals surface fold below $T_c$, while the ideal-gas surface never folds at any temperature? Pick the explanation that gives $a$ and $b$ their right roles.
+    choices:
+      - text: >-
+          The slope of the ideal isotherm, $-k_BT/v^2$, is negative everywhere. The van der Waals slope, $-k_BT/(v - b)^2 + 2a/v^3$, has a positive attraction term that can outweigh the first at intermediate volumes when $k_BT$ is small; the hard core keeps the slope negative at small $v$, and the dilute gas at large $v$. Only below $k_BT_c = 8a/(27b)$ does attraction win anywhere.
+        correct: true
+        feedback: >-
+          Right. A fold needs something that makes the pressure rise with volume, and only the attraction term does. $b$ confines the rising stretch: without it ($b = 0$, $a > 0$) every isotherm rises for $v < 2a/(k_BT)$ at every temperature, so the fold would never close and there would be no critical point; without $a$ there is no fold at all.
+      - text: >-
+          $b$ produces the fold: near $v = b$ the term $k_BT/(v - b)$ diverges, and that makes the pressure rise with volume; $a$ only shifts where it happens.
+        feedback: >-
+          Near $v = b$ the pressure falls steeply as $v$ grows: the divergence is a wall, not a rise. With $a = 0$, $P = k_BT/(v - b)$ falls everywhere and there is no fold.
+      - text: >-
+          The ideal surface would fold too at a low enough temperature; it lacks only a critical point.
+        feedback: >-
+          $(\partial P/\partial v)_T = -k_BT/v^2 < 0$ at every $T > 0$: the ideal isotherm falls the whole way at every temperature. With no constant of any substance in it, the ideal law has nothing that could make it fold.
+      - text: >-
+          The fold is the equation's record of condensation: below $T_c$ the real gas's pressure rises, falls and rises again as it condenses, and $a$ and $b$ reproduce that.
+        feedback: >-
+          A real substance does no such thing: compressed below $T_c$ it holds its pressure flat while it condenses. The stretch of the fold where the pressure rises with volume is a feature of the bare equation, with no stable state on it; what replaces it is module 14's subject.
+        misconception: MC-vdw-loop-is-real
+
+  # ---------------------------------------------------------------- OBJ-2.1-5: the critical point
+  - id: Q-2.1-rank-tc
+    type: rank
+    level: mid
+    objectives: [OBJ-2.1-5]
+    prompt: >-
+      Five model gases have the van der Waals constants below, with $a$ in units of $10^{-49}\,\text{Pa}\,\text{m}^6$ and $b$ in units of $10^{-29}\,\text{m}^3$. Rank them by critical temperature, highest first. Tie any that are equal.
+    items:
+      - id: p
+        label: >-
+          $a = 4$, $b = 4$
+      - id: q
+        label: >-
+          $a = 8$, $b = 4$
+      - id: r
+        label: >-
+          $a = 8$, $b = 8$
+      - id: s
+        label: >-
+          $a = 2$, $b = 4$
+      - id: t
+        label: >-
+          $a = 6$, $b = 3$
+    order: [[q, t], [p, r], s]
+    correctFeedback: >-
+      Right. $k_BT_c = 8a/(27b)$ depends on $a/b$ alone, attraction against size: the ratios are $2$, $2$, $1$, $1$ and $0.5$, giving $429$, $429$, $215$, $215$ and $107\,\text{K}$. Scaling $a$ and $b$ by the same factor, as from $p$ to $r$ or the morph slider of figure 2.1a, leaves $T_c$ where it was and moves only $v_c = 3b$ and $P_c = a/(27b^2)$.
+    wrongFeedback: >-
+      $T_c = 8a/(27k_Bb)$: compare the ratios $a/b$. They are $2$, $2$, $1$, $1$ and $0.5$, in the order $q, t, p, r, s$.
+
+  - id: Q-2.1-critical-volume
+    type: numeric
+    level: mid
+    objectives: [OBJ-2.1-5]
+    prompt: >-
+      The CRC Handbook tabulates CO₂'s van der Waals constants as $a_\mathrm{m} = 0.3640\,\text{Pa}\,\text{m}^6/\text{mol}^2$ and $b_\mathrm{m} = 4.267 \times 10^{-5}\,\text{m}^3/\text{mol}$. What critical molar volume does the model predict, in $\text{cm}^3/\text{mol}$?
+    answer: 128.0
+    unit: cm³/mol
+    tolerance: 0.01
+    correctFeedback: >-
+      $V_c = 3b_\mathrm{m} = 1.280 \times 10^{-4}\,\text{m}^3/\text{mol} = 128.0\,\text{cm}^3/\text{mol}$. NIST's critical density, $467.6\,\text{kg/m}^3$, gives a measured $94.1\,\text{cm}^3/\text{mol}$: the model's is $36\%$ too large. The same constants give back $T_c = 304.0\,\text{K}$ and $P_c = 7.40\,\text{MPa}$, close to NIST's, but only because the table computed them from a measured $T_c$ and $P_c$. The volume is the prediction nobody fitted.
+    wrongFeedback: >-
+      The critical point of a van der Waals gas has $v_c = 3b$; per mole, $V_c = 3b_\mathrm{m}$. Convert cubic metres to cubic centimetres.
+    commonWrong:
+      - value: 42.67
+        feedback: >-
+          That is $b_\mathrm{m}$ itself. The critical volume is three times the excluded volume: $v_c = 3b$, from $(v - b)/2 = v/3$.
+      - value: 14.22
+        feedback: >-
+          That divides $b_\mathrm{m}$ by three. The critical volume is larger than the excluded volume, $v_c = 3b$: the gas at its critical point still has room for its molecules to move.
+
+  - id: Q-2.1-circular-check
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-2.1-5, OBJ-2.1-6]
+    prompt: >-
+      A student takes CO₂'s tabulated van der Waals constants, computes $T_c = 8a/(27k_Bb) = 304.0\,\text{K}$ and $P_c = a/(27b^2) = 7.40\,\text{MPa}$, finds them within $0.1\%$ and $0.4\%$ of NIST's $304.13\,\text{K}$ and $7.3773\,\text{MPa}$, and concludes that the van der Waals model predicts CO₂'s critical point to better than half a percent. What is wrong with the conclusion?
+    choices:
+      - text: >-
+          The agreement is circular. The table's compilers computed $a$ and $b$ from a measured $T_c$ and $P_c$, so the formulas return what went in. The critical quantity nobody fitted, $V_c = 3b_\mathrm{m} = 128.0\,\text{cm}^3/\text{mol}$, is the test, and it misses the measured $94.1$ by $36\%$; equivalently $Z_c = 3/8$ against $0.275$.
+        correct: true
+        feedback: >-
+          Right. Two constants can always be made to hit two numbers. A model is tested by what it predicts beyond its fit: here the third critical constant, and the van der Waals equation gets it wrong for every gas, since $Z_c = 3/8$ is built in.
+      - text: >-
+          Nothing is wrong: agreement to half a percent with NIST's independent measurement confirms the model.
+        feedback: >-
+          The measurement is not independent of the constants: they were made from it. Any two-constant formula, right or wrong, would agree as well once fitted to the same two numbers.
+      - text: >-
+          The comparison should be made in reduced variables, where every gas agrees with the model.
+        feedback: >-
+          In reduced variables the critical point is at $T_r = P_r = v_r = 1$ by definition, so that comparison would be circular for all three. The model's content is what it says about the numbers it was not fitted to, such as $Z_c$.
+      - text: >-
+          The small differences show that NIST's critical point is slightly wrong, and the model's is right.
+        feedback: >-
+          The differences come from the older measurements the table was built from: these constants correspond to $T_c = 304.0\,\text{K}$ and $P_c = 7.40\,\text{MPa}$. They say nothing about the model.
+
+  - id: Q-2.1-oxygen-cylinder
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-2.1-5]
+    prompt: >-
+      A hospital oxygen cylinder at room temperature, $293\,\text{K}$, holds oxygen at $15\,\text{MPa}$, three times its critical pressure of $5.04\,\text{MPa}$. Oxygen's critical temperature is $154.6\,\text{K}$ (NIST). Is there liquid oxygen sloshing in the cylinder?
+    choices:
+      - text: >-
+          No. At $T_r = 293/154.6 = 1.90$ it is far above its critical temperature, where every isotherm falls and compression raises the density smoothly: the cylinder holds a supercritical fluid, with no separate liquid.
+        correct: true
+        feedback: >-
+          Right. Above $T_c$ no pressure liquefies a substance; to get liquid oxygen it must first be cooled below $154.6\,\text{K}$, which is why liquid oxygen is stored in insulated tanks, not in pressure cylinders at room temperature.
+      - text: >-
+          Yes: at three times its critical pressure it has been squeezed well past the point of liquefaction.
+        feedback: >-
+          Pressure alone does not liquefy a gas. Above its critical temperature every isotherm falls monotonically, each pressure is met at one density, and nothing separates into a liquid and a vapour.
+        misconception: MC-any-gas-liquefies
+      - text: >-
+          Partly: above the critical pressure, liquid and vapour coexist in the cylinder.
+        feedback: >-
+          Liquid and vapour coexist only below the critical temperature, at the saturation pressure for that temperature. At $T_r = 1.90$ there is one fluid phase at any pressure.
+      - text: >-
+          Not yet, but a cylinder strong enough to reach a few times higher pressure would hold liquid.
+        feedback: >-
+          No pressure will do it at $293\,\text{K}$. Pushed far enough, oxygen would eventually freeze into a solid, which the van der Waals model does not contain, but it never passes through a separate liquid.
+        misconception: MC-any-gas-liquefies
+
+  # ---------------------------------------------------------------- OBJ-2.1-6: reduced variables, Z
+  - id: Q-2.1-reduced-pressure
+    type: numeric
+    level: basic
+    objectives: [OBJ-2.1-6]
+    prompt: >-
+      A van der Waals gas is at $T_r = 1.1$ and $v_r = 2.5$. Find its reduced pressure $P_r$.
+    answer: 0.8738
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      $P_r = 8T_r/(3v_r - 1) - 3/v_r^2 = 8.8/6.5 - 3/6.25 = 1.354 - 0.480 = 0.874$, whatever the gas. Its compressibility factor is $Z = 3P_rv_r/(8T_r) = 0.745$: a quarter below ideal.
+    wrongFeedback: >-
+      Put $T_r$ and $v_r$ into the law of corresponding states, $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$.
+    commonWrong:
+      - value: 1.1733
+        feedback: >-
+          That is the ideal gas in the same units, $8T_r/(3v_r)$. The van der Waals gas has both corrections: $3v_r - 1$ for the size and $-3/v_r^2$ for the attraction.
+      - value: 1.3538
+        feedback: >-
+          That keeps the excluded volume and drops the attraction term, $-3/v_r^2 = -0.48$.
+
+  - id: Q-2.1-same-z
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-2.1-6]
+    prompt: >-
+      Carbon dioxide and nitrogen, each treated as a van der Waals gas fitted to its own critical point, are both held at $T_r = 1.5$ and $P_r = 2.0$. Their critical points, and their $a$ and $b$, are very different numbers. Do they have the same compressibility factor $Z$?
+    choices:
+      - text: >-
+          Yes. The reduced equation has no $a$, $b$ or $k_B$ in it, and above the critical temperature each $P_r$ is met at one reduced volume, here $v_r = 1.59$, the same for both. $Z = 3P_rv_r/(8T_r) = 0.79$ is then the same too.
+        correct: true
+        feedback: >-
+          Right. The temperature matters to the argument: below $T_c$ a pair $(T_r, P_r)$ inside the wiggle's pressure range is met at three $v_r$ (at $T_r = 0.9$, $P_r = 0.60$ gives $v_r = 0.61$, $1.00$ and $2.72$), and the reduced equation alone does not say which. What it fixes in every case is $P_r$ from $(T_r, v_r)$.
+      - text: >-
+          No: $Z$ depends on the gas's chemistry, so two different gases never share it.
+        feedback: >-
+          At the same $(v, T)$ two gases have different pressures, because their $a$ and $b$ differ. Measured in units of each gas's own critical point, those constants cancel out of the van der Waals equation, and with them every difference between the gases.
+      - text: >-
+          Yes, but only because CO₂ and N₂ have similar molecular masses.
+        feedback: >-
+          A CO₂ molecule is half again as heavy as an N₂ molecule, and the mass appears nowhere in the equation of state. Corresponding states follows from $a$ and $b$ cancelling out of the reduced equation, for any pair of van der Waals gases.
+      - text: >-
+          Only at their critical points, $T_r = P_r = 1$, where both have $Z_c = 3/8$.
+        feedback: >-
+          $Z_c = 3/8$ is one case of the general statement, not the only one. The reduced equation holds at every state, and at every state it gives the two gases the same $Z$.
+
+  - id: Q-2.1-z-dilute
+    type: mc
+    level: basic
+    qualitative: true
+    objectives: [OBJ-2.1-6]
+    prompt: >-
+      In the $Z$ view of figure 2.1b, a van der Waals gas at $T_r = 1.2$ and $v_r = 5$ has $Z = 0.88$. What does that say?
+    choices:
+      - text: >-
+          Its pressure is $12\%$ below the ideal gas's at the same $v$ and $T$: at this density attraction outweighs excluded volume. Expanded further, $Z$ climbs toward $1$.
+        correct: true
+        feedback: >-
+          Right. $Z = Pv/(k_BT)$ compares the pressure with the ideal one at the same state. As $v \to \infty$ both corrections vanish and $Z \to 1$; compressed to $v_r = 0.83$, $Z$ dips to $0.54$, and at the dense end excluded volume wins and $Z$ shoots above $1$.
+      - text: >-
+          It is $12\%$ denser than an ideal gas at the same $v$ and $T$.
+        feedback: >-
+          At the same $v$ the density is the same by definition, $1/v$. What differs is the pressure: $Z = Pv/(k_BT)$ is the actual pressure over the ideal one.
+      - text: >-
+          Excluded volume dominates at this density.
+        feedback: >-
+          Excluded volume raises the pressure and would make $Z > 1$. $Z < 1$ means attraction, the $-a/v^2$ term, is winning.
+      - text: >-
+          $Z = 0.88$ is a fixed property of this gas, the same at every volume.
+        feedback: >-
+          $Z$ varies along the isotherm: $0.54$ near $v_r = 0.83$, $0.88$ at $v_r = 5$, and $1$ in the limit of infinite volume. The ideal gas is the limit every van der Waals gas approaches, not a separate kind of gas.
+
+  - id: Q-2.1-boyle
+    type: numeric
+    level: bagrut
+    objectives: [OBJ-2.1-6]
+    prompt: >-
+      Oxygen's critical point is $T_c = 154.581\,\text{K}$, $P_c = 5.043\,\text{MPa}$ (NIST). Treated as a van der Waals gas fitted to it, at what temperature does its second virial coefficient vanish, so that $Z$ departs from $1$ only at second order in the density?
+    answer: 521.7
+    unit: K
+    tolerance: 0.01
+    correctFeedback: >-
+      $B(T) = b - a/(k_BT)$ vanishes at $k_BT_B = a/b$, and $a/b = \tfrac{27}{8}k_BT_c$ from the critical point: $T_B = 3.375 \times 154.581 = 521.7\,\text{K}$. The critical pressure drops out; in reduced units every van der Waals gas has $T_{B,r} = 27/8$. Below $T_B$, $B < 0$ and attraction pulls $Z$ below $1$ in the dilute gas; above it, size pushes $Z$ above $1$.
+    wrongFeedback: >-
+      Set $B(T) = b - a/(k_BT) = 0$, and use $k_BT_c = 8a/(27b)$ to write $a/b$ in terms of $T_c$.
+    commonWrong:
+      - value: 154.58
+        feedback: >-
+          That is the critical temperature. $B$ vanishes where $k_BT = a/b$, which is $27/8$ times higher than $k_BT_c = 8a/(27b)$.
+      - value: 45.80
+        feedback: >-
+          That is $\tfrac{8}{27}T_c$, the ratio upside down. From $k_BT_c = 8a/(27b)$, $a/b = \tfrac{27}{8}k_BT_c$.
+      - value: 4338
+        feedback: >-
+          That is $a_\mathrm{m}/b_\mathrm{m}$, an energy per mole in $\text{J/mol}$. Divide by $R$ to get a temperature.
+
+  # ---------------------------------------------------------------- real carbon dioxide
+  - id: Q-2.1-co2-gauge
+    type: mc
+    level: mid
+    qualitative: true
+    objectives: [OBJ-2.1-3]
+    prompt: >-
+      Carbon dioxide at $280\,\text{K}$, below its critical temperature, is compressed slowly at constant temperature from a dilute gas to a small fraction of its starting volume. How does the gauge reading compare with the ideal prediction $P = k_BT/v$ at the same volume?
+    choices:
+      - text: >-
+          It falls further and further below the ideal prediction as the gas is compressed, then holds at the saturation pressure, $4.16\,\text{MPa}$, while the gas condenses, and the ideal prediction keeps climbing; once all is liquid it shoots up.
+        correct: true
+        feedback: >-
+          Right, as NIST's isotherm shows: the ideal law is $7\%$ too high at $1\,\text{MPa}$, $16\%$ at $2\,\text{MPa}$ and $55\%$ at saturation, and then the gauge does not move from $361.5$ down to $49.8\,\text{cm}^3/\text{mol}$. A law with no constant of the substance in it has no way to produce the plateau.
+      - text: >-
+          It follows $k_BT/v$ at every volume, since every gas obeys the ideal gas law.
+        feedback: >-
+          This is what the CO₂ data falsify. The measured pressure falls below the ideal one long before condensation, $16\%$ at $2\,\text{MPa}$, and then stops rising altogether while the ideal prediction climbs on.
+        misconception: MC-ideal-gas-universal
+      - text: >-
+          It climbs more slowly than $k_BT/v$, then rises, falls and rises again, as the van der Waals isotherm below $T_c$ does.
+        feedback: >-
+          That is the bare van der Waals equation, not the substance. Real CO₂ holds its pressure flat at $4.16\,\text{MPa}$ while it condenses; on the stretch where the van der Waals pressure rises with volume no state is stable.
+        misconception: MC-vdw-loop-is-real
+      - text: >-
+          It rises faster than the ideal prediction at every volume, because the molecules crowd each other.
+        feedback: >-
+          Crowding raises the pressure only at the dense end. Over the whole vapour branch attraction wins and the measured pressure is below the ideal one; only in the liquid does the pressure rise steeply.
+      - text: >-
+          It drops to zero once the gas starts to condense.
+        feedback: >-
+          Condensation holds the pressure at a fixed, nonzero value, the saturation pressure, while vapour and liquid coexist. Zero pressure would mean no vapour at all.
+
+  - id: Q-2.1-co2-ideal-error
+    type: numeric
+    level: mid
+    objectives: [OBJ-2.1-3, OBJ-2.1-6]
+    prompt: >-
+      NIST's isotherm has carbon dioxide vapour at $280\,\text{K}$ and $3.50\,\text{MPa}$ with a density of $90.807\,\text{kg/m}^3$ (molar mass $44.0095\,\text{g/mol}$, $R = 8.3145\,\text{J/(mol K)}$). Find its compressibility factor $Z$.
+    answer: 0.7286
+    unit: ''
+    tolerance: 0.01
+    correctFeedback: >-
+      $V_\mathrm{m} = M/\rho = 0.0440095/90.807 = 4.846 \times 10^{-4}\,\text{m}^3/\text{mol}$, and $Z = PV_\mathrm{m}/(RT) = 3.5 \times 10^6 \times 4.846 \times 10^{-4}/(8.3145 \times 280) = 0.729$. The real pressure is $27\%$ below the ideal one at this volume: the ideal law would read $4.80\,\text{MPa}$, $37\%$ too high. The van der Waals equation gives $Z = 0.773$.
+    wrongFeedback: >-
+      Find the molar volume from the density, $V_\mathrm{m} = M/\rho$ with $M$ in kilograms per mole, then $Z = PV_\mathrm{m}/(RT)$.
+    commonWrong:
+      - value: 1.3725
+        feedback: >-
+          That is $1/Z$, the ideal pressure over the real one. $Z$ is the real pressure over the ideal, $PV_\mathrm{m}/(RT)$.
+      - value: 728.6
+        feedback: >-
+          That takes the molar mass in grams per mole as if it were kilograms. $M = 0.0440095\,\text{kg/mol}$.
+      - value: 0.3725
+        feedback: >-
+          That is how far the ideal law overshoots, $1/Z - 1$. The question asks for $Z$ itself.
+
+  - id: Q-2.1-plateau-state
+    type: mc
+    level: bagrut
+    qualitative: true
+    objectives: [OBJ-2.1-1, OBJ-2.1-3]
+    prompt: >-
+      Carbon dioxide at $280\,\text{K}$ stands in a cylinder at $4.1607\,\text{MPa}$, its saturation pressure at that temperature. By the state postulate two independent intensive variables fix the state. Do $P$ and $T$ here fix the molar volume?
+    choices:
+      - text: >-
+          No. On the plateau the pressure is fixed by the temperature, so $P$ and $T$ are not independent: the molar volume can be anything from $49.8$ to $361.5\,\text{cm}^3/\text{mol}$, depending on how much has condensed. Another variable, such as $v$ itself, fixes the state.
+        correct: true
+        feedback: >-
+          Right. The postulate asks for two independent variables, and during condensation $P$ and $T$ are tied together by the saturation curve. $T$ and $v$ remain independent and fix everything, including the fraction that is liquid.
+      - text: >-
+          Yes: by the state postulate, $P$ and $T$ always fix $v$.
+        feedback: >-
+          Only when they are independent. At $280\,\text{K}$ the vapour and liquid coexist at one pressure, $4.1607\,\text{MPa}$, over a sevenfold range of molar volume; knowing $P$ and $T$ there says only that the substance is somewhere on the plateau.
+      - text: >-
+          No: the state postulate fails during condensation, which is why module 14 is needed.
+        feedback: >-
+          The postulate holds; it is $P$ and $T$ that stop being independent. Module 14 is needed to say where the plateau lies, not because the state stops being fixed by two variables.
+      - text: >-
+          Yes: $V_\mathrm{m} = RT/P = 559.5\,\text{cm}^3/\text{mol}$.
+        feedback: >-
+          That is the ideal gas law, which no point of the plateau obeys: the saturated vapour has $361.5\,\text{cm}^3/\text{mol}$, $Z = 0.65$, and the liquid $49.8$. The real substance takes any volume between the two.
+        misconception: MC-ideal-gas-universal

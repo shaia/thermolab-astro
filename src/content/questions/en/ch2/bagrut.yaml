@@ -1,0 +1,479 @@
+# Module 02 review problems, from ThermoLab's problem set (content/en/thermodynamics/02-equations-of-state-problems.md,
+# problems 1-4; problem 5, a molecule's size and dimensional analysis, went to the workbook). The lesson's worked
+# examples already solve parts of them: example 3 is problem 1(d) with argon, example 4 is problem 4(a) with the 2 MPa
+# datum, and example 6 is corresponding states for nitrogen and CO₂. So problem 1 uses methane and proves the critical
+# point through the largest value of 2a(v - b)²/v³, problem 2 uses water, problem 3 xenon at a different reduced state,
+# and problem 4 other rows of the CO₂ isotherm and the virial coefficient at its dilute end. ThermoLab's problem 1(d)
+# compared argon's computed T_c and P_c with measured values as if that were a test; the constants were fitted to them,
+# so here the test is the critical volume (part b), as the lesson's example 3 says.
+# Every number was recomputed with ThermoLab's library (thermolab.gases) and numpy. Real-substance data: NIST Chemistry
+# WebBook, SRD 69 fluid pages (critical points of methane, water, xenon, CO₂; CO₂'s 280 K isotherm from the Span–Wagner
+# equation). ThermoLab kept its solutions with the instructor; this platform publishes worked solutions and rubrics. Ids
+# are shared with the Hebrew file.
+lang: en
+chapter: 2
+questions:
+  - id: Q-2-bagrut-1
+    type: bagrut
+    title: >-
+      Methane's critical point, and a natural-gas cylinder
+    prompt: >-
+      Methane's critical point (NIST) is $T_c = 190.564\,\text{K}$ and $P_c = 4.5992\,\text{MPa}$, with a critical density of $162.66\,\text{kg/m}^3$; its molar mass is $16.0428\,\text{g/mol}$, so its measured critical molar volume is $V_c = 98.63\,\text{cm}^3/\text{mol}$. Treat methane as a van der Waals gas whose constants are fitted, as tables do, to $T_c$ and $P_c$. Take $R = 8.3145\,\text{J/(mol K)}$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-2.1-4, OBJ-2.1-5]
+        prompt: >-
+          Find the fitted excluded volume per mole, $b_\mathrm{m} = RT_c/(8P_c)$, in $\text{cm}^3/\text{mol}$.
+        answer: 43.06
+        unit: cm³/mol
+        tolerance: 0.01
+        correctFeedback: >-
+          $b_\mathrm{m} = 8.3145 \times 190.564/(8 \times 4.5992 \times 10^6) = 4.306 \times 10^{-5}\,\text{m}^3/\text{mol} = 43.06\,\text{cm}^3/\text{mol}$, and $a_\mathrm{m} = 27(RT_c)^2/(64P_c) = 0.2303\,\text{Pa}\,\text{m}^6/\text{mol}^2$, which is how tables of van der Waals constants are made.
+        wrongFeedback: >-
+          Invert $k_BT_c = 8a/(27b)$ and $P_c = a/(27b^2)$: dividing gives $b = k_BT_c/(8P_c)$, and per mole $b_\mathrm{m} = RT_c/(8P_c)$.
+        commonWrong:
+          - value: 344.5
+            feedback: >-
+              That is $RT_c/P_c$, without the $8$. From $k_BT_c = 8a/(27b)$ and $P_c = a/(27b^2)$, $k_BT_c/P_c = 8b$.
+          - value: 129.2
+            feedback: >-
+              That is $3b_\mathrm{m}$, the model's critical volume, which part (b) asks about. $b_\mathrm{m}$ itself is a third of it.
+          - value: 4.306e-5
+            feedback: >-
+              The number is right in cubic metres per mole. The answer is asked in $\text{cm}^3/\text{mol}$: multiply by $10^6$.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-2.1-5, OBJ-2.1-6]
+        prompt: >-
+          The fitted constants give back $T_c$ and $P_c$ by construction. The third critical constant is a prediction. By what factor does the model's critical molar volume exceed methane's measured one?
+        answer: 1.310
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          $V_c' = 3b_\mathrm{m} = 129.2\,\text{cm}^3/\text{mol}$, against the measured $98.63$: a factor $1.31$, $31\%$ too large. The factor is $3/(8Z_c)$, with methane's measured $Z_c = P_cV_c/(RT_c) = 0.286$ against the model's $3/8$.
+        wrongFeedback: >-
+          The van der Waals critical volume is $v_c = 3b$; per mole, $3b_\mathrm{m}$. Divide by the measured $98.63\,\text{cm}^3/\text{mol}$.
+        commonWrong:
+          - value: 0.4366
+            feedback: >-
+              That compares $b_\mathrm{m}$, not the critical volume, with the measured $V_c$. The model's critical volume is $3b_\mathrm{m}$.
+          - value: 0.7634
+            feedback: >-
+              That is the measured volume over the model's. The question asks by what factor the model's exceeds the measured one: $129.2/98.63$.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-2.1-5]
+        prompt: >-
+          A natural-gas car stores methane at $20\,\text{MPa}$ and $293\,\text{K}$, more than four times methane's critical pressure. Is there liquid methane in the tank?
+        choices:
+          - text: >-
+              No. At $T_r = 293/190.564 = 1.54$ methane is above its critical temperature: its isotherm falls at every volume, and compression raises the density smoothly without ever separating a liquid. The tank holds a supercritical fluid.
+            correct: true
+            feedback: >-
+              Right. That is why the fuel is called compressed natural gas: to carry methane as a liquid it must be cooled below $190.6\,\text{K}$ first, which is what liquefied natural gas is.
+          - text: >-
+              Yes: $20\,\text{MPa}$ is $4.3$ times the critical pressure, well past the pressure needed to liquefy it.
+            feedback: >-
+              Above its critical temperature no pressure liquefies a gas. The critical pressure is the pressure at the critical point, not a threshold that liquefies the gas once crossed.
+            misconception: MC-any-gas-liquefies
+          - text: >-
+              Partly: above the critical pressure, liquid and vapour coexist.
+            feedback: >-
+              Liquid and vapour coexist only below the critical temperature, at the saturation pressure of that temperature. At $T_r = 1.54$ there is one fluid at every pressure.
+            misconception: MC-any-gas-liquefies
+          - text: >-
+              Yes: at $293\,\text{K}$ the van der Waals isotherm of methane has a stretch where the pressure rises with volume, and the tank's state lies on it.
+            feedback: >-
+              The rising stretch exists only below $T_c$. At $T_r = 1.54$ the slope $(\partial P/\partial v)_T$ is negative everywhere, as part (d) shows.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-2.1-5, OBJ-2.1-4]
+        prompt: >-
+          Show from $(\partial P/\partial v)_T$ that a van der Waals isotherm has a stretch on which the pressure rises with volume if and only if $k_BT < 8a/(27b)$, by finding the largest value of $f(v) = 2a(v - b)^2/v^3$ for $v > b$. Deduce $v_c$, $T_c$ and $P_c$, explain from your result why no pressure liquefies methane at $293\,\text{K}$, and check your result in limits.
+        solution:
+          - kind: law
+            text: >-
+              The van der Waals equation $P = k_BT/(v - b) - a/v^2$ at fixed $T$ has slope $(\partial P/\partial v)_T = -k_BT/(v - b)^2 + 2a/v^3$. It is positive exactly where $k_BT < 2a(v - b)^2/v^3 = f(v)$.
+          - kind: manipulation
+            text: >-
+              $f(b) = 0$ and $f \to 0$ as $v \to \infty$. Differentiating, $f'(v) = 2a(v - b)(3b - v)/v^4$, which vanishes for $v > b$ only at $v = 3b$, the maximum: $f(3b) = 2a(2b)^2/(3b)^3 = 8a/(27b)$. So the slope is positive somewhere if and only if $k_BT < 8a/(27b)$. At $k_BT = 8a/(27b)$ it touches zero at the single volume $v = 3b$ and is negative on both sides, so the isotherm is flat there with no change of direction: an inflection with zero slope, the critical point. Its pressure is $P = k_BT/(2b) - a/(9b^2) = 4a/(27b^2) - 3a/(27b^2)$.
+          - kind: formula
+            text: >-
+              $v_c = 3b \qquad k_BT_c = \dfrac{8a}{27b} \qquad P_c = \dfrac{a}{27b^2}$
+          - kind: limit
+            text: >-
+              $a \to 0$: $f \equiv 0$, no rising stretch at any temperature and $T_c \to 0$: hard spheres alone never condense. $b \to 0$ at fixed $a$: $f(v) = 2a/v$ grows without bound as $v \to 0$, so every isotherm rises at small enough $v$ whatever the temperature, and $T_c \to \infty$: attraction with no hard core to stop the collapse gives a fold that never closes. $v \to \infty$: $f \to 0$, so the dilute gas is stable at every temperature.
+          - kind: units
+            text: >-
+              $a/v^3$ is $\text{Pa}\,\text{m}^6/\text{m}^3 = \text{J}$, an energy, as $k_BT$ is; so $8a/(27b)$ is an energy and $a/(27b^2)$ is $\text{Pa}$.
+          - kind: substitution
+            text: >-
+              Per mole, $8a_\mathrm{m}/(27b_\mathrm{m}) = 8 \times 0.2303/(27 \times 4.306 \times 10^{-5}) = 1584\,\text{J/mol} = RT_c$, as the fit requires; at $293\,\text{K}$, $RT = 2436\,\text{J/mol}$, larger than the largest value of $f$, so $(\partial P/\partial v)_T < 0$ at every volume. $V_c' = 3b_\mathrm{m} = 129.2\,\text{cm}^3/\text{mol}$.
+          - kind: result
+            text: >-
+              A rising stretch exists if and only if $T < T_c = 8a/(27k_Bb)$, and the critical point is $(3b, 8a/(27k_Bb), a/(27b^2))$. Methane at $293\,\text{K}$ is at $T_r = 1.54$: its isotherm falls at every volume, each pressure, $20\,\text{MPa}$ included, is met at one density only, and there is never a second, separate phase to condense into.
+        rubric:
+          - text: >-
+              Writes $(\partial P/\partial v)_T$ and the condition $k_BT < 2a(v - b)^2/v^3$ for a rising stretch.
+            weight: 2
+          - text: >-
+              Finds the maximum of $f$ at $v = 3b$, with $f(3b) = 8a/(27b)$, and concludes $k_BT_c = 8a/(27b)$, $v_c = 3b$.
+            weight: 3
+          - text: >-
+              Finds $P_c = a/(27b^2)$.
+          - text: >-
+              Explains for methane at $293\,\text{K}$: $T > T_c$, so the slope is negative everywhere and no separate liquid can form.
+            weight: 2
+          - text: >-
+              A limit check: $a \to 0$, $b \to 0$ or $v \to \infty$, with what each means.
+            weight: 2
+
+  - id: Q-2-bagrut-2
+    type: bagrut
+    title: >-
+      Water is no van der Waals gas
+    prompt: >-
+      Water's critical point (NIST, IAPWS-95) is $T_c = 647.096\,\text{K}$ and $P_c = 22.064\,\text{MPa}$, with a critical density of $322.0\,\text{kg/m}^3$; its molar mass is $18.0153\,\text{g/mol}$. Every van der Waals gas has the critical compressibility factor $Z_c = P_cv_c/(k_BT_c) = 3/8$. Take $R = 8.3145\,\text{J/(mol K)}$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-2.1-6]
+        prompt: >-
+          Find water's measured critical compressibility factor, $Z_c = P_cV_c/(RT_c)$.
+        answer: 0.2294
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          $V_c = M/\rho_c = 0.0180153/322.0 = 5.595 \times 10^{-5}\,\text{m}^3/\text{mol}$, and $Z_c = 22.064 \times 10^6 \times 5.595 \times 10^{-5}/(8.3145 \times 647.096) = 0.229$, well below $3/8$. Argon, xenon and nitrogen have $0.29$, carbon dioxide $0.275$: water, polar and hydrogen-bonded, is the outlier.
+        wrongFeedback: >-
+          The critical molar volume is $V_c = M/\rho_c$, with $M$ in kilograms per mole; then $Z_c = P_cV_c/(RT_c)$.
+        commonWrong:
+          - value: 0.375
+            feedback: >-
+              That is the van der Waals value, the same for every van der Waals gas. The question asks for water's measured one, from its critical data.
+          - value: 229.4
+            feedback: >-
+              That takes the molar mass in grams per mole as if it were kilograms. $M = 0.0180153\,\text{kg/mol}$.
+          - value: 4.359
+            feedback: >-
+              That is $1/Z_c$, $RT_c/(P_cV_c)$. $Z_c$ has the pressure and volume on top.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-2.1-5, OBJ-2.1-6]
+        prompt: >-
+          Fit $a$ and $b$ to water's $T_c$ and $P_c$. By what factor does the model's critical molar volume, $3b_\mathrm{m}$, exceed the measured one?
+        answer: 1.634
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          $b_\mathrm{m} = RT_c/(8P_c) = 30.48\,\text{cm}^3/\text{mol}$, so $V_c' = 91.44\,\text{cm}^3/\text{mol}$ against the measured $55.95$: $63\%$ too large. The factor is $3/(8Z_c) = 0.375/0.2294$, as part (d) shows it must be.
+        wrongFeedback: >-
+          $b_\mathrm{m} = RT_c/(8P_c)$, the model's critical volume is $3b_\mathrm{m}$, and the measured one is $M/\rho_c$.
+        commonWrong:
+          - value: 0.6118
+            feedback: >-
+              That is the measured volume over the model's. The question asks by what factor the model's exceeds the measured one.
+          - value: 0.5448
+            feedback: >-
+              That compares $b_\mathrm{m}$, not $3b_\mathrm{m}$, with the measured critical volume.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-2.1-1, OBJ-2.1-6]
+        prompt: >-
+          Measured critical compressibility factors run from about $0.23$ (water) to $0.29$ (argon, xenon, nitrogen), never $3/8$. What does this count against?
+        choices:
+          - text: >-
+              Against the van der Waals model, which builds $Z_c = 3/8$ in for every gas, and against corresponding states as an exact law of real substances, since one universal reduced equation would give every substance the same $Z_c$. Not against the state postulate, which says only that the equilibrium states form a surface, not what shape it has.
+            correct: true
+            feedback: >-
+              Right. Real gases obey corresponding states approximately, best among small near-spherical molecules (argon, xenon, nitrogen all at $0.29$), and water's $0.23$ shows how far a polar molecule falls outside the family.
+          - text: >-
+              Against the state postulate: a substance whose $Z_c$ is not $3/8$ needs a third variable to fix its state.
+            feedback: >-
+              The postulate says two independent intensive variables fix the state; it implies no particular equation of state and no value of $Z_c$. Water's surface is still a surface, just not the van der Waals one.
+          - text: >-
+              Against nothing: $0.29$ against $0.375$ is within the error of measuring a critical point.
+            feedback: >-
+              Critical constants are measured to well under one percent; NIST gives water's $T_c$ to a thousandth of a kelvin. A $23\%$ gap for argon and $39\%$ for water are differences of kind, not error.
+          - text: >-
+              Against the ideal gas law, which would give $Z_c = 1$.
+            feedback: >-
+              The ideal gas has no critical point at all: its isotherms fall everywhere at every temperature. $Z = 1$ is its value at every state, and has nothing to do with a critical one.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-2.1-6, OBJ-2.1-5]
+        prompt: >-
+          Show that $Z_c = 3/8$ for every van der Waals gas. Then show that if $a$ and $b$ are fitted to any two of a real substance's three critical constants $T_c$, $P_c$, $v_c$, the model misses the third by a factor fixed by the measured $Z_c$ alone. Find the three factors, evaluate the three predictions for water, and check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              The van der Waals critical point is $v_c = 3b$, $k_BT_c = 8a/(27b)$, $P_c = a/(27b^2)$, and the measured critical compressibility factor is $Z_c = P_cv_c/(k_BT_c)$.
+          - kind: manipulation
+            text: >-
+              In the model, $P_cv_c/(k_BT_c) = (a/(27b^2)) \cdot 3b \cdot 27b/(8a) = 3/8$: $a$ and $b$ cancel. Fitted to $(T_c, P_c)$: $b = k_BT_c/(8P_c)$, so $v_c' = 3b = 3k_BT_c/(8P_c)$. Fitted to $(T_c, v_c)$: $b = v_c/3$ and $a = 27k_BT_cb/8 = 9k_BT_cv_c/8$, so $P_c' = a/(27b^2) = 3k_BT_c/(8v_c)$. Fitted to $(P_c, v_c)$: $b = v_c/3$ and $a = 27P_cb^2 = 3P_cv_c^2$, so $k_BT_c' = 8a/(27b) = 8P_cv_c/3$. Divide each by the measured value and use $Z_c = P_cv_c/(k_BT_c)$.
+          - kind: formula
+            text: >-
+              $\dfrac{v_c'}{v_c} = \dfrac{P_c'}{P_c} = \dfrac{3}{8Z_c} \qquad \dfrac{T_c'}{T_c} = \dfrac{8Z_c}{3}$
+          - kind: limit
+            text: >-
+              $Z_c \to 3/8$: all three factors go to $1$, and a substance with the van der Waals $Z_c$ could be fitted at its whole critical point at once. The further $Z_c$ is from $3/8$, the worse every choice of fit; two constants cannot place three numbers, because the model ties them by $Z_c = 3/8$. The factors are reciprocal pairs: the volume and the pressure miss in the same direction, the temperature in the other, so that the product $P_c'v_c'/(k_BT_c')$ always returns $3/8$.
+          - kind: units
+            text: >-
+              $Z_c$ and all three factors are pure numbers: $\text{Pa}\cdot\text{m}^3/\text{J} = 1$.
+          - kind: substitution
+            text: >-
+              Water, $Z_c = 0.2294$: $3/(8Z_c) = 1.634$ and $8Z_c/3 = 0.612$. Fitted to $(T_c, P_c)$, $V_c' = 91.44\,\text{cm}^3/\text{mol}$ against $55.95$; fitted to $(T_c, V_c)$, $P_c' = 36.06\,\text{MPa}$ against $22.064$; fitted to $(P_c, V_c)$, $T_c' = 395.9\,\text{K}$ against $647.1$.
+          - kind: result
+            text: >-
+              $Z_c = 3/8$ for every van der Waals gas, and whichever two critical constants $a$ and $b$ are fitted to, the third misses by $3/(8Z_c)$ or $8Z_c/3$: for water $63\%$ too large in volume or pressure, or $39\%$ too low in temperature, $396$ rather than $647\,\text{K}$. Tables fit $T_c$ and $P_c$, and accept the wrong volume.
+        rubric:
+          - text: >-
+              Shows $Z_c = 3/8$ with $a$ and $b$ cancelling.
+            weight: 2
+          - text: >-
+              Derives the three fits and their predictions, $v_c' = 3k_BT_c/(8P_c)$, $P_c' = 3k_BT_c/(8v_c)$, $k_BT_c' = 8P_cv_c/3$.
+            weight: 3
+          - text: >-
+              Expresses the three factors through the measured $Z_c$: $3/(8Z_c)$, $3/(8Z_c)$, $8Z_c/3$.
+          - text: >-
+              Evaluates the three predictions for water: $91.4\,\text{cm}^3/\text{mol}$, $36.1\,\text{MPa}$, $396\,\text{K}$.
+          - text: >-
+              A limit check: $Z_c \to 3/8$ makes every fit exact, or the product of the predictions returns $3/8$.
+            weight: 2
+
+  - id: Q-2-bagrut-3
+    type: bagrut
+    title: >-
+      Xenon in its own units
+    prompt: >-
+      Xenon's critical point (NIST) is $T_c = 289.733\,\text{K}$ and $P_c = 5.842\,\text{MPa}$. Treat xenon as a van der Waals gas fitted to it, and use the reduced variables $P_r = P/P_c$, $v_r = v/v_c$, $T_r = T/T_c$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-2.1-6]
+        prompt: >-
+          Xenon is held at $T_r = 1.3$ and $v_r = 3$. Find $P_r$.
+        answer: 0.9667
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          $P_r = 8 \times 1.3/(9 - 1) - 3/9 = 1.300 - 0.333 = 0.967$, the same for every van der Waals gas at this $T_r$ and $v_r$. $Z = 3P_rv_r/(8T_r) = 0.837$.
+        wrongFeedback: >-
+          Use the law of corresponding states, $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$.
+        commonWrong:
+          - value: 1.1556
+            feedback: >-
+              That is the ideal gas in reduced units, $8T_r/(3v_r)$. The van der Waals gas has both corrections.
+          - value: 1.3
+            feedback: >-
+              That keeps the excluded volume, $8T_r/(3v_r - 1)$, and drops the attraction, $-3/v_r^2 = -0.333$.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-2.1-6, OBJ-2.1-3]
+        prompt: >-
+          What is xenon's actual pressure in this state, in $\text{MPa}$?
+        answer: 5.647
+        unit: MPa
+        tolerance: 0.01
+        correctFeedback: >-
+          $P = P_rP_c = 0.9667 \times 5.842 = 5.647\,\text{MPa}$, at $T = 1.3 \times 289.733 = 376.7\,\text{K}$ and $V_\mathrm{m} = 3 \times 3RT_c/(8P_c) = 463.9\,\text{cm}^3/\text{mol}$. The ideal gas at the same $T$ and $V_\mathrm{m}$ would be at $6.751\,\text{MPa}$, $20\%$ higher.
+        wrongFeedback: >-
+          Reduced variables are measured in the gas's own critical units: $P = P_rP_c$.
+        commonWrong:
+          - value: 6.751
+            feedback: >-
+              That is the ideal pressure at the same temperature and molar volume, $RT/V_\mathrm{m}$. The van der Waals pressure is $P_rP_c$ with $P_r$ from part (a).
+          - value: 0.1655
+            feedback: >-
+              That divides $P_r$ by $P_c$. $P_r = P/P_c$, so $P = P_rP_c$.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-2.1-6]
+        prompt: >-
+          A second van der Waals gas is at $T_r = 0.9$ and $P_r = 0.60$. What does the law of corresponding states say about its reduced volume?
+        choices:
+          - text: >-
+              Solved for $v_r$, the reduced equation has three roots here, $0.613$, $1.000$ and $2.721$: below $T_c$ a pair $(T_r, P_r)$ inside the wiggle's pressure range does not fix $v_r$. The middle root is on the stretch where $(\partial P/\partial v)_T > 0$, not a stable state; which of the outer two a real substance takes is module 14's question.
+            correct: true
+            feedback: >-
+              Right. The law fixes $P_r$ from $(T_r, v_r)$ for every van der Waals gas. Fixing $(T_r, P_r)$ instead gives one $v_r$ above $T_c$, and up to three below it, where the isotherm at $T_r = 0.9$ rises between $v_r = 0.72$ and $1.53$, from $P_r = 0.42$ to $0.72$.
+          - text: >-
+              It has one value, the same for every van der Waals gas, because $a$ and $b$ cancel from the reduced equation.
+            feedback: >-
+              The cancellation makes the answer the same for every gas, but not single. $3P_rv_r^3 - (P_r + 8T_r)v_r^2 + 9v_r - 3 = 0$ is a cubic, and at $T_r = 0.9$, $P_r = 0.60$ it has three roots above $v_r = 1/3$.
+          - text: >-
+              It has three values, and the gas passes through all three in turn as it is compressed, its pressure rising and falling along the loop.
+            feedback: >-
+              The three roots are three points of the bare equation, not stations of a real compression. A real substance holds its pressure flat while it condenses; the middle root lies where no state is stable.
+            misconception: MC-vdw-loop-is-real
+          - text: >-
+              It has none: the reduced equation does not apply below the critical temperature.
+            feedback: >-
+              It applies at every temperature; the reduction is algebra and holds wherever the van der Waals equation does. Below $T_c$ it simply has more than one root for some pressures.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-2.1-6]
+        prompt: >-
+          Derive the reduced van der Waals equation from $P = k_BT/(v - b) - a/v^2$ and the critical point, and check that it gives $P_r = 1$ at $T_r = v_r = 1$. Show that $Z$ depends only on $T_r$ and $v_r$, expand it for large $v_r$ to first order in $1/v_r$, and find the reduced temperature at which that first-order term vanishes. Evaluate it for xenon, and explain what the reduction tells you about two gases that the van der Waals equation with each gas's own $a$ and $b$ does not, on its own. Check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              $P = k_BT/(v - b) - a/v^2$, with critical point $v_c = 3b$, $k_BT_c = 8a/(27b)$, $P_c = a/(27b^2)$, and $Z = Pv/(k_BT)$.
+          - kind: manipulation
+            text: >-
+              Substitute $P = P_rP_c$, $v = 3bv_r$, $k_BT = 8aT_r/(27b)$: $P_r\,a/(27b^2) = (8aT_r/(27b))/(3bv_r - b) - a/(9b^2v_r^2)$. Multiply by $27b^2/a$: $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$. At $T_r = v_r = 1$, $P_r = 4 - 3 = 1$. Then $Z = P_rP_c \cdot v_rv_c/(T_r\,k_BT_c) = Z_c\,P_rv_r/T_r = 3P_rv_r/(8T_r)$, a function of $(T_r, v_r)$ alone. For large $v_r$, $8T_r/(3v_r - 1) = (8T_r/(3v_r))\,(1 + 1/(3v_r) + \cdots)$, so $Z = 1 + (1/3 - 9/(8T_r))/v_r + \cdots$.
+          - kind: formula
+            text: >-
+              $P_r = \dfrac{8T_r}{3v_r - 1} - \dfrac{3}{v_r^2} \qquad Z = \dfrac{3P_rv_r}{8T_r} = 1 + \dfrac{1}{v_r}\left(\dfrac13 - \dfrac{9}{8T_r}\right) + \cdots \qquad T_{B,r} = \dfrac{27}{8}$
+          - kind: limit
+            text: >-
+              $v_r \to \infty$: $P_r \to 8T_r/(3v_r)$, the ideal gas in these units, and $Z \to 1$. $T_r = v_r = 1$: $P_r = 1$ and $Z = 3/8$, the critical point. $T_r$ below $27/8$: the first-order term is negative, attraction wins in the dilute gas and $Z < 1$; above, size wins and $Z > 1$. None of these limits names a gas.
+          - kind: units
+            text: >-
+              Every reduced variable is a ratio of like quantities, and $Z$ is $\text{Pa}\cdot\text{m}^3/\text{J}$, a pure number; the reduced equation has no constant with a unit in it, which is why nothing is left to tell gases apart.
+          - kind: substitution
+            text: >-
+              Xenon's Boyle temperature as a van der Waals gas: $T_B = \tfrac{27}{8} \times 289.733 = 977.8\,\text{K}$. At the state of part (a), $Z = 3 \times 0.9667 \times 3/(8 \times 1.3) = 0.837$; the first-order expansion gives $1 + (0.333 - 0.865)/3 = 0.823$.
+          - kind: result
+            text: >-
+              $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$ and $Z = 3P_rv_r/(8T_r)$ hold for every van der Waals gas, and the dilute $Z$ departs from $1$ at first order unless $T_r = 27/8$, $978\,\text{K}$ for xenon. With each gas's own $a$ and $b$ the van der Waals equation gives each gas's pressure, and two gases at the same $(T, v)$ have different pressures; it takes the reduction to see that two gases at the same $(T_r, v_r)$ have the same $P_r$ and the same $Z$, whatever their molecules.
+        rubric:
+          - text: >-
+              Substitutes the reduced variables and the critical point, and simplifies to $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$ with $a$, $b$ and $k_B$ cancelling.
+            weight: 3
+          - text: >-
+              Shows $Z = 3P_rv_r/(8T_r)$, a function of $(T_r, v_r)$ alone.
+          - text: >-
+              Expands $Z$ to first order in $1/v_r$ and finds $T_{B,r} = 27/8$, $978\,\text{K}$ for xenon.
+            weight: 2
+          - text: >-
+              Says what the reduction adds: the same $(T_r, v_r)$ gives the same $P_r$ and $Z$ for every gas.
+          - text: >-
+              A limit check: $v_r \to \infty$ gives the ideal gas, or $T_r = v_r = 1$ gives $P_r = 1$ and $Z = 3/8$.
+            weight: 2
+
+  - id: Q-2-bagrut-4
+    type: bagrut
+    title: >-
+      Carbon dioxide along its 280 K isotherm
+    prompt: >-
+      NIST's isotherm for carbon dioxide at $280\,\text{K}$ (molar mass $44.0095\,\text{g/mol}$) lists, among others, these states: vapour at $0.40\,\text{MPa}$ with density $7.7545\,\text{kg/m}^3$; vapour at $3.00\,\text{MPa}$, $72.805\,\text{kg/m}^3$; saturated vapour at $4.1607\,\text{MPa}$, $121.74\,\text{kg/m}^3$; saturated liquid at $4.1607\,\text{MPa}$, $883.58\,\text{kg/m}^3$. The van der Waals constants fitted to CO₂'s critical point are $a_\mathrm{m} = 0.3657\,\text{Pa}\,\text{m}^6/\text{mol}^2$ and $b_\mathrm{m} = 42.85\,\text{cm}^3/\text{mol}$. Take $R = 8.3145\,\text{J/(mol K)}$; per mole, $P = RT/(V_\mathrm{m} - b_\mathrm{m}) - a_\mathrm{m}/V_\mathrm{m}^2$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-2.1-3]
+        prompt: >-
+          At the $3.00\,\text{MPa}$ datum, find the molar volume and the ideal pressure $RT/V_\mathrm{m}$, in $\text{MPa}$.
+        answer: 3.851
+        unit: MPa
+        tolerance: 0.01
+        correctFeedback: >-
+          $V_\mathrm{m} = 0.0440095/72.805 = 604.5\,\text{cm}^3/\text{mol}$ and $RT/V_\mathrm{m} = 2328.1/6.045 \times 10^{-4} = 3.851\,\text{MPa}$, $28\%$ above the datum. Along the whole table the ideal law stays within $10\%$ only up to $1.3\,\text{MPa}$, and is more than $50\%$ too high from $4.1\,\text{MPa}$ to saturation.
+        wrongFeedback: >-
+          $V_\mathrm{m} = M/\rho$ with $M$ in kilograms per mole, then $P = RT/V_\mathrm{m}$.
+        commonWrong:
+          - value: 0.003851
+            feedback: >-
+              That takes the molar mass in grams per mole as if it were kilograms, making the volume a thousand times too large. $M = 0.0440095\,\text{kg/mol}$.
+          - value: 3.0
+            feedback: >-
+              That is the datum, the measured pressure. The ideal law predicts something else at this volume, and the difference is the point.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-2.1-4]
+        prompt: >-
+          Find the van der Waals pressure at the same molar volume, in $\text{MPa}$.
+        answer: 3.144
+        unit: MPa
+        tolerance: 0.01
+        correctFeedback: >-
+          $b_\mathrm{m}/V_\mathrm{m} = 0.071$, so excluded volume raises the ideal $3.851$ to $RT/(V_\mathrm{m} - b_\mathrm{m}) = 4.145\,\text{MPa}$; attraction takes away $a_\mathrm{m}/V_\mathrm{m}^2 = 1.001\,\text{MPa}$, leaving $3.144\,\text{MPa}$, $4.8\%$ above the datum. Two constants fixed at the critical point cut the ideal law's error by a factor of six here.
+        wrongFeedback: >-
+          Evaluate $RT/(V_\mathrm{m} - b_\mathrm{m}) - a_\mathrm{m}/V_\mathrm{m}^2$ with $V_\mathrm{m} = 6.045 \times 10^{-4}\,\text{m}^3/\text{mol}$ and $b_\mathrm{m} = 4.285 \times 10^{-5}\,\text{m}^3/\text{mol}$.
+        commonWrong:
+          - value: 4.145
+            feedback: >-
+              That keeps the excluded volume and drops the attraction, $a_\mathrm{m}/V_\mathrm{m}^2 = 1.001\,\text{MPa}$.
+          - value: 2.851
+            feedback: >-
+              That keeps the attraction and drops the excluded volume: $RT/V_\mathrm{m} - a_\mathrm{m}/V_\mathrm{m}^2$. The molecules' size adds back $0.29\,\text{MPa}$.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-2.1-4]
+        prompt: >-
+          At the saturated-liquid state, $V_\mathrm{m} = 49.81\,\text{cm}^3/\text{mol}$, the van der Waals equation gives $187\,\text{MPa}$ against the measured $4.16$. Why does it fail so badly there?
+        choices:
+          - text: >-
+              The fitted $b_\mathrm{m} = 42.85\,\text{cm}^3/\text{mol}$ is $86\%$ of the liquid's volume, so $V_\mathrm{m} - b_\mathrm{m}$ is only $7\,\text{cm}^3/\text{mol}$ and the hard-core term, $334\,\text{MPa}$, explodes. A $b$ fitted at the critical point makes the molecules too large for the liquid, as the too-large $v_c = 3b$ already showed.
+            correct: true
+            feedback: >-
+              Right. The constants are fixed by two numbers measured at one point of the phase diagram, and the dense liquid is the van der Waals equation's worst region; the model specification lists it among the failure modes.
+          - text: >-
+              The attraction is too weak in the model; a larger $a$ would bring the pressure down to the datum.
+            feedback: >-
+              Attraction already takes away $a_\mathrm{m}/V_\mathrm{m}^2 = 147\,\text{MPa}$. The term that is wrong is the hard core, $RT/(V_\mathrm{m} - b_\mathrm{m}) = 334\,\text{MPa}$, seven times the ideal pressure, because $V_\mathrm{m} - b_\mathrm{m}$ is so small.
+          - text: >-
+              The datum is wrong: a liquid at $280\,\text{K}$ must be at a far higher pressure than its vapour.
+            feedback: >-
+              The saturated liquid and the saturated vapour are at the same pressure, $4.1607\,\text{MPa}$: that is what coexistence on the plateau means. The liquid barely compresses, so its pressure rises steeply only when it is squeezed further.
+          - text: >-
+              The equation is evaluated on the stretch of the wiggle where the pressure rises with volume.
+            feedback: >-
+              The wiggle lies at larger volumes, between the liquid and the vapour. At $49.8\,\text{cm}^3/\text{mol}$ the van der Waals isotherm is on its liquid branch, falling steeply as the volume grows.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-2.1-3, OBJ-2.1-4, OBJ-2.1-6]
+        prompt: >-
+          At the dilute end, $Z - 1 \approx B/V_\mathrm{m}$ with $B$ the second virial coefficient per mole. Estimate $B$ for CO₂ at $280\,\text{K}$ from the $0.40\,\text{MPa}$ datum and compare it with the van der Waals $B = b_\mathrm{m} - a_\mathrm{m}/(RT)$. Then explain why neither the ideal law nor the van der Waals equation, nor any single equation $P(v)$ analytic in $v$, can draw the flat stretch between the saturated vapour and the saturated liquid. Check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              The virial expansion $Z = PV_\mathrm{m}/(RT) = 1 + B/V_\mathrm{m} + C/V_\mathrm{m}^2 + \cdots$; for the van der Waals equation, $v/(v - b) = 1 + b/v + \cdots$ gives $B = b_\mathrm{m} - a_\mathrm{m}/(RT)$.
+          - kind: manipulation
+            text: >-
+              At the dilute datum the higher terms are small, so $B \approx (Z - 1)V_\mathrm{m}$. On the plateau, $P(v)$ would have to be constant on an interval of $v$; a function analytic in $v$ that is constant on an interval is constant everywhere on its domain, which contradicts the dilute limit $P \to RT/V_\mathrm{m} \to 0$.
+          - kind: formula
+            text: >-
+              $B \approx (Z - 1)\,V_\mathrm{m} \qquad B' = b_\mathrm{m} - \dfrac{a_\mathrm{m}}{RT}$
+          - kind: limit
+            text: >-
+              $P \to 0$, $V_\mathrm{m} \to \infty$: $Z - 1 \approx B/V_\mathrm{m} \to 0$ for the data and the model alike, and the ideal law becomes exact; at $0.40\,\text{MPa}$ the data are already within $2.5\%$ of it. $T \to T_B = a_\mathrm{m}/(Rb_\mathrm{m})$, $1026\,\text{K}$ for the fitted model: $B \to 0$. At $280\,\text{K}$, far below it, $B < 0$: attraction wins in the dilute vapour, which is why the ideal law overestimates every vapour pressure in the table.
+          - kind: units
+            text: >-
+              $Z$ is a pure number, so $B$ has the units of $V_\mathrm{m}$, $\text{cm}^3/\text{mol}$; $a_\mathrm{m}/(RT)$ is $\text{Pa}\,\text{m}^6\,\text{mol}^{-2}/(\text{J}\,\text{mol}^{-1}) = \text{m}^3/\text{mol}$, as $b_\mathrm{m}$ is.
+          - kind: substitution
+            text: >-
+              At $0.40\,\text{MPa}$: $V_\mathrm{m} = 0.0440095/7.7545 = 5675\,\text{cm}^3/\text{mol}$, $Z = 0.4 \times 10^6 \times 5.675 \times 10^{-3}/2328.1 = 0.9751$, so $B \approx -0.0249 \times 5675 = -141\,\text{cm}^3/\text{mol}$ (a quadratic fit of $Z - 1$ against $1/V_\mathrm{m}$ over the eight lowest-pressure rows of the table gives $-142$). Van der Waals: $a_\mathrm{m}/(RT) = 157.1$, so $B = 42.85 - 157.1 = -114\,\text{cm}^3/\text{mol}$, $19\%$ short in size; the model's $Z$ at the same volume is $0.980$.
+          - kind: result
+            text: >-
+              $B \approx -141\,\text{cm}^3/\text{mol}$ from the data against $-114$ from van der Waals: the model has the sign and the size of the dilute departure roughly right, and too little attraction at $280\,\text{K}$. The flat stretch cannot come from any one analytic $P(v)$, ideal, van der Waals or otherwise: it is two phases at one pressure, and drawing it needs something beyond a single-phase equation of state, which module 14 supplies.
+        rubric:
+          - text: >-
+              Computes $V_\mathrm{m}$ and $Z = 0.975$ at $0.40\,\text{MPa}$, and $B \approx (Z - 1)V_\mathrm{m} \approx -141\,\text{cm}^3/\text{mol}$.
+            weight: 2
+          - text: >-
+              Computes the van der Waals $B = b_\mathrm{m} - a_\mathrm{m}/(RT) \approx -114\,\text{cm}^3/\text{mol}$ and compares the two.
+            weight: 2
+          - text: >-
+              Argues that an analytic $P(v)$ constant on an interval would be constant everywhere, so no single such equation draws the plateau.
+            weight: 2
+          - text: >-
+              A limit check: $P \to 0$ gives $Z \to 1$, or $T \to T_B$ gives $B \to 0$, with what it means for the sign of $Z - 1$.
+            weight: 2
