@@ -1,0 +1,472 @@
+# Lesson 2.1 workbook. Problem 07 is ThermoLab's problem 5 (a molecule's size, and dimensional analysis), taken past
+# the lesson's example 5: the factor of one half derived by placing molecules one at a time, argon's b against its
+# liquid, and the critical point up to pure numbers from dimensions alone. The rest are new, and none repeats
+# ThermoLab's problems 1 to 4, which are review problems, or the lesson's six worked examples. ThermoLab kept its
+# solutions with the instructor; this platform publishes them, by the author's decision.
+# Real-gas data are NIST Chemistry WebBook, SRD 69 (Thermophysical Properties of Fluid Systems), fetched 2026-11-20
+# from https://webbook.nist.gov/cgi/fluid.cgi (Type=IsoTherm for isotherms; Type=SatT for the saturation tables, whose
+# last row is the critical point): nitrogen ID=C7727379, argon C7440371, methane C74828, carbon dioxide C124389, water
+# C7732185. Every number was recomputed with numpy and checked against ThermoLab's thermolab.gases.
+# Take k_B = 1.380649e-23 J/K, N_A = 6.02214076e23 /mol, R = 8.314462618 J/(mol K).
+lang: en
+lesson: '2.1'
+practice:
+  - id: W-2.1-01
+    level: basic
+    qualitative: true
+    objectives: [OBJ-2.1-2, OBJ-2.1-1]
+    prompt: >-
+      The doubling test on less obvious quantities. Two identical bottles of nitrogen, in the same equilibrium state, are joined into one system.
+      (a) Classify each of these as extensive, intensive or neither, and say how it changes: the number density $n = N/V$; the mass density $\rho$; the compressibility factor $Z = PV/(Nk_BT)$; the product $PV$; the heat capacity $C$ and the heat capacity per particle $C/N$; the energy per unit volume $U/V$.
+      (b) The same for three quantities of the van der Waals model: the total excluded volume $Nb$; the number of pairs of molecules, $N(N - 1)/2$; and the model's attraction energy, $-aN^2/V$.
+      (c) The same for the slope of an isotherm drawn against the total volume, $(\partial P/\partial V)_{T,N}$, and for $-V(\partial P/\partial V)_{T,N}$.
+      (d) A student draws the equilibrium states of nitrogen as a surface over $(V, T)$ instead of $(v, T)$. Explain why that does not give one surface for the substance, and why $(v, T)$ does.
+    answer: >-
+      (a) $n$, $\rho$, $Z$, $C/N$ and $U/V$ are intensive; $PV$ and $C$ double, extensive. (b) $Nb$ doubles, extensive; the number of pairs grows as $N^2$, about fourfold, neither; the attraction energy $-a(2N)^2/(2V)$ doubles, extensive. (c) $(\partial P/\partial V)_{T,N}$ halves, neither; $-V(\partial P/\partial V)_{T,N}$ is intensive. (d) At given $V$ and $T$ the pressure depends on $N$, so each amount of gas has its own surface over $(V, T)$; the pressure depends on $V$ and $N$ only through $v = V/N$, so every sample shares one surface over $(v, T)$.
+    solution:
+      - kind: law
+        text: >-
+          Joining two identical systems in the same state doubles $N$, $V$ and $U$ and leaves $P$ and $T$ unchanged. A ratio of two extensive variables is intensive; an extensive variable times an intensive one is extensive. And the equation of state gives the pressure as a function of $v = V/N$ and $T$ alone, $P = f(v, T)$.
+      - kind: reasoning
+        text: >-
+          (a) $n = N/V$ becomes $2N/2V$: unchanged. $\rho = Nm/V$ likewise. $Z = PV/(Nk_BT) = Pv/(k_BT)$ is built from $P$, $v$ and $T$, all unchanged: it is a property of the state, not of the sample. $PV$ is an intensive $P$ times an extensive $V$: it doubles (it equals $ZNk_BT$). The energy doubles at every temperature, so its derivative $C$ doubles and $C/N$ does not. $U/V$ is a ratio of two extensive variables.
+      - kind: reasoning
+        text: >-
+          (b) $b$ belongs to a molecule, so $Nb$ doubles. The pairs go from $N(N - 1)/2$ to $2N(2N - 1)/2$, about four times as many for large $N$: neither. Yet the attraction energy $-a(2N)^2/(2V) = -2aN^2/V$ doubles. The two are consistent: a molecule feels only the neighbours within reach of its attraction, and their number is set by the density $N/V$, so the pairs that count are $N$ times $N/V$, not all $N^2/2$ of them. $N^2/V$ is extensive; $N^2$ is not.
+      - kind: reasoning
+        text: >-
+          (c) With $P = f(V/N, T)$, $(\partial P/\partial V)_{T,N} = \frac{1}{N}\,\partial f/\partial v$: the same $\partial f/\partial v$ divided by twice the $N$. It halves, so it scales as $1/N$ and is neither. Multiplied by $-V$ it becomes $-v\,\partial f/\partial v$, intensive: the bulk modulus, the inverse of the isothermal compressibility.
+      - kind: reasoning
+        text: >-
+          (d) Over $(V, T)$, a bottle with twice the gas has twice the pressure at the same $V$ and $T$: every amount of gas draws its own surface, and nitrogen as a substance has none. Over $(v, T)$ the amount drops out, because $P = f(v, T)$: all samples of nitrogen, of any size, lie on one surface. That is the state postulate's surface, fixed by two intensive variables.
+      - kind: limit
+        text: >-
+          The test assumes that walls and surfaces do not matter, so that joining the bottles changes nothing but the amount. For a bottle that holds; for a droplet of a few hundred molecules, a large share of them sit at the surface, joining two droplets changes that share, and quantities that should be intensive drift. Anything that grows as $N^2$ or $1/N$ cannot appear alone in a relation between intensive variables; it must come with a matching power of $V$.
+      - kind: result
+        text: >-
+          (a) Intensive: $n$, $\rho$, $Z$, $C/N$, $U/V$; extensive: $PV$, $C$. (b) $Nb$ and $-aN^2/V$ are extensive; the pair count is neither. (c) $(\partial P/\partial V)_{T,N}$ is neither; $-V(\partial P/\partial V)_{T,N}$ is intensive. (d) Only over $(v, T)$ do all samples of a substance share one equation-of-state surface.
+
+  - id: W-2.1-02
+    level: basic
+    objectives: [OBJ-2.1-3, OBJ-2.1-6]
+    prompt: >-
+      The hook's nitrogen cylinder. A $50.0\,\text{L}$ steel cylinder holds nitrogen ($M = 28.013\,\text{g/mol}$) at $20.0\,\text{MPa}$ and $293.15\,\text{K}$.
+      (a) Using the ideal gas law, how many molecules, moles and kilograms of nitrogen does it hold?
+      (b) NIST's reference data give nitrogen at $20.0\,\text{MPa}$ and $293.15\,\text{K}$ a density of $7.8014\,\text{mol/L}$. How much nitrogen is really in the cylinder, and what is $Z$? Did the ideal law over- or underestimate, and which of the two van der Waals corrections is winning?
+      (c) At the same temperature NIST gives $0.041037\,\text{mol/L}$ at $0.100\,\text{MPa}$ and $4.09951\,\text{mol/L}$ at $10.0\,\text{MPa}$. Find $Z$ at each. A technician concludes from the second that nitrogen at $10\,\text{MPa}$ is an ideal gas. Is she right?
+      (d) State, in one sentence that these numbers support, what kind of law $PV = Nk_BT$ is.
+    answer: >-
+      (a) $N = 2.471 \times 10^{26}$, $410.3\,\text{mol}$, $11.49\,\text{kg}$. (b) $390.1\,\text{mol}$, $10.93\,\text{kg}$; $Z = 1.052$. The ideal law overestimates by $5.2\%$, $0.57\,\text{kg}$; $Z > 1$ means the excluded volume is winning over the attraction. (c) $Z = 0.99977$ and $1.0008$. No: at $10\,\text{MPa}$ the two corrections happen to cancel; $Z$ has dipped to $0.994$ near $5\,\text{MPa}$ and is on its way up, to $1.052$ at $20\,\text{MPa}$. (d) An empirical law of the dilute regime: nitrogen obeys it to $0.02\%$ at atmospheric pressure and fails by $5\%$ in the cylinder.
+    solution:
+      - kind: given
+        text: >-
+          $V = 0.0500\,\text{m}^3$, $P = 2.00 \times 10^7\,\text{Pa}$, $T = 293.15\,\text{K}$, $M = 28.013\,\text{g/mol}$. NIST densities at $293.15\,\text{K}$: $7.8014$, $0.041037$ and $4.09951\,\text{mol/L}$ at $20.0$, $0.100$ and $10.0\,\text{MPa}$.
+      - kind: law
+        text: >-
+          The ideal gas law $PV = Nk_BT$, or $PV = nRT$ in moles. For a real gas, the compressibility factor $Z = PV/(nRT)$ measures the departure; with $n = \rho V$ the true amount, the ideal law's amount $PV/(RT)$ is $Z$ times too large.
+      - kind: formula
+        text: >-
+          $N = \dfrac{PV}{k_BT} \qquad n = \rho V \qquad Z = \dfrac{P}{\rho RT}$
+      - kind: limit
+        text: >-
+          As $P \to 0$ at fixed $T$, $\rho \to P/(RT)$ and $Z \to 1$: the ideal law is the limit every gas approaches. $Z > 1$ means the gas is harder to compress than an ideal one, the excluded volume dominating; $Z < 1$ means easier, the attraction dominating.
+      - kind: units
+        text: >-
+          $\text{Pa}\cdot\text{m}^3/(\text{J/K}\cdot\text{K}) = \text{J/J}$, a count. In $Z$, $\text{Pa}/(\text{mol/m}^3 \cdot \text{J/(mol K)} \cdot \text{K}) = \text{Pa}/(\text{J/m}^3)$, a pure number; note $1\,\text{mol/L} = 10^3\,\text{mol/m}^3$.
+      - kind: substitution
+        text: >-
+          (a) $N = 2.00 \times 10^7 \times 0.0500/(1.380649 \times 10^{-23} \times 293.15) = 2.471 \times 10^{26}$; $N/N_A = 410.3\,\text{mol}$; $m = 410.3 \times 28.013\,\text{g} = 11.49\,\text{kg}$. (b) $n = \rho V = 7801.4 \times 0.0500 = 390.1\,\text{mol}$, $10.93\,\text{kg}$; $Z = 410.3/390.1 = 1.052$. (c) $Z = 1.00 \times 10^5/(41.037 \times 8.3145 \times 293.15) = 0.99977$; $Z = 1.00 \times 10^7/(4099.51 \times 8.3145 \times 293.15) = 1.0008$.
+      - kind: reasoning
+        text: >-
+          (c) $Z = 1$ at one pressure does not make a gas ideal; an ideal gas has $Z = 1$ at every pressure. NIST's isotherm at $293.15\,\text{K}$ falls to $Z = 0.994$ near $5\,\text{MPa}$, where attraction wins, crosses $1$ near $9.7\,\text{MPa}$, and reaches $1.052$ at $20\,\text{MPa}$, where excluded volume wins. At $10\,\text{MPa}$ the technician has caught it crossing. The ideal law gives the right amount there, for the wrong reason, and the next reading will not be so lucky. (d) The ideal law is not a law every gas obeys; it is the limit of the dilute regime, measured here to hold to $2 \times 10^{-4}$ at $0.1\,\text{MPa}$ and to fail by $5\%$ at $20\,\text{MPa}$.
+      - kind: result
+        text: >-
+          (a) $2.47 \times 10^{26}$ molecules, $410\,\text{mol}$, $11.5\,\text{kg}$ by the ideal law. (b) Really $390\,\text{mol}$, $10.9\,\text{kg}$; $Z = 1.052$, an overestimate of $5.2\%$ because excluded volume dominates at this density. (c) $Z = 0.99977$ and $1.0008$; $Z = 1$ at $10\,\text{MPa}$ is a crossing, not ideality. (d) $PV = Nk_BT$ is an empirical law of the dilute regime.
+
+  - id: W-2.1-03
+    level: basic
+    qualitative: true
+    objectives: [OBJ-2.1-5, OBJ-2.1-1]
+    prompt: >-
+      Which gases can be bottled as liquids? NIST gives these critical temperatures: nitrogen $126.19\,\text{K}$, argon $150.69\,\text{K}$, methane $190.56\,\text{K}$, carbon dioxide $304.13\,\text{K}$, butane $425.13\,\text{K}$, water $647.10\,\text{K}$.
+      (a) Which of them can stand as a liquid under its own vapour in a closed bottle at $20\,{}^\circ\text{C}$? Which cannot be liquefied at $20\,{}^\circ\text{C}$ by any pressure?
+      (b) Cars that run on natural gas, mostly methane, carry it compressed to about $20\,\text{MPa}$, while a lighter holds butane as a liquid at about $0.2\,\text{MPa}$. Why does the methane tank need a hundred times the pressure, and still hold no liquid?
+      (c) A carbon dioxide fire extinguisher, filled with $0.667\,\text{kg}$ of CO₂ per litre of cylinder, stands in a room at $20\,{}^\circ\text{C}$. Its gauge reads $5.73\,\text{MPa}$ when full, and still $5.73\,\text{MPa}$ when most of the CO₂ has been sprayed out, as long as some liquid is left. Explain. Two extinguishers, one full and one nearly empty, are then at the same $P$ and $T$ but hold contents of very different average density: does that contradict the state postulate?
+      (d) The same full extinguisher is left in a car at $35\,{}^\circ\text{C}$. What has changed about its contents, and about the way the gauge falls as it is used?
+    answer: >-
+      (a) Carbon dioxide, butane and water; nitrogen, argon and methane cannot be liquefied at $20\,{}^\circ\text{C}$ by any pressure. (b) Methane at $20\,{}^\circ\text{C}$ is at $T_r = 1.54$, above its critical temperature: compression only raises its density smoothly, so the tank must be pressurized to hold much of it, and no liquid forms. Butane is at $T_r = 0.69$, a liquid under its own vapour. (c) While liquid and vapour coexist, the pressure is the saturation pressure at $20\,{}^\circ\text{C}$, whatever their proportions. No contradiction: on coexistence $P$ is fixed by $T$, so $P$ and $T$ are not two independent variables; $T$ and the average $v$ fix the contents. (d) At $35\,{}^\circ\text{C}$, $T_r = 1.013$: the contents are one supercritical fluid, the gauge reads about $9.1\,\text{MPa}$ when full and falls steadily as the CO₂ is used, about $7.8\,\text{MPa}$ at half.
+    solution:
+      - kind: law
+        text: >-
+          Above its critical temperature every isotherm of a substance falls steadily with volume: each pressure is met at one density, and compression never splits it into a liquid and a vapour. Below $T_c$ a liquid and its vapour can coexist, at the one saturation pressure the temperature sets. The state postulate: two independent intensive variables fix the state.
+      - kind: reasoning
+        text: >-
+          (a) At $293.15\,\text{K}$: carbon dioxide ($T_r = 0.964$), butane ($0.690$) and water ($0.453$) are below their critical temperatures and can be liquid; nitrogen ($T_r = 2.32$), argon ($1.95$) and methane ($1.54$) are above, and no pressure liquefies them at room temperature. They must be cooled below $T_c$ first, which is why liquid nitrogen and liquefied natural gas are cryogenic. (b) Methane is stored as a compressed supercritical fluid, whose density rises only in proportion to the pressure (and less, once excluded volume dominates); to hold a useful amount the tank needs high pressure. Butane is below its critical temperature, so a modest pressure, its own saturation pressure, keeps a dense liquid in a light plastic shell.
+      - kind: reasoning
+        text: >-
+          (c) The fill, $667/44.01 = 15.16\,\text{mol/L}$, lies between NIST's saturated vapour ($4.41\,\text{mol/L}$) and liquid ($17.57\,\text{mol/L}$) at $293.15\,\text{K}$: the cylinder holds liquid under vapour, at the saturation pressure $5.729\,\text{MPa}$. Spraying removes CO₂, some liquid evaporates to refill the vapour space, and the pressure stays at $5.73\,\text{MPa}$ until the liquid is gone. The full and the nearly empty cylinder are both mixtures of the same two states, liquid at $56.9$ and vapour at $226.6\,\text{cm}^3/\text{mol}$, in different proportions. Here $P = P_\mathrm{sat}(T)$, so $P$ and $T$ are one variable, not two, and do not fix the average volume; $T$ and the average $v$ do. That is the fold of figure 2.1a: below $T_c$ one $(P, T)$ is met at more than one volume.
+      - kind: reasoning
+        text: >-
+          (d) At $308.15\,\text{K}$ CO₂ is above its critical temperature: the same $15.16\,\text{mol/L}$ is a single supercritical fluid, at $9.07\,\text{MPa}$ by NIST's isotherm. There is no liquid to hold the pressure up, so the reading falls with every gram used, to $7.81\,\text{MPa}$ when half the CO₂ is gone, and the gauge now measures how much is left, as it would for nitrogen.
+      - kind: limit
+        text: >-
+          Just below $T_c$ the saturated liquid and vapour densities approach each other and the plateau shrinks; at $T_c$ they meet, and above it the distinction is gone. A substance far above $T_c$, such as nitrogen at room temperature, behaves at moderate pressures almost like the ideal gas, the limit in which nothing condenses.
+      - kind: result
+        text: >-
+          (a) Liquid at $20\,{}^\circ\text{C}$: CO₂, butane, water; never by pressure alone: nitrogen, argon, methane. (b) Methane is supercritical at room temperature and can only be compressed, not condensed. (c) Coexisting liquid and vapour hold the saturation pressure; on coexistence $P$ and $T$ are not independent, so the state postulate needs $T$ and $v$. (d) At $35\,{}^\circ\text{C}$ the CO₂ is supercritical: $9.07\,\text{MPa}$ when full, falling steadily as it empties.
+
+  - id: W-2.1-04
+    level: mid
+    qualitative: true
+    objectives: [OBJ-2.1-5]
+    prompt: >-
+      Why the critical isotherm has an inflection point.
+      (a) Below $T_c$ each van der Waals isotherm has a local minimum and a local maximum of $P(v)$; at $T_r = 0.9$ they lie at $v_r = 0.72$ and $1.53$. Describe what happens to them as $T$ rises to $T_c$, and explain why, at the temperature where they meet, both $(\partial P/\partial v)_T$ and $(\partial^2 P/\partial v^2)_T$ vanish at the meeting point.
+      (b) A second argument, from the slope alone: above $T_c$ the slope $(\partial P/\partial v)_T$ is negative everywhere, and at $T_c$ it is nowhere positive and reaches $0$ at one volume. Why must the second derivative vanish there? What sign must the third derivative have, and why can the critical point not be a plain maximum of $P(v)$?
+      (c) Expand the reduced equation $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$ on the critical isotherm about $v_r = 1$, to third order, and check the expansion at $v_r = 1.1$.
+      (d) Show that, near $v_r = 1$, the flattest slope of an isotherm slightly above $T_c$, the smallest value of $-\partial P_r/\partial v_r$ there, is close to $6(T_r - 1)$. A sweep that comes down from high temperatures and stops at the first isotherm whose flattest slope falls below a threshold $\varepsilon$ therefore stops above $T_c$. By how much? Why does a finer grid of temperatures not remove the error, and what does?
+    answer: >-
+      (a) They move toward each other and merge at $v_c$; the rising stretch between them shrinks to a point. Where two zeros of $\partial P/\partial v$ merge into a double zero, $\partial P/\partial v$ and its derivative vanish together. (b) The slope has its largest value, $0$, at $v_c$: an interior maximum of the slope, so its derivative $\partial^2P/\partial v^2$ vanishes and $\partial^3P/\partial v^3 < 0$. A plain maximum of $P$ would need a rising stretch on the critical isotherm itself. (c) $P_r \approx 1 - \tfrac32(v_r - 1)^3$; at $v_r = 1.1$, $0.99850$ against the exact $0.99892$. (d) $-\partial P_r/\partial v_r = 6(T_r - 1)$ at $v_r = 1$, and its local minimum is $0.058$ at $T_r = 1.01$; the sweep stops at $T_r \approx 1 + \varepsilon/6$, high by $\varepsilon T_c/6$, whatever the grid. Tighten $\varepsilon$ along with the grid, or extrapolate the flattest slope linearly to zero.
+    solution:
+      - kind: law
+        text: >-
+          The critical point is defined by $(\partial P/\partial v)_T = 0$ and $(\partial^2P/\partial v^2)_T = 0$ on the critical isotherm; above $T_c$ every isotherm falls everywhere, below it there is a stretch where it rises. Figure 2.1b's readout reports the flattest slope, the smallest $-\partial P_r/\partial v_r$.
+      - kind: reasoning
+        text: >-
+          (a) The local minimum and maximum are the two volumes where $\partial P/\partial v = 0$ (at $T_r = 0.9$, $v_r = 0.719$ and $1.529$; at $0.95$, $0.787$ and $1.330$; at $0.99$, $0.895$ and $1.128$). As $T$ rises they close in, and at $T_c$ they meet at $v_c$. Two simple zeros of a smooth function that merge become one double zero, and a double zero of a function is a zero of its derivative as well: $\partial P/\partial v = 0$ and $\partial^2P/\partial v^2 = 0$ at the same point. The pair of conditions in the definition is exactly "the minimum and the maximum have merged".
+      - kind: reasoning
+        text: >-
+          (b) Write $s(v) = (\partial P/\partial v)_T$. Above $T_c$, $s < 0$ everywhere; below, $s > 0$ somewhere. By continuity, at $T_c$ itself $s \le 0$ everywhere and $s = 0$ at $v_c$. So $s$ has an interior maximum at $v_c$: its derivative vanishes, $\partial^2P/\partial v^2 = 0$, and its second derivative is negative (or zero), $\partial^3P/\partial v^3 \le 0$, which for van der Waals is strictly negative. Then $P - P_c \approx \tfrac16\,\partial^3P/\partial v^3\,(v - v_c)^3$: the isotherm passes through the critical point falling, flat for an instant, an inflection with a horizontal tangent. A plain maximum of $P$ would need $s > 0$ just before $v_c$: a rising stretch on the critical isotherm itself, which belongs only below $T_c$.
+      - kind: manipulation
+        text: >-
+          (c) At $T_r = 1$, with $f(v) = 8/(3v - 1) - 3/v^2$: $f' = -24/(3v - 1)^2 + 6/v^3$, $f'' = 144/(3v - 1)^3 - 18/v^4$, $f''' = -1296/(3v - 1)^4 + 72/v^5$. At $v = 1$: $f = 1$, $f' = -6 + 6 = 0$, $f'' = 18 - 18 = 0$, $f''' = -81 + 72 = -9$. (d) $-\partial P_r/\partial v_r = 24T_r/(3v_r - 1)^2 - 6/v_r^3$, which at $v_r = 1$ is $6T_r - 6$. Near $T_c$ the minimum over $v_r$ sits close to $v_r = 1$ and differs from this only at higher order.
+      - kind: formula
+        text: >-
+          $P_r \approx 1 - \tfrac32\,(v_r - 1)^3 \qquad \min\left(-\dfrac{\partial P_r}{\partial v_r}\right) \approx 6\,(T_r - 1) \qquad \Delta T \approx \dfrac{\varepsilon\,T_c}{6}$
+      - kind: limit
+        text: >-
+          As $T_r \to 1$ the flattest slope goes to $0$ linearly, so a threshold $\varepsilon \to 0$ stops the sweep exactly at $T_c$. With $\varepsilon$ fixed, refining the grid makes the stopping point converge, but to $T_c(1 + \varepsilon/6)$, not to $T_c$; the half-grid-step error bar then shrinks below the bias, and the result looks more certain as it stays wrong. This is the trap the lesson describes for ThermoLab's scan of CO₂.
+      - kind: substitution
+        text: >-
+          (c) At $v_r = 1.1$: exact $8/2.3 - 3/1.21 = 3.47826 - 2.47934 = 0.99892$; cubic $1 - 1.5 \times 0.001 = 0.99850$. (d) Numerically the local minimum of $-\partial P_r/\partial v_r$ is $0.00598$ at $T_r = 1.001$ ($v_r = 1.002$), $0.0582$ at $1.01$ ($v_r = 1.021$), $0.113$ at $1.02$, against $6(T_r - 1) = 0.006$, $0.060$, $0.120$. For CO₂ ($T_c = 304.13\,\text{K}$) a threshold $\varepsilon = 0.01$ stops the sweep about $0.5\,\text{K}$ high.
+      - kind: result
+        text: >-
+          (a) The minimum and maximum merge at $v_c$, and a merged pair of zeros of the slope is a zero of its derivative too. (b) The slope is never positive at $T_c$ and touches zero at $v_c$, so the curvature vanishes there and the third derivative is negative: a falling inflection, never a maximum. (c) $P_r \approx 1 - \tfrac32(v_r - 1)^3$. (d) A fixed threshold biases the estimate high by $\varepsilon T_c/6$; only shrinking $\varepsilon$ with the grid, or extrapolating the slope to zero, removes it.
+
+  - id: W-2.1-05
+    level: mid
+    objectives: [OBJ-2.1-4, OBJ-2.1-6]
+    prompt: >-
+      Is van der Waals always better than ideal? NIST's reference data give nitrogen at $300\,\text{K}$ these molar volumes: $2490.4\,\text{cm}^3/\text{mol}$ at $1.00\,\text{MPa}$; $497.18$ at $5.00$; $250.74$ at $10.0$; $131.81$ at $20.0$; $95.03$ at $30.0$; $68.04$ at $50.0\,\text{MPa}$. Nitrogen's critical point is $T_c = 126.19\,\text{K}$, $P_c = 3.3958\,\text{MPa}$.
+      (a) Find nitrogen's van der Waals constants, per particle and per mole, from its critical point.
+      (b) For each datum compute $Z$, then the ideal and the van der Waals pressure at the measured volume, and each one's error. Over what range is each model within $1\%$?
+      (c) At $10.0\,\text{MPa}$, split the van der Waals pressure into the ideal pressure, the rise due to $b$ and the drop due to $a$. Explain from the two terms why the model's $Z$ first falls below $1$ as the gas is compressed, then rises above it.
+      (d) Up to $20\,\text{MPa}$ the ideal law beats van der Waals here, though the reverse held for CO₂ at $280\,\text{K}$. Estimate the second virial coefficient $B$ from the $1\,\text{MPa}$ datum, compare it with the model's $b - a/(k_BT)$, and explain what fixes the model's balance between attraction and size.
+    answer: >-
+      (a) $b = 6.413 \times 10^{-29}\,\text{m}^3$, $a = 3.771 \times 10^{-49}\,\text{Pa}\,\text{m}^6$; per mole $38.62\,\text{cm}^3/\text{mol}$ and $0.1368\,\text{Pa}\,\text{m}^6/\text{mol}^2$. (b) $Z = 0.9984$, $0.9966$, $1.0052$, $1.0568$, $1.1430$, $1.3639$; ideal errors $+0.16$, $+0.34$, $-0.52$, $-5.4$, $-12.5$, $-26.7\%$; van der Waals $-0.47$, $-2.3$, $-4.2$, $-5.5$, $-3.1$, $+10.5\%$. Ideal within $1\%$ up to $10\,\text{MPa}$; van der Waals only at $1\,\text{MPa}$. (c) $9.948 + 1.811 - 2.175 = 9.584\,\text{MPa}$; attraction's share grows as $1/v^2$ and wins at moderate density, while $v/(v - b)$ diverges as $v \to b$ and wins when dense. (d) Measured $B \approx -4\,\text{cm}^3/\text{mol}$; the model's is $38.6 - 54.8 = -16.2\,\text{cm}^3/\text{mol}$, four times too negative. Fitting $a$ and $b$ to the critical point fixes $T_B = \tfrac{27}{8}T_c = 426\,\text{K}$, while real nitrogen at $300\,\text{K}$ is already close to its Boyle temperature.
+    solution:
+      - kind: given
+        text: >-
+          $T = 300\,\text{K}$, $k_BT = 4.142 \times 10^{-21}\,\text{J}$; $T_c = 126.19\,\text{K}$, $P_c = 3.3958\,\text{MPa}$; six pairs $(P, V_\mathrm{m})$; $v = V_\mathrm{m}/N_A$.
+      - kind: law
+        text: >-
+          The van der Waals equation with constants fixed by the critical point, $b = k_BT_c/(8P_c)$, $a = 27(k_BT_c)^2/(64P_c)$; the compressibility factor $Z = Pv/(k_BT)$; to first order in the density, $Z \approx 1 + B/v$ with $B = b - a/(k_BT)$ for the model.
+      - kind: formula
+        text: >-
+          $P = \dfrac{k_BT}{v} + \underbrace{\dfrac{k_BT}{v}\,\dfrac{b}{v - b}}_{b} - \underbrace{\dfrac{a}{v^2}}_{a} \qquad Z = \dfrac{v}{v - b} - \dfrac{a}{k_BTv} \qquad B \approx (Z - 1)\,V_\mathrm{m}$
+      - kind: limit
+        text: >-
+          As $v \to \infty$ both added terms vanish, the $b$ term as $b/v$ and the $a$ term as $a/(k_BTv)$ relative to the ideal one: both are first order in the density, and their difference is $B/v$. At higher density the $a$ term keeps growing as $1/v$ relative to ideal, while $b/(v - b)$ grows without bound as $v \to b$: excluded volume must win in the end.
+      - kind: units
+        text: >-
+          $b$: $\text{J}/\text{Pa} = \text{m}^3$; $a$: $\text{J}^2/\text{Pa} = \text{J}\,\text{m}^3 = \text{Pa}\,\text{m}^6$. Per mole, multiply $b$ by $N_A$ and $a$ by $N_A^2$. $B$ is a molar volume like $V_\mathrm{m}$.
+      - kind: substitution
+        text: >-
+          (a) $k_BT_c = 1.7423 \times 10^{-21}\,\text{J}$; $b = 6.413 \times 10^{-29}\,\text{m}^3$ ($38.62\,\text{cm}^3/\text{mol}$), $a = 3.771 \times 10^{-49}\,\text{Pa}\,\text{m}^6$ ($0.1368\,\text{Pa}\,\text{m}^6/\text{mol}^2$). (b) With $RT = 2494.3\,\text{J/mol}$, ideal pressures $RT/V_\mathrm{m}$: $1.002$, $5.017$, $9.948$, $18.924$, $26.247$, $36.660\,\text{MPa}$; van der Waals: $0.995$, $4.886$, $9.584$, $18.896$, $29.074$, $55.248\,\text{MPa}$; $Z = PV_\mathrm{m}/(RT)$ as in the answer. (c) At $250.74\,\text{cm}^3/\text{mol}$, $b/v = 0.154$: the excluded volume adds $9.948 \times 0.154/0.846 = 1.811\,\text{MPa}$; $a/v^2 = 2.175\,\text{MPa}$. (d) $Z(1\,\text{MPa}) = 0.998405$, $B \approx -0.001595 \times 2490.4 = -3.97\,\text{cm}^3/\text{mol}$; model $a_\mathrm{m}/(RT) = 54.8\,\text{cm}^3/\text{mol}$, so $B = -16.2\,\text{cm}^3/\text{mol}$.
+      - kind: reasoning
+        text: >-
+          (c) Along the isotherm the model's $Z$ falls to a minimum of $0.963$ near $240\,\text{cm}^3/\text{mol}$ and returns to $1$ at $131\,\text{cm}^3/\text{mol}$, which is why at $20\,\text{MPa}$ ($131.81\,\text{cm}^3/\text{mol}$) the van der Waals and the ideal pressures nearly coincide; denser still, excluded volume dominates. Real nitrogen does the same, but its dip is only to $0.996$, near $4\,\text{MPa}$, and it is back at $1$ by $7.9\,\text{MPa}$. (d) The van der Waals constants were chosen to put the critical point in the right place, and that fixes $a/b$, hence the Boyle temperature $a/(k_Bb) = \tfrac{27}{8}T_c$, for every van der Waals gas. At $300\,\text{K}$ the model gas is well below its $426\,\text{K}$ and its attraction outweighs its size; real nitrogen at $300\,\text{K}$ has almost balanced them. Close to $T_c$, where the constants were fitted, the model does well (CO₂ at $T_r = 0.92$); at $T_r = 2.4$ it is calibrated in the wrong place.
+      - kind: result
+        text: >-
+          (a) $a_\mathrm{m} = 0.1368\,\text{Pa}\,\text{m}^6/\text{mol}^2$, $b_\mathrm{m} = 38.62\,\text{cm}^3/\text{mol}$. (b) The ideal law is within $1\%$ up to $10\,\text{MPa}$; van der Waals is within $1\%$ only at $1\,\text{MPa}$, better than ideal only from $30\,\text{MPa}$, and $10\%$ high at $50\,\text{MPa}$. (c) $9.948 + 1.811 - 2.175 = 9.584\,\text{MPa}$: attraction wins at moderate density, excluded volume when dense. (d) $B \approx -4\,\text{cm}^3/\text{mol}$ measured against $-16\,\text{cm}^3/\text{mol}$ modelled: two constants fitted at the critical point cannot also get the balance right at $2.4\,T_c$. Better near $T_c$ does not mean better everywhere.
+
+  - id: W-2.1-06
+    level: mid
+    objectives: [OBJ-2.1-6, OBJ-2.1-4]
+    prompt: >-
+      The virial expansion of a van der Waals gas, and its Boyle temperature. Write $x = b/v$ and $\tau = a/(bk_BT)$.
+      (a) Show that $Z = 1/(1 - x) - \tau x$, and expand $Z$ as a power series in $1/v$. Find every virial coefficient.
+      (b) Find the Boyle temperature $T_B$, where the second coefficient vanishes, in terms of $a$ and $b$ and in terms of $T_c$, and write $B/v_c$ as a function of $T_r$.
+      (c) Show that at $T_B$, $Z = 1 + x^2/(1 - x)$ exactly. What does that say about $Z - 1$ at the Boyle temperature, at every density?
+      (d) Below $T_B$, find the volume at which $Z$ comes back to $1$, and the minimum of $Z$ along the isotherm, with the volume where it occurs.
+      (e) Check (d) against figure 2.1b at $T_r = 1.2$, where $Z$ dips to $0.54$ near $v_r = 0.83$. Then find the reduced temperature at which a van der Waals isotherm first reaches zero pressure.
+    answer: >-
+      (a) $Z = 1 + (b - a/k_BT)/v + b^2/v^2 + b^3/v^3 + \cdots$: $B = b - a/(k_BT)$, and the $n$-th coefficient is $b^{n-1}$ for $n \ge 3$. (b) $k_BT_B = a/b = \tfrac{27}{8}k_BT_c$; $B/v_c = \tfrac13\big(1 - 27/(8T_r)\big)$. (c) $Z - 1 = x^2/(1 - x) \ge 0$: never below $1$, and only second order in the density. (d) $Z = 1$ at $v = b/(1 - T/T_B)$; $Z_\mathrm{min} = 1 - (\sqrt\tau - 1)^2$ at $v = b/(1 - \tau^{-1/2})$. (e) $Z_\mathrm{min} = 0.542$ at $v_r = 0.826$, as the figure shows; zero pressure first at $\tau = 4$, $T_r = 27/32 = 0.844$.
+    solution:
+      - kind: law
+        text: >-
+          The van der Waals equation $P = k_BT/(v - b) - a/v^2$, and the virial expansion $Z = 1 + B(T)/v + C(T)/v^2 + \cdots$, defined as the power series of $Z$ in the density.
+      - kind: manipulation
+        text: >-
+          (a) $Z = Pv/(k_BT) = v/(v - b) - a/(k_BTv) = 1/(1 - x) - \tau x$. The geometric series $1/(1 - x) = 1 + x + x^2 + \cdots$ gives $Z = 1 + (1 - \tau)x + x^2 + x^3 + \cdots$, and $(1 - \tau)x = (b - a/k_BT)/v$. (c) At $\tau = 1$: $1/(1 - x) - x = (1 - x + x^2)/(1 - x) = 1 + x^2/(1 - x)$. (d) $Z - 1 = x/(1 - x) - \tau x = 0$ at $x = 1 - 1/\tau$. $\mathrm{d}Z/\mathrm{d}x = 1/(1 - x)^2 - \tau = 0$ at $1 - x = \tau^{-1/2}$, where $Z = \sqrt\tau - \tau(1 - \tau^{-1/2}) = 2\sqrt\tau - \tau$.
+      - kind: formula
+        text: >-
+          $B = b - \dfrac{a}{k_BT} \qquad k_BT_B = \dfrac ab = \dfrac{27}{8}\,k_BT_c \qquad v_{Z=1} = \dfrac{b}{1 - T/T_B} \qquad Z_\mathrm{min} = 1 - \left(\sqrt{\dfrac{T_B}{T}} - 1\right)^2$
+      - kind: limit
+        text: >-
+          At $T = T_B$ ($\tau = 1$) the minimum moves to $x = 0$, $Z_\mathrm{min} = 1$, and the $Z = 1$ crossing goes to infinite volume: (c) again. As $T \to \infty$ ($\tau \to 0$), $Z = 1/(1 - x)$, hard spheres with no attraction, above $1$ everywhere. As $v \to b$ ($x \to 1$), $Z \to \infty$ at every temperature: excluded volume always wins when dense enough.
+      - kind: units
+        text: >-
+          $x = b/v$ is a ratio of volumes and $\tau = a/(bk_BT)$ is $(\text{J}\,\text{m}^3)/(\text{m}^3\cdot\text{J})$: both pure numbers, so $Z$ is too. $B$ has the units of $b$, a volume.
+      - kind: substitution
+        text: >-
+          (b) With $v_c = 3b$ and $a/(bk_BT) = \tfrac{27}{8}T_c/T$: $B/v_c = \tfrac13(1 - 27/(8T_r))$, negative below $T_r = 3.375$. (c) At $v_r = 5$, $x = 1/15$: $Z = 1 + (1/225)/(14/15) = 1.0048$. (e) $T_r = 1.2$: $\tau = 27/9.6 = 2.8125$, $\sqrt\tau = 1.6771$; $Z_\mathrm{min} = 1 - 0.6771^2 = 0.542$ at $x = 1 - 1/1.6771 = 0.4037$, $v_r = 1/(3x) = 0.826$; $Z = 1$ again at $x = 0.6444$, $v_r = 0.517$. Zero pressure: $Z_\mathrm{min} = 0$ when $\sqrt\tau = 2$, $\tau = 4$, $T = T_B/4$, $T_r = 27/32 = 0.844$. Check: $P_r = 0$ is $8T_rv_r^2 - 9v_r + 3 = 0$, whose discriminant $81 - 96T_r$ vanishes at $T_r = 27/32$.
+      - kind: result
+        text: >-
+          (a) $B = b - a/(k_BT)$ and every higher coefficient is a power of $b$: attraction enters only at first order. (b) $T_B = a/(k_Bb) = 3.375\,T_c$. (c) At $T_B$, $Z = 1 + x^2/(1 - x)$, never below $1$. (d) Below $T_B$, $Z$ returns to $1$ at $v = b/(1 - T/T_B)$ and bottoms out at $1 - (\sqrt{T_B/T} - 1)^2$. (e) $0.542$ at $v_r = 0.826$ for $T_r = 1.2$; the first isotherm to touch $P = 0$ is $T_r = 27/32 = 0.844$, which is why at $T_r = 0.8$ the wiggle dips below zero.
+
+  - id: W-2.1-07
+    level: bagrut
+    objectives: [OBJ-2.1-2, OBJ-2.1-4, OBJ-2.1-6]
+    prompt: >-
+      ThermoLab's challenge: a molecule's size, and dimensional analysis, taken further than example 5.
+      (a) Place $N$ hard spheres of diameter $d$ into a volume $V$ one at a time. In a dilute gas, the centre of the $k$-th sphere may go anywhere except inside the $k - 1$ spheres of radius $d$ around the centres already placed, each of volume $\Omega = \tfrac43\pi d^3$. Show that the product of the volumes available to the $N$ centres is, to first order in $N\Omega/V$, the same as $(V - Nb)^N$ with $b = \tfrac23\pi d^3$. Where does the half come from? Which of $b$ and $Nb$ is intensive?
+      (b) For CO₂, $d \approx 3.3 \times 10^{-10}\,\text{m}$ gives $b = 7.5 \times 10^{-29}\,\text{m}^3$, against $7.1 \times 10^{-29}\,\text{m}^3$ from its critical point (example 5). Now argon: from NIST's critical point, $T_c = 150.687\,\text{K}$ and $P_c = 4.8630\,\text{MPa}$, find $b$ and the diameter it implies. NIST gives liquid argon at its triple point, $83.806\,\text{K}$, a density of $35.4653\,\text{mol/L}$. Compare $d$ with the spacing $(V/N)^{1/3}$ of the atoms in that liquid, and $b$ with the liquid's volume per atom. What do you conclude about reading $b$ as a molecule's size?
+      (c) Inspect the van der Waals equation term by term and confirm that $a$ must carry units of $\text{Pa}\,\text{m}^6$ and $b$ of $\text{m}^3$. Explain in one sentence why this fixes their units without knowing either value.
+      (d) Push the dimensional argument further. The equation's only constants are $a$ and $b$, and $T$ enters only as the energy $k_BT$. Show that $v_c$, $k_BT_c$ and $P_c$ must be $b$, $a/b$ and $a/b^2$ times pure numbers, and hence that $Z_c$ is the same for every van der Waals gas, before any algebra. What does the algebra of the lesson add? NIST's critical points give $Z_c = 0.290$ for argon and $0.229$ for water: what does that say about any equation of state with only two constants?
+    answer: >-
+      (a) $\prod_k (V - k\Omega) \approx V^N e^{-N^2\Omega/(2V)} \approx (V - N\Omega/2)^N$: each pair excludes $\Omega$ once, not twice, so $b = \Omega/2 = \tfrac23\pi d^3$. $b$ is intensive, $Nb$ extensive. (b) $b = 5.348 \times 10^{-29}\,\text{m}^3$ ($32.2\,\text{cm}^3/\text{mol}$), $d = 2.94 \times 10^{-10}\,\text{m}$; the liquid's spacing is $3.60 \times 10^{-10}\,\text{m}$ and its volume per atom $4.68 \times 10^{-29}\,\text{m}^3$, $14\%$ smaller than $b$. The model could not hold argon's own liquid ($v > b$ is required): $b$ sizes atoms to tens of percent, not better. (c) $a/v^2$ is a pressure and $v - b$ a volume. (d) $v_c = c_1b$, $k_BT_c = c_2a/b$, $P_c = c_3a/b^2$, so $Z_c = c_1c_3/c_2$, the same number for every van der Waals gas; the algebra supplies $c_1 = 3$, $c_2 = 8/27$, $c_3 = 1/27$, $Z_c = 3/8$. Real $Z_c$ differ from gas to gas, so no two-constant equation of this kind fits them all: a third, substance-specific number is needed.
+    solution:
+      - kind: law
+        text: >-
+          Hard spheres of diameter $d$ cannot have centres closer than $d$. In a dilute gas the excluded spheres around different molecules rarely overlap, so their volumes add. Dimensional analysis: every term of an equation carries the same units, and a quantity built from the constants of a model can only be a pure number times the one combination of them that has its units.
+      - kind: manipulation
+        text: >-
+          (a) $\ln\prod_{k=0}^{N-1}(V - k\Omega) = \sum_k \ln V + \sum_k \ln(1 - k\Omega/V) \approx N\ln V - \dfrac{\Omega}{V}\sum_k k = N\ln V - \dfrac{\Omega N^2}{2V}$, to first order in $N\Omega/V$. And $N\ln(V - Nb) \approx N\ln V - N^2b/V$. They agree when $b = \Omega/2$. The sum $\sum_k k = N^2/2$ counts each pair once: the later molecule of each pair pays the exclusion, the earlier does not. Spread evenly, that is half a sphere per molecule. Doubling the system doubles $N$ and $V$: $Nb$ doubles, $b$ does not. (d) In $P = k_BT/(v - b) - a/v^2$, $[b] = \text{m}^3$ and $[a] = \text{J}\,\text{m}^3$. The only volume that can be built from $a$ and $b$ is $b$ itself ($a$ carries joules); the only energy is $a/b$; the only pressure, energy per volume, is $a/b^2$.
+      - kind: formula
+        text: >-
+          $b = \tfrac12 \cdot \tfrac43\pi d^3 \qquad d = \left(\dfrac{3b}{2\pi}\right)^{1/3} \qquad v_c = c_1 b,\ \ k_BT_c = c_2\,\dfrac ab,\ \ P_c = c_3\,\dfrac{a}{b^2} \qquad Z_c = \dfrac{P_cv_c}{k_BT_c} = \dfrac{c_1c_3}{c_2}$
+      - kind: limit
+        text: >-
+          As $d \to 0$, $b \to 0$: point particles, the ideal gas. The first-order result needs $N\Omega/V \ll 1$; as the gas approaches close packing the excluded spheres overlap, the true available volume shrinks more slowly than $V - Nb$, and the simple form fails, which is part of why a dense liquid defeats the model. In (d), any equation with a third dimensional constant, a second length, say, would let $Z_c$ depend on the ratio of the two lengths and vary from gas to gas.
+      - kind: units
+        text: >-
+          (c) $a/v^2$ is subtracted from a pressure, so $[a] = \text{Pa}\cdot\text{m}^6$; $b$ is subtracted from a volume per particle, so $[b] = \text{m}^3$. Units of the terms are fixed by the equation's form, not by the numbers in it, which is why the dimensions come before any measurement. $d$: $(\text{m}^3)^{1/3} = \text{m}$.
+      - kind: substitution
+        text: >-
+          (b) Argon: $b = k_BT_c/(8P_c) = 1.380649 \times 10^{-23} \times 150.687/(8 \times 4.8630 \times 10^6) = 5.348 \times 10^{-29}\,\text{m}^3$, $32.20\,\text{cm}^3/\text{mol}$; $d = (3 \times 5.348 \times 10^{-29}/2\pi)^{1/3} = 2.94 \times 10^{-10}\,\text{m}$. Liquid: $V_\mathrm{m} = 1/35.4653 = 28.20\,\text{cm}^3/\text{mol}$, $V/N = 4.682 \times 10^{-29}\,\text{m}^3$, spacing $3.60 \times 10^{-10}\,\text{m}$; $b/(V/N) = 1.14$. (d) $Z_c = (1/27)(3)/(8/27) = 3/8$. NIST: argon $4.8630\,\text{MPa} \times 74.59\,\text{cm}^3/\text{mol}/(8.3145 \times 150.687\,\text{K}) = 0.290$; water ($647.10\,\text{K}$, $22.064\,\text{MPa}$, $17.874\,\text{mol/L}$) $0.229$.
+      - kind: reasoning
+        text: >-
+          (b) The two estimates of an argon atom's size, $2.94$ and $3.60 \times 10^{-10}\,\text{m}$, agree to $20\%$, and the CO₂ estimate in example 5 agreed to $6\%$, but the argon comparison exposes the limit: the fitted $b$ is larger than the volume each atom actually has in the liquid, so a van der Waals argon could never be compressed to its own triple-point density. $b$ is a fitted constant that also absorbs what the model gets wrong (the mean-field attraction, the first-order exclusion), not a measured molecular volume; it gives the order of magnitude of a molecule, robustly, and no more.
+      - kind: result
+        text: >-
+          (a) $b = \tfrac23\pi d^3$: each excluded pair is counted once; $b$ intensive, $Nb$ extensive. (b) Argon's $b = 5.35 \times 10^{-29}\,\text{m}^3$ implies $d = 2.94 \times 10^{-10}\,\text{m}$, against a spacing of $3.60 \times 10^{-10}\,\text{m}$ in the liquid, whose volume per atom is $14\%$ smaller than $b$: the right order of magnitude, and no better. (c) $[a] = \text{Pa}\,\text{m}^6$, $[b] = \text{m}^3$, from the form of the equation alone. (d) Dimensions alone give $v_c \propto b$, $k_BT_c \propto a/b$, $P_c \propto a/b^2$ and a universal $Z_c$; the algebra gives the numbers, $3$, $8/27$, $1/27$ and $3/8$. Measured $Z_c$ from $0.23$ to $0.29$ need a third constant.
+
+  - id: W-2.1-08
+    level: bagrut
+    objectives: [OBJ-2.1-4, OBJ-2.1-5]
+    prompt: >-
+      How compressible is a fluid near its critical point? The isothermal compressibility is $\kappa_T = -\dfrac1v\left(\dfrac{\partial v}{\partial P}\right)_T$.
+      (a) Show that $\kappa_T = 1/P$ for an ideal gas, and derive $\kappa_T$ for a van der Waals gas.
+      (b) Show that at the critical volume, $v = v_c$, a van der Waals gas above $T_c$ has $\kappa_TP_c = 1/\big(6(T_r - 1)\big)$.
+      (c) Treat CO₂ as the van der Waals gas fitted to its critical point ($T_c = 304.13\,\text{K}$, $P_c = 7.3773\,\text{MPa}$, model critical volume $128.5\,\text{cm}^3/\text{mol}$). Find $\kappa_T$ at $v = v_c$ at $320\,\text{K}$ and at $310\,\text{K}$, and compare each with an ideal gas at the same $v$ and $T$. By what fraction does a pressure rise of $0.01\,\text{MPa}$ compress the model fluid at $310\,\text{K}$?
+      (d) From the slope of NIST's isotherms, real CO₂ at its own critical density ($10.6249\,\text{mol/L}$) has $\kappa_T = 0.309\,\text{MPa}^{-1}$ at $320\,\text{K}$ and $0.984\,\text{MPa}^{-1}$ at $310\,\text{K}$. How well does the model do? Does the real $\kappa_T$ grow as $1/(T - T_c)$?
+      (e) Below $T_c$, on the middle stretch of the van der Waals loop, $\kappa_T < 0$. What would that mean physically, and why can no state there be stable?
+    answer: >-
+      (a) Ideal: $v = k_BT/P$, $\kappa_T = 1/P$. Van der Waals: $\kappa_T = \big[v\big(k_BT/(v - b)^2 - 2a/v^3\big)\big]^{-1}$. (b) At $v = 3b$, $v\,\partial P/\partial v = -\tfrac34k_B(T - T_c)/b$, which gives $\kappa_TP_c = 1/(6(T_r - 1))$. (c) $0.433\,\text{MPa}^{-1}$ at $320\,\text{K}$ and $1.17\,\text{MPa}^{-1}$ at $310\,\text{K}$, against $0.048$ and $0.050\,\text{MPa}^{-1}$ ideal: $9$ and $23$ times more compressible; $0.01\,\text{MPa}$ shrinks it by $1.2\%$. (d) The model is $40\%$ and $19\%$ high, the right size where the ideal gas is off by factors of $6$ and $20$. Real $\kappa_T$ grows by $3.19$ from $320$ to $310\,\text{K}$, faster than the $2.70$ of $1/(T - T_c)$. (e) Compressing a region would lower its pressure, so its surroundings would compress it further: any small fluctuation runs away.
+    solution:
+      - kind: given
+        text: >-
+          CO₂ model: $b = k_BT_c/(8P_c)$, $v_c = 3b$, $128.5\,\text{cm}^3/\text{mol}$; $T_r = 320/304.13 = 1.0522$ and $310/304.13 = 1.0193$. NIST: $\kappa_T = 0.309$ and $0.984\,\text{MPa}^{-1}$ at $\rho_c = 10.6249\,\text{mol/L}$.
+      - kind: law
+        text: >-
+          The definition of $\kappa_T$, with the reciprocal rule $(\partial v/\partial P)_T = 1/(\partial P/\partial v)_T$; the van der Waals equation and its critical point $v_c = 3b$, $k_BT_c = 8a/(27b)$, $P_c = a/(27b^2)$.
+      - kind: manipulation
+        text: >-
+          (a) $\kappa_T = -1/\big(v\,(\partial P/\partial v)_T\big)$, and $(\partial P/\partial v)_T = -k_BT/(v - b)^2 + 2a/v^3$. Ideal ($a = b = 0$): $-v \cdot (-k_BT/v^2) = k_BT/v = P$. (b) At $v = 3b$: $\partial P/\partial v = -k_BT/(4b^2) + 2a/(27b^3)$, and $2a/(27b^3) = k_BT_c/(4b^2)$, so $\partial P/\partial v = -k_B(T - T_c)/(4b^2)$ and $\kappa_T = 4b/\big(3k_B(T - T_c)\big)$. Multiplying by $P_c = a/(27b^2)$ and using $a/b = \tfrac{27}{8}k_BT_c$ gives $\kappa_TP_c = 1/\big(6(T_r - 1)\big)$.
+      - kind: formula
+        text: >-
+          $\kappa_T = \dfrac{1}{v\left(\dfrac{k_BT}{(v - b)^2} - \dfrac{2a}{v^3}\right)} \qquad \kappa_T\big|_{v_c} = \dfrac{4b}{3k_B(T - T_c)} = \dfrac{1}{6P_c(T_r - 1)}$
+      - kind: limit
+        text: >-
+          As $a, b \to 0$ the formula returns $1/P$. At large $v$ the $a$ term dies as $v^{-3}$ against $v^{-2}$ and the gas becomes ideal. As $T \to T_c^+$ at $v_c$, $\kappa_T \to \infty$: on the critical isotherm the slope is zero at $v_c$, and the fluid yields without limit to the smallest push. $\kappa_T$ is intensive, built from $v$, $T$, $P$.
+      - kind: units
+        text: >-
+          $\kappa_T$: $1/(\text{m}^3 \cdot \text{J}/\text{m}^6) = \text{m}^3/\text{J} = \text{Pa}^{-1}$; $\kappa_TP_c$ is a pure number. In $4b/(3k_B(T - T_c))$: $\text{m}^3/\text{J} = \text{Pa}^{-1}$.
+      - kind: substitution
+        text: >-
+          (c) $320\,\text{K}$: $\kappa_TP_c = 1/(6 \times 0.05218) = 3.194$, $\kappa_T = 3.194/7.3773 = 0.433\,\text{MPa}^{-1}$; ideal $P = RT/V_\mathrm{m} = 8.3145 \times 320/128.5 \times 10^{-6} = 20.71\,\text{MPa}$, $\kappa_T = 0.0483\,\text{MPa}^{-1}$, ratio $9.0$. $310\,\text{K}$: $\kappa_TP_c = 8.635$, $\kappa_T = 1.17\,\text{MPa}^{-1}$; ideal $20.06\,\text{MPa}$, $0.0499\,\text{MPa}^{-1}$, ratio $23.5$. A rise of $0.01\,\text{MPa}$: $\Delta v/v = -1.17 \times 0.01 = -1.2\%$. (d) $0.433/0.309 = 1.40$; $1.17/0.984 = 1.19$. Real ratio $0.984/0.309 = 3.19$; $(320 - 304.13)/(310 - 304.13) = 15.87/5.87 = 2.70$.
+      - kind: reasoning
+        text: >-
+          (d) The model gets the size of the effect, which the ideal law misses by an order of magnitude. Its excess shrinks from $40\%$ at $320\,\text{K}$ to $19\%$ at $310\,\text{K}$ because the real compressibility climbs faster as $T_c$ approaches, and that trend is the deeper difference. If $\kappa_T \propto (T - T_c)^{-\gamma}$, the two NIST points give $\gamma = \ln 3.19/\ln 2.70 = 1.17$, not $1$: real CO₂ becomes compressible faster than any van der Waals gas as $T_c$ approaches. (e) $\kappa_T < 0$ means $(\partial P/\partial v)_T > 0$: a region that is squeezed a little loses pressure, so the fluid around it, now at higher pressure, squeezes it further, while a region that expands gains pressure and expands further. Nothing restores the starting state, so a fluid there cannot stay uniform; it separates, and where it ends up is module 14's question.
+      - kind: result
+        text: >-
+          (a) $\kappa_T = 1/P$ ideal; $\kappa_T = [v(k_BT/(v - b)^2 - 2a/v^3)]^{-1}$ van der Waals. (b) $\kappa_TP_c = 1/(6(T_r - 1))$ at $v_c$. (c) $0.433$ and $1.17\,\text{MPa}^{-1}$, $9$ and $23$ times the ideal value; $1.2\%$ per $0.01\,\text{MPa}$. (d) The model is within $20$ to $40\%$ of NIST, but real CO₂'s compressibility grows faster than $1/(T - T_c)$. (e) A negative compressibility amplifies every fluctuation: no stable uniform state.
+
+  - id: W-2.1-09
+    level: bagrut
+    objectives: [OBJ-2.1-6, OBJ-2.1-3, OBJ-2.1-4]
+    prompt: >-
+      Argon's second virial coefficient and Boyle temperature from data. NIST gives argon at $1.000\,\text{MPa}$ these densities, in $\text{mol/L}$: $0.864906$ at $150\,\text{K}$; $0.619374$ at $200\,\text{K}$; $0.403305$ at $300\,\text{K}$; $0.300732$ at $400\,\text{K}$; $0.240128$ at $500\,\text{K}$; $0.199972$ at $600\,\text{K}$. Argon's critical point is $T_c = 150.687\,\text{K}$, $P_c = 4.8630\,\text{MPa}$.
+      (a) Show that, to first order in the density, $B \approx (Z - 1)V_\mathrm{m}$. Estimate the error this makes, given that argon's third virial coefficient is about $2 \times 10^3\,\text{cm}^6/\text{mol}^2$ at $150\,\text{K}$ and smaller at higher temperatures.
+      (b) Compute $Z$ and $B$ at each temperature. How far is argon at $1\,\text{MPa}$ from ideal, at each?
+      (c) Find the Boyle temperature by linear interpolation, and compare it with the van der Waals prediction $\tfrac{27}{8}T_c$.
+      (d) Compute the van der Waals $B(T) = b - a/(k_BT)$ with constants from the critical point, and compare it with (b) at $200$, $300$ and $500\,\text{K}$.
+      (e) Fit the van der Waals form $B = b' - a'/(k_BT)$ to the measured $B$ at $200$ and $600\,\text{K}$ alone. What critical temperature do $a'$ and $b'$ predict? What does that say about what $a$ and $b$ are?
+    answer: >-
+      (a) $Z - 1 = B/V_\mathrm{m} + C/V_\mathrm{m}^2 + \cdots$, so $(Z - 1)V_\mathrm{m} = B + C/V_\mathrm{m}$; the error $C\rho$ is about $2\,\text{cm}^3/\text{mol}$ at $150\,\text{K}$, less above. (b) $Z = 0.9271$, $0.9709$, $0.9941$, $0.9998$, $1.0017$, $1.0024$; $B = -84.3$, $-47.0$, $-14.7$, $-0.6$, $+7.2$, $+12.1\,\text{cm}^3/\text{mol}$. Argon is $7.3\%$ from ideal at $150\,\text{K}$, $0.6\%$ at $300\,\text{K}$, under $0.25\%$ above. (c) $T_B \approx 407\,\text{K} = 2.70\,T_c$, against $509\,\text{K} = 3.375\,T_c$ for van der Waals, $25\%$ high. (d) $-49.7$, $-22.4$, $-0.5\,\text{cm}^3/\text{mol}$ against $-47.0$, $-14.7$, $+7.2$. (e) $a'_\mathrm{m} = 0.147\,\text{Pa}\,\text{m}^6/\text{mol}^2$, $b'_\mathrm{m} = 41.6\,\text{cm}^3/\text{mol}$, predicting $T_c = 126\,\text{K}$, $16\%$ low: no single pair of constants fits both the critical point and $B(T)$.
+    solution:
+      - kind: given
+        text: >-
+          $P = 1.000 \times 10^6\,\text{Pa}$; $RT = 8.3145\,T\,\text{J/mol}$; $\rho$ as tabulated, $V_\mathrm{m} = 1/\rho$. Van der Waals constants from the critical point: $a_\mathrm{m} = 27R^2T_c^2/(64P_c) = 0.1362\,\text{Pa}\,\text{m}^6/\text{mol}^2$, $b_\mathrm{m} = RT_c/(8P_c) = 32.20\,\text{cm}^3/\text{mol}$.
+      - kind: law
+        text: >-
+          The virial expansion $Z = 1 + B/V_\mathrm{m} + C/V_\mathrm{m}^2 + \cdots$, with $Z = PV_\mathrm{m}/(RT)$ measured. The Boyle temperature is where $B$ changes sign. For a van der Waals gas, $B = b - a/(k_BT)$, per mole $b_\mathrm{m} - a_\mathrm{m}/(RT)$, with $T_B = a/(k_Bb) = \tfrac{27}{8}T_c$.
+      - kind: formula
+        text: >-
+          $Z = \dfrac{P}{\rho RT} \qquad B \approx \dfrac{Z - 1}{\rho} \qquad T_B \approx T_1 + (T_2 - T_1)\,\dfrac{-B_1}{B_2 - B_1} \qquad a' = \dfrac{B_2 - B_1}{\frac{1}{RT_1} - \frac{1}{RT_2}},\ \ b' = B_2 + \dfrac{a'}{RT_2}$
+      - kind: limit
+        text: >-
+          As $P \to 0$, $(Z - 1)V_\mathrm{m} \to B$ exactly, which is why a low pressure is used: at $1\,\text{MPa}$ the third term is a few percent of $B$ at worst. Near $T_B$, $Z - 1$ is tiny ($-1.7 \times 10^{-4}$ at $400\,\text{K}$) and the six-figure densities still resolve it. A van der Waals $B$ rises toward $b$ as $T \to \infty$ and never turns over.
+      - kind: units
+        text: >-
+          $Z$: $\text{Pa}/(\text{mol/m}^3 \cdot \text{J/mol}) = \text{Pa}/(\text{J/m}^3)$, pure; $B = (Z - 1)/\rho$ in $\text{m}^3/\text{mol}$; $C\rho$ in $(\text{cm}^6/\text{mol}^2)(\text{mol/cm}^3) = \text{cm}^3/\text{mol}$, like $B$.
+      - kind: substitution
+        text: >-
+          (a) $C\rho \approx 2 \times 10^3 \times 0.865 \times 10^{-3} = 1.7\,\text{cm}^3/\text{mol}$ at $150\,\text{K}$, $2\%$ of $B$. (b) $150\,\text{K}$: $Z = 10^6/(864.906 \times 1247.2) = 0.9271$, $B = -0.0729/864.906\,\text{m}^3/\text{mol} = -84.3\,\text{cm}^3/\text{mol}$; likewise $-47.0$, $-14.7$, $-0.57$, $+7.23$, $+12.05\,\text{cm}^3/\text{mol}$. (c) $T_B = 400 + 100 \times 0.57/(0.57 + 7.23) = 407\,\text{K}$; $407/150.687 = 2.70$; $\tfrac{27}{8} \times 150.687 = 508.6\,\text{K}$. (d) $b_\mathrm{m} - a_\mathrm{m}/(RT)$: $32.20 - 81.89 = -49.7$ at $200\,\text{K}$; $-22.4$ at $300\,\text{K}$; $-0.5$ at $500\,\text{K}$ (in $\text{cm}^3/\text{mol}$). (e) $1/(RT)$: $6.014 \times 10^{-4}$ and $2.005 \times 10^{-4}\,\text{mol/J}$; $a' = (12.05 + 46.95) \times 10^{-6}/(4.009 \times 10^{-4}) = 0.147\,\text{Pa}\,\text{m}^6/\text{mol}^2$; $b' = 41.6\,\text{cm}^3/\text{mol}$; $T_c' = 8a'/(27Rb') = 126\,\text{K}$.
+      - kind: reasoning
+        text: >-
+          (b) The ideal law, an empirical law of the dilute regime, holds for argon at $10$ atmospheres to $0.6\%$ at room temperature and fails by $7\%$ at the critical temperature: dilute enough depends on temperature as well as density. (d) The van der Waals $B$ is too negative from $200\,\text{K}$ up, because its attraction-to-size balance, $a/b$, is pinned by the critical point to $T_B = 3.375\,T_c$, while argon's is $2.70\,T_c$. (e) Fitted to $B(T)$, the same formula needs a larger $b$ and a smaller $a$, and then misplaces the critical point by $25\,\text{K}$. The constants are not properties of the atom; they are fit parameters, and their values depend on which data they are asked to fit.
+      - kind: result
+        text: >-
+          (a) $B \approx (Z - 1)V_\mathrm{m}$, good to about $2\,\text{cm}^3/\text{mol}$. (b) $B$ runs from $-84$ to $+12\,\text{cm}^3/\text{mol}$ between $150$ and $600\,\text{K}$; $Z$ at $1\,\text{MPa}$ is within $0.6\%$ of $1$ from $300\,\text{K}$ up. (c) $T_B \approx 407\,\text{K} = 2.70\,T_c$; van der Waals says $509\,\text{K}$. (d) The model's $B$ is $3$ to $8\,\text{cm}^3/\text{mol}$ too negative above $200\,\text{K}$. (e) Fitting $B$ instead gives $T_c = 126\,\text{K}$: two constants cannot carry both the critical point and the dilute gas.
+
+  - id: W-2.1-10
+    level: bagrut
+    objectives: [OBJ-2.1-6]
+    prompt: >-
+      Corresponding states, tested on real gases. NIST's critical points: argon $150.687\,\text{K}$, $4.8630\,\text{MPa}$, $74.59\,\text{cm}^3/\text{mol}$; nitrogen $126.192\,\text{K}$, $3.3958\,\text{MPa}$, $89.41\,\text{cm}^3/\text{mol}$; methane $190.564\,\text{K}$, $4.5992\,\text{MPa}$, $98.63\,\text{cm}^3/\text{mol}$; carbon dioxide $304.13\,\text{K}$, $7.3773\,\text{MPa}$, $94.12\,\text{cm}^3/\text{mol}$. At $T_r = 1.2$, $P_r = 1.0$ NIST gives densities of $4.11313$, $3.41017$, $3.07301$ and $3.03561\,\text{mol/L}$, in that order; at $T_r = 1.5$, $P_r = 2.0$, $6.23148$, $5.13408$, $4.64666$ and $4.50532\,\text{mol/L}$.
+      (a) Find each gas's temperature and pressure in the two states, and $Z$ from the data.
+      (b) Solve the reduced van der Waals equation for $v_r$ in each state, and find its $Z$.
+      (c) How closely do the four gases agree with one another, and with van der Waals?
+      (d) Compute each gas's reduced volume $v/v_c$ with its measured critical volume, and compare with the van der Waals $v_r$. Why do the reduced volumes disagree by a third when $Z$ agrees within a few percent?
+      (e) Which gas stands apart, and what does the law of corresponding states need to describe it?
+    answer: >-
+      (a) $T_r = 1.2$, $P_r = 1$: $Z = 0.786$ (argon, $180.8\,\text{K}$, $4.863\,\text{MPa}$), $0.791$ (nitrogen, $151.4\,\text{K}$, $3.396\,\text{MPa}$), $0.787$ (methane, $228.7\,\text{K}$, $4.599\,\text{MPa}$), $0.801$ (CO₂, $365.0\,\text{K}$, $7.377\,\text{MPa}$). $T_r = 1.5$, $P_r = 2$: $0.831$, $0.841$, $0.833$, $0.863$. (b) $v_r = 2.490$, $Z = 0.778$; $v_r = 1.587$, $Z = 0.793$. (c) Argon, nitrogen and methane within $0.6\%$ and $1.2\%$ of one another; CO₂ $2\%$ and $4\%$ above argon; van der Waals $1\%$ and $4.5\%$ below. (d) $3.26$, $3.28$, $3.30$, $3.50$ against $2.49$; $2.15$, $2.18$, $2.18$, $2.36$ against $1.59$. Since $v/v_c = (Z/Z_c)(T_r/P_r)$, the reduced volume carries $1/Z_c$, and the model's $Z_c = 3/8$ is $30\%$ above the real ones. (e) CO₂, whose $Z_c$ is $0.275$ against $0.286$ to $0.290$: real gases need at least one more parameter of the substance.
+    solution:
+      - kind: given
+        text: >-
+          Critical constants as listed; real $Z_c = P_cV_c/(RT_c)$: argon $0.290$, nitrogen $0.289$, methane $0.286$, CO₂ $0.275$. $T = T_rT_c$, $P = P_rP_c$.
+      - kind: law
+        text: >-
+          The law of corresponding states for real gases, an approximate empirical law: at the same $T_r$ and $P_r$, different gases have about the same $Z$. For a van der Waals gas it is exact: $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$ and $Z = 3P_rv_r/(8T_r)$.
+      - kind: manipulation
+        text: >-
+          (b) Multiplying the reduced equation by $v_r^2(3v_r - 1)$ gives a cubic in $v_r$, solved numerically; above $T_c$ it has one real root above $v_r = \tfrac13$. (d) With $Z = PV_\mathrm{m}/(RT)$ and $Z_c = P_cV_c/(RT_c)$, dividing gives $V_\mathrm{m}/V_c = (Z/Z_c)(T_r/P_r)$, true for any substance; for van der Waals, $Z_c = 3/8$.
+      - kind: formula
+        text: >-
+          $3P_rv_r^3 - (P_r + 8T_r)\,v_r^2 + 9v_r - 3 = 0 \qquad Z = \dfrac{P_rP_c}{\rho R\,T_rT_c} \qquad \dfrac{V_\mathrm{m}}{V_c} = \dfrac{Z}{Z_c}\,\dfrac{T_r}{P_r}$
+      - kind: limit
+        text: >-
+          As $P_r \to 0$ at any $T_r$, every gas and the model give $Z \to 1$: corresponding states is trivially true in the dilute limit, and the test is at moderate reduced density. At the critical point itself, $T_r = P_r = 1$, the model gives $Z = 3/8$ and the gases $0.275$ to $0.290$: the law's real-gas version and the model part company most there.
+      - kind: units
+        text: >-
+          Reduced variables, $Z$ and $V_\mathrm{m}/V_c$ are pure numbers; in $Z = P/(\rho RT)$ the density must be in $\text{mol/m}^3$.
+      - kind: substitution
+        text: >-
+          (a) Argon at $T_r = 1.2$: $T = 180.82\,\text{K}$, $Z = 4.8630 \times 10^6/(4113.13 \times 8.3145 \times 180.82) = 0.786$; the others likewise, $0.791$, $0.787$, $0.801$; and at $T_r = 1.5$, $P_r = 2$, $0.831$, $0.841$, $0.833$, $0.863$. (b) $T_r = 1.2$, $P_r = 1$: $3v^3 - 10.6v^2 + 9v - 3 = 0$, $v_r = 2.490$, $Z = 3 \times 2.490/9.6 = 0.778$. $T_r = 1.5$, $P_r = 2$: $6v^3 - 14v^2 + 9v - 3 = 0$, $v_r = 1.587$, $Z = 6 \times 1.587/12 = 0.793$. (d) Argon: $(0.786/0.290)(1.2) = 3.26$; nitrogen $3.28$, methane $3.30$, CO₂ $3.50$; at $T_r = 1.5$, $P_r = 2$: $2.15$, $2.18$, $2.18$, $2.36$.
+      - kind: reasoning
+        text: >-
+          (c) The simple, near-spherical molecules agree with one another better than any of them agrees with the model: the real-gas law of corresponding states is a good empirical law, but its universal curve is not the van der Waals one. (d) Reduced volumes compare $Z/Z_c$, and the model's critical volume, $3b$, is about $30\%$ larger than measured ones (lesson 2.1); measured with each gas's own $v_c$ the volumes cannot match the model's. $Z$ against $(T_r, P_r)$ avoids $v_c$ altogether, which is why it is the form in which corresponding states is tested. (e) CO₂, a linear molecule with a lower $Z_c$, departs by $2$ to $4\%$; a two-parameter law cannot tell it from argon, and corresponding states needs at least one more number of the substance, such as $Z_c$ itself.
+      - kind: result
+        text: >-
+          (a) $Z = 0.786$, $0.791$, $0.787$, $0.801$ at $(1.2, 1)$; $0.831$, $0.841$, $0.833$, $0.863$ at $(1.5, 2)$. (b) Van der Waals: $0.778$ and $0.793$. (c) Argon, nitrogen and methane agree within about $1\%$, CO₂ is $2$ to $4\%$ high, the model $1$ to $4.5\%$ low. (d) Reduced volumes $3.26$ to $3.50$ against $2.49$, because they carry $1/Z_c$. (e) CO₂ needs a third parameter; real gases obey corresponding states approximately, and best when their molecules are alike.
+challenge:
+  - id: W-2.1-c1
+    stars: 1
+    objectives: [OBJ-2.1-4, OBJ-2.1-5]
+    prompt: >-
+      Point particles that attract. $N$ classical point particles in a volume $V$ at temperature $T$ attract one another through an unspecified force, which lowers the energy of every configuration by $uN^2/(2V)$, with $u > 0$. The source derives from the partition function the equation of state $P = nk_BT - un^2/2$, with $n = N/V$; take it as given.
+      (a) Show that this is the van der Waals equation with $b = 0$, and identify $a$.
+      (b) Compute the isothermal compressibility $\kappa_T(n) = -\dfrac1V\left(\dfrac{\partial V}{\partial P}\right)_{T,N}$.
+      (c) Find the line in the $(T, P)$ plane on which $\kappa_T$ diverges, and the density and $Z$ there. What happens to the gas if it is compressed past it?
+      (d) Show that the model has no critical point: no temperature has an isotherm with an inflection of zero slope. Reconcile this with $k_BT_c = 8a/(27b)$, and contrast it with hard spheres without attraction, $P = nk_BT/(1 - nb)$.
+      (e) Give argon its $a$ from its critical point, $a_\mathrm{m} = 0.1362\,\text{Pa}\,\text{m}^6/\text{mol}^2$. At what pressure and molar volume would point-particle argon become unstable at $300\,\text{K}$? NIST gives real argon at $300\,\text{K}$ and $11.4\,\text{MPa}$ a compressibility factor of $0.952$. What does $b$ do that this model lacks?
+    answer: >-
+      (a) $P = k_BT/v - (u/2)/v^2$: van der Waals with $b = 0$ and $a = u/2$. (b) $\kappa_T = 1/\big(n(k_BT - un)\big)$. (c) On $P^* = (k_BT)^2/(2u)$, at $n^* = k_BT/u$, where $Z = 1/2$ at every temperature. Past it $\kappa_T < 0$: the gas is unstable and nothing stops it collapsing. (d) $\partial^2P/\partial n^2 = -u < 0$ everywhere, so each isotherm has a maximum, never a flat inflection; $T_c = 8a/(27k_Bb) \to \infty$ as $b \to 0$, so every temperature is below it. Hard spheres have $\partial P/\partial n = k_BT/(1 - nb)^2 > 0$ everywhere: never unstable, no critical point. Both corrections are needed. (e) $11.4\,\text{MPa}$ and $109\,\text{cm}^3/\text{mol}$; real argon there is an ordinary supercritical fluid. $b$ stops the collapse: with it the van der Waals pressure at $109\,\text{cm}^3/\text{mol}$ is $21.0\,\text{MPa}$, and at $T_r = 1.99$ its isotherm falls everywhere.
+    solution:
+      - kind: law
+        text: >-
+          The van der Waals equation $P = k_BT/(v - b) - a/v^2$ with $v = 1/n$; the isothermal compressibility $\kappa_T = 1/\big(n\,(\partial P/\partial n)_T\big)$, since $V = N/n$ at fixed $N$; a stable state needs $\kappa_T > 0$; a critical point needs $\partial P/\partial n = \partial^2P/\partial n^2 = 0$ on one isotherm.
+      - kind: manipulation
+        text: >-
+          (a) $nk_BT = k_BT/v$ and $un^2/2 = (u/2)/v^2$. The mean-field picture of the lesson: the energy $-uN^2/(2V)$ is $-\tfrac u2 n$ per particle times $N$, each particle feeling a pull proportional to the density of its neighbours, and its derivative with respect to $V$ lowers the pressure by $un^2/2$. (b) $\partial P/\partial n = k_BT - un$, and $\partial V/\partial P = (\partial V/\partial n)(\partial n/\partial P) = -(N/n^2)/(k_BT - un)$. (c) $\kappa_T \to \infty$ where $k_BT = un^*$; there $P^* = (k_BT)^2/u - (k_BT)^2/(2u)$ and $Z = P^*/(n^*k_BT) = \tfrac12$. (d) In $n$, the conditions for a critical point are those in $v$, since $\partial n/\partial v = -n^2 \neq 0$; here $\partial^2P/\partial n^2 = -u$ is never zero.
+      - kind: formula
+        text: >-
+          $a = \dfrac u2 \qquad \kappa_T = \dfrac{1}{n\,(k_BT - un)} \qquad n^* = \dfrac{k_BT}{u} \qquad P^* = \dfrac{(k_BT)^2}{2u}$
+      - kind: limit
+        text: >-
+          As $u \to 0$, $n^* \to \infty$ and $\kappa_T \to 1/(nk_BT) = 1/P$: the ideal gas, never unstable. At low density $\kappa_T \approx 1/P$ whatever $u$. Each isotherm rises from $0$ to its maximum $P^*$ at $n^*$ and then falls, through zero at $n = 2k_BT/u$, toward ever more negative pressure: with no excluded volume nothing holds the particles apart. Adding $b$ turns the maximum into the van der Waals loop, whose pressure rises again at high density.
+      - kind: units
+        text: >-
+          $u$ carries $\text{J}\,\text{m}^3$, like $a$, so $un$ is an energy, comparable with $k_BT$; $(k_BT)^2/u$ is $\text{J}/\text{m}^3 = \text{Pa}$; $\kappa_T$ is $\text{m}^3/\text{J} = \text{Pa}^{-1}$.
+      - kind: substitution
+        text: >-
+          (e) $a = 0.1362/N_A^2 = 3.755 \times 10^{-49}\,\text{Pa}\,\text{m}^6$, $u = 7.510 \times 10^{-49}\,\text{Pa}\,\text{m}^6$; $k_BT = 4.142 \times 10^{-21}\,\text{J}$. $n^* = 5.515 \times 10^{27}\,\text{m}^{-3}$, $V_\mathrm{m} = N_A/n^* = 109.2\,\text{cm}^3/\text{mol}$; $P^* = (4.142 \times 10^{-21})^2/(2 \times 7.510 \times 10^{-49}) = 11.42\,\text{MPa}$. With $b = 5.348 \times 10^{-29}\,\text{m}^3$ restored, $v = 1.813 \times 10^{-28}\,\text{m}^3$: $P = 4.142 \times 10^{-21}/1.278 \times 10^{-28} - 3.755 \times 10^{-49}/3.287 \times 10^{-56} = 32.40 - 11.42 = 21.0\,\text{MPa}$.
+      - kind: reasoning
+        text: >-
+          (d) The van der Waals critical temperature, $8a/(27k_Bb)$, is the ratio of attraction to size. With no size, it is infinite: the point-particle gas is below its critical temperature at every temperature, and every isotherm has the instability that van der Waals isotherms have only below $T_c$, without the rise at high density that would end it. Hard spheres with no attraction are the opposite case, $T_c = 0$: every isotherm rises steeply and monotonically with density, so they never condense. A critical point needs both, attraction to make the isotherm turn and size to make it turn back. (e) Real argon at $300\,\text{K}$ ($T_r = 1.99$) and $11.4\,\text{MPa}$ is a supercritical fluid with $Z = 0.952$, nothing like the collapse the model predicts there.
+      - kind: result
+        text: >-
+          (a) $a = u/2$, $b = 0$. (b) $\kappa_T = 1/(n(k_BT - un))$. (c) Instability on $P^* = (k_BT)^2/(2u)$ at $n^* = k_BT/u$, with $Z = 1/2$; beyond it the gas collapses. (d) No inflection ever, because $T_c \to \infty$ as $b \to 0$; hard spheres alone have $T_c = 0$. A critical point needs attraction and size together. (e) Point-particle argon would collapse at $11.4\,\text{MPa}$ and $109\,\text{cm}^3/\text{mol}$ at room temperature; the excluded volume raises the pressure there to $21.0\,\text{MPa}$ and keeps the isotherm falling.
+    source:
+      name: 'MIT 8.333 Statistical Mechanics I: Statistical Mechanics of Particles (OpenCourseWare)'
+      year: 2013
+      problem: 'Problem Set 5, Problem 4'
+      url: 'https://ocw.mit.edu/courses/8-333-statistical-mechanics-i-statistical-mechanics-of-particles-fall-2013/3a47ef89d0b17a1a47639036ed695746_MIT8_333F13_pset5.pdf'
+      verified: '2026-11-20'
+      adapted: true
+
+  - id: W-2.1-c2
+    stars: 2
+    objectives: [OBJ-2.1-5, OBJ-2.1-6]
+    prompt: >-
+      The critical point of a truncated virial expansion. The pressure of a gas is related to its density $n = N/V$ and temperature $T$ by $P = k_BTn - \tfrac u2n^2 + \tfrac w6n^3$, where $u$ and $w$ are positive constants that do not depend on temperature.
+      (a) Locate the critical temperature $T_c$ below which this equation must be invalid, and the critical density $n_c$ and pressure $P_c$. Find the ratio $k_BT_cn_c/P_c$, and compare the critical compressibility factor with the van der Waals $3/8$ and with argon's $0.290$.
+      (b) Calculate the isothermal compressibility $\kappa_T = -\dfrac1V\left(\dfrac{\partial V}{\partial P}\right)_T$, and describe its behaviour as a function of $T$ at $n = n_c$. What happens below $T_c$?
+      (c) On the critical isotherm, give $P - P_c$ as a function of $n - n_c$.
+      (d) In place of the source's Maxwell construction, which is module 14's: show that the results of (b) and (c), a compressibility that diverges as $1/(T - T_c)$ along $n = n_c$ and a critical isotherm cubic in $n - n_c$, hold for every equation of state $P(n, T)$ that has a Taylor series about its critical point, van der Waals included. Real fluids instead have $|P - P_c| \propto |n - n_c|^{\delta}$ on the critical isotherm and $\kappa_T \propto (T - T_c)^{-\gamma}$, with the three-dimensional Ising values $\delta \approx 4.79$ and $\gamma \approx 1.24$ (Pelissetto and Vicari, Physics Reports 368, 549 (2002)). What does that say about the real $P(n, T)$ at its critical point? Problem 8's NIST data for CO₂ gave a ratio of $3.19$ between $\kappa_T$ at $310$ and $320\,\text{K}$; which way do they point?
+    answer: >-
+      (a) $n_c = u/w$, $k_BT_c = u^2/(2w)$, $P_c = u^3/(6w^2)$; $k_BT_cn_c/P_c = 3$, so $Z_c = 1/3$, against $3/8$ for van der Waals and $0.290$ for argon. (b) $\kappa_T = 1/\big(n(k_BT - un + wn^2/2)\big)$; at $n_c$, $\kappa_T = 1/\big(n_ck_B(T - T_c)\big)$, diverging as $T \to T_c^+$; below $T_c$ it is negative there, an unstable state. (c) $P - P_c = \tfrac w6(n - n_c)^3$, exactly. (d) With $\partial P/\partial n = \partial^2P/\partial n^2 = 0$ at the critical point, a Taylor series gives $\partial P/\partial n \approx P_{nT}(T - T_c)$ at $n_c$ and $P - P_c \approx \tfrac16P_{nnn}(n - n_c)^3$ on the critical isotherm, for any smooth equation. Real fluids' $\delta \ne 3$ and $\gamma \ne 1$ mean their $P(n, T)$ has no Taylor series at the critical point; the CO₂ ratio $3.19$ against $2.70$ points the same way, an effective $\gamma$ of $1.17$.
+    solution:
+      - kind: law
+        text: >-
+          A critical point needs $\partial P/\partial n = 0$ and $\partial^2P/\partial n^2 = 0$ on one isotherm (equivalent to the conditions in $v$, since $\partial n/\partial v = -n^2 \neq 0$ and the first derivative vanishes there); stability needs $\partial P/\partial n > 0$; $\kappa_T = 1/\big(n\,(\partial P/\partial n)_T\big)$.
+      - kind: manipulation
+        text: >-
+          (a) $\partial P/\partial n = k_BT - un + \tfrac w2n^2$, $\partial^2P/\partial n^2 = -u + wn$. The second vanishes at $n_c = u/w$; the first then gives $k_BT_c = un_c - \tfrac w2n_c^2 = u^2/(2w)$; and $P_c = \tfrac{u^2}{2w}\tfrac uw - \tfrac u2\tfrac{u^2}{w^2} + \tfrac w6\tfrac{u^3}{w^3} = \tfrac{u^3}{6w^2}$. Below $T_c$, $\partial P/\partial n$ is a parabola in $n$ whose minimum, $k_B(T - T_c)$ at $n_c$, is negative: a band of densities with $\kappa_T < 0$, where the equation cannot describe a uniform state. (c) $P$ is a cubic in $n$ whose first and second derivatives vanish at $n_c$ on the critical isotherm and whose third derivative is $w$. (d) Expand about $(n_c, T_c)$: $P = P_c + P_T\,\Delta T + P_{nT}\,\Delta n\,\Delta T + \tfrac16P_{nnn}\,\Delta n^3 + \cdots$, with no $\Delta n$ or $\Delta n^2$ term because $P_n = P_{nn} = 0$ there. Then at $\Delta n = 0$, $\partial P/\partial n = P_{nT}\,\Delta T + O(\Delta T^2)$, and at $\Delta T = 0$, $P - P_c = \tfrac16P_{nnn}\,\Delta n^3 + \cdots$.
+      - kind: formula
+        text: >-
+          $n_c = \dfrac uw \qquad k_BT_c = \dfrac{u^2}{2w} \qquad P_c = \dfrac{u^3}{6w^2} \qquad \kappa_T\big|_{n_c} = \dfrac{1}{n_ck_B(T - T_c)} \qquad P - P_c = \dfrac w6\,(n - n_c)^3$
+      - kind: limit
+        text: >-
+          As $w \to 0$ the critical point runs off to infinite density and temperature: this is challenge 1's point particles, $P = nk_BT - un^2/2$, with no critical point; the $n^3$ term plays the part of the excluded volume. Far above $T_c$, $\kappa_T \to 1/(nk_BT) = 1/P$, ideal. In the van der Waals case the same expansion gives $P_r - 1 \approx -\tfrac32(v_r - 1)^3$ and $\kappa_TP_c = 1/(6(T_r - 1))$ (problems 4 and 8): different coefficients, the same powers.
+      - kind: units
+        text: >-
+          $un^2$ and $wn^3$ are pressures, so $[u] = \text{J}\,\text{m}^3$ and $[w] = \text{J}\,\text{m}^6$. $u/w$ is $\text{m}^{-3}$, a density; $u^2/w$ is $\text{J}$, an energy; $u^3/w^2$ is $\text{J}/\text{m}^3$, a pressure. As in problem 7, dimensions alone force $Z_c$ to be a pure number the same for every gas this equation describes.
+      - kind: substitution
+        text: >-
+          (a) $k_BT_cn_c/P_c = \dfrac{u^2}{2w}\cdot\dfrac uw\cdot\dfrac{6w^2}{u^3} = 3$, $Z_c = \tfrac13 = 0.333$. (b) At $n_c$: $k_BT - u^2/w + u^2/(2w) = k_BT - u^2/(2w) = k_B(T - T_c)$. (d) For $\kappa_T \propto 1/(T - T_c)$ with $T_c = 304.13\,\text{K}$, the ratio from $320$ to $310\,\text{K}$ is $15.87/5.87 = 2.70$; NIST gives $3.19$, an effective $\gamma = \ln 3.19/\ln 2.70 = 1.17$, already above $1$ at $6$ to $16\,\text{K}$ from the critical point and on its way to $1.24$ closer in.
+      - kind: reasoning
+        text: >-
+          (d) A cubic critical isotherm and $\gamma = 1$ are not features of van der Waals or of this truncated series in particular; they follow from smoothness alone, so every equation of state that can be expanded about its critical point, however many constants it has, shares them. Measured critical behaviour does not: $\delta \approx 4.8$ means a critical isotherm far flatter than a cubic, and $\gamma \approx 1.24$ a compressibility that grows faster than $1/(T - T_c)$. The real $P(n, T)$ is not analytic at its critical point; the fluctuations that the mean-field picture averages away dominate there. That is the failure the lesson's model specification names, and module 15 meets it again in a magnet.
+      - kind: result
+        text: >-
+          (a) $n_c = u/w$, $k_BT_c = u^2/(2w)$, $P_c = u^3/(6w^2)$, $Z_c = 1/3$: universal, like van der Waals's $3/8$, and like it too large. (b) $\kappa_T = 1/(n_ck_B(T - T_c))$ at $n_c$, infinite at $T_c$ and negative below. (c) $P - P_c = \tfrac w6(n - n_c)^3$. (d) Any equation with a Taylor series at its critical point gives $\delta = 3$ and $\gamma = 1$; real fluids, with $\delta \approx 4.8$ and $\gamma \approx 1.24$, and CO₂'s compressibility rising $3.19$-fold where $1/(T - T_c)$ allows $2.70$, show that no such equation is right at the critical point.
+    source:
+      name: 'MIT 8.333 Statistical Mechanics I: Statistical Mechanics of Particles (OpenCourseWare)'
+      year: 2013
+      problem: 'Problem Set 5, Problem 2'
+      url: 'https://ocw.mit.edu/courses/8-333-statistical-mechanics-i-statistical-mechanics-of-particles-fall-2013/3a47ef89d0b17a1a47639036ed695746_MIT8_333F13_pset5.pdf'
+      verified: '2026-11-20'
+      adapted: true

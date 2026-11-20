@@ -1,0 +1,67 @@
+---
+lang: en
+chapter: 2
+title: 'Module 02 in one page: equations of state'
+---
+
+## The big idea
+
+Fix two independent intensive variables of a simple compressible substance and every other equilibrium property is fixed: that is the state postulate, an empirical law, and it puts all of a substance's equilibrium states on one surface in $(P, v, T)$, drawn over the volume per particle $v = V/N$ so that the amount of substance drops out. An equation of state is the equation of that surface. The ideal gas law is the surface of the dilute limit, approached by every gas and obeyed exactly by none; it contains no constant of any substance, and so it cannot condense anything. Give the molecules a size and the room each centre can move in shrinks from $v$ to $v - b$, raising the pressure; let them attract and the pressure drops by $a/v^2$. The van der Waals surface that results folds below a critical temperature set by $a/b$, where an isotherm is momentarily flat and has stopped curving, and above that temperature no pressure liquefies the gas. Measured in units of its own critical point, every van der Waals gas obeys one equation with nothing left to adjust. Real gases obey a law of the same kind approximately, with a different curve: their critical compressibility is $0.27$ to $0.29$, not $3/8$. The compressibility factor $Z$ measures the distance from ideal. Real CO₂ at $280\,\text{K}$ shows both the model's strength, its vapour branch within $9\%$, and its failures: where the model wiggles, the real substance holds its pressure flat while it condenses, which is module 14's question.
+
+## What to remember
+
+<Formula tex="PV = Nk_BT \qquad Pv = k_BT" label="The ideal gas law, extensive and per particle: the dilute limit of every gas" />
+
+<Formula tex="P = \frac{k_BT}{v - b} - \frac{a}{v^2} \qquad b = \frac23\pi d^3 \qquad a = \frac{a_\mathrm{m}}{N_A^2} \qquad b = \frac{b_\mathrm{m}}{N_A}" label="The van der Waals equation per particle, the excluded volume of hard spheres, and the conversion from per-mole constants" />
+
+<Formula tex="v_c = 3b \qquad k_BT_c = \frac{8a}{27b} \qquad P_c = \frac{a}{27b^2} \qquad b = \frac{k_BT_c}{8P_c} \qquad a = \frac{27\,(k_BT_c)^2}{64\,P_c}" label="The van der Waals critical point, and the constants fitted to a measured one" />
+
+<Formula tex="P_r = \frac{8T_r}{3v_r - 1} - \frac{3}{v_r^2} \qquad Z_c = \frac{P_cv_c}{k_BT_c} = \frac38" label="Corresponding states for a van der Waals gas, and its critical compressibility factor" />
+
+<Formula tex="Z = \frac{Pv}{k_BT} = 1 + \frac{B(T)}{v} + \frac{b^2}{v^2} + \cdots \qquad B(T) = b - \frac{a}{k_BT} \qquad k_BT_B = \frac ab = \frac{27}{8}\,k_BT_c" label="The compressibility factor and the virial expansion of a van der Waals gas, with its Boyle temperature" />
+
+- **One surface.** Two independent intensive variables fix the state, so the states form a surface over $(v, T)$; isotherms, isochores and isobars are slices of it, and every partial derivative must say what is held. See <LessonLink id="2.1" anchor="state-postulate">the state postulate</LessonLink> and <LessonLink id="2.1" anchor="shadows">three shadows of one surface</LessonLink>.
+- **The doubling test.** Joining two identical systems doubles $N$, $V$, $U$ and leaves $P$, $T$, $v$; a ratio of extensive variables is intensive, and some quantities, $V^2$ or the number of pairs, are neither. See <LessonLink id="2.1" anchor="doubling">the doubling test</LessonLink>.
+- **What kind of law $PV = Nk_BT$ is:** a theorem of non-interacting point particles, and for real gases an empirical law of the dilute classical regime. Room air obeys it to $0.07\%$; compressed CO₂ misses by tens of percent. See <LessonLink id="2.1" anchor="ideal-law">the ideal gas law</LessonLink>.
+- **The two corrections.** Excluded volume always raises the pressure; attraction, one factor of density for the molecules reaching the wall and one for the neighbours pulling them back, always lowers it. $[a] = \text{Pa}\,\text{m}^6$, $[b] = \text{m}^3$. See <LessonLink id="2.1" anchor="excluded-volume">a molecule has a size</LessonLink>, <LessonLink id="2.1" anchor="attraction">molecules pull on each other</LessonLink> and <LessonLink id="2.1" anchor="vdw">the van der Waals equation</LessonLink>.
+- **The critical point** is where the minimum and maximum of a sub-critical isotherm merge: zero slope and zero curvature, a falling inflection. $T_c$ depends on $a/b$ alone; neither correction alone gives one. See <LessonLink id="2.1" anchor="critical">the critical isotherm</LessonLink>.
+- **Above $T_c$ every isotherm falls**, each pressure meets one volume, and no pressure liquefies the gas: nitrogen ($T_c = 126\,\text{K}$) in a cylinder, butane ($425\,\text{K}$) in a lighter. See <LessonLink id="2.1" anchor="supercritical">above the critical temperature, no liquid</LessonLink>.
+- **Corresponding states** is a theorem for van der Waals gases and an approximate empirical law for real ones; the model's $Z_c = 3/8$ against $0.290$ for argon and $0.275$ for CO₂ means its critical volume is $29$ to $37\%$ too large. See <LessonLink id="2.1" anchor="reduced">measure a gas in its own units</LessonLink>.
+- **$Z$ and the virial expansion.** $Z \to 1$ as $v \to \infty$; below the Boyle temperature attraction pulls $Z$ under $1$ at moderate density, and excluded volume always wins when dense. See <LessonLink id="2.1" anchor="z-dilute">how far from ideal</LessonLink>.
+- **Real CO₂ at $280\,\text{K}$:** the ideal law is $16\%$ high at $2\,\text{MPa}$, van der Waals $2.8\%$; at $4.16\,\text{MPa}$ the pressure holds while the volume falls from $361$ to $49.8\,\text{cm}^3/\text{mol}$. See <LessonLink id="2.1" anchor="co2">the data</LessonLink> and <LessonLink id="2.1" anchor="model-spec">the model, specified</LessonLink>.
+
+## Common mistakes
+
+- **"Every gas obeys $PV = Nk_BT$."** Only in the dilute limit. CO₂ at $280\,\text{K}$ and $2\,\text{MPa}$ has $Z = 0.86$, and then condenses, which no law without a molecular constant can produce. See <LessonLink id="2.1" anchor="what-it-shows">what the comparison establishes</LessonLink>.
+- **"$Z = 1$ means the gas is ideal."** Nitrogen at $293\,\text{K}$ passes through $Z = 1$ near $9.7\,\text{MPa}$ on its way from $0.994$ to $1.052$: the corrections cancel there, they do not vanish. An ideal gas has $Z = 1$ at every pressure.
+- **"Van der Waals is always better than ideal."** Its constants are fitted at the critical point, which fixes its Boyle temperature at $\tfrac{27}{8}T_c$. For nitrogen at $300\,\text{K}$, far above $T_c$, the ideal law is within $1\%$ up to $10\,\text{MPa}$ while van der Waals is $4\%$ low.
+- **"Joining two bottles never changes an intensive variable."** Only bottles in the same state. One mole in $10\,\text{L}$ joined to one in $30\,\text{L}$ ends at $124.7\,\text{kPa}$, a volume-weighted average, not $166.3\,\text{kPa}$. See <LessonLink id="2.1" anchor="ex-2-1-2">joining two bottles</LessonLink>.
+- **"Any gas liquefies if you compress it hard enough."** Only below $T_c$. See <LessonLink id="2.1" anchor="supercritical">above the critical temperature, no liquid</LessonLink>.
+- **"A real gas follows the van der Waals loop."** On the stretch where $(\partial P/\partial v)_T > 0$ no state is stable; a real substance holds the saturation pressure while it condenses. See <LessonLink id="2.1" anchor="wiggle">below the critical temperature, the isotherm wiggles</LessonLink>.
+- **"The fold means $P$ has several values at one $(v, T)$."** $P(v, T)$ is single-valued; it is $v$ at given $(P, T)$ that has three values below $T_c$. See <LessonLink id="2.1" anchor="rotate">the surface seen edge-on</LessonLink>.
+- **"Tabulated $a$ and $b$ predict $T_c$ and $P_c$ well, so the model is confirmed."** Tables compute them from $T_c$ and $P_c$; the agreement is circular, and only $v_c$, or $Z_c$, tests the model. See <LessonLink id="2.1" anchor="ex-2-1-3">argon's critical point</LessonLink>.
+- **"$b$ is the volume of a molecule."** For hard spheres it is four times it, and as a fitted constant it absorbs the model's other errors: argon's $b$ is larger than the volume per atom in its own liquid. See <LessonLink id="2.1" anchor="ex-2-1-5">the size of a CO₂ molecule</LessonLink>.
+- **Mixing per-mole and per-particle constants.** $a = a_\mathrm{m}/N_A^2$ and $b = b_\mathrm{m}/N_A$; with $k_B$ use per-particle constants and $v = V/N$, with $R$ per-mole ones and $V_\mathrm{m}$.
+- **Comparing reduced volumes across gases or with the model.** $v/v_c = (Z/Z_c)(T_r/P_r)$ carries $1/Z_c$; compare $Z$ at the same $T_r$ and $P_r$ instead.
+
+## How to solve
+
+1. **Locate the state first.** Compute $T_r$ and $P_r$ (or $v_r$). Dilute and far above $T_c$: the ideal law, and say how good it is. Moderate density near $T_c$: van der Waals. Inside the fold below $T_c$: the bare equation does not describe the substance.
+2. **Pick one convention and keep it:** per particle with $k_B$, $v = V/N$, $a$, $b$; or per mole with $R$, $V_\mathrm{m}$, $a_\mathrm{m}$, $b_\mathrm{m}$. Convert densities from $\text{mol/L}$ to $\text{mol/m}^3$.
+3. **Constants from a critical point:** $b = k_BT_c/(8P_c)$, $a = 27(k_BT_c)^2/(64P_c)$. After that, $T_c$ and $P_c$ come back by construction; only $v_c$ and $Z_c$ test anything.
+4. **Pressure at given $v$ and $T$:** evaluate the ideal term, the rise $\frac{k_BT}{v}\frac{b}{v - b}$ and the drop $a/v^2$ separately, and say which wins.
+5. **Volume at given $P$ and $T$:** the van der Waals equation is cubic in $v$; solve it numerically and keep roots with $v > b$. Three roots mean you are below $T_c$, in the fold.
+6. **Critical point:** set $(\partial P/\partial v)_T = 0$ and $(\partial^2P/\partial v^2)_T = 0$, divide one by the other to eliminate $T$, then substitute back.
+7. **From data:** $Z = P/(\rho RT)$; at low pressure $B \approx (Z - 1)V_\mathrm{m}$; the Boyle temperature is where $B$ changes sign.
+8. **Doubling test:** write the quantity in terms of $N$, $V$ and intensive variables and count the powers of the amount.
+9. **Check limits:** $a, b \to 0$ gives the ideal law; $v \to \infty$ gives $Z \to 1$; $T_r = v_r = 1$ gives $P_r = 1$; $b$ raises the pressure and $a$ lowers it; nothing condenses above $T_c$.
+
+## Checklist before an exam
+
+- I can state the state postulate, say why it is an empirical law, explain why the states of a substance form one surface over $(v, T)$, and say when $P$ and $T$ fail to fix the state.
+- I can apply the doubling test to any quantity, including ones that are neither extensive nor intensive, and predict what changes when two systems are joined.
+- I can use $PV = Nk_BT$ in particles or in moles, and say what kind of law it is, with numbers for where it holds and where it fails.
+- I can explain where $b$ and $a$ come from, get their units without their values, convert per-mole constants, and compute a van der Waals pressure term by term.
+- I can derive the critical point, explain why the critical isotherm has a flat inflection, and explain why no pressure liquefies a gas above $T_c$.
+- I can derive the reduced equation and $Z_c = 3/8$, and test corresponding states on real data through $Z$.
+- I can expand the van der Waals $Z$ into the virial series, find the Boyle temperature, and read $B$ from measured densities.

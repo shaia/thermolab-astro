@@ -93,3 +93,23 @@ when it is.
   v_r = 5, T_r = 27/8). An imprecision.
 - Quiz Q-02-7's correct choice: "any van der Waals substance at a given (T_r, P_r) has the same reduced volume v_r".
   Below T_c a given (T_r, P_r) on the loop's range has three v_r; the law fixes P_r from (T_r, v_r). An imprecision.
+- Quiz Q-02-8's discussion: the non-monotonic region "cannot exist without both ingredients: setting either a or b to
+  zero removes the critical point entirely", with a described as pulling the pressure down "at larger v". With b = 0
+  and a > 0, (∂P/∂v)_T = −k_BT/v² + 2a/v³ is positive for every v < 2a/(k_BT), at every temperature (numerically,
+  a = 1e-48 Pa m⁶, T = 1000 K: rising up to 1.448e-28 m³ against 2a/(k_BT) = 1.449e-28 m³): attraction alone folds
+  every isotherm and the fold never closes, which is why there is no critical point (T_c = 8a/(27k_Bb) → ∞). Only
+  a = 0 removes the fold. And the attraction wins at intermediate v; at large v both corrections fade, and the slope
+  is the ideal −k_BT/v².
+- Quiz Q-02-1's example of two independent intensive variables is "say P and T". On the condensation plateau they are
+  not independent: NIST's CO₂ at 280 K and 4.1607 MPa has any molar volume from 49.8 to 361.5 cm³/mol. An
+  imprecision; the port's question uses T and v.
+- Problem set, problem 1(d): argon's b = 5.317e-29 m³; from b_m = 3.201e-5 m³/mol it is 5.3154e-29 (with N_A =
+  6.022e23, 5.3155e-29). The "measured" T_c = 150.9 K, P_c = 4.87 MPa are not NIST's 150.687 K, 4.8630 MPa, and the
+  part asks to compare all three computed critical constants with them, though T_c and P_c come back by construction
+  (the constants were made from 150.87 K, 4.898 MPa); only V_c tests the model, as in Q-02-6.
+- Advanced: "At low T, B(T) < 0 — attraction dominates and Z < 1; at high T, B(T) > 0 — excluded volume dominates and
+  Z > 1." The sign of B fixes the sign of Z − 1 only in the dilute limit. Below T_B a van der Waals gas has Z < 1 only
+  for v > b/(1 − T/T_B) and Z > 1 denser (T_r = 1.2: Z returns to 1 at v_r = 0.517). Real nitrogen at 300 K has
+  B = −4.4 cm³/mol (NIST isotherm, 0.05–1 MPa) and Z = 1.057 at 20 MPa. An imprecision.
+- Problem set, problem 5 is tagged OBJ-02-2 (the doubling test); no part of it asks about extensive or intensive
+  quantities. The port's version (workbook W-2.1-07) adds one, on b and Nb.
