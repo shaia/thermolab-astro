@@ -125,7 +125,7 @@ So $\mu_1 = 3.5$, $\sigma_1^2 \approx 2.917$ and $\sigma_1 \approx 1.708$. No ap
 
 **Why does the average settle?** The tempting answer is that the dice compensate: a run of high rolls is later cancelled by a run of low ones. That can be tested. Roll $40\,000$ runs and keep the ones whose first ten rolls averaged above $4.5$, about $2.5\%$ of them. Their opening average is $4.74$. If the dice compensated, the rolls that follow would have to average below $3.5$. They do not: over the next sixty rolls the hot runs average $3.499 \pm 0.001$ ($64$ batches of $40\,000$ runs), exactly what every other run does. The dice have no memory.
 
-So the opening excess, $10 \times (4.74 - 3.5) = 12.4$ above the expected sum, is never paid back. Switch the figure to its excess view, the running sum minus $3.5\,n$: no run returns to zero and stays there. Each one wanders, and its typical distance from zero grows like $\sigma_1\sqrt{n}$, the widening envelope: $54$ after a thousand rolls, $540$ after a hundred thousand. The sum does not settle at all. The *average* settles because the excess, whatever it is, is divided by $n$: after a thousand rolls the hot runs' average is $3.5 + 12.4/1000 = 3.512$, and it was never corrected, only diluted.
+So the opening excess, $10 \times (4.74 - 3.5) = 12.4$ above the expected sum, is never paid back. The figure now shows its excess view, the running sum minus $3.5\,n$: no run returns to zero and stays there. Each one wanders, and its typical distance from zero grows like $\sigma_1\sqrt{n}$, the widening envelope: $54$ after a thousand rolls, $540$ after a hundred thousand. The sum does not settle at all. The *average* settles because the excess, whatever it is, is divided by $n$: after a thousand rolls the hot runs' average is $3.5 + 12.4/1000 = 3.512$, and it was never corrected, only diluted.
 
 **Your prediction gets its answer here.** The sum of $N$ dice strays from its expected value by about $\sigma_1\sqrt{N}$: four times the dice, twice the distance, $17$ for $100$ dice and $34$ for $400$. It is the average that halves. Figure 0.1b measures both.
 
@@ -189,7 +189,7 @@ Read the two together: they point in opposite directions. The sum gets *noisier*
 
 <Formula tex="\frac{\sigma_{A_N}}{\mu_1} = \frac{\sigma_1}{\mu_1}\,N^{-1/2} \qquad \frac{\sigma_1}{\mu_1} = \frac{\sqrt{35/12}}{7/2} \approx 0.488" label="The N^(-1/2) law, with its coefficient for a fair die" />
 
-For $100$ dice it is $4.9\%$; for $10^4$, $0.49\%$; for $10^{23}$, $1.5 \times 10^{-12}$. That is why a gas has a pressure and a single die does not have an average. The same sum of independent quantities comes back three times: module 3 asks what *shape* the distribution of the average takes (the central limit theorem), <LessonLink id="4.1" anchor="mole">module 4</LessonLink> makes the quantities molecular velocities and the average a pressure, and module 8 counts microstates, whose peak narrows as $N^{-1/2}$.
+For $100$ dice it is $4.9\%$; for $10^4$, $0.49\%$; for $10^{23}$, $1.5 \times 10^{-12}$. That is why a gas has a pressure and a single die does not have an average. The same sum of independent quantities comes back three times: module 3 asks what *shape* the distribution of the average takes (the central limit theorem), <LessonLink id="4.1" anchor="mole">module 4</LessonLink> makes the quantities molecular velocities and the average a pressure, and module 8 counts microstates, and the peak of their count narrows as $N^{-1/2}$.
 
 **From typical to guaranteed.** The law so far says how far the average *typically* strays. Chebyshev's inequality turns that into a guarantee: for every $\varepsilon > 0$,
 
@@ -554,7 +554,7 @@ $$
 
 **Substitution:** (a) $\omega_1$: $1 = 1$, exact, $f = xy$; $\omega_2$: $1 \ne 0$, inexact. (b) Straight line, $x = y = t$: $\omega_1$ gives $\int_0^1 2t\,\mathrm{d}t = 1$ and $\omega_2$ gives $\int_0^1 t\,\mathrm{d}t = \tfrac12$. Across then up: $\omega_1$ gives $0 + 1 = 1$; $\omega_2$ gives $0$ (on the first leg $y = 0$, on the second $\mathrm{d}x = 0$). (c) $-1$.
 
-**Result:** $\omega_1$ gives $1$ along both routes, $f(1,1) - f(0,0)$; $\omega_2$ gives $\tfrac12$ and $0$, and $-1$ around the square. The loop integral had to be non-zero: if $\omega_2$ were exact, every loop would give zero.
+**Result:** $\omega_1$ gives $1$ along both routes, $f(1,1) - f(0,0)$; $\omega_2$ gives $\tfrac12$ and $0$, and $-1$ around the square. Its two routes disagree, so $\omega_2$ is not exact, and nothing obliges a loop to give zero: going out by one route and back by the other gives their difference.
 
 </Solution>
 
@@ -588,11 +588,9 @@ $$
 
 </Example>
 
-{/* TODO bank */}
-
 <Check
   title="Questions on the lesson"
-  ids={[]}
+  ids={['Q-0.1-one-or-many', 'Q-0.1-hot-start', 'Q-0.1-die-variance', 'Q-0.1-split-die', 'Q-0.1-opposite-faces', 'Q-0.1-three-dice', 'Q-0.1-ten-thousand', 'Q-0.1-sum-and-average', 'Q-0.1-dice-needed', 'Q-0.1-chebyshev', 'Q-0.1-what-makes-a-law', 'Q-0.1-simulation-proves', 'Q-0.1-speed-dimensions', 'Q-0.1-exp-argument', 'Q-0.1-helium-speed', 'Q-0.1-partial-x', 'Q-0.1-total-differential', 'Q-0.1-held-variable', 'Q-0.1-line-integral', 'Q-0.1-y-dx-exact', 'Q-0.1-which-exact', 'Q-0.1-loop-area', 'Q-0.1-heat-paths', 'Q-0.1-delta-and-labels', 'Q-0.1-compression-sign', 'Q-0.1-expansion-work', 'Q-0.1-entropy-change']}
 />
 
 <Summary title="What we learned">

@@ -41,3 +41,5 @@ when it is.
 - Hebrew conventions page: its dice model specification drops "and the deterministic chaos that is the
   actual reason a throw looks random" from *Ignored* and "beyond its distribution" from *Failure modes*;
   the English page and both module pages have them.
+- Quiz Q-00-2: "if you got 17.5 you forgot to subtract the square of the mean". 17.5 is Σ(k − 3.5)², the
+  squared deviations not divided by 6; forgetting to subtract μ² gives ⟨X²⟩ = 91/6 = 15.17.

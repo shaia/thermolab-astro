@@ -1,0 +1,462 @@
+# Module 00 review problems, from ThermoLab's problem set (content/en/foundations/00-orientation-problems.md,
+# problems 2-5; problems 1 and 6 went to the workbook). The lesson's worked examples 2-5 already solve those problems
+# with ThermoLab's numbers, so these keep each problem's topic and its open question but change the numbers, the forms
+# and the scenario. Every number was recomputed with ThermoLab's library (sampling, forms, validation); simulated
+# numbers are multi-seed means. ThermoLab kept its solutions with the instructor; this platform publishes worked
+# solutions and rubrics. Ids are shared with the Hebrew file.
+lang: en
+chapter: 0
+questions:
+  - id: Q-0-bagrut-1
+    type: bagrut
+    title: >-
+      Scatter bookkeeping, and when averaging stops paying
+    prompt: >-
+      A fair die has $\mu_1 = 3.5$ and $\sigma_1 = \sqrt{35/12} = 1.708$. An experiment averages $N$ independent fair dice, and the experiment is repeated many times.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-0.1-3]
+        prompt: >-
+          Find the standard deviation of the average of $N = 2500$ dice.
+        answer: 0.0342
+        unit: ''
+        tolerance: 0.02
+        correctFeedback: >-
+          $\sigma_1/\sqrt{2500} = 1.708/50 = 0.0342$. Measured, $1000$ experiments for each of eight seeds: $0.0341 \pm 0.0002$.
+        wrongFeedback: >-
+          The standard deviation of the average is $\sigma_1/\sqrt N$.
+        commonWrong:
+          - value: 0.000683
+            feedback: >-
+              That is $\sigma_1/N$. The variance falls as $1/N$; the standard deviation, its square root, as $N^{-1/2}$.
+            misconception: MC-scatter-one-over-n
+          - value: 85.4
+            feedback: >-
+              That is $\sigma_1\sqrt N$, the spread of the **sum** of the dice. Divide the sum by $N$ to get the average, and its spread by $N$ too.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-0.1-3]
+        prompt: >-
+          How many dice must be averaged for the standard deviation of the average to fall to $0.005$?
+        answer: 1.167e5
+        unit: ''
+        tolerance: 0.02
+        correctFeedback: >-
+          $N = (\sigma_1/0.005)^2 = (35/12)/(2.5 \times 10^{-5}) = 1.17 \times 10^{5}$: a hundred and seventeen thousand dice per experiment, seven times the precision of part (a) for forty-seven times the dice.
+        wrongFeedback: >-
+          Solve $\sigma_1/\sqrt N = 0.005$ for $N$.
+        commonWrong:
+          - value: 342
+            feedback: >-
+              That is $\sigma_1/0.005$: it assumes the spread falls as $1/N$. It falls as $N^{-1/2}$, so the ratio must be squared.
+            misconception: MC-scatter-one-over-n
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-0.1-3, OBJ-0.1-1]
+        prompt: >-
+          For the $N$ of part (b), the standard deviation of the **sum** of the dice is $583$, against $17.1$ for $100$ dice. How can the sum become less predictable while the average becomes more predictable?
+        choices:
+          - text: >-
+              They answer different questions. The sum's spread grows as $\sqrt N$, but the sum itself grows as $N$, so in proportion to its size it shrinks, by exactly as much as the average's: $583/(1.17 \times 10^{5} \times 3.5) = 0.005/3.5 = 0.14\%$.
+            correct: true
+            feedback: >-
+              Right. Both spreads come from the same $\operatorname{Var}(S_N) = N\sigma_1^2$; dividing by $N$ turns the growing absolute spread of the sum into the shrinking spread of the average.
+          - text: >-
+              It cannot: adding dice suppresses randomness in the sum too, so the $583$ must be a mistake.
+            feedback: >-
+              $\operatorname{Var}(S_N) = N\sigma_1^2$, so the sum strays by $\sigma_1\sqrt N = 1.708 \times 342 = 583$. The sum's absolute spread grows without bound; only the average's shrinks.
+            misconception: MC-sum-scatter-shrinks
+          - text: >-
+              The later dice compensate the early ones in the average but not in the sum.
+            feedback: >-
+              Nothing compensates anything, in the sum or the average: the dice have no memory. The excess of the sum stays, and the average divides it by $N$.
+            misconception: MC-lln-compensation
+          - text: >-
+              Averaging divides the spread by $N$ and summing multiplies it by $N$, so the two move in opposite directions by the same factor.
+            feedback: >-
+              The directions are right, the factors are not. Variances scale as $N$ for the sum and $1/N$ for the average, so the spreads scale as $\sqrt N$ and $1/\sqrt N$: here a factor of $34$, not $1170$, from $N = 100$.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-0.1-1, OBJ-0.1-3]
+        prompt: >-
+          A laboratory reads a thermometer $M$ times and averages the readings, expecting the precision to improve as $\sqrt M$. Each reading is $T_\text{true} + b + e_i$: the noise $e_i$ is independent from reading to reading, with standard deviation $\sigma = 0.20\,\text{K}$, while the calibration offset $b$ is the same for every reading of this thermometer and was set once, at random, with standard deviation $s_b = 0.05\,\text{K}$. State what must be true of repeated measurements for the $\sqrt M$ law to hold. Derive the standard deviation of the average of $M$ readings, evaluate it for $M = 100$, and compare it with what the $\sqrt M$ law promises. Say how more precision could be bought. Check your result in limits.
+        solution:
+          - kind: law
+            text: >-
+              The $\sqrt M$ law needs the errors of the $M$ measurements to be independent (more precisely, uncorrelated), each with a finite variance. Then variances add: $\operatorname{Var}\left(\sum_i e_i\right) = M\sigma^2$, and dividing by $M$ gives $\sigma^2/M$. A covariance between readings adds terms that do not shrink.
+          - kind: manipulation
+            text: >-
+              The average of the readings is $T_\text{true} + b + \frac1M\sum_i e_i$. The offset $b$ appears in every reading, so averaging does not reduce it; it is independent of the noise, so the two variances add: $\operatorname{Var}(\bar T) = s_b^2 + \sigma^2/M$. Equivalently, every pair of readings has covariance $s_b^2$, a correlation $\rho = s_b^2/(s_b^2 + \sigma^2) = 0.059$, and $\operatorname{Var}(\bar T) = (s_b^2 + \sigma^2)\left[(1 - \rho)/M + \rho\right]$, the same thing.
+          - kind: formula
+            text: >-
+              $\sigma_{\bar T} = \sqrt{s_b^2 + \dfrac{\sigma^2}{M}}$
+          - kind: limit
+            text: >-
+              $s_b \to 0$: $\sigma_{\bar T} = \sigma/\sqrt M$, the $\sqrt M$ law. $M = 1$: $\sqrt{s_b^2 + \sigma^2}$, the spread of a single reading. $M \to \infty$: $\sigma_{\bar T} \to s_b = 0.05\,\text{K}$, a floor that no amount of averaging lowers. The law holds while $\sigma^2/M \gg s_b^2$, that is for $M \ll (\sigma/s_b)^2 = 16$, and fails beyond.
+          - kind: units
+            text: >-
+              $s_b$, $\sigma$ and $\sigma_{\bar T}$ are temperatures in kelvin; $M$ and $\rho$ are pure numbers.
+          - kind: substitution
+            text: >-
+              $M = 100$: $\sqrt{0.0025 + 0.0004} = \sqrt{0.0029} = 0.054\,\text{K}$ (simulated, $20\,000$ thermometers for each of eight seeds: $0.0539 \pm 0.0001\,\text{K}$). The $\sqrt M$ law applied to one reading's spread, $0.206\,\text{K}$, promises $0.021\,\text{K}$: the honest error is $2.6$ times larger, and it is already within $8\%$ of the floor.
+          - kind: result
+            text: >-
+              $\sigma_{\bar T} = \sqrt{s_b^2 + \sigma^2/M}$: $0.054\,\text{K}$ at $M = 100$, against the $0.021\,\text{K}$ the $\sqrt M$ law promises, and never below $0.05\,\text{K}$. Averaging reduces only the part of the error that is independent from reading to reading. To do better, make the offset vary: average over several independently calibrated thermometers, whose offsets are independent of each other, or calibrate the thermometer against a reference, which shrinks $s_b$ itself.
+        rubric:
+          - text: >-
+              States the condition: the errors are independent (uncorrelated) from measurement to measurement, with finite variance.
+          - text: >-
+              Derives $\operatorname{Var}(\bar T) = s_b^2 + \sigma^2/M$, explaining why the common offset does not average away.
+            weight: 2
+          - text: >-
+              Evaluates $0.054\,\text{K}$ at $M = 100$ and compares it with the $0.021\,\text{K}$ of the $\sqrt M$ law.
+          - text: >-
+              A remedy that makes the offsets independent (several thermometers) or removes them (calibration).
+          - text: >-
+              A limit check: $s_b \to 0$ recovers $\sigma/\sqrt M$, or $M \to \infty$ leaves the floor $s_b$.
+            weight: 2
+
+  - id: Q-0-bagrut-2
+    type: bagrut
+    title: >-
+      Dimensional detective
+    prompt: >-
+      SI units throughout, with $k_B = 1.381 \times 10^{-23}\,\text{J/K}$. An ideal gas obeys $PV = Nk_BT$, where $N$ is a pure count of molecules.
+    parts:
+      - label: a
+        type: mc
+        points: 4
+        objectives: [OBJ-0.1-4]
+        prompt: >-
+          From $PV = Nk_BT$, what are the SI units of $k_B$?
+        choices:
+          - text: >-
+              $\text{J/K}$
+            correct: true
+            feedback: >-
+              Right. $[PV] = \text{Pa}\cdot\text{m}^3 = (\text{N/m}^2)\cdot\text{m}^3 = \text{N}\cdot\text{m} = \text{J}$, and $N$ is a pure number, so $[k_B] = \text{J}/\text{K}$: an energy per kelvin.
+          - text: >-
+              $\text{J}\cdot\text{K}$
+            feedback: >-
+              $k_B$ multiplies $T$ to give an energy, so it must carry $1/\text{K}$, not $\text{K}$.
+          - text: >-
+              $\text{J}/(\text{mol}\cdot\text{K})$
+            feedback: >-
+              Those are the units of the gas constant $R = N_Ak_B$, in chemistry's $PV = nRT$ with $n$ in moles. In $PV = Nk_BT$, $N$ counts molecules and has no unit.
+          - text: >-
+              $\text{Pa}\cdot\text{m}^3$
+            feedback: >-
+              That is a joule, the units of $PV$ itself. Dividing by $NT$ leaves $\text{J/K}$.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-0.1-4]
+        prompt: >-
+          A monatomic ideal gas has $P = \tfrac23 u$, where $u$ is its kinetic energy per unit volume. Find $u$ for argon at $P = 1.00 \times 10^{5}\,\text{Pa}$, in $\text{J/m}^3$.
+        answer: 1.50e5
+        unit: J/m^3
+        tolerance: 0.02
+        correctFeedback: >-
+          $u = \tfrac32 P = 1.50 \times 10^{5}\,\text{J/m}^3$. The pressure and the energy density share a unit, and they still differ by a factor of $1.5$.
+        wrongFeedback: >-
+          Solve $P = \tfrac23 u$ for $u$.
+        commonWrong:
+          - value: 1.00e5
+            feedback: >-
+              That takes the pressure to be the energy density because the units agree. Equal units allow a dimensionless factor, and here it is $\tfrac23$.
+          - value: 6.67e4
+            feedback: >-
+              That is $\tfrac23 P$. The relation is $P = \tfrac23 u$, so $u = \tfrac32 P$.
+      - label: c
+        type: mc
+        points: 4
+        objectives: [OBJ-0.1-4]
+        prompt: >-
+          A molecule travels some distance between collisions. With $n$ the number of molecules per unit volume ($\text{m}^{-3}$) and $\sigma$ the collision cross-section of a molecule ($\text{m}^2$), which of these can that distance be?
+        choices:
+          - text: >-
+              $\dfrac{1}{n\sigma}$
+            correct: true
+            feedback: >-
+              Right. $[n\sigma] = \text{m}^{-3}\cdot\text{m}^2 = \text{m}^{-1}$, so $1/(n\sigma)$ is a length. The full result, $1/(\sqrt2\,n\sigma)$, has a factor dimensions cannot supply; for air at room conditions, with $\sigma$ about $4 \times 10^{-19}\,\text{m}^2$, it is about $70\,\text{nm}$.
+          - text: >-
+              $n\sigma$
+            feedback: >-
+              That is an inverse length, $\text{m}^{-1}$: the chance of a collision per metre travelled. Its reciprocal is a length.
+          - text: >-
+              $\dfrac{1}{n\sigma^2}$
+            feedback: >-
+              $[n\sigma^2] = \text{m}^{-3}\cdot\text{m}^4 = \text{m}$, so its reciprocal is $\text{m}^{-1}$.
+          - text: >-
+              $\dfrac{\sigma}{n}$
+            feedback: >-
+              $\text{m}^2/\text{m}^{-3} = \text{m}^5$: not a length.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-0.1-4]
+        prompt: >-
+          Show that the pascal and the joule per cubic metre are the same unit. Given part (b), may we conclude from the units that the pressure of a gas is its energy density? Say what dimensional analysis licenses here and what it does not. Then: a simulation of a monatomic gas at $300\,\text{K}$ reports a mean kinetic energy per molecule of $6.19 \times 10^{-21}\,\text{J}$, where theory gives $\tfrac32 k_BT$. A student checks that the two differ by less than $10^{-12}\,\text{J}$ and reports a perfect match. Say what is wrong with the test, propose a better one, and apply it. Check your test in a limit.
+        solution:
+          - kind: law
+            text: >-
+              Only quantities of the same dimensions can be equated, and an equation between them can still carry any dimensionless factor. Two numbers agree when their relative difference $|a - b|/|b|$ is small compared with the precision claimed.
+          - kind: manipulation
+            text: >-
+              $\text{Pa} = \text{N/m}^2 = \text{N}\cdot\text{m}/\text{m}^3 = \text{J/m}^3$. So pressure and energy density have the same dimensions, and dimensional analysis licenses only the hypothesis that $P$ is some pure number times $u$, if no other quantity enters. It cannot supply the number: a monatomic ideal gas has $P = \tfrac23 u$, isotropic radiation $P = \tfrac13 u$, and both pass the check. It can reject formulas, never derive their factors.
+          - kind: manipulation
+            text: >-
+              The test $|a - b| < 10^{-12}\,\text{J}$ is meaningless at this scale: molecular energies are around $10^{-21}\,\text{J}$, so any two of them pass it, whatever the simulation did. The honest test compares the difference with the size of the quantity: $|a - b|/|b| < \epsilon$, with $\epsilon$ the precision the simulation claims.
+          - kind: formula
+            text: >-
+              $\text{Pa} = \text{J/m}^3, \qquad \dfrac{|a - b|}{|b|} < \epsilon$
+          - kind: limit
+            text: >-
+              Change the unit of energy to the electronvolt, $1.602 \times 10^{-19}\,\text{J}$: the two energies become $0.03879$ and $0.03864\,\text{eV}$, they differ by $1.5 \times 10^{-4}\,\text{eV}$, and the same test with $10^{-12}$ now fails. A verdict that flips with the choice of unit says nothing about the physics; the relative difference is $0.39\%$ in either unit. As $T \to 0$ both energies go to zero and the absolute test passes for any result at all, while the relative test still measures agreement.
+          - kind: units
+            text: >-
+              $k_BT$ is in joules; the relative difference is a pure number, the same in every system of units.
+          - kind: substitution
+            text: >-
+              $b = \tfrac32 \times 1.381 \times 10^{-23} \times 300 = 6.214 \times 10^{-21}\,\text{J}$; $|a - b| = 2.45 \times 10^{-23}\,\text{J}$; $|a - b|/b = 3.9 \times 10^{-3}$.
+          - kind: result
+            text: >-
+              $\text{Pa} = \text{J/m}^3$, but that does not make the pressure equal to the energy density: units allow a dimensionless factor ($\tfrac23$ here, $\tfrac13$ for radiation) and cannot supply it. The student's absolute test passes for any molecular energy; the relative difference is $0.39\%$, which is a match only if the simulation claimed no better than about half a percent.
+        rubric:
+          - text: >-
+              Shows $\text{Pa} = \text{N/m}^2 = \text{J/m}^3$.
+          - text: >-
+              Explains that equal units allow a dimensionless factor ($\tfrac23$, $\tfrac13$) that dimensional analysis cannot supply: it rejects formulas, never derives factors.
+            weight: 2
+          - text: >-
+              Explains why the absolute test is meaningless at molecular scales and proposes the relative difference.
+            weight: 2
+          - text: >-
+              Applies it: $0.39\%$, judged against the precision claimed.
+          - text: >-
+              A limit check: a change of unit flips the absolute verdict, or $T \to 0$ makes it pass for anything.
+
+  - id: Q-0-bagrut-3
+    type: bagrut
+    title: >-
+      Partial derivatives at work
+    prompt: >-
+      An ideal gas of $N = 2.00 \times 10^{22}$ molecules has $P(V, T) = Nk_BT/V$, with $k_B = 1.381 \times 10^{-23}\,\text{J/K}$, and is at $V = 2.00 \times 10^{-3}\,\text{m}^3$ and $T = 400\,\text{K}$. Its temperature rises by $8.0\,\text{K}$ while its volume falls by $4.0 \times 10^{-5}\,\text{m}^3$.
+    parts:
+      - label: a
+        type: numeric
+        points: 4
+        objectives: [OBJ-0.1-5]
+        prompt: >-
+          Find $(\partial P/\partial T)_V$ at the initial state, in Pa/K.
+        answer: 138.1
+        unit: Pa/K
+        tolerance: 0.01
+        correctFeedback: >-
+          $(\partial P/\partial T)_V = Nk_B/V = 0.2762/(2.00 \times 10^{-3}) = 138.1\,\text{Pa/K}$. At fixed volume $P$ is proportional to $T$.
+        wrongFeedback: >-
+          Hold $V$ fixed: $P = (Nk_B/V)\,T$ is linear in $T$.
+        commonWrong:
+          - value: 0.2762
+            feedback: >-
+              That is $Nk_B$, in $\text{J/K}$. Divide by $V$ to get $\text{Pa/K}$.
+          - value: 2.76e7
+            feedback: >-
+              That is the size of $(\partial P/\partial V)_T = -Nk_BT/V^2$, the derivative with respect to the other variable.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-0.1-5]
+        prompt: >-
+          Estimate the change in pressure with the total differential, in Pa.
+        answer: 2210
+        unit: Pa
+        tolerance: 0.005
+        correctFeedback: >-
+          $(\partial P/\partial V)_T = -Nk_BT/V^2 = -2.762 \times 10^{7}\,\text{Pa/m}^3$, so $\mathrm{d}P = 138.1 \times 8.0 + (-2.762 \times 10^{7})(-4.0 \times 10^{-5}) = 1105 + 1105 = 2210\,\text{Pa}$: a $2\%$ rise in $T$ and a $2\%$ fall in $V$ each raise $P$ by $2\%$ of $5.524 \times 10^{4}\,\text{Pa}$.
+        wrongFeedback: >-
+          $\mathrm{d}P = (\partial P/\partial T)_V\,\mathrm{d}T + (\partial P/\partial V)_T\,\mathrm{d}V$, with $\mathrm{d}V$ negative.
+        commonWrong:
+          - value: 1105
+            feedback: >-
+              That is the temperature term alone. The volume changed too, and the total differential adds its response.
+          - value: 0
+            feedback: >-
+              The volume term has the wrong sign: $(\partial P/\partial V)_T < 0$ and $\mathrm{d}V < 0$, so a compression **raises** the pressure.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-0.1-5]
+        prompt: >-
+          Compute the exact change in pressure, in Pa.
+        answer: 2255
+        unit: Pa
+        tolerance: 0.005
+        correctFeedback: >-
+          $P_2 = 0.2762 \times 408/(1.96 \times 10^{-3}) = 57\,495\,\text{Pa}$, against $P_1 = 55\,240\,\text{Pa}$: $\Delta P = 2255\,\text{Pa}$. The estimate of part (b) is $2.0\%$ low.
+        wrongFeedback: >-
+          Evaluate $Nk_BT/V$ at $T = 408\,\text{K}$, $V = 1.96 \times 10^{-3}\,\text{m}^3$, and subtract the initial pressure.
+        commonWrong:
+          - value: 2210
+            feedback: >-
+              That is the first-order estimate of part (b). The exact change also contains the terms of second order in the changes.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-0.1-5]
+        prompt: >-
+          Expand $P(V + \mathrm{d}V, T + \mathrm{d}T)$ to second order in the changes, evaluate the second-order terms, and compare them with the difference between parts (c) and (b). Explain without calculation why a $2\%$ rise in $T$ together with a $2\%$ **rise** in $V$ leaves $P$ exactly unchanged, and what the total differential gives for it. Then, along the isobar through the initial state, on which $V \propto T$, find $\mathrm{d}P/\mathrm{d}T$; compare it with $(\partial P/\partial T)_V$ and name the term of the total differential that accounts for the difference. Check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              The total differential is the first-order change, $\mathrm{d}P = (\partial P/\partial T)_V\,\mathrm{d}T + (\partial P/\partial V)_T\,\mathrm{d}V$; the next terms of the Taylor expansion are $\tfrac12 P_{TT}\,\mathrm{d}T^2 + P_{TV}\,\mathrm{d}T\,\mathrm{d}V + \tfrac12 P_{VV}\,\mathrm{d}V^2$.
+          - kind: manipulation
+            text: >-
+              With $P = Nk_BT/V$: $P_{TT} = 0$, $P_{TV} = -Nk_B/V^2$, $P_{VV} = 2Nk_BT/V^3$. The second-order terms are $P\left[(\mathrm{d}V/V)^2 - (\mathrm{d}T/T)(\mathrm{d}V/V)\right]$. A rise of $T$ and $V$ in the same proportion leaves $T/V$, and so $P$, exactly unchanged; the total differential gives $P(\mathrm{d}T/T - \mathrm{d}V/V) = 0$ too: the two first-order responses cancel.
+          - kind: manipulation
+            text: >-
+              Along the isobar, $V = V_1T/T_1$ and $\mathrm{d}V/\mathrm{d}T = V/T$. Dividing the total differential by $\mathrm{d}T$: $\mathrm{d}P/\mathrm{d}T = Nk_B/V + (-Nk_BT/V^2)(V/T) = 0$, as it must be on a line of constant pressure, while $(\partial P/\partial T)_V = Nk_B/V = 138.1\,\text{Pa/K}$. The difference is the term $(\partial P/\partial V)_T\,\mathrm{d}V/\mathrm{d}T$: the partial derivative ignores that $V$ changes along the path.
+          - kind: formula
+            text: >-
+              $\Delta P - \mathrm{d}P \approx P\left[\left(\dfrac{\mathrm{d}V}{V}\right)^2 - \dfrac{\mathrm{d}T}{T}\,\dfrac{\mathrm{d}V}{V}\right], \qquad \left.\dfrac{\mathrm{d}P}{\mathrm{d}T}\right|_{P} = \left(\dfrac{\partial P}{\partial T}\right)_V + \left(\dfrac{\partial P}{\partial V}\right)_T\dfrac{\mathrm{d}V}{\mathrm{d}T} = 0$
+          - kind: limit
+            text: >-
+              $\mathrm{d}V = 0$: the second-order terms vanish, and since $P$ is linear in $T$ the estimate is exact. Shrinking both changes by a factor $k$ shrinks the estimate by $k$ and its error by $k^2$: the exact differences are $45.1$, $11.2$ and $2.78\,\text{Pa}$ for $k = 1$, $2$ and $4$, a factor of about $4$ each time. The estimate becomes exact in the limit, which is what makes the total differential the derivative.
+          - kind: units
+            text: >-
+              $P\,(\mathrm{d}V/V)^2$ is a pressure times a pure number: pascals. $(\partial P/\partial V)_T\,\mathrm{d}V/\mathrm{d}T$ is $(\text{Pa/m}^3)(\text{m}^3/\text{K}) = \text{Pa/K}$, like $(\partial P/\partial T)_V$.
+          - kind: substitution
+            text: >-
+              $\mathrm{d}T/T = 0.02$, $\mathrm{d}V/V = -0.02$: the second-order terms are $5.524 \times 10^{4} \times (0.0004 + 0.0004) = 44.2\,\text{Pa}$, against the actual $2255 - 2210 = 45.1\,\text{Pa}$; the remaining $0.9\,\text{Pa}$ is third order.
+          - kind: result
+            text: >-
+              The estimate misses by $45.1\,\text{Pa}$, of which the second-order terms account for $44.2\,\text{Pa}$; the error falls as the square of the changes. Equal fractional rises of $T$ and $V$ leave $P$ unchanged, exactly and to first order. Along the isobar $\mathrm{d}P/\mathrm{d}T = 0$, not $138.1\,\text{Pa/K}$: the term $(\partial P/\partial V)_T\,\mathrm{d}V$ cancels the temperature term.
+        rubric:
+          - text: >-
+              Derives the second-order terms, $P[(\mathrm{d}V/V)^2 - (\mathrm{d}T/T)(\mathrm{d}V/V)]$, and evaluates $44.2\,\text{Pa}$ against $45.1\,\text{Pa}$.
+            weight: 2
+          - text: >-
+              Explains why equal fractional rises of $T$ and $V$ leave $P$ unchanged, and that the total differential gives zero.
+          - text: >-
+              Finds $\mathrm{d}P/\mathrm{d}T = 0$ along the isobar and names the term $(\partial P/\partial V)_T\,\mathrm{d}V$ as the difference from $(\partial P/\partial T)_V$.
+            weight: 2
+          - text: >-
+              A limit check: $\mathrm{d}V = 0$ makes the estimate exact, or the error falls as $k^2$ when the changes shrink by $k$.
+
+  - id: Q-0-bagrut-4
+    type: bagrut
+    title: >-
+      Exact or not
+    prompt: >-
+      Two differential forms in the plane: $\omega_1 = 2xy\,\mathrm{d}x + x^2\,\mathrm{d}y$ and $\omega_2 = x^2\,\mathrm{d}y$.
+    parts:
+      - label: a
+        type: mc
+        points: 4
+        objectives: [OBJ-0.1-6]
+        prompt: >-
+          Apply the mixed-partials test to each form. Which is exact?
+        choices:
+          - text: >-
+              $\omega_1$ only: for it $\partial M/\partial y = 2x = \partial N/\partial x$; for $\omega_2$, $\partial M/\partial y = 0$ but $\partial N/\partial x = 2x$.
+            correct: true
+            feedback: >-
+              Right. $\omega_1 = \mathrm{d}(x^2y)$. $\omega_2$ passes the test only on the line $x = 0$, which is not enough: exactness needs the partials to agree on the whole region.
+          - text: >-
+              Both: each is built from the same function $x^2$.
+            feedback: >-
+              Sharing a function is not the test. For $\omega_2$, $M = 0$ and $N = x^2$, and $0 \ne 2x$.
+          - text: >-
+              $\omega_2$ only: a form with a single term has nothing to compare, so it is exact.
+            feedback: >-
+              A missing term is a term equal to zero. $\omega_2$ has $M = 0$, so $\partial M/\partial y = 0$, against $\partial N/\partial x = 2x$.
+          - text: >-
+              Neither: $\partial(2xy)/\partial x = 2y$ differs from $\partial(x^2)/\partial y = 0$.
+            feedback: >-
+              Those are the wrong derivatives. The test crosses them: $M$ with respect to $y$, $N$ with respect to $x$.
+      - label: b
+        type: numeric
+        points: 4
+        objectives: [OBJ-0.1-6]
+        prompt: >-
+          Integrate $\omega_1$ from $(1, 1)$ to $(2, 3)$.
+        answer: 11
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          $\omega_1 = \mathrm{d}(x^2y)$, so the integral is $f(2, 3) - f(1, 1) = 12 - 1 = 11$ along every path: no path was given because none is needed. Along the straight line, along $x$ first or along $y$ first, it comes out $11$.
+        wrongFeedback: >-
+          Find the potential $f$ with $\mathrm{d}f = \omega_1$ and evaluate $f(B) - f(A)$.
+        commonWrong:
+          - value: 12
+            feedback: >-
+              That is $f(2, 3)$ alone. Subtract the value at the start, $f(1, 1) = 1$.
+      - label: c
+        type: numeric
+        points: 4
+        objectives: [OBJ-0.1-6, OBJ-0.1-5]
+        prompt: >-
+          Integrate $\omega_2$ from $(0, 0)$ to $(1, 1)$ along the straight line $y = x$.
+        answer: 0.333
+        unit: ''
+        tolerance: 0.01
+        correctFeedback: >-
+          With $x = y = t$: $\int_0^1 t^2\,\mathrm{d}t = 1/3$. Across to $(1, 0)$ and then up gives $1$, up and then across gives $0$: three paths, three answers, as the test predicted. $\omega_1$ gives $1$ on all three.
+        wrongFeedback: >-
+          Parametrize $x = y = t$, so $\mathrm{d}y = \mathrm{d}t$, and integrate $t^2$ from $0$ to $1$.
+        commonWrong:
+          - value: 1
+            feedback: >-
+              That is the route across to $(1, 0)$ and then up, along which $x = 1$ while $y$ rises. The question asks for the straight line.
+          - value: 0
+            feedback: >-
+              That is the route up and then across: going up at $x = 0$ adds nothing, and going across has $\mathrm{d}y = 0$. The question asks for the straight line.
+      - label: d
+        type: open
+        points: 13
+        objectives: [OBJ-0.1-6, OBJ-0.1-7]
+        prompt: >-
+          Compute $\oint \omega_2$ counter-clockwise around the unit square with corners $(0, 0)$, $(1, 0)$, $(1, 1)$, $(0, 1)$, and explain why it had to be non-zero. Show that around a square of side $s$ centred at $(x_0, y_0)$ the integral is $2x_0s^2$, and relate this to the mixed partials. On the $P$–$V$ plane the work done on a gas, $\dbar W = -P\,\mathrm{d}V$, is a form of the same kind: show that it is inexact, and say what physical consequence follows for a gas taken around a closed cycle. Check your results in limits.
+        solution:
+          - kind: law
+            text: >-
+              An exact form integrates to zero around every closed loop. For $\omega = M\,\mathrm{d}x + N\,\mathrm{d}y$, the integral around a small loop is $(\partial N/\partial x - \partial M/\partial y)$ times the enclosed area, to leading order; for a rectangle and a form with $M = 0$, the integral comes from the two vertical edges alone.
+          - kind: manipulation
+            text: >-
+              Unit square: on the bottom and top edges $\mathrm{d}y = 0$; on the left edge $x = 0$; the right edge, $x = 1$ with $y$ rising from $0$ to $1$, gives $1$. So $\oint\omega_2 = 1$. It had to be non-zero: if $\omega_2$ were exact, every loop would give zero, and the test showed it is not. Square of side $s$ centred at $(x_0, y_0)$: the right edge, at $x_0 + s/2$, rises and gives $(x_0 + s/2)^2 s$; the left edge, at $x_0 - s/2$, falls and gives $-(x_0 - s/2)^2 s$; the sum is $2x_0s^2$ exactly. That is $(\partial N/\partial x - \partial M/\partial y) = 2x_0$ times the area $s^2$: the mixed partials' disagreement is the loop integral per unit area.
+          - kind: manipulation
+            text: >-
+              On the $P$–$V$ plane, $\dbar W = 0\,\mathrm{d}P + (-P)\,\mathrm{d}V$, so $\partial(0)/\partial V = 0$ but $\partial(-P)/\partial P = -1$: inexact, and around a loop $-\oint P\,\mathrm{d}V$ is plus or minus the enclosed area, the sign set by the direction. Around a cycle traversed clockwise on a diagram with $V$ across and $P$ up, the gas expands at high pressure and is compressed at low pressure: $W = -\oint P\,\mathrm{d}V = -(\text{area}) < 0$, net work done by the gas. The gas returns to its starting state, so $\Delta U = 0$ and $Q = -W > 0$: around a cycle, heat taken in is turned into work. That is an engine, and it is possible only because work is not a state function.
+          - kind: formula
+            text: >-
+              $\oint_{\square}\omega_2 = 1, \qquad \oint_{s \times s}\omega_2 = 2x_0s^2 = \left(\dfrac{\partial N}{\partial x} - \dfrac{\partial M}{\partial y}\right)s^2, \qquad \oint \dbar W = -\oint P\,\mathrm{d}V$
+          - kind: limit
+            text: >-
+              $s \to 0$: the loop integral vanishes as $s^2$, the area, so a small enough loop gives nothing however inexact the form. $x_0 = 0$: the partials agree on the $y$ axis and a square centred there gives exactly $0$. For $\omega_1$ the factor $\partial N/\partial x - \partial M/\partial y$ is $0$ everywhere, and every loop gives $0$. A cycle that encloses no area, out and back along the same path in the $P$–$V$ plane, gives $W = 0$.
+          - kind: units
+            text: >-
+              $x$ and $y$ are pure numbers here, and so are the integrals. On the $P$–$V$ plane the enclosed area is $\text{Pa}\cdot\text{m}^3 = \text{J}$: an area there is an energy.
+          - kind: substitution
+            text: >-
+              Unit square: $1$. A square of side $0.5$ centred at $(1.25, 1.25)$: $2 \times 1.25 \times 0.25 = 0.625$, which the integral along its four edges reproduces; side $0.1$ centred at $(1.05, 1.05)$: $0.021$.
+          - kind: result
+            text: >-
+              $\oint\omega_2 = 1$ around the unit square, and $2x_0s^2$ around a small square: the loop integral per unit area is the disagreement of the mixed partials, which is why that test decides exactness. Work, $\dbar W = -P\,\mathrm{d}V$, fails the test, so a gas taken around a cycle can exchange net work equal to the enclosed area, with $\Delta U = 0$ and an equal and opposite net heat: the principle of every heat engine.
+        rubric:
+          - text: >-
+              $\oint\omega_2 = 1$, with the reason it had to be non-zero (an exact form gives zero around every loop).
+          - text: >-
+              Derives $2x_0s^2$ and relates it to $\partial N/\partial x - \partial M/\partial y$ times the area.
+            weight: 2
+          - text: >-
+              Shows that $-P\,\mathrm{d}V$ is inexact and that the net work around a cycle is the enclosed area.
+            weight: 2
+          - text: >-
+              States the consequence: $\Delta U = 0$ around a cycle, so net heat in equals net work out, an engine.
+          - text: >-
+              A limit check: $s \to 0$, $x_0 = 0$, or a cycle enclosing no area.
