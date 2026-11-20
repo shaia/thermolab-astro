@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { uniform } from '../../src/physics/kinetics';
 import { sampleAverages, sampleSums } from '../../src/physics/sampling';
-import { latticeHistogram, nFromSlider, N_MAX, plotIndices, sliderFromN } from '../../src/sims/core/dice-view';
+import { histogramHalfWidth, latticeHistogram, nFromSlider, N_MAX, plotIndices, sliderFromN } from '../../src/sims/core/dice-view';
+import { predictedAverageSpread, predictedSumSpread } from '../../src/physics/sampling';
 
 describe('plotIndices', () => {
   it('is sorted, unique, inside [1, n] and contains both ends', () => {
@@ -56,5 +57,21 @@ describe('latticeHistogram', () => {
   it('ignores values outside the range', () => {
     const h = latticeHistogram([0, 5, 100], 4, 6, 1);
     expect(h.counts.reduce((a, c) => a + c, 0)).toBe(1);
+  });
+});
+
+describe('histogramHalfWidth', () => {
+  it('shows the sum of 400 dice out to beyond its spread of 34', () => {
+    const spread = predictedSumSpread(400);
+    expect(spread).toBeCloseTo(34.16, 1);
+    expect(histogramHalfWidth('sum', 400, spread)).toBeGreaterThan(3 * spread);
+  });
+  it('keeps one die inside the faces in both views', () => {
+    expect(histogramHalfWidth('average', 1, predictedAverageSpread(1))).toBe(3);
+    expect(histogramHalfWidth('sum', 1, predictedSumSpread(1))).toBe(3);
+  });
+  it('narrows the average of many dice to about four spreads', () => {
+    const spread = predictedAverageSpread(400);
+    expect(histogramHalfWidth('average', 400, spread)).toBeCloseTo(4.2 * spread, 10);
   });
 });

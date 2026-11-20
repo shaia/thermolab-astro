@@ -57,3 +57,12 @@ export function latticeHistogram(values: ArrayLike<number>, lo: number, hi: numb
   }
   return { start: first * width - lattice / 2, width, counts };
 }
+
+/**
+ * Half the width of the histogram panel: about four predicted spreads either side of the centre, but no
+ * wider than the values can reach. An average lies in [1, 6] = 3.5 ± 2.5; a sum of n dice in
+ * [n, 6n] = 3.5n ± 2.5n. The cap leaves half a bin of margin at n = 1.
+ */
+export function histogramHalfWidth(view: 'average' | 'sum', n: number, spread: number): number {
+  return Math.min(4.2 * spread, view === 'average' ? 3 : 3 * n);
+}

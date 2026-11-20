@@ -17,7 +17,7 @@ import { dieMean, dieRelativeSpread, dieVariance, mean, predictedAverageSpread, 
 import { markTask } from '~/progress/store';
 import { subscribeSteps } from '~/ui/steps';
 import { useFigureCanvas, type FrameInfo } from './core/canvas';
-import { latticeHistogram, N_MAX, nFromSlider, sliderFromN } from './core/dice-view';
+import { histogramHalfWidth, latticeHistogram, N_MAX, nFromSlider, sliderFromN } from './core/dice-view';
 import { withAlpha } from './core/ink';
 import { drawAxes, drawCurve, drawMarker, insetBox, makePlot, niceTicks } from './core/plot';
 import SimShell, { Slider, Toggle, type TaskDef } from './core/SimShell';
@@ -65,7 +65,7 @@ const TEXT = {
     task: {
       quadruple: `קבעו ${iso('N = 25')}, ואז ${iso('N = 100')}. פי כמה משתנה הפיזור?`,
       'sum-grows': 'עברו לסכום. מה קורה לפיזור שלו כש-N גדל?',
-      fit: 'הגרילו דגימות חדשות כמה פעמים. עד כמה יציבה החזקה המותאמת?',
+      fit: 'הגרילו דגימות חדשות כמה פעמים. עד כמה יציב המעריך המותאם?',
     } satisfies Record<TaskId, string>,
     label: 'איור חי: הפיזור של הממוצע (או הסכום) של N קוביות בהרבה ניסויים, וכיצד הוא משתנה עם N על צירים לוגריתמיים.',
     keys: 'במקלדת: חיצי ימין ושמאל משנים את N, אנטר מגריל דגימות חדשות.',
@@ -81,10 +81,10 @@ const TEXT = {
     predicted: 'חזוי',
     spread: 'פיזור',
     relative: 'פיזור יחסי',
-    exponent: 'חזקה מותאמת',
+    exponent: 'מעריך מותאם',
     computing: 'בחישוב…',
     describe: (view: View, n: number, samples: number, measured: number, predicted: number, alpha: number) =>
-      `${num(samples)} ניסויים של ${num(n)} קוביות, ${view === 'average' ? 'ממוצעים' : 'סכומים'}: הפיזור הנמדד ${iso(measured.toPrecision(3))}, החזוי ${iso(predicted.toPrecision(3))}; החזקה המותאמת ${iso(alpha.toFixed(2).replace('-', MINUS))}.`,
+      `${num(samples)} ניסויים של ${num(n)} קוביות, ${view === 'average' ? 'ממוצעים' : 'סכומים'}: הפיזור הנמדד ${iso(measured.toPrecision(3))}, החזוי ${iso(predicted.toPrecision(3))}; המעריך המותאם ${iso(alpha.toFixed(2).replace('-', MINUS))}.`,
   },
 } satisfies Record<Lang, unknown>;
 
@@ -176,7 +176,7 @@ export default function DiceSpread(props: DiceSpreadProps) {
     const hBox = insetBox(lefts, margin);
     const centre = view === 'average' ? MU : MU * n;
     const halfSpread = view === 'average' ? predictedAverageSpread(n) : predictedSumSpread(n);
-    const half = Math.min(4.2 * halfSpread, 3);
+    const half = histogramHalfWidth(view, n, halfSpread);
     const lo = centre - half;
     const hi = centre + half;
     const lattice = view === 'average' ? 1 / n : 1;
