@@ -9,6 +9,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { hydrated, overflow } from './helpers';
 
 const PAGES = [
+  'practice/ch0/', 'test/ch0/', 'summary/ch0/', 'workbook/0-1/',
   'practice/ch4/', 'test/ch4/', 'summary/ch4/', 'workbook/4-1/',
   'practice/ch15/', 'test/ch15/', 'summary/ch15/', 'workbook/15-1/',
   'me/', 'formulas/', 'glossary/', 'search/',
