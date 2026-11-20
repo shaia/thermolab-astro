@@ -1,0 +1,121 @@
+# Misconceptions lesson 15.1 is built to catch. The first three are ThermoLab's register entries for module 15
+# (assessment/misconceptions.yml: ensemble-cancellation, critical-fastest-settling, mc-is-real-dynamics). The other
+# four are new: each is a belief a step of the lesson refutes with a measurement, and the register had no entry.
+- id: MC-ensemble-cancellation
+  title:
+    en: Below T_c up and down cancel
+    he: מתחת ל-⁦T_c⁩ מעלה ומטה מתקזזים
+  belief:
+    en: Below the transition the equilibrium magnetization is zero, because up and down are equally likely and cancel.
+    he: מתחת למעבר המגנוט בשיווי משקל הוא אפס, כי מעלה ומטה סבירים באותה מידה ומתקזזים.
+  truth:
+    en: The ensemble average is zero by symmetry, but a large lattice below T_c holds one sign, close to ±m₀, for longer than any run. The ensemble average and the reading of one sample stop being the same thing.
+    he: הממוצע על הצבר הוא אפס מטעמי סימטריה, אבל סריג גדול מתחת ל-⁦T_c⁩ מחזיק בסימן אחד, קרוב ל-⁦±m₀⁩, יותר זמן מכל הרצה. הממוצע על הצבר והקריאה של דגימה אחת כבר אינם אותו דבר.
+  remedy:
+    lesson: '15.1'
+    anchor: ergodicity
+    label:
+      en: Watch a small lattice reverse and a large one never
+      he: צפו בסריג קטן שמתהפך ובסריג גדול שאף פעם לא
+
+- id: MC-critical-fastest-settling
+  title:
+    en: A system settles fastest at T_c
+    he: מערכת מתייצבת הכי מהר ב-⁦T_c⁩
+  belief:
+    en: At the critical temperature a system settles fastest, because it is between phases and nothing holds it back.
+    he: בטמפרטורה הקריטית מערכת מתייצבת הכי מהר, כי היא בין פאזות ושום דבר לא מעכב אותה.
+  truth:
+    en: The autocorrelation time peaks at T_c and grows with the lattice as L^z, z ≈ 2. At the transition everything is correlated with everything else, and a local update rule is slowest exactly there.
+    he: זמן המתאם העצמי מגיע לשיא ב-⁦T_c⁩ וגדל עם הסריג כמו ⁦L^z⁩, ‏⁦z ≈ 2⁩. במעבר הכול מתואם עם הכול, וכלל עדכון מקומי איטי ביותר בדיוק שם.
+  remedy:
+    lesson: '15.1'
+    anchor: slowing
+    label:
+      en: Measure the autocorrelation time across T_c
+      he: מדדו את זמן המתאם העצמי לרוחב ⁦T_c⁩
+
+- id: MC-mc-is-real-dynamics
+  title:
+    en: Monte Carlo shows the real motion
+    he: מונטה קרלו מראה את התנועה הממשית
+  belief:
+    en: A Monte Carlo simulation shows the magnet's real time evolution, one sweep standing for a fixed slice of time.
+    he: סימולציית מונטה קרלו מראה את ההתפתחות הממשית של המגנט בזמן, וכל סריקה מייצגת פרק זמן קבוע.
+  truth:
+    en: Detailed balance fixes where the chain goes, not how fast. Metropolis and Glauber take different numbers of sweeps to reach the same equilibrium; a sweep is a unit of computation, not of time.
+    he: איזון מפורט קובע לאן השרשרת הולכת, לא כמה מהר. מטרופוליס וגלאובר צריכים מספר שונה של סריקות כדי להגיע לאותו שיווי משקל; סריקה היא יחידה של חישוב, לא של זמן.
+  remedy:
+    lesson: '15.1'
+    anchor: mc-time
+    label:
+      en: Run the same quench under two rules
+      he: הריצו את אותו צינון חטוף בשני כללים
+
+- id: MC-one-dimension-orders
+  title:
+    en: A chain orders when it is cold enough
+    he: שרשרת מסתדרת כשקר מספיק
+  belief:
+    en: Any chain of coupled spins becomes ordered below some temperature, as mean field predicts.
+    he: כל שרשרת של ספינים מצומדים נעשית מסודרת מתחת לטמפרטורה כלשהי, כפי שהשדה הממוצע חוזה.
+  truth:
+    en: In one dimension a pair of domain walls costs a fixed energy, 4J, and gains an entropy k_B ln(N²/2) that grows without bound. At any T > 0 a long enough chain is disordered; mean field's transition at 2J does not exist.
+    he: בממד אחד זוג קירות תחום עולה אנרגיה קבועה, ⁦4J⁩, ומרוויח אנטרופיה ⁦k_B ln(N²/2)⁩ שגדלה בלי גבול. בכל ⁦T > 0⁩ שרשרת ארוכה מספיק אינה מסודרת; המעבר של השדה הממוצע ב-⁦2J⁩ אינו קיים.
+  remedy:
+    lesson: '15.1'
+    anchor: chain
+    label:
+      en: Count the walls on a ring
+      he: ספרו את הקירות על טבעת
+
+- id: MC-mean-field-harmless
+  title:
+    en: Averaging the neighbours is harmless
+    he: מיצוע השכנים אינו מזיק
+  belief:
+    en: Replacing each neighbour of a spin by its average changes the answer only in detail, so mean field's transition temperature is about right.
+    he: החלפת כל שכן של ספין בממוצע שלו משנה את התשובה רק בפרטים, ולכן טמפרטורת המעבר של השדה הממוצע בערך נכונה.
+  truth:
+    en: Near T_c the neighbours are correlated with the spin and with each other over long distances, and mean field discards exactly that. It puts the square lattice's T_c 76% too high and gets the exponent β wrong (1/2 against 1/8).
+    he: ליד ⁦T_c⁩ השכנים מתואמים עם הספין ואחד עם השני למרחקים ארוכים, והשדה הממוצע זורק בדיוק את זה. הוא ממקם את ⁦T_c⁩ של הסריג הריבועי גבוה ב-76% ומחטיא את המעריך ⁦β⁩ ‏(⁦1/2⁩ במקום ⁦1/8⁩).
+  remedy:
+    lesson: '15.1'
+    anchor: mean-field
+    label:
+      en: Compare mean field with Onsager
+      he: השוו את השדה הממוצע לאונסאגר
+
+- id: MC-naive-error-bar
+  title:
+    en: More samples, proportionally smaller error
+    he: יותר דגימות, שגיאה קטנה יותר באותו יחס
+  belief:
+    en: The error of a Monte Carlo average is σ/√n for n recorded samples, however correlated they are.
+    he: השגיאה של ממוצע מונטה קרלו היא ⁦σ/√n⁩ עבור ⁦n⁩ דגימות רשומות, יהיו מתואמות ככל שיהיו.
+  truth:
+    en: Correlated samples are worth fewer independent ones, N_eff = n/(2τ). The naive error is too small by √(2τ), which near T_c can be a factor of ten or more; a change of seed exposes it.
+    he: דגימות מתואמות שוות פחות דגימות בלתי תלויות, ⁦N_eff = n/(2τ)⁩. השגיאה הנאיבית קטנה מדי פי ⁦√(2τ)⁩, וליד ⁦T_c⁩ זה יכול להיות פי עשרה ויותר; החלפת זרע חושפת זאת.
+  remedy:
+    lesson: '15.1'
+    anchor: error-bars
+    label:
+      en: See what an honest error bar costs
+      he: ראו כמה עולה שגיאה כנה
+
+- id: MC-simulation-shows-singularity
+  title:
+    en: A big enough simulation shows the singularity
+    he: סימולציה גדולה מספיק מראה את הסינגולריות
+  belief:
+    en: A large enough simulation shows the phase transition itself, a true jump or divergence at T_c.
+    he: סימולציה גדולה מספיק מראה את מעבר הפאזה עצמו, קפיצה או התבדרות אמיתית ב-⁦T_c⁩.
+  truth:
+    en: 'On N spins the partition function is a finite sum of exponentials, analytic in T: every peak is finite and rounded. A simulation shows a trend consistent with a singularity at N → ∞; the singularity is established by derivation.'
+    he: 'עבור ⁦N⁩ ספינים פונקציית החלוקה היא סכום סופי של אקספוננטים, אנליטית ב-⁦T⁩: כל שיא סופי ומעוגל. סימולציה מראה מגמה שתואמת סינגולריות ב-⁦N → ∞⁩; את הסינגולריות מבססים בגזירה.'
+  remedy:
+    lesson: '15.1'
+    anchor: finite
+    label:
+      en: What a finite simulation can and cannot show
+      he: מה סימולציה סופית יכולה ואינה יכולה להראות

@@ -118,7 +118,68 @@ export const chapters: Chapter[] = [
   planned(12, 'statistical', 'Partition functions', 'פונקציות החלוקה'),
   planned(13, 'advanced', 'Chemical potential', 'פוטנציאל כימי'),
   planned(14, 'advanced', 'Phase coexistence', 'דו-קיום פאזות'),
-  planned(15, 'advanced', 'Phase transitions and the Ising model', 'מעברי פאזה ומודל איזינג'),
+  {
+    n: 15,
+    part: 'advanced',
+    title: { en: 'Phase transitions and the Ising model', he: 'מעברי פאזה ומודל איזינג' },
+    lessons: [
+      {
+        id: '15.1',
+        title: { en: 'Who chooses the direction? The Ising model', he: 'מי בוחר את הכיוון? מודל איזינג' },
+        objectives: [
+          {
+            id: 'OBJ-15.1-1',
+            text: {
+              en: 'Write the Ising energy, define the order parameter m, and explain what it means for the up-down symmetry of the h = 0 model to be spontaneously broken.',
+              he: `לכתוב את אנרגיית איזינג, להגדיר את פרמטר הסדר ${f('m')}, ולהסביר מה פירוש שבירה ספונטנית של סימטריית מעלה–מטה של המודל ב-${f('h = 0')}.`,
+            },
+          },
+          {
+            id: 'OBJ-15.1-2',
+            text: {
+              en: 'Derive the Metropolis rule A = min(1, e^(-ΔE/k_BT)) from detailed balance, and explain why the chain samples equilibrium rather than the magnet\'s real motion.',
+              he: `לגזור את כלל מטרופוליס ${f('A = min(1, e^(-ΔE/k_BT))')} מאיזון מפורט, ולהסביר מדוע השרשרת דוגמת שיווי משקל ואינה מדמה את התנועה הממשית של המגנט.`,
+            },
+          },
+          {
+            id: 'OBJ-15.1-3',
+            text: {
+              en: 'Explain, from the free energy of a domain wall, why the one-dimensional Ising chain has no phase transition at any T > 0.',
+              he: `להסביר, מהאנרגיה החופשית של קיר תחום, מדוע לשרשרת איזינג החד-ממדית אין מעבר פאזה בשום ${f('T > 0')}.`,
+            },
+          },
+          {
+            id: 'OBJ-15.1-4',
+            text: {
+              en: 'Derive the mean-field equation m = tanh((qJm + h)/k_BT) and its T_c = qJ/k_B, and quantify how far it misses Onsager\'s exact k_BT_c ≈ 2.269 J.',
+              he: `לגזור את משוואת השדה הממוצע ${f('m = tanh((qJm + h)/k_BT)')} ואת ${f('T_c = qJ/k_B')} שלה, ולכמת עד כמה היא מחטיאה את התוצאה המדויקת של אונסאגר ${f('k_BT_c ≈ 2.269 J')}.`,
+            },
+          },
+          {
+            id: 'OBJ-15.1-5',
+            text: {
+              en: 'Estimate ⟨|m|⟩, the susceptibility and the heat capacity from Monte Carlo traces through the fluctuation identities, and locate T_c from the susceptibility peak.',
+              he: `לאמוד את ${f('⟨|m|⟩')}, את הסוספטיביליות ואת קיבול החום מעקבות מונטה קרלו בעזרת זהויות הפלוקטואציה, ולאתר את ${f('T_c')} משיא הסוספטיביליות.`,
+            },
+          },
+          {
+            id: 'OBJ-15.1-6',
+            text: {
+              en: 'Describe hysteresis, finite-size rounding and critical slowing down as measurements, and say what finite simulations can and cannot establish about the infinite-N singularity.',
+              he: 'לתאר היסטרזיס, עיגול של גודל סופי והאטה קריטית כמדידות, ולומר מה סימולציות סופיות יכולות ואינן יכולות לבסס על הסינגולריות של מערכת אינסופית.',
+            },
+          },
+          {
+            id: 'OBJ-15.1-7',
+            text: {
+              en: 'Attach a defensible error bar to a Monte Carlo average using the autocorrelation time, N_eff = n/(2τ), and reject conclusions that do not survive a change of seed.',
+              he: `לצרף שגיאה שאפשר להגן עליה לממוצע מונטה קרלו בעזרת זמן המתאם העצמי, ${f('N_eff = n/(2τ)')}, ולדחות מסקנות שאינן שורדות החלפת זרע.`,
+            },
+          },
+        ],
+      },
+    ],
+  },
   planned(16, 'advanced', 'Thermal radiation and the heat capacity of solids', 'קרינה תרמית וקיבול החום של מוצקים'),
   planned(17, 'advanced', 'Quantum gases', 'גזים קוונטיים'),
   planned(18, 'advanced', 'Fluctuations and transport', 'פלוקטואציות והובלה'),
