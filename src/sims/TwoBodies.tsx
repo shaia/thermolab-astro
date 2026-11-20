@@ -67,7 +67,7 @@ const TEXT = {
   en: {
     task: {
       unequal: 'Run the pair as it starts: A is small and hot, B large and cold. Does the common temperature land halfway between the two starts? If not, nearer to which, and why?',
-      'no-overshoot': 'Run it once with A hotter, then once with B hotter. Do the two temperatures ever cross on the way to T_eq?',
+      'no-overshoot': 'Run it once with A hotter, then once with B hotter. Does the gap swing past zero systematically, or only jitter about it once it is small?',
       'same-size': 'Set nA equal to nB and run to the end. Where do the two temperatures meet?',
       'log-gap': 'Switch to the log view and run to the end. How straight is the gap, and what slope does it have?',
     } satisfies Record<TaskId, string>,
@@ -95,7 +95,7 @@ const TEXT = {
   he: {
     task: {
       unequal: `הריצו את הזוג כפי שהוא מתחיל: A קטן וחם, B גדול וקר. האם הטמפרטורה המשותפת נוחתת באמצע בין שתי ההתחלות? אם לא, קרוב יותר לאיזו, ולמה?`,
-      'no-overshoot': `הריצו פעם אחת כש-A חם יותר, ופעם אחת כש-B חם יותר. האם שתי הטמפרטורות חוצות זו את זו בדרך אל ${iso('T_eq')}?`,
+      'no-overshoot': `הריצו פעם אחת כש-A חם יותר, ופעם אחת כש-B חם יותר. האם הפער חוצה את האפס באופן שיטתי, או רק רועד סביבו כשהוא כבר קטן?`,
       'same-size': `קבעו ${iso('nA')} שווה ל-${iso('nB')} והריצו עד הסוף. היכן נפגשות שתי הטמפרטורות?`,
       'log-gap': 'עברו לתצוגה הלוגריתמית והריצו עד הסוף. עד כמה ישר הפער, ומה השיפוע שלו?',
     } satisfies Record<TaskId, string>,
@@ -429,6 +429,7 @@ export default function TwoBodies(props: TwoBodiesProps) {
             [p.hot, '— T_A'],
             [p.cold, '— T_B'],
             [p.ink2, '- - T_eq'],
+            [p.ink2, '- - mean'],
           ]
         : [
             [p.accent, '— |T_A − T_B|'],

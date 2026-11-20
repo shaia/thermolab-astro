@@ -46,7 +46,7 @@ questions:
           Both are at $20\,{}^\circ\text{C}$, as a thermometer taped to each would show. Steel carries heat away from your hand faster than wood, and the hand reports how fast it loses heat, not the temperature of what it touches.
         correct: true
         feedback: >-
-          Right. Both have been in equilibrium with the room's air all night, so by the zeroth law they are in equilibrium with each other. Your hand stays near body temperature and never comes to equilibrium with the railing; it senses its own rate of heat loss, and steel conducts heat far better than wood.
+          Right. Both have been in equilibrium with the room's air all night, so by the zeroth law they are in equilibrium with each other. Your hand stays near body temperature and never comes to equilibrium with the railing; it senses its own rate of heat loss, and steel draws heat out of the skin much faster than wood, through its conductivity and its heat capacity per unit volume together.
       - text: >-
           The steel is colder than the wood; that is exactly why it feels colder.
         feedback: >-
@@ -125,7 +125,7 @@ questions:
           No. Heat has to cross the contact at a finite rate, so the gap closes as $e^{-t/\tau}$, over a relaxation time set by the heat capacities and the conductance of the contact.
         correct: true
         feedback: >-
-          Right. $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$ vanishes only as $\kappa \to \infty$, a contact of infinite conductance, which nothing has. $\tau$ may be short; it is never zero.
+          Right. $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$ vanishes only as $\kappa \to \infty$ (a contact of infinite conductance) or as a heat capacity goes to zero (a body that holds no energy); nothing has either. $\tau$ may be short; it is never zero.
       - text: >-
           Yes: contact alone makes the temperatures equal at once.
         feedback: >-
@@ -493,7 +493,7 @@ questions:
     commonWrong:
       - value: 200
         feedback: >-
-          That is the number of oscillators. The relaxation time is set by the number of **quanta**: each hop moves one of them, a smaller share of the imbalance the more there are.
+          That is the number of oscillators. The relaxation time is set by the number of **quanta**: each step moves one quantum drawn from all $Q$, so the mean imbalance shrinks by the fraction $1/Q$ per step.
       - value: 37.5
         feedback: >-
           That is $n_An_B/(n_A + n_B)$, the capacity combination of Newton's $\tau$ without the conductance. In the model the conductance is $(k_B/Q)\,n_An_B/(n_A + n_B)$ per step, and dividing by it leaves $\tau \approx Q$.
@@ -517,7 +517,7 @@ questions:
       - text: >-
           Two bodies at very different starting temperatures, both well above the quantum scale.
         feedback: >-
-          A large starting gap is no problem: the mean drift is exactly linear in $q_A$ for every state, so the exponential holds for any $T_A(0) - T_B(0)$, as long as both bodies stay in the classical regime.
+          A large gap is a weaker problem than the cold: well above the quantum scale both heat capacities are close to constant, so $T_\mathrm{eq}$ is still right. The model's exponential is exact for any gap, but a real contact's $\kappa$ may depend on the gap, so for real solids the exponential is safest near equilibrium. Near absolute zero even the model's temperature is wrong.
       - text: >-
           Two bodies of very different sizes, a large A and a small B.
         feedback: >-
@@ -537,7 +537,7 @@ questions:
     unit: ''
     tolerance: 0.1
     correctFeedback: >-
-      The scatter falls as $N^{-1/2}$: four times the oscillators, half the scatter, $0.11/2 = 0.055$. Two batches of $64$ seeds give $0.106 \pm 0.003$ and $0.107 \pm 0.003$ at $N = 80$, and $0.0519 \pm 0.0016$ and $0.0511 \pm 0.0016$ at $N = 320$: ratios of $2.04$ and $2.10$, against the predicted $2$.
+      The scatter falls as $N^{-1/2}$: four times the oscillators, half the scatter, $0.11/2 = 0.055$. Over $2048$ seeds the RMS is $0.108$ at $N = 80$ and $0.0537$ at $N = 320$: a ratio of $2.01$, against the predicted $2$.
     wrongFeedback: >-
       The scatter of a single run about the mean curve falls as $N^{-1/2}$, the scatter of a binomial count.
     commonWrong:

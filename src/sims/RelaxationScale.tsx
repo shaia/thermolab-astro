@@ -6,8 +6,8 @@
  *
  * Readout per panel: N = nA + nB, the RMS deviation of the run from the prediction over its 6τ steps, and that
  * RMS averaged over `average` runs (this one and others from other seeds); then the ratios of successive RMS
- * values against √factor, the N^(−1/2) law. One run's RMS is itself noisy (its ratio between two panels swings by
- * about a third), which is why the averaged ratios are shown beside it.
+ * values against √factor, the N^(−1/2) law. One run's RMS is itself noisy (its ratio between two panels is a ratio of
+ * two noisy numbers: for a factor of 10, one run in ten gives below about 2 and one in ten above about 5), which is why the averaged ratios are shown beside it.
  * The figure computes; it does not animate. Steps may set { base, factor, ratio, tA, tB, seed }.
  */
 
@@ -54,13 +54,13 @@ const TEXT = {
   },
   he: {
     task: {
-      'scatter-shrinks': 'הגרילו זרעים חדשים כמה פעמים. באיזה פאנל הפיזור סביב העקומה המקווקווה הקטן ביותר, בכל פעם?',
+      'scatter-shrinks': 'הגרילו זרעים חדשים כמה פעמים. באיזה פאנל הפיזור סביב העקומה המקווקוות הוא הקטן ביותר, בכל פעם?',
       ratio: `שנו את הגורם. האם היחסים בין ערכי ${iso('RMS')} הממוצעים נשארים קרובים לשורש הגורם?`,
       'time-units': `שנו את הגודל הבסיסי. האם שלוש העקומות עדיין נופלות על ${iso('e^(' + MINUS + 't/τ)')}, כשהזמן נמדד ביחידות של ${iso('τ')}?`,
     } satisfies Record<TaskId, string>,
-    label: 'איור חי: שלושה פאנלים, זוג גופים אחד בשלושה גדלים, וכל אחד מראה את הפער היחסי בטמפרטורות כפונקציה של הזמן ביחידות של זמן הרלקסציה, עם האקספוננט החזוי והפיזור סביבו, קטן יותר בזוגות הגדולים.',
-    base: 'מספר המתנדים ב-A הקטן ביותר',
-    factor: 'היחס בין הגדלים של פאנלים סמוכים',
+    label: 'איור חי: שלושה פאנלים, זוג גופים אחד בשלושה גדלים, וכל אחד מראה את הפער היחסי בטמפרטורות כפונקציה של הזמן ביחידות של זמן הרלקסציה, עם המעריכית החזויה והפיזור סביבה, קטן יותר בזוגות הגדולים.',
+    base: 'מספר המתנדים ב-A הקטן ביותר, הבסיס',
+    factor: 'הגורם בין הגדלים של פאנלים סמוכים',
     again: 'זרעים חדשים',
     xAxis: `צעדים / ${iso('τ')}`,
     yAxis: 'הפער היחסי',

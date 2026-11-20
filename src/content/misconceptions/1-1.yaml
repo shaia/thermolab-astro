@@ -11,8 +11,8 @@
     en: Two bodies placed in contact reach the same temperature the instant they touch.
     he: שני גופים שמוצמדים זה לזה מגיעים לאותה טמפרטורה ברגע שהם נוגעים.
   truth:
-    en: Heat has to cross the contact, at a rate set by its conductance κ. The gap closes as e^(−t/τ), with τ = C_A C_B/(κ(C_A + C_B)), which is zero only for a contact of infinite conductance.
-    he: החום צריך לחצות את המגע, בקצב שנקבע לפי המוליכות שלו ⁦κ⁩. הפער נסגר כמו ⁦e^(−t/τ)⁩, עם ⁦τ = C_A C_B/(κ(C_A + C_B))⁩, שמתאפס רק במגע בעל מוליכות אינסופית.
+    en: Heat has to cross the contact, at a rate set by its conductance κ. The gap closes as e^(−t/τ), with τ = C_A C_B/(κ(C_A + C_B)), which is zero only for a contact of infinite conductance or a body of no heat capacity, neither of which exists.
+    he: החום צריך לחצות את המגע, בקצב שנקבע לפי המוליכות התרמית שלו ⁦κ⁩. הפער נסגר כמו ⁦e^(−t/τ)⁩, עם ⁦τ = C_A C_B/(κ(C_A + C_B))⁩, שמתאפס רק במגע בעל מוליכות אינסופית או בגוף חסר קיבול חום, ואף אחד מהם אינו קיים.
   remedy:
     lesson: '1.1'
     anchor: tau
@@ -40,19 +40,19 @@
 - id: MC-temperatures-overshoot
   title:
     en: The temperatures overshoot and swing back
-    he: הטמפרטורות עוברות את נקודת המפגש וחוזרות
+    he: הטמפרטורות חורגות אל מעבר לנקודת המפגש וחוזרות
   belief:
     en: Like a pendulum, the hot body cools past the common temperature, and the two temperatures oscillate before they settle.
     he: כמו מטוטלת, הגוף החם מתקרר אל מעבר לטמפרטורה המשותפת, ושתי הטמפרטורות מתנודדות לפני שהן מתייצבות.
   truth:
     en: The heat flow at each moment is set by the present temperature difference alone, so the gap obeys a first-order equation and decays as e^(−t/τ) without changing sign. Heat flow has no inertia. A small body jitters randomly about the common temperature, but never swings past it systematically.
-    he: זרימת החום בכל רגע נקבעת רק לפי הפרש הטמפרטורות הנוכחי, ולכן הפער מקיים משוואה מסדר ראשון ודועך כמו ⁦e^(−t/τ)⁩ בלי להחליף סימן. לזרימת חום אין התמדה. גוף קטן רועד באקראי סביב הטמפרטורה המשותפת, אבל לעולם אינו עובר אותה באופן שיטתי.
+    he: זרימת החום בכל רגע נקבעת רק לפי הפרש הטמפרטורות הנוכחי, ולכן הפער מקיים משוואה מסדר ראשון ודועך כמו ⁦e^(−t/τ)⁩ בלי להחליף סימן. לזרימת חום אין אינרציה. הטמפרטורה של גוף קטן רועדת באקראי סביב הטמפרטורה המשותפת, אבל לעולם אינה עוברת אותה באופן שיטתי.
   remedy:
     lesson: '1.1'
     anchor: no-overshoot
     label:
       en: Watch the gap close without crossing
-      he: צפו בפער נסגר בלי לחצות את האפס
+      he: צפו כיצד הפער נסגר בלי לחצות את האפס
 
 - id: MC-touch-tells-temperature
   title:
@@ -62,8 +62,8 @@
     en: A metal table leg in a room is colder than the wooden top beside it, because it feels colder to the touch.
     he: רגל מתכת של שולחן בחדר קרה יותר ממשטח העץ שלידה, כי היא מרגישה קרה יותר במגע.
   truth:
-    en: Both are in equilibrium with the room, and so, by the zeroth law, with each other; a thermometer reads the same on both. The hand does not reach equilibrium with what it touches. It senses how fast it loses heat, and metal conducts heat away faster.
-    he: שתיהן בשיווי משקל עם החדר, ולכן, לפי החוק האפס, גם זו עם זו; מדחום מראה את אותה קריאה על שתיהן. היד אינה מגיעה לשיווי משקל עם מה שהיא נוגעת בו. היא חשה בקצב שבו היא מאבדת חום, ומתכת מוליכה את החום הלאה מהר יותר.
+    en: Both are in equilibrium with the room, and so, by the zeroth law, with each other; a thermometer reads the same on both. The hand does not reach equilibrium with what it touches. It senses how fast it loses heat, and metal draws heat away faster, through its conductivity and its heat capacity per unit volume together.
+    he: שתיהן בשיווי משקל עם החדר, ולכן, לפי החוק האפס, גם זו עם זו; מדחום מראה את אותה קריאה על שתיהן. היד אינה מגיעה לשיווי משקל עם מה שהיא נוגעת בו. היא חשה בקצב שבו היא מאבדת חום, ומתכת שואבת חום מן היד מהר יותר, בזכות מוליכות החום וקיבול החום ליחידת נפח יחד.
   remedy:
     lesson: '1.1'
     anchor: zeroth-law

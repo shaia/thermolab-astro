@@ -50,10 +50,16 @@ when it is.
   n_B = 300, Q = 700 it is 0.107 k_B per step, against k_B/Q = 0.0014 k_B.
 - Transfer section, module 12 bullet: the canonical Einstein solid does not give "the same number" as
   T = qε/(nk_B). Its partition function gives k_BT = ε/ln(1 + n/q), which approaches ε(q/n + 1/2) only at high
-  temperature: 1.44 ε at one quantum per oscillator, 25.50 ε at 25 (the notebook's bodies), against 1 ε and 25 ε.
+  temperature: 1.44 ε at one quantum per oscillator, against 1 ε; and 25.50 ε at 25 quanta per oscillator (the
+  notebook's hot body), against 25 ε. The notebook's cold body holds 12.5 and reads 12.99 ε, against 12.5 ε.
+  ThermoLab's own module 12 (lines 701–711) says "equipartition's reading plus half a quantum", which
+  contradicts module 01's "the same number".
 - Two epistemic labels are wrong (English lines 267 and 300, Hebrew 249 and 278). "The discrete simulation
   realises exactly this law" is labelled *numerical-observation*, but what it states, that the mean gap follows
   (1 − 1/Q)^n exactly, is a theorem about the model, proved in the Advanced section; and "A caution about what
   the simulation proves" is labelled *open-question*, but it states the scope of the evidence, which is not open.
   The same box says the ODE derivation "proves the law"; it derives the exponential from Newton's law, which is
   itself empirical (the page's own label).
+- Line 425 says the result "becomes the continuous exponential e^{−n/τ} once Q ≫ 1, with τ = −1/ln(1 − 1/Q) → Q".
+  With that τ, (1 − 1/Q)^n = e^{−n/τ} exactly for every Q ≥ 2; only τ ≈ Q − 1/2 needs Q ≫ 1. An imprecision, not
+  an error; the port states it correctly.

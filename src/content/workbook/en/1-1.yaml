@@ -82,7 +82,7 @@ practice:
       (b) Find each block's temperature $3.0\,\text{min}$ after contact.
       (c) Block B is replaced by a $10.0\,\text{kg}$ copper block at $20\,{}^\circ\text{C}$. Repeat (a) and (b), and compare the new $\tau$ with $C_A/\kappa$.
     answer: >-
-      (a) $50.0\,{}^\circ\text{C}$; $\tau = 96\,\text{s}$. (b) The gap is $9.2\,\text{K}$: $T_A = 54.6\,{}^\circ\text{C}$, $T_B = 45.4\,{}^\circ\text{C}$. (c) $25.5\,{}^\circ\text{C}$; $\tau = 175\,\text{s}$, against $C_A/\kappa = 193\,\text{s}$; after $3.0\,\text{min}$ the gap is $21.5\,\text{K}$, $T_A = 45.0\,{}^\circ\text{C}$ and $T_B = 23.5\,{}^\circ\text{C}$.
+      (a) $50.0\,{}^\circ\text{C}$; $\tau = 96\,\text{s}$. (b) The gap is $9.25\,\text{K}$: $T_A = 54.6\,{}^\circ\text{C}$, $T_B = 45.4\,{}^\circ\text{C}$. (c) $25.5\,{}^\circ\text{C}$; $\tau = 175\,\text{s}$, against $C_A/\kappa = 193\,\text{s}$; after $3.0\,\text{min}$ the gap is $21.5\,\text{K}$, $T_A = 45.0\,{}^\circ\text{C}$ and $T_B = 23.5\,{}^\circ\text{C}$.
     solution:
       - kind: given
         text: >-
@@ -126,7 +126,7 @@ practice:
     solution:
       - kind: reasoning
         text: >-
-          (a) Nothing switches off at equilibrium. Energy keeps crossing the contact in both directions; what vanishes is the difference between the two flows. (b) Equilibrium equalizes temperature, not energy: each body holds $U = CT$, so the one with the larger capacity holds more. In figure 1.1a the pair settles at $T = 1.75$ with $175$ quanta in A and $525$ in B.
+          (a) Nothing switches off at equilibrium. Energy keeps crossing the contact in both directions; what vanishes is the difference between the two flows. (b) Equilibrium equalizes temperature, not energy: in the model each body holds $U = nk_BT$, so the one with the larger capacity ($C = nk_B$) holds more. In figure 1.1a the pair settles at $T = 1.75$ with $175$ quanta in A and $525$ in B.
       - kind: reasoning
         text: >-
           (c) The crossing rates are $P(A \to B) = (q_A/Q)\,n_B/(n_A + n_B)$ and $P(B \to A) = (q_B/Q)\,n_A/(n_A + n_B)$, equal when $q_A/n_A = q_B/n_B$: the same quanta per oscillator, $q_A = 175$. At $q_A = 350$, $T_A = 3.5$ and $T_B = 1.17$; then $P(A \to B) = 0.5 \times 0.75 = 0.375$ against $P(B \to A) = 0.5 \times 0.25 = 0.125$, and A is still cooling. Equal energy is not equal temperature.
@@ -166,7 +166,7 @@ practice:
           $T_f = \dfrac{\sum_i C_iT_{i,0}}{\sum_i C_i} \qquad Q_i = C_i\,(T_f - T_{i,0})$
       - kind: limit
         text: >-
-          If one capacity grows without bound, that body is a reservoir and $T_f$ goes to its temperature. Equal capacities give the plain mean. A body that starts at $T_f$ (as C nearly does) exchanges no net heat, though in (b) it first gives up heat and then takes some back: $Q_i$ depends only on the end points because each body's energy depends only on its own temperature.
+          If one capacity grows without bound, that body is a reservoir and $T_f$ goes to its temperature. Equal capacities give the plain mean. A body that starts at $T_f$ exchanges no net heat. C starts $12\,\text{K}$ above $T_f$ and gives up $2400\,\text{J}$ in all, though in (b) it first gives up heat and then takes some back: $Q_i$ depends only on the end points because each body's energy depends only on its own temperature.
       - kind: units
         text: >-
           $\sum C_iT_i/\sum C_i$: $(\text{J/K})\,{}^\circ\text{C}/(\text{J/K}) = {}^\circ\text{C}$. The weights sum to one, so the offset between Celsius and kelvin cancels and Celsius may be used throughout.
@@ -226,7 +226,7 @@ practice:
     solution:
       - kind: reasoning
         text: >-
-          (a) The theorem behind the prediction, $\langle T_A - T_B\rangle_n = (T_A(0) - T_B(0))(1 - 1/Q)^n$, is a statement about the average over runs. A single run carries the binomial jitter of the lesson, $0.15$ for this pair (its exact standard deviation after $700$ steps is $0.152$). So $1.27$ sits $(1.27 - 1.10)/0.15 = 1.1$ standard deviations above the mean; over $384$ seeds, $15\%$ of runs reached $1.27$ or more. To test the law, average many seeds: $64$ runs give the mean to $0.15/8 = 0.019$, and their means came out between $1.093$ and $1.150$ against $1.103$.
+          (a) The theorem behind the prediction, $\langle T_A - T_B\rangle_n = (T_A(0) - T_B(0))(1 - 1/Q)^n$, is a statement about the average over runs. A single run carries the binomial jitter of the lesson, $0.15$ for this pair (its exact standard deviation after $700$ steps is $0.152$). So $1.27$ sits $(1.27 - 1.10)/0.15 = 1.1$ standard deviations above the mean; over $384$ seeds, $15\%$ of runs reached $1.27$ or more (the exact chain gives $13.1\%$). To test the law, average many seeds: $64$ runs give the mean to $0.15/8 = 0.019$, and their means came out between $1.093$ and $1.150$ against $1.103$.
       - kind: reasoning
         text: >-
           (b) A straight line on the logarithmic plot is the exponential only while the mean gap is larger than the jitter. The mean falls to $0.15$ at about $t = \tau\ln(3/0.15) = 3\tau$; after that $|T_A - T_B|$ hovers at about $0.15$ and touches zero some $70$ times per run, points the logarithm cannot even take. A line fitted through the whole run is dragged flat by that floor. Measured with ThermoLab's code over six batches of $64$ seeds, whole-run fits average $1140$ to $1200$ steps, while fits over the first $2\tau$ average $703 \pm 7$, consistent with $699.5$; one such fit scatters by about $135$ steps. The cure is to fit where the signal exceeds the noise, or to fit the gap averaged over many seeds.
@@ -301,7 +301,7 @@ practice:
           $T_\mathrm{eq} = \dfrac{n_AT_A + n_BT_B}{n_A + n_B} \qquad \sigma_{T_A} = \dfrac{\sqrt{Qp(1 - p)}}{n_A} \qquad \dfrac{\sigma_{\Delta T}}{\langle \Delta T \rangle} \propto N^{-1/2}$
       - kind: reasoning
         text: >-
-          (b) Agreement in expectation holds at every step, since the law for the mean is a theorem about this model. What changes is how well $64$ runs can show it: the scatter of single runs grows from zero to the equilibrium value $0.28$ while the mean gap falls, so the relative error of the measured mean grows from about $1\%$ at $0.5\tau$ to about $50\%$ at $4\tau$. Close to equilibrium the comparison is weakest, not strongest. (c) The variance of $q_A$ also obeys a linear recursion, which gives the exact relative spreads at $t = Q$: $0.190$ and $0.0600$.
+          (b) Agreement in expectation holds at every step, since the law for the mean is a theorem about this model. What changes is how well $64$ runs can show it: the scatter of single runs grows from zero to the equilibrium value $0.28$ (overshooting it slightly, to $0.29$ near $2\tau$) while the mean gap falls, so the relative error of the measured mean grows from about $1\%$ at $0.5\tau$ to about $50\%$ at $4\tau$. Close to equilibrium the comparison is weakest, not strongest. (c) The variance of $q_A$ also obeys a linear recursion, which gives the exact relative spreads at $t = Q$: $0.190$ and $0.0600$.
       - kind: limit
         text: >-
           At $t = 0$ every run starts at the same state and the spread is zero; as $t \to \infty$ the mean gap goes to zero and the relative spread diverges, while the absolute spread settles at the binomial value. As $N \to \infty$ at fixed temperatures the relative spread goes to zero as $N^{-1/2}$, and a single run becomes the mean.
@@ -410,7 +410,7 @@ challenge:
       (c) At which $q_A$ are the two temperatures equal? Compare with the most probable division of the energy (a computer finds $q_A = 37$, with probability $0.073$) and with the hop model's balance condition $q_A/N_A = q_B/N_B$.
       (d) The entropic and the equipartition temperatures give the same body different numbers. Explain why they nevertheless sort bodies into the same classes of mutual equilibrium, and what that says about what the zeroth law fixes and what it leaves open.
     answer: >-
-      (a) $k_BT_A/\varepsilon = 0.37$ ($426\,\text{K}$), $k_BT_B/\varepsilon = 0.76$ ($878\,\text{K}$); B is hotter, and energy flows from B to A. (b) $0.361$ and $0.752$; the equipartition values, $0.067$ and $0.36$, are $5.5$ and $2.1$ times too low, both solids being far from the classical regime. (c) Between $q_A = 37$ and $38$, at $37.5$ in Stirling's approximation, where the most probable division also lies and where $q_A/N_A = q_B/N_B$. (d) Both are increasing functions of $q/N$, and equilibrium between two such solids is equal $q/N$: the zeroth law fixes the classes, not the numbers given to them.
+      (a) $k_BT_A/\varepsilon = 0.37$ ($426\,\text{K}$), $k_BT_B/\varepsilon = 0.76$ ($878\,\text{K}$); B is hotter, and energy flows from B to A. (b) $0.361$ and $0.752$; the equipartition values, $0.067$ and $0.36$, are $5.5$ and $2.1$ times too low, both solids being far from the classical regime. (c) Between $q_A = 37$ and $38$, at $37.5$ in Stirling's approximation, where the most probable division also lies and where $q_A/N_A = q_B/N_B$. (d) Among Einstein solids with the same $\varepsilon$, both are increasing functions of $q/N$, and equilibrium between two such solids is equal $q/N$: the zeroth law fixes the classes, not the numbers given to them. Across solids of different $\varepsilon$, or a solid and a gas, $q\varepsilon/(Nk_B)$ does not label the classes.
     solution:
       - kind: law
         text: >-

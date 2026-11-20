@@ -88,7 +88,8 @@ line each, with the evidence. ThermoLab is fixed separately, from that list.
 - Terms follow ThermoLab's `glossary/terms.yml`. The glossary's `reject` lists are enforced.
   Decided during the pilots: error bar = פס שגיאה, run = הרצה, Onsager = אונסאגר, real (as
   opposed to model) = ממשי, true = אמיתי, envelope = מעטפת, spread or scatter = פיזור,
-  exponent = מעריך, quasistatic = כמו-סטטי.
+  exponent = מעריך, quasistatic = כמו-סטטי, "falls as" (a scaling law, N^(−1/2)) = דועך כמו (never "קטן כמו", which
+  reads "as small as"), reservoir = מאגר חום at first use, then מאגר.
 - Write Hebrew as Hebrew, not as translated English. It must say the same thing as the English;
   the Hebrew review checks meaning, not just grammar.
 - Bidi: in plain-text fields (objectives, Predict choices, Formula labels, misconceptions,

@@ -29,7 +29,7 @@ import LessonLink from '~/components/LessonLink.astro';
 <Spread
   fig="fig-1-1a"
   n="1.1a"
-  caption="Two Einstein solids in thermal contact, computed live: body A of $n_A$ oscillators and body B of $n_B$, drawn side by side as blocks of oscillators in proportion to their sizes, each oscillator shaded by the quanta it holds. At every step one quantum hops: it leaves a body with probability proportional to the quanta that body holds, and lands on an oscillator chosen at random among both. Temperatures are in units of the quantum, $\varepsilon/k_B$: a body holding $q$ quanta has $T = q\varepsilon/(nk_B)$. Time is counted in steps. Right: $T_A$ and $T_B$ against the steps, the dashed equilibrium temperature $T_\mathrm{eq} = (n_AT_A + n_BT_B)/(n_A + n_B)$, and the mean curves predicted from $(1 - 1/Q)^n$, where $Q$ is the total number of quanta. The logarithmic view plots $|T_A - T_B|$ on a logarithmic axis, with the straight line of slope $-1/\tau$, $\tau = -1/\ln(1 - 1/Q)$. The readout gives the step count, $T_A$, $T_B$, $T_\mathrm{eq}$, $\tau$ and the total energy."
+  caption="Two Einstein solids in thermal contact, computed live: body A of $n_A$ oscillators and body B of $n_B$, drawn side by side as blocks of oscillators in proportion to their sizes, each oscillator shaded by the quanta it holds. At every step one quantum hops: it leaves a body with probability proportional to the quanta that body holds, and lands on an oscillator chosen at random among both. Temperatures are in units of the quantum, $\varepsilon/k_B$: a body holding $q$ quanta has $T = q\varepsilon/(nk_B)$. Time is counted in steps. Right: $T_A$ and $T_B$ against the steps, the dashed equilibrium temperature $T_\mathrm{eq} = (n_AT_A + n_BT_B)/(n_A + n_B)$, and the mean curves predicted from $(1 - 1/Q)^n$, where $Q$ is the total number of quanta. The logarithmic view plots $|T_A - T_B|$ on a logarithmic axis, with the straight line of slope $-1/\tau$ in $\ln|T_A - T_B|$, $\tau = -1/\ln(1 - 1/Q)$. The readout gives the step count, $T_A$, $T_B$, $T_\mathrm{eq}$, $\tau$ and the total energy."
   figure={TwoBodies}
   figureProps={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear', tasks: ['unequal', 'no-overshoot', 'same-size', 'log-gap'] }}
 >
@@ -64,7 +64,7 @@ Check it in figure 1.1a, which starts with exactly this pair.
 
 <Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="unequal">
 
-Figure 1.1a holds two <Term id="einstein-solid">Einstein solids</Term>: bodies made of oscillators, each holding energy in identical packets, <Term id="energy-quantum">quanta</Term> of size $\varepsilon$. Body A has $100$ oscillators at $T_A = 4$, which here means four quanta per oscillator; body B has $300$ at $T_B = 1$. At every frame one quantum hops, and you can watch the shading move from A's block into B's. On the right, $T_A$ falls and $T_B$ rises, and they meet on the dashed line at $1.75$, not at the midpoint $2.5$. A fell by $2.25$; B rose by only $0.75$, a third as much, because it has three times the oscillators to share the same energy among.
+Figure 1.1a holds two <Term id="einstein-solid">Einstein solids</Term>: bodies made of oscillators, each holding energy in identical packets, <Term id="energy-quantum">quanta</Term> of size $\varepsilon$. Body A has $100$ oscillators at $T_A = 4$, which here means four quanta per oscillator; body B has $300$ at $T_B = 1$. At every step one quantum hops (the figure runs about ten steps a frame and marks the last hop of each), and you can watch the shading move from A's block into B's. On the right, $T_A$ falls and $T_B$ rises, and they meet on the dashed line at $1.75$, not at the midpoint $2.5$. A fell by $2.25$; B rose by only $0.75$, a third as much, because it has three times the oscillators to share the same energy among.
 
 **Your prediction gets its answer here.** Equilibrium is not where the temperatures split the difference: the body with the larger heat capacity moves less, and the common temperature lands closer to where it started.
 
@@ -72,7 +72,7 @@ Figure 1.1a holds two <Term id="einstein-solid">Einstein solids</Term>: bodies m
 
 <Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="no-overshoot">
 
-Run it again and watch the gap between the curves. The dashed mean curves never cross the equilibrium line: A's comes down onto it from above, B's up onto it from below, each slower the closer it gets. The live traces follow them, and late in the run they do cross and recross the line, but by small random amounts, the jitter of a pair of only $400$ oscillators. Over $64$ seeds the gap $T_A - T_B$ first touches zero between $2.0$ and $6.0$ relaxation times in (in two runs it never did), when the shrinking gap has become as small as that jitter; averaged over the last third of the run and the $64$ seeds, it is $0.008 \pm 0.015$. Random wobble about the line, yes; a systematic swing past it, no: "no overshoot" is a statement about the mean. Now swap the starting temperatures, B hot and A cold, and check that the same holds from the other side.
+Run it again and watch the gap between the curves. The dashed mean curves never cross the equilibrium line: A's comes down onto it from above, B's up onto it from below, each slower the closer it gets. The live traces follow them, and late in the run they do cross and recross the line, but by small random amounts, the jitter of a pair of only $400$ oscillators. Over $64$ seeds the gap $T_A - T_B$ first touches zero between $2.0$ and $6.0$ relaxation times in (in two runs it never did), when the shrinking gap has become as small as that jitter; averaged over the last third of the run and the $64$ seeds, it is $0.008 \pm 0.015$, against the $+0.024$ that the exact mean predicts there, where it is still relaxing. Random wobble about the line, yes; a systematic swing past it, no: "no overshoot" is a statement about the mean. Now swap the starting temperatures, B hot and A cold, and check that the same holds from the other side.
 
 </Step>
 
@@ -84,7 +84,7 @@ Now two bodies of the same size, $200$ oscillators each, at the same starting te
 
 <Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'log' }} id="log-gap">
 
-Back to the first pair, in the logarithmic view: the gap $|T_A - T_B|$ on a logarithmic axis. At first the run falls along a straight line, the line of slope $-1/\tau$: in every interval of $\tau$ steps the gap shrinks by the same factor, $e$. That is what exponential decay looks like, and it is the shape the derivation below predicts. But only at first. From about two relaxation times on, the run strays visibly from the line, and by about three the mean gap, $3e^{-3} = 0.15$, is no larger than the random jitter of a single run, about $0.15$: the line dissolves into noise. That floor is the equilibrium itself, still fluctuating.
+Back to the first pair, in the logarithmic view: the gap $|T_A - T_B|$ on a logarithmic axis. At first the run falls along a straight line, the line of slope $-1/\tau$ in $\ln|T_A - T_B|$: in every interval of $\tau$ steps the gap shrinks by the same factor, $e$. That is what exponential decay looks like, and it is the shape the derivation below predicts. But only at first. From about two relaxation times on, the run strays visibly from the line, and by about three the mean gap, $3e^{-3} = 0.15$, is no larger than the random jitter of a single run, about $0.15$: the line dissolves into noise. That floor is the equilibrium itself, still fluctuating.
 
 </Step>
 
@@ -96,13 +96,13 @@ Back to the first pair, in the logarithmic view: the gap $|T_A - T_B|$ on a loga
 
 <Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="zeroth-law">
 
-**Thermal equilibrium.** Two bodies are in <Term id="thermal-contact">thermal contact</Term> when energy can pass between them as <Term id="heat">heat</Term>, energy that crosses because their temperatures differ, with no work done. They are in <Term id="thermal-equilibrium">thermal equilibrium</Term> when, in contact, nothing macroscopic about either changes any more.
+**Thermal equilibrium.** Two bodies are in <Term id="thermal-contact">thermal contact</Term> when energy can pass between them as <Term id="heat">heat</Term>, energy that crosses because their temperatures differ, with no work done. They are in <Term id="thermal-equilibrium">thermal equilibrium</Term> when, in contact and with nothing outside feeding or draining either of them, nothing macroscopic about either changes any more: no net heat flows between them.
 
 **The zeroth law of thermodynamics.** If body A is in thermal equilibrium with body C, and body B is in thermal equilibrium with C, then A and B are in thermal equilibrium with each other.
 
 It sounds too obvious to state, which is why it was numbered after the first three laws had been. But it is an <LessonLink id="0.1" anchor="epistemic-labels">empirical law</LessonLink>, not a logical necessity. "Has the same mass as" is transitive by arithmetic, because mass is a number. "Is in thermal equilibrium with" is a relation between physical bodies, found by putting them in contact and watching, and nothing but experiment says that it is transitive. The <Term id="zeroth-law">zeroth law</Term> says it is, and that makes <Term id="temperature">temperature</Term> possible: sort all bodies into classes that are in equilibrium with one another, and give each class a number. Body C is then a thermometer. Calibrate it once, touch it to A and then to B: if it reads the same on both, the zeroth law guarantees that A and B would be in equilibrium with each other if they touched, without ever bringing them together.
 
-**Your hand is not a thermometer.** It does not come into equilibrium with what it touches; it stays near body temperature and reports how fast it loses heat. Metal and wood at room temperature are in equilibrium with the air and with each other: the same temperature, by the zeroth law. The metal feels colder because it conducts the heat away from your skin faster, not because it is colder.
+**Your hand is not a thermometer.** It does not come into equilibrium with what it touches; it stays near body temperature and reports how fast it loses heat. Metal and wood at room temperature are in equilibrium with the air and with each other: the same temperature, by the zeroth law. The metal feels colder because it draws heat out of your skin faster (the rate depends on the conductivity and on the heat capacity per unit volume together, and metal is higher in both), not because it is colder.
 
 </Step>
 
@@ -124,7 +124,7 @@ and they are equal exactly when $q_A/n_A = q_B/n_B$: when the two bodies hold th
 
 <Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="t-eq">
 
-**System and boundary.** The pair, isolated together: an <Term id="isolated-system">isolated system</Term>. The boundary between them is rigid, so no work is done. In the course's convention, $\Delta U = Q + W$ with $W$ the work done on a body (<LessonLink id="0.1" anchor="work-sign">the sign of work</LessonLink>), and here $W = 0$: every change in either body's <Term id="internal-energy">internal energy</Term> is heat from the other, $Q_A = -Q_B$.
+**System and boundary.** The pair, isolated together: an <Term id="isolated-system">isolated system</Term>. The boundary between them is rigid, so no work is done. In the course's convention, $\Delta U = Q + W$ with $W$ the work done on a body (<LessonLink id="0.1" anchor="work-sign">the sign of work</LessonLink>), and here $W = 0$: every change in either body's <Term id="internal-energy">internal energy</Term> is heat from the other, $\Delta U_A = -\Delta U_B$.
 
 **Heat capacity.** A body's <Term id="heat-capacity">heat capacity</Term> $C$ is the energy it takes to raise its temperature by one kelvin. Over a range of temperature small enough for $C$ to be treated as constant, $\Delta U = C\,\Delta T$. Conservation of the pair's energy is then
 
@@ -140,7 +140,7 @@ a weighted average of the two starting temperatures, each weighted by its own bo
 
 <Note kind="warn">
 
-Constant heat capacity is an approximation. Real heat capacities depend on temperature, strongly so for solids at low temperature (module 16). Everything else in this derivation is exact; this is the one place an error can enter, and it grows with $|T_{A,0} - T_{B,0}|$.
+Constant heat capacity is an approximation. Real heat capacities depend on temperature, strongly so for solids at low temperature (module 16). Given that the pair is isolated and neither body changes phase, everything else in this derivation is exact; this is the one place an error can enter, and it grows with $|T_{A,0} - T_{B,0}|$.
 
 </Note>
 
@@ -176,7 +176,7 @@ $$
 \dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t
 $$
 
-written with a $\delta$ because heat is not a function of the state (<LessonLink id="0.1" anchor="inexact-d">the inexact differential</LessonLink>). The constant $\kappa > 0$ is the thermal conductance of the contact, in $\text{W/K}$. Like the zeroth law, this is an empirical law, not a theorem: it is the linear idealization of heat conduction, good for small differences, and it fails when $\kappa$ itself starts to depend on the difference, or when radiation or convection carry a share that is not linear in it.
+written with a $\delta$ because heat is not a function of the state (<LessonLink id="0.1" anchor="inexact-d">the inexact differential</LessonLink>). The constant $\kappa > 0$ is the thermal conductance of the contact, in $\text{W/K}$. Like the zeroth law, this is an empirical law, not a theorem: it is the linear idealization of heat conduction, good for small differences, and it fails when $\kappa$ itself starts to depend on the difference, or when radiation or convection carry a share that is not linear in it. It also takes each body to be at one uniform temperature at all times: internal conduction is fast compared with the heat crossing the contact.
 
 With $C_A\,\mathrm{d}T_A = \dbar Q_A$, and the mirror statement for B,
 
@@ -202,9 +202,9 @@ Both temperatures converge on $T_\mathrm{eq}$: the shape of the approach is expo
 
 **What sets the relaxation time.** The <Term id="relaxation-time">relaxation time</Term> $\tau$ is the time over which the gap shrinks by a factor of $e$: to $37\%$ after one $\tau$, $5\%$ after three, and to half after $\tau\ln 2 = 0.69\,\tau$. Read its formula one factor at a time. A better contact, larger $\kappa$, makes it shorter. Larger capacities make it longer, through the combination $C_AC_B/(C_A + C_B)$, which is dominated by the *smaller* of the two: if $C_B \gg C_A$, then $\tau \to C_A/\kappa$, and B is a reservoir whose own temperature hardly moves. Doubling both capacities doubles $\tau$ and leaves $T_\mathrm{eq}$ alone.
 
-**Never instant.** $\tau$ goes to zero only as $\kappa \to \infty$, a contact of infinite conductance, which nothing has. Two blocks pressed together meet over a time that may be short, never at the moment they touch.
+**Never instant.** $\tau$ goes to zero only as $\kappa \to \infty$, a contact of infinite conductance, or as a heat capacity goes to zero, a body that holds no energy; nothing has either. Two blocks pressed together meet over a time that may be short, never at the moment they touch.
 
-**Never past.** The equation is first order: the rate of change of the gap is set by the gap itself, so as the gap shrinks so does what drives it, and $\Delta T(0)\,e^{-t/\tau}$ keeps its sign forever. A pendulum overshoots its lowest point because it has momentum, a second derivative in its equation of motion. Heat flow has none: the flow at each instant is fixed by the present difference alone, and it dies away exactly as that difference does. The straight line in the logarithmic view is this solution, measured.
+**Never past.** The equation is first order: the rate of change of the gap is set by the gap itself, so as the gap shrinks so does what drives it, and $\Delta T(0)\,e^{-t/\tau}$ keeps its sign forever. A pendulum overshoots its lowest point because it has inertia: its equation of motion is second order. Heat flow has none: the flow at each instant is fixed by the present difference alone, and it dies away exactly as that difference does. The dashed straight line in the logarithmic view is this solution, and the run is the measurement.
 
 </Step>
 
@@ -220,7 +220,7 @@ $$
 \langle \Delta q_A \rangle = \Big(1 - \frac{q_A}{Q}\Big)\,p - \frac{q_A}{Q}\,(1 - p) = p - \frac{q_A}{Q} = -\frac{q_A - pQ}{Q}
 $$
 
-which is exactly linear in $q_A$, for every state and not only near equilibrium, because $Q$ never changes. So the mean distance from the equilibrium share $pQ$ shrinks by the same factor $1 - 1/Q$ at every step. The gap $T_A - T_B$ is itself a linear function of $q_A - pQ$, so it shrinks the same way:
+which is exactly linear in $q_A$, for every state and not only near equilibrium, because $Q$ never changes. So the mean of $q_A - pQ$, the average excess over the equilibrium share, shrinks by the same factor $1 - 1/Q$ at every step. The gap $T_A - T_B$ is itself a linear function of $q_A - pQ$, so it shrinks the same way:
 
 $$
 \big\langle T_A - T_B \big\rangle_n = \big(T_A(0) - T_B(0)\big)\left(1 - \frac{1}{Q}\right)^{n} = \big(T_A(0) - T_B(0)\big)\,e^{-n/\tau} \qquad \tau = \frac{-1}{\ln(1 - 1/Q)} \approx Q - \frac12
@@ -234,7 +234,7 @@ $$
 \kappa = \frac{k_B}{Q}\,\frac{n_An_B}{n_A + n_B}
 $$
 
-per step: $0.107\,k_B$ for the first pair. It falls as $1/Q$ because one hop moves one quantum, a smaller share of the imbalance the more quanta the pair holds. A step is a unit of the model, not of time: no physical constant converts it into seconds.
+per step: $0.107\,k_B$ for the first pair. It falls as $1/Q$ because the quantum that moves is drawn from all $Q$ of them: at a given temperature gap the excess in A, $q_A - pQ = n_An_B\,\Delta T/(n_A + n_B)$, is fixed, but the mean net transfer per step is only $1/Q$ of it, since each excess quantum is picked once in $Q$ steps on average; most hops are two-way traffic that cancels. A step is a unit of the model, not of time: no physical constant converts it into seconds.
 
 </Step>
 
@@ -260,13 +260,13 @@ per step: $0.107\,k_B$ for the first pair. It falls as $1/Q$ because one hop mov
 
 <Step fig="fig-1-1b" set={{ base: 20, factor: 10, ratio: 3 }} id="scatter-shrinks">
 
-**The scatter shrinks.** What does differ is how far a single run strays from the curve. The smallest pair wanders visibly, by about a tenth of the starting gap; the largest hugs the line. The readout measures it as the RMS deviation of the run's fractional gap from $e^{-t/\tau}$ over the whole run, six relaxation times. Over $64$ seeds it is $0.112 \pm 0.004$, $0.0349 \pm 0.0012$ and $0.0107 \pm 0.0004$, and multiplied by $\sqrt N$ it gives $1.00$, $0.99$ and $0.95$: the scatter falls as $N^{-1/2}$, the law of <LessonLink id="0.1" anchor="fit">module 0</LessonLink>. Nothing about a hop got gentler; there are more quanta to average over. Press "New seeds" a few times: the paths change, and the largest pair scatters least every time.
+**The scatter shrinks.** What does differ is how far a single run strays from the curve. The smallest pair wanders visibly, by about a tenth of the starting gap; the largest hugs the line. The readout measures it as the RMS deviation of the run's fractional gap from $e^{-t/\tau}$ over the whole run, six relaxation times. Over $2048$ seeds it is $0.108$, $0.0341$ and $0.0107$, and multiplied by $\sqrt N$ it gives $0.97$, $0.96$ and $0.96$: the scatter falls as $N^{-1/2}$, the law of <LessonLink id="0.1" anchor="fit">module 0</LessonLink>. Nothing about a hop got gentler; there are more quanta to average over. Press "New seeds" a few times: the paths change, and the largest pair scatters least every time.
 
 </Step>
 
 <Step fig="fig-1-1b" set={{ base: 20, factor: 4, ratio: 3 }} id="ratio">
 
-**Measure the exponent.** If the scatter falls as $N^{-1/2}$, a pair ten times larger scatters $\sqrt{10} = 3.16$ times less. Read the ratio of the RMS values averaged over sixteen runs, in the readout: that is the one to compare with $\sqrt{10}$. Over $64$ seeds the two ratios come out $3.21$ and $3.27$. A single run's ratio, also in the readout, is a ratio of two noisy numbers, and it scatters widely: in two batches of $256$ seeds, one run in ten gives a ratio below about $2$ and one in ten above about $5$. Press "New seeds" a few times and watch it jump, while the averaged ratio scatters by only about $0.4$. Then move the factor slider. The figure now uses a factor of $4$, where the law predicts a ratio of $2$; the $64$-seed ratios are $2.05$ and $1.91$.
+**Measure the exponent.** If the scatter falls as $N^{-1/2}$, a pair ten times larger scatters $\sqrt{10} = 3.16$ times less. Read the ratio of the RMS values averaged over sixteen runs, in the readout: that is the one to compare with $\sqrt{10}$. Over $64$ seeds the two ratios come out $3.21$ and $3.27$. A single run's ratio, also in the readout, is a ratio of two noisy numbers, and it scatters widely: in two batches of $256$ seeds, one run in ten gives a ratio below about $2$ and one in ten above about $5$. Press "New seeds" a few times and watch it jump, while the averaged ratio scatters by only about $0.25$. Then move the factor slider. The figure now uses a factor of $4$, where the law predicts a ratio of $2$; the $64$-seed ratios are $2.05$ and $1.91$.
 
 </Step>
 
@@ -300,7 +300,7 @@ A real Einstein solid's quanta cannot be told apart, and counting them that way 
 - **Valid when:** both bodies are warm enough for equipartition, many quanta per oscillator, and exchange quanta of the same size.
 - **Failure modes:** low temperature, where quantum statistics replace equipartition; unequal quantum sizes; and so few oscillators that a temperature is not yet a macroscopic quantity.
 
-The figures stretch the second field: at one quantum per oscillator, B starts at the edge of the classical regime (a real Einstein solid holding one quantum per oscillator is at $k_BT = \varepsilon/\ln 2 = 1.44\,\varepsilon$, not $\varepsilon$). Inside the model, $T = q\varepsilon/(nk_B)$ is a definition, and everything above holds for it exactly.
+The figures stretch the **Valid when** field: at one quantum per oscillator, B starts at the edge of the classical regime (a real Einstein solid holding one quantum per oscillator is at $k_BT = \varepsilon/\ln 2 = 1.44\,\varepsilon$, not $\varepsilon$). Inside the model, $T = q\varepsilon/(nk_B)$ is a definition, and everything above holds for it exactly.
 
 </Step>
 
@@ -310,7 +310,7 @@ The figures stretch the second field: at one quantum per oscillator, B starts at
 
 <Note kind="warn">
 
-The model's dynamics is not the real one. A step is a hop, not a second, and $\tau \approx Q$ steps says how the model's clock runs, not how long a real body takes to cool. Where the two bodies end up, and that the gap closes exponentially and without overshoot, carry over to real bodies; the time scale does not.
+The model's dynamics is not the real one. A step is a hop, not a second, and $\tau \approx Q$ steps says how the model's clock runs, not how long a real body takes to cool. Where the two bodies end up, and that the gap closes exponentially and without overshoot, carry over to any real pair whose contact obeys Newton's law (small differences, bodies of uniform temperature); the time scale does not.
 
 </Note>
 
@@ -506,7 +506,7 @@ $$
 
 **Substitution:** (a) $\sigma_{q_A} = \sqrt{700 \times 0.1875} = 11.5$ quanta; $\sigma_{T_A} = 0.115$; relative, $\sqrt{0.75/175} = 0.065$. (b) $\sqrt{0.75/(1.75 \times 10^{23})} = 2.1 \times 10^{-12}$.
 
-**Result:** (a) $T_A$ fluctuates by $6.5\%$ about $1.75$, which is the visible jitter of figure 1.1a. (b) $2 \times 10^{-12}$: for bodies you can hold, the equilibrium temperature is steady to twelve decimal places. Counting the quanta as a real Einstein solid does widens it by $\sqrt{1 + 1.75} = 1.66$, to about $3 \times 10^{-12}$; the conclusion stands.
+**Result:** (a) $T_A$ fluctuates by $6.5\%$ about $1.75$, which is the visible jitter of figure 1.1a. (b) $2 \times 10^{-12}$: for bodies you can hold, the equilibrium temperature is steady to twelve decimal places. Counting the quanta as a real Einstein solid does widens it by $\sqrt{1 + 1.75} = 1.66$, to about $3.5 \times 10^{-12}$; the conclusion stands.
 
 </Solution>
 

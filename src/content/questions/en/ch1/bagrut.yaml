@@ -98,7 +98,7 @@ questions:
               $T_{B,0} = T^\ast - \dfrac{C_A}{C_B}\,\big(T_{A,0} - T^\ast\big)$
           - kind: limit
             text: >-
-              $T^\ast = T_{A,0}$: $T_{B,0} = T_{A,0}$, the pot must be as hot as the water, since the water may lose nothing. $C_B \to 0$: $T_{B,0} \to -\infty$, a pot of no heat capacity takes no heat whatever its temperature. $C_B \to \infty$: $T_{B,0} \to T^\ast$, a huge pot holds the water at its own temperature. $C_A = C_B$: $T_{B,0} = 2T^\ast - T_{A,0}$, as far below $T^\ast$ as the water starts above it.
+              $T^\ast = T_{A,0}$: $T_{B,0} = T_{A,0}$, the pot must be as hot as the water, since the water may lose nothing. $C_B \to 0$: $T_{B,0} \to -\infty$, since a pot of no heat capacity could absorb the water's $15\,\text{K}$ drop only from infinitely far below; in practice it does not cool the water at all, so no preheating is needed. $C_B \to \infty$: $T_{B,0} \to T^\ast$, a huge pot holds the water at its own temperature. $C_A = C_B$: $T_{B,0} = 2T^\ast - T_{A,0}$, as far below $T^\ast$ as the water starts above it.
           - kind: units
             text: >-
               $C_A/C_B$ is a pure number and multiplies a temperature difference, so $T_{B,0}$ is a temperature; Celsius may be used throughout, since only differences and a weighted average with weights summing to one appear.
@@ -389,7 +389,7 @@ questions:
         unit: ''
         tolerance: 0.01
         correctFeedback: >-
-          $q = 2 \times 2.3 = 4.6$ rounds to $5$, and $T_A = 5/2 = 2.5$, $9\%$ above the request. Rounding can shift a temperature by up to half a quantum per oscillator, $1/(2n)$: $0.25$ here, negligible for a macroscopic $n$. A body of two oscillators cannot even be set to the temperature asked of it.
+          $q = 2 \times 2.3 = 4.6$ rounds to $5$, and $T_A = 5/2 = 2.5$, $9\%$ above the request. Rounding can shift a temperature by up to half a quantum spread over the body's $n$ oscillators, $1/(2n)$: $0.25$ here, negligible for a macroscopic $n$. A body of two oscillators cannot even be set to the temperature asked of it.
         wrongFeedback: >-
           Compute $q = nT$, round it to the nearest whole number, and convert back, $T = q/n$.
         commonWrong:

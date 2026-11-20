@@ -23,8 +23,8 @@
   term: { en: thermal equilibrium, he: שיווי משקל תרמי }
   reject: ['שווי משקל תרמי']
   definition:
-    en: The state of two bodies in thermal contact once nothing macroscopic about either changes any more. The net heat flow has stopped; energy still crosses in both directions, at equal rates.
-    he: המצב של שני גופים במגע תרמי כשכבר שום דבר מאקרוסקופי באף אחד מהם אינו משתנה. זרימת החום נטו נפסקה; אנרגיה עדיין עוברת בשני הכיוונים, בקצבים שווים.
+    en: The state of two bodies in thermal contact, left to themselves, once nothing macroscopic about either changes any more. The net heat flow has stopped; energy still crosses in both directions, at equal rates. A steady state kept up by an outside flow is not equilibrium.
+    he: המצב של שני גופים במגע תרמי, כשהם מושארים לעצמם, כשכבר שום דבר מאקרוסקופי באף אחד מהם אינו משתנה. זרימת החום נטו נפסקה; אנרגיה עדיין עוברת בשני הכיוונים, בקצבים שווים. מצב עמיד שנשמר על ידי זרימה מבחוץ אינו שיווי משקל.
   lesson: '1.1'
 - id: zeroth-law
   term: { en: zeroth law of thermodynamics, he: החוק האפס של התרמודינמיקה }
@@ -49,7 +49,7 @@
   term: { en: Newton's law of cooling, he: חוק הקירור של ניוטון }
   definition:
     en: The empirical law that heat flows between two bodies at a rate proportional to their temperature difference, $\dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t$, where $\kappa$ is the conductance of the contact. It holds for small differences.
-    he: החוק האמפירי שלפיו חום זורם בין שני גופים בקצב יחסי להפרש הטמפרטורות ביניהם, $\dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t$, כאשר $\kappa$ היא המוליכות של המגע. הוא תקף להפרשים קטנים.
+    he: החוק האמפירי שלפיו חום זורם בין שני גופים בקצב יחסי להפרש הטמפרטורות ביניהם, $\dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t$, כאשר $\kappa$ היא המוליכות התרמית של המגע. הוא תקף להפרשים קטנים.
   lesson: '1.1'
 - id: relaxation-time
   term: { en: relaxation time, he: זמן רלקסציה }
