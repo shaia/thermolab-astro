@@ -16,7 +16,7 @@
   term: { en: spontaneous symmetry breaking, he: שבירת סימטריה ספונטנית }
   definition:
     en: A state with less symmetry than the energy that governs it. The Ising energy at $h = 0$ is unchanged by flipping every spin, yet below $T_c$ a large lattice holds one sign.
-    he: מצב שיש בו פחות סימטריה מבאנרגיה שקובעת אותו. אנרגיית איזינג ב-$h = 0$ אינה משתנה כשהופכים כל ספין, ובכל זאת מתחת ל-$T_c$ סריג גדול מחזיק בסימן אחד.
+    he: מצב שיש בו פחות סימטריה מאשר באנרגיה שקובעת אותו. אנרגיית איזינג ב-$h = 0$ אינה משתנה כשהופכים כל ספין, ובכל זאת מתחת ל-$T_c$ סריג גדול מחזיק בסימן אחד.
   lesson: '15.1'
 - id: spontaneous-magnetization
   term: { en: spontaneous magnetization, he: מגנוט ספונטני }
@@ -28,7 +28,7 @@
   term: { en: magnetic domain, he: תחום מגנטי }
   definition:
     en: A region in which the spins share one sign, bounded by domain walls.
-    he: אזור שבו לכל הספינים אותו סימן, תחום בקירות תחום.
+    he: אזור שבו לכל הספינים אותו סימן, ושקירות תחום מקיפים אותו.
   lesson: '15.1'
 - id: domain-wall
   term: { en: domain wall, he: קיר תחום }
@@ -64,7 +64,7 @@
     he: התנאי $p_s P(s\to s') = p_{s'} P(s'\to s)$ לכל זוג מצבים. הוא הופך את $p$ להתפלגות סטציונרית של השרשרת.
   lesson: '15.1'
 - id: metropolis
-  term: { en: Metropolis algorithm, he: אלגוריתם מטרופוליס }
+  term: { en: Metropolis rule, he: כלל מטרופוליס }
   definition:
     en: Propose a flip; accept it with probability $\min(1, e^{-\Delta E/(k_BT)})$. Every move that lowers the energy is accepted.
     he: מציעים היפוך ומקבלים אותו בהסתברות $\min(1, e^{-\Delta E/(k_BT)})$. כל מהלך שמוריד את האנרגיה מתקבל.
@@ -85,7 +85,7 @@
   term: { en: quench, he: צינון חטוף }
   definition:
     en: A sudden drop of temperature, faster than the system can follow; the lattice is left to order from a disordered start.
-    he: ירידה פתאומית בטמפרטורה, מהירה מכפי שהמערכת יכולה לעקוב; הסריג נשאר להסתדר ממצב התחלה לא מסודר.
+    he: ירידה פתאומית בטמפרטורה, מהירה יותר מכפי שהמערכת יכולה לעקוב אחריה; את הסריג משאירים להסתדר ממצב התחלה לא מסודר.
   lesson: '15.1'
 - id: coarsening
   term: { en: coarsening, he: הגסה }

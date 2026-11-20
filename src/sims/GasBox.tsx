@@ -86,7 +86,7 @@ const TEXT = {
     mass: 'מסת חלקיק',
     argon: (k: number) => (k === 1 ? 'ארגון' : `פי ${k} מארגון`),
     measured: 'נמדד (ממוצע מצטבר)',
-    previous: 'הריצה הקודמת',
+    previous: 'ההרצה הקודמת',
     ratio: 'יחס',
     yAxis: 'הלחץ P ‏(µN/m)',
     xAxis: 'זמן (ns)',

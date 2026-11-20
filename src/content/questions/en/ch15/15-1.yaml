@@ -98,7 +98,7 @@ questions:
           To reverse, a lattice must pass through configurations with walls running all the way across it. Their cost grows with $L$, so the waiting time between reversals grows exponentially with the size.
         correct: true
         feedback: >-
-          Right. Both lattices are ordered, and in both the ensemble average of $m$ is zero. What differs is how long the chain takes to get from one sign to the other: dozens of reversals in $10^5$ sweeps at $L = 8$, none at $L = 16$ or $32$.
+          Right. Both lattices are ordered, and in both the ensemble average of $m$ is zero. What differs is how long the chain takes to get from one sign to the other: dozens of reversals in $10^5$ sweeps at $L = 8$, once or twice at most at $L = 16$, and none at $32$.
       - text: >-
           The $32 \times 32$ lattice is further below its own transition temperature, which grows with the size.
         feedback: >-

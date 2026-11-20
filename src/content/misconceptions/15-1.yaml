@@ -78,7 +78,7 @@
     he: החלפת כל שכן של ספין בממוצע שלו משנה את התשובה רק בפרטים, ולכן טמפרטורת המעבר של השדה הממוצע בערך נכונה.
   truth:
     en: Near T_c the neighbours are correlated with the spin and with each other over long distances, and mean field discards exactly that. It puts the square lattice's T_c 76% too high and gets the exponent β wrong (1/2 against 1/8).
-    he: ליד ⁦T_c⁩ השכנים מתואמים עם הספין ואחד עם השני למרחקים ארוכים, והשדה הממוצע זורק בדיוק את זה. הוא ממקם את ⁦T_c⁩ של הסריג הריבועי גבוה ב-76% ומחטיא את המעריך ⁦β⁩ ‏(⁦1/2⁩ במקום ⁦1/8⁩).
+    he: ליד ⁦T_c⁩ השכנים מתואמים עם הספין ואחד עם השני למרחקים ארוכים, והשדה הממוצע זורק בדיוק את זה. הוא ממקם את ⁦T_c⁩ של הסריג הריבועי גבוה מדי ב-76% ומחטיא את המעריך ⁦β⁩ ‏(⁦1/2⁩ במקום ⁦1/8⁩).
   remedy:
     lesson: '15.1'
     anchor: mean-field
@@ -95,13 +95,13 @@
     he: השגיאה של ממוצע מונטה קרלו היא ⁦σ/√n⁩ עבור ⁦n⁩ דגימות רשומות, יהיו מתואמות ככל שיהיו.
   truth:
     en: Correlated samples are worth fewer independent ones, N_eff = n/(2τ). The naive error is too small by √(2τ), which near T_c can be a factor of ten or more; a change of seed exposes it.
-    he: דגימות מתואמות שוות פחות דגימות בלתי תלויות, ⁦N_eff = n/(2τ)⁩. השגיאה הנאיבית קטנה מדי פי ⁦√(2τ)⁩, וליד ⁦T_c⁩ זה יכול להיות פי עשרה ויותר; החלפת זרע חושפת זאת.
+    he: דגימות מתואמות שקולות למספר קטן יותר של דגימות בלתי תלויות, ⁦N_eff = n/(2τ)⁩. השגיאה הנאיבית קטנה מדי פי ⁦√(2τ)⁩, וליד ⁦T_c⁩ זה יכול להיות פי עשרה ויותר; החלפת זרע חושפת זאת.
   remedy:
     lesson: '15.1'
     anchor: error-bars
     label:
       en: See what an honest error bar costs
-      he: ראו כמה עולה שגיאה כנה
+      he: ראו כמה עולה פס שגיאה כן
 
 - id: MC-simulation-shows-singularity
   title:

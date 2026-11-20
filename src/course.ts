@@ -173,7 +173,7 @@ export const chapters: Chapter[] = [
             id: 'OBJ-15.1-7',
             text: {
               en: 'Attach a defensible error bar to a Monte Carlo average using the autocorrelation time, N_eff = n/(2τ), and reject conclusions that do not survive a change of seed.',
-              he: `לצרף שגיאה שאפשר להגן עליה לממוצע מונטה קרלו בעזרת זמן המתאם העצמי, ${f('N_eff = n/(2τ)')}, ולדחות מסקנות שאינן שורדות החלפת זרע.`,
+              he: `לצרף פס שגיאה שאפשר להגן עליו לממוצע מונטה קרלו בעזרת זמן המתאם העצמי, ${f('N_eff = n/(2τ)')}, ולדחות מסקנות שאינן שורדות החלפת זרע.`,
             },
           },
         ],
