@@ -1,0 +1,74 @@
+# Terms lesson 1.1 introduces. Hebrew spellings, and the spellings rejected, follow ThermoLab's canonical glossary
+# (glossary/terms.yml); Newton's law of cooling is not in it, and follows ThermoLab's Hebrew module 01. Terms defined
+# by other lessons (internal energy and equipartition: 4.1) are used here through <Term> of their definitions.
+- id: temperature
+  term: { en: temperature, he: טמפרטורה }
+  definition:
+    en: The property that bodies in thermal equilibrium with one another share; the zeroth law is what makes it well defined. A thermometer is a third body that comes to equilibrium with the one it measures and shows their common temperature.
+    he: התכונה שגופים הנמצאים בשיווי משקל תרמי זה עם זה חולקים; החוק האפס הוא שהופך אותה למוגדרת היטב. מדחום הוא גוף שלישי שמגיע לשיווי משקל עם הגוף שהוא מודד ומראה את הטמפרטורה המשותפת להם.
+  lesson: '1.1'
+- id: heat
+  term: { en: heat, he: חום }
+  definition:
+    en: Energy that crosses a system's boundary because of a temperature difference. A small amount of it is written $\dbar Q$, since heat is not a function of the state.
+    he: אנרגיה שחוצה את גבול המערכת בגלל הפרש טמפרטורות. כמות קטנה ממנה נכתבת $\dbar Q$, כי חום אינו פונקציה של המצב.
+  lesson: '1.1'
+- id: thermal-contact
+  term: { en: thermal contact, he: מגע תרמי }
+  definition:
+    en: A contact through which energy can pass between two bodies as heat, with no work done.
+    he: מגע שדרכו אנרגיה יכולה לעבור בין שני גופים כחום, בלי שנעשית עבודה.
+  lesson: '1.1'
+- id: thermal-equilibrium
+  term: { en: thermal equilibrium, he: שיווי משקל תרמי }
+  reject: ['שווי משקל תרמי']
+  definition:
+    en: The state of two bodies in thermal contact once nothing macroscopic about either changes any more. The net heat flow has stopped; energy still crosses in both directions, at equal rates.
+    he: המצב של שני גופים במגע תרמי כשכבר שום דבר מאקרוסקופי באף אחד מהם אינו משתנה. זרימת החום נטו נפסקה; אנרגיה עדיין עוברת בשני הכיוונים, בקצבים שווים.
+  lesson: '1.1'
+- id: zeroth-law
+  term: { en: zeroth law of thermodynamics, he: החוק האפס של התרמודינמיקה }
+  definition:
+    en: If $A$ and $B$ are each in thermal equilibrium with $C$, they are in thermal equilibrium with each other. An empirical law, and the one that makes temperature well defined.
+    he: אם $A$ ו-$B$ נמצאים כל אחד בשיווי משקל תרמי עם $C$, הם נמצאים בשיווי משקל תרמי זה עם זה. זהו חוק אמפירי, והוא שהופך את הטמפרטורה למוגדרת היטב.
+  lesson: '1.1'
+- id: isolated-system
+  term: { en: isolated system, he: מערכת מבודדת }
+  definition:
+    en: A system that exchanges neither energy nor matter with its surroundings, so that its total energy is conserved.
+    he: מערכת שאינה מחליפה עם סביבתה לא אנרגיה ולא חומר, כך שהאנרגיה הכוללת שלה נשמרת.
+  lesson: '1.1'
+- id: heat-capacity
+  term: { en: heat capacity, he: קיבול חום }
+  reject: ['קיבולת חום']
+  definition:
+    en: The energy it takes to raise a body's temperature by one kelvin, $C = \Delta U/\Delta T$ when no work is done; $nk_B$ for an Einstein solid of $n$ oscillators in the classical limit.
+    he: האנרגיה הדרושה כדי להעלות את הטמפרטורה של גוף בקלווין אחד, $C = \Delta U/\Delta T$ כשלא נעשית עבודה; $nk_B$ במוצק איינשטיין של $n$ מתנדים בגבול הקלאסי.
+  lesson: '1.1'
+- id: newtons-law-of-cooling
+  term: { en: Newton's law of cooling, he: חוק הקירור של ניוטון }
+  definition:
+    en: The empirical law that heat flows between two bodies at a rate proportional to their temperature difference, $\dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t$, where $\kappa$ is the conductance of the contact. It holds for small differences.
+    he: החוק האמפירי שלפיו חום זורם בין שני גופים בקצב יחסי להפרש הטמפרטורות ביניהם, $\dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t$, כאשר $\kappa$ היא המוליכות של המגע. הוא תקף להפרשים קטנים.
+  lesson: '1.1'
+- id: relaxation-time
+  term: { en: relaxation time, he: זמן רלקסציה }
+  reject: ['זמן הרפיה']
+  definition:
+    en: The time $\tau$ over which a deviation from equilibrium shrinks by a factor $e$. For two bodies in contact, $\tau = C_AC_B/\big(\kappa\,(C_A + C_B)\big)$.
+    he: הזמן $\tau$ שבמהלכו סטייה משיווי המשקל קטנה פי $e$. עבור שני גופים במגע, $\tau = C_AC_B/\big(\kappa\,(C_A + C_B)\big)$.
+  lesson: '1.1'
+- id: einstein-solid
+  term: { en: Einstein solid, he: מוצק איינשטיין }
+  reject: ['מוצק אינשטיין']
+  definition:
+    en: A model of a solid as independent oscillators, each holding its energy in whole quanta of one size $\varepsilon$.
+    he: מודל של מוצק כאוסף של מתנדים בלתי תלויים, שכל אחד מהם מחזיק את האנרגיה שלו בקוונטים שלמים בגודל אחד, $\varepsilon$.
+  lesson: '1.1'
+- id: energy-quantum
+  term: { en: energy quantum, he: קוונט אנרגיה }
+  reject: ['קוואנט אנרגיה']
+  definition:
+    en: The smallest packet of energy, $\varepsilon$, that an oscillator of an Einstein solid can gain or lose. Two solids in contact exchange quanta of the same size.
+    he: חבילת האנרגיה הקטנה ביותר, $\varepsilon$, שמתנד של מוצק איינשטיין יכול לקבל או לאבד. שני מוצקים במגע מחליפים ביניהם קוונטים בגודל זהה.
+  lesson: '1.1'

@@ -40,3 +40,14 @@ when it is.
   the English page and both module pages have them.
 - Quiz Q-00-2: "if you got 17.5 you forgot to subtract the square of the mean". 17.5 is Σ(k − 3.5)², the
   squared deviations not divided by 6; forgetting to subtract μ² gives ⟨X²⟩ = 91/6 = 15.17.
+
+## Module 01: thermal equilibrium
+
+- The hop model's implicit conductance is κ = k_B n_A n_B / ((n_A + n_B) Q) per step, not k_B/Q (Advanced
+  section, English line 427 and Hebrew line 395; `equilibrium.relaxation_time` docstring). With C = nk_B,
+  Newton's τ = C_A C_B / (κ(C_A + C_B)) equals the model's τ ≈ Q only for that κ; it also follows directly from
+  the mean drift, C_A ⟨ΔT_A⟩ = −(ε/Q)(q_A − pQ) = (k_B/Q) · n_A n_B/(n_A + n_B) · (T_B − T_A). For n_A = 100,
+  n_B = 300, Q = 700 it is 0.107 k_B per step, against k_B/Q = 0.0014 k_B.
+- Transfer section, module 12 bullet: the canonical Einstein solid does not give "the same number" as
+  T = qε/(nk_B). Its partition function gives k_BT = ε/ln(1 + n/q), which approaches ε(q/n + 1/2) only at high
+  temperature: 1.44 ε at one quantum per oscillator, 25.50 ε at 25 (the notebook's bodies), against 1 ε and 25 ε.

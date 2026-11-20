@@ -1,0 +1,531 @@
+---
+lang: en
+id: '1.1'
+chapter: 1
+order: 1
+title: What makes two temperatures the same
+subtitle: Why heat runs from hot to cold, where it stops, and how fast it gets there; and two bodies trading energy one quantum at a time that obey the law exactly, on average
+minutes: 90
+objectives:
+  - id: OBJ-1.1-1
+    text: State the zeroth law of thermodynamics and explain why it is what makes temperature a well-defined, transitive property.
+  - id: OBJ-1.1-2
+    text: Explain thermal equilibrium as the state at which net heat flow between two bodies in contact stops, and identify what continues at the microscopic level.
+  - id: OBJ-1.1-3
+    text: Derive the equilibrium temperature T_eq = (C_A T_A + C_B T_B)/(C_A + C_B) from conservation of energy, and predict how it depends on the two heat capacities.
+  - id: OBJ-1.1-4
+    text: Derive and interpret the exponential relaxation law T_A(t) − T_B(t) = (T_A(0) − T_B(0)) e^(−t/τ), and state what determines the relaxation time τ.
+  - id: OBJ-1.1-5
+    text: Verify computationally that a discrete stochastic energy-exchange model converges to the analytic relaxation law as the system size grows, and state what the simulation does and does not establish.
+prerequisites: ['0.1']
+figures: [fig-1-1a, fig-1-1b]
+---
+
+import TwoBodies from '~/sims/TwoBodies.astro';
+import RelaxationScale from '~/sims/RelaxationScale.astro';
+import Lab from '~/components/Lab.astro';
+import LessonLink from '~/components/LessonLink.astro';
+
+<Spread
+  fig="fig-1-1a"
+  n="1.1a"
+  caption="Two Einstein solids in thermal contact, computed live: body A of $n_A$ oscillators and body B of $n_B$, drawn side by side as blocks of oscillators in proportion to their sizes, each oscillator shaded by the quanta it holds. At every step one quantum hops: it leaves a body with probability proportional to the quanta that body holds, and lands on an oscillator chosen at random among both. Temperatures are in units of the quantum, $\varepsilon/k_B$: a body holding $q$ quanta has $T = q\varepsilon/(nk_B)$. Time is counted in steps. Right: $T_A$ and $T_B$ against the steps, the dashed equilibrium temperature $T_\mathrm{eq} = (n_AT_A + n_BT_B)/(n_A + n_B)$, and the mean curves predicted from $(1 - 1/Q)^n$, where $Q$ is the total number of quanta. The logarithmic view plots $|T_A - T_B|$ on a logarithmic axis, with the straight line of slope $-1/\tau$, $\tau = -1/\ln(1 - 1/Q)$. The readout gives the step count, $T_A$, $T_B$, $T_\mathrm{eq}$, $\tau$ and the total energy."
+  figure={TwoBodies}
+  figureProps={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear', tasks: ['unequal', 'no-overshoot', 'same-size', 'log-gap'] }}
+>
+
+<Hook title="The metal is not colder">
+
+Touch the metal leg of a table, then the wooden top beside it. The metal feels distinctly colder. A thermometer taped to each, left for a few minutes, reads the same on both: the temperature of the room. Your hand was not measuring temperature. It was measuring how fast heat left *it*, and metal carries heat away from skin far faster than wood does.
+
+So what *is* the quantity a thermometer reports, precisely enough that a table leg and a room full of air can be said to share it? And why does heat, once two objects touch, flow from the hotter to the colder, slow down, and stop *exactly* when the two temperatures are equal: never before, never after, and never at some other balance?
+
+This lesson answers in four steps. A law of experience, the zeroth law, makes "the same temperature" mean something. Energy conservation fixes where two bodies end up. Newton's law of cooling fixes how fast they get there. And a model of two bodies trading packets of energy one at a time, run live in the figure, shows a law of that shape emerging from nothing but random exchange.
+
+</Hook>
+
+<Predict
+  id="pred-1-1"
+  prompt="Body A, at temperature 4, is pressed against body B, at temperature 1. B has three times the heat capacity of A, and the pair is otherwise isolated. Where do the two temperatures end up?"
+  choices={[
+    'At 2.5, halfway: in equilibrium the two bodies split the difference.',
+    'At 1.75, closer to the starting temperature of B.',
+    'At 3.25: the hotter body drives the flow, so it sets the result.',
+    'They pass each other, swing back, and settle at 2.5 after a few oscillations.',
+  ]}
+  answer={1}
+>
+
+Check it in figure 1.1a, which starts with exactly this pair.
+
+</Predict>
+
+<Explore title="Put two bodies in contact">
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="unequal">
+
+Figure 1.1a holds two <Term id="einstein-solid">Einstein solids</Term>: bodies made of oscillators, each holding energy in identical packets, <Term id="energy-quantum">quanta</Term> of size $\varepsilon$. Body A has $100$ oscillators at $T_A = 4$, which here means four quanta per oscillator; body B has $300$ at $T_B = 1$. At every frame one quantum hops, and you can watch the shading move from A's block into B's. On the right, $T_A$ falls and $T_B$ rises, and they meet on the dashed line at $1.75$, not at the midpoint $2.5$. A fell by $2.25$; B rose by only $0.75$, a third as much, because it has three times the oscillators to share the same energy among.
+
+**Your prediction gets its answer here.** Equilibrium is not where the temperatures split the difference: the body with the larger heat capacity moves less, and the common temperature lands closer to where it started.
+
+</Step>
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="no-overshoot">
+
+Run it again and watch the gap between the curves. The dashed mean curves never cross the equilibrium line: A's comes down onto it from above, B's up onto it from below, each slower the closer it gets. The live traces follow them, and late in the run they do cross and recross the line, but by small random amounts, the jitter of a pair of only $400$ oscillators. Over $64$ seeds the gap $T_A - T_B$ first touches zero between $2.0$ and $6.0$ relaxation times in (in two runs it never did), when the shrinking gap has become as small as that jitter; averaged over the last third of the run and the $64$ seeds, it is $0.008 \pm 0.015$. Random wobble about the line, yes; a systematic swing past it, no: "no overshoot" is a statement about the mean. Now swap the starting temperatures, B hot and A cold, and check that the same holds from the other side.
+
+</Step>
+
+<Step fig="fig-1-1a" set={{ nA: 200, nB: 200, tA: 4, tB: 1, view: 'linear' }} id="same-size">
+
+Now two bodies of the same size, $200$ oscillators each, at the same starting temperatures. They meet at $2.5$, exactly halfway, each moving by $1.5$. Equal heat capacities, equal weights: the plain average is the special case, not the rule. Notice the readout's $\tau$ as well: $999.5$ steps here, against $699.5$ for the first pair. Why it changed is a question about the model, answered below.
+
+</Step>
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'log' }} id="log-gap">
+
+Back to the first pair, in the logarithmic view: the gap $|T_A - T_B|$ on a logarithmic axis. At first the run falls along a straight line, the line of slope $-1/\tau$: in every interval of $\tau$ steps the gap shrinks by the same factor, $e$. That is what exponential decay looks like, and it is the shape the derivation below predicts. But only at first. From about two relaxation times on, the run strays visibly from the line, and by about three the mean gap, $3e^{-3} = 0.15$, is no larger than the random jitter of a single run, about $0.15$: the line dissolves into noise. That floor is the equilibrium itself, still fluctuating.
+
+</Step>
+
+<Lab notebook="01-equilibrium" />
+
+</Explore>
+
+<Explain title="What the thermometer reports" id="zeroth">
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="zeroth-law">
+
+**Thermal equilibrium.** Two bodies are in <Term id="thermal-contact">thermal contact</Term> when energy can pass between them as <Term id="heat">heat</Term>, energy that crosses because their temperatures differ, with no work done. They are in <Term id="thermal-equilibrium">thermal equilibrium</Term> when, in contact, nothing macroscopic about either changes any more.
+
+**The zeroth law of thermodynamics.** If body A is in thermal equilibrium with body C, and body B is in thermal equilibrium with C, then A and B are in thermal equilibrium with each other.
+
+It sounds too obvious to state, which is why it was numbered after the first three laws had been. But it is an <LessonLink id="0.1" anchor="epistemic-labels">empirical law</LessonLink>, not a logical necessity. "Has the same mass as" is transitive by arithmetic, because mass is a number. "Is in thermal equilibrium with" is a relation between physical bodies, found by putting them in contact and watching, and nothing but experiment says that it is transitive. The <Term id="zeroth-law">zeroth law</Term> says it is, and that makes <Term id="temperature">temperature</Term> possible: sort all bodies into classes that are in equilibrium with one another, and give each class a number. Body C is then a thermometer. Calibrate it once, touch it to A and then to B: if it reads the same on both, the zeroth law guarantees that A and B would be in equilibrium with each other if they touched, without ever bringing them together.
+
+**Your hand is not a thermometer.** It does not come into equilibrium with what it touches; it stays near body temperature and reports how fast it loses heat. Metal and wood at room temperature are in equilibrium with the air and with each other: the same temperature, by the zeroth law. The metal feels colder because it conducts the heat away from your skin faster, not because it is colder.
+
+</Step>
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="still-hopping">
+
+**What stops, and what does not.** Let the figure run past equilibrium and watch the blocks: quanta keep hopping, between the bodies as well as within them. Nothing about the exchange switches off. What stops is the *net* flow. In the model a quantum crosses from A to B when it is drawn from A, with probability $q_A/Q$, and lands in B, with probability $n_B/(n_A + n_B)$; the reverse crossing needs the mirror image. The two rates are
+
+$$
+P(A \to B) = \frac{q_A}{Q}\,\frac{n_B}{n_A + n_B} \qquad P(B \to A) = \frac{q_B}{Q}\,\frac{n_A}{n_A + n_B}
+$$
+
+and they are equal exactly when $q_A/n_A = q_B/n_B$: when the two bodies hold the same number of quanta per oscillator, the same temperature. At the figure's equilibrium, $175$ quanta in A and $525$ in B, each direction happens with probability $0.1875$ per step: more than a third of all steps still carry a quantum across. Equilibrium is a balance of two busy flows, not stillness, the same lesson <LessonLink id="4.1" anchor="many">module 4</LessonLink> draws from a steady pressure gauge.
+
+</Step>
+
+</Explain>
+
+<Explain title="Where they meet: energy conservation" id="energy">
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="t-eq">
+
+**System and boundary.** The pair, isolated together: an <Term id="isolated-system">isolated system</Term>. The boundary between them is rigid, so no work is done. In the course's convention, $\Delta U = Q + W$ with $W$ the work done on a body (<LessonLink id="0.1" anchor="work-sign">the sign of work</LessonLink>), and here $W = 0$: every change in either body's <Term id="internal-energy">internal energy</Term> is heat from the other, $Q_A = -Q_B$.
+
+**Heat capacity.** A body's <Term id="heat-capacity">heat capacity</Term> $C$ is the energy it takes to raise its temperature by one kelvin. Over a range of temperature small enough for $C$ to be treated as constant, $\Delta U = C\,\Delta T$. Conservation of the pair's energy is then
+
+$$
+C_A\big(T_\mathrm{eq} - T_{A,0}\big) + C_B\big(T_\mathrm{eq} - T_{B,0}\big) = 0
+$$
+
+which rearranges to
+
+<Formula tex="T_\mathrm{eq} = \frac{C_A T_{A,0} + C_B T_{B,0}}{C_A + C_B}" label="The equilibrium temperature of two bodies in contact, isolated together" />
+
+a weighted average of the two starting temperatures, each weighted by its own body's heat capacity. It is the plain average only when $C_A = C_B$. Read it as a lever: the two temperature changes are in inverse proportion to the capacities, $(T_{A,0} - T_\mathrm{eq})/(T_\mathrm{eq} - T_{B,0}) = C_B/C_A$, so the body that needs more energy per kelvin moves less. Doubling both capacities changes nothing: only their ratio enters.
+
+<Note kind="warn">
+
+Constant heat capacity is an approximation. Real heat capacities depend on temperature, strongly so for solids at low temperature (module 16). Everything else in this derivation is exact; this is the one place an error can enter, and it grows with $|T_{A,0} - T_{B,0}|$.
+
+</Note>
+
+</Step>
+
+<Step fig="fig-1-1a" set={{ nA: 200, nB: 200, tA: 4, tB: 1, view: 'linear' }} id="model-capacity">
+
+**The same law, inside the model.** Each oscillator of an Einstein solid holds, in the classical limit, a mean energy $k_BT$ (two quadratic terms, $\tfrac12 k_BT$ each, by <Term id="equipartition">equipartition</Term>), so a body of $n$ oscillators holding $q$ quanta has
+
+$$
+U = q\varepsilon = nk_BT \qquad C = nk_B \qquad T = \frac{q\varepsilon}{nk_B}
+$$
+
+The model conserves energy exactly, not approximately: a hop only changes which body owns one quantum, and the total $Q$ never changes, which is why the readout's energy total never moves. With $C = nk_B$ the weighted average becomes
+
+$$
+T_\mathrm{eq} = \frac{Q\varepsilon}{(n_A + n_B)\,k_B}
+$$
+
+the quanta shared out evenly per oscillator. For the first pair, $700$ quanta over $400$ oscillators: $1.75$. For the two equal bodies the figure now shows, $1000$ over $400$: $2.5$.
+
+</Step>
+
+</Explain>
+
+<Explain title="How fast: Newton's law of cooling" id="relax">
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'linear' }} id="newton">
+
+**The missing ingredient.** Energy conservation says where the pair ends up and nothing about how fast. That needs a statement about the rate of heat flow, and the simplest is <Term id="newtons-law-of-cooling">Newton's law of cooling</Term>: heat flows from the hotter body to the colder at a rate proportional to their temperature difference. In a time $\mathrm{d}t$, body A takes in the heat
+
+$$
+\dbar Q_A = \kappa\,(T_B - T_A)\,\mathrm{d}t
+$$
+
+written with a $\delta$ because heat is not a function of the state (<LessonLink id="0.1" anchor="inexact-d">the inexact differential</LessonLink>). The constant $\kappa > 0$ is the thermal conductance of the contact, in $\text{W/K}$. Like the zeroth law, this is an empirical law, not a theorem: it is the linear idealization of heat conduction, good for small differences, and it fails when $\kappa$ itself starts to depend on the difference, or when radiation or convection carry a share that is not linear in it.
+
+With $C_A\,\mathrm{d}T_A = \dbar Q_A$, and the mirror statement for B,
+
+$$
+\frac{\mathrm{d}T_A}{\mathrm{d}t} = \frac{\kappa}{C_A}\,(T_B - T_A) \qquad \frac{\mathrm{d}T_B}{\mathrm{d}t} = \frac{\kappa}{C_B}\,(T_A - T_B)
+$$
+
+Subtract the second from the first, and the gap $\Delta T = T_A - T_B$ obeys an equation of its own:
+
+$$
+\frac{\mathrm{d}\,\Delta T}{\mathrm{d}t} = -\kappa\left(\frac{1}{C_A} + \frac{1}{C_B}\right)\Delta T = -\frac{\Delta T}{\tau}
+$$
+
+whose solution is
+
+<Formula tex="T_A(t) - T_B(t) = \big(T_A(0) - T_B(0)\big)\,e^{-t/\tau} \qquad \tau = \frac{C_A C_B}{\kappa\,(C_A + C_B)}" label="Exponential relaxation of the temperature gap, and the relaxation time" />
+
+Both temperatures converge on $T_\mathrm{eq}$: the shape of the approach is exponential, and its destination was already fixed by energy conservation alone.
+
+</Step>
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'log' }} id="tau">
+
+**What sets the relaxation time.** The <Term id="relaxation-time">relaxation time</Term> $\tau$ is the time over which the gap shrinks by a factor of $e$: to $37\%$ after one $\tau$, $5\%$ after three, and to half after $\tau\ln 2 = 0.69\,\tau$. Read its formula one factor at a time. A better contact, larger $\kappa$, makes it shorter. Larger capacities make it longer, through the combination $C_AC_B/(C_A + C_B)$, which is dominated by the *smaller* of the two: if $C_B \gg C_A$, then $\tau \to C_A/\kappa$, and B is a reservoir whose own temperature hardly moves. Doubling both capacities doubles $\tau$ and leaves $T_\mathrm{eq}$ alone.
+
+**Never instant.** $\tau$ goes to zero only as $\kappa \to \infty$, a contact of infinite conductance, which nothing has. Two blocks pressed together meet over a time that may be short, never at the moment they touch.
+
+**Never past.** The equation is first order: the rate of change of the gap is set by the gap itself, so as the gap shrinks so does what drives it, and $\Delta T(0)\,e^{-t/\tau}$ keeps its sign forever. A pendulum overshoots its lowest point because it has momentum, a second derivative in its equation of motion. Heat flow has none: the flow at each instant is fixed by the present difference alone, and it dies away exactly as that difference does. The straight line in the logarithmic view is this solution, measured.
+
+</Step>
+
+</Explain>
+
+<Explain title="Why random hops obey it exactly" id="exact">
+
+<Step fig="fig-1-1a" set={{ nA: 100, nB: 300, tA: 4, tB: 1, view: 'log' }} id="hop-rule">
+
+**The mean of one step.** The hop rule looks arbitrary until its consequence is traced. In one step $q_A$ falls by one when the quantum leaves A and lands in B, and rises by one when it leaves B and lands in A. With $p = n_A/(n_A + n_B)$ the chance of landing in A, the mean change is
+
+$$
+\langle \Delta q_A \rangle = \Big(1 - \frac{q_A}{Q}\Big)\,p - \frac{q_A}{Q}\,(1 - p) = p - \frac{q_A}{Q} = -\frac{q_A - pQ}{Q}
+$$
+
+which is exactly linear in $q_A$, for every state and not only near equilibrium, because $Q$ never changes. So the mean distance from the equilibrium share $pQ$ shrinks by the same factor $1 - 1/Q$ at every step. The gap $T_A - T_B$ is itself a linear function of $q_A - pQ$, so it shrinks the same way:
+
+$$
+\big\langle T_A - T_B \big\rangle_n = \big(T_A(0) - T_B(0)\big)\left(1 - \frac{1}{Q}\right)^{n} = \big(T_A(0) - T_B(0)\big)\,e^{-n/\tau} \qquad \tau = \frac{-1}{\ln(1 - 1/Q)} \approx Q - \frac12
+$$
+
+This is a theorem about the model: the *mean* over runs follows the exponential exactly. For the first pair $Q = 700$ and $\tau = 699.5$ steps; for the equal pair, $Q = 1000$ and $\tau = 999.5$, which is why the readout changed. Two batches of $512$ seeds give a mean gap after $699$ steps of $1.104 \pm 0.007$ and $1.106 \pm 0.007$, against the predicted $1.1044$, while single runs scatter about it by $0.15$.
+
+**The model's conductance.** Matching $\tau = Q$ to Newton's $\tau = C_AC_B/\big(\kappa(C_A + C_B)\big)$, with $C = nk_B$, gives the conductance the hop rule implies:
+
+$$
+\kappa = \frac{k_B}{Q}\,\frac{n_An_B}{n_A + n_B}
+$$
+
+per step: $0.107\,k_B$ for the first pair. It falls as $1/Q$ because one hop moves one quantum, a smaller share of the imbalance the more quanta the pair holds. A step is a unit of the model, not of time: no physical constant converts it into seconds.
+
+</Step>
+
+</Explain>
+
+</Spread>
+
+<Spread
+  fig="fig-1-1b"
+  n="1.1b"
+  caption="The same relaxation at three sizes, computed live. Each panel is a pair of $n_A$ and $n_B$ oscillators starting at $T_A$ and $T_B$, with $n_B/n_A$ set by the ratio; the smallest pair has $n_A$ set by the base, and each next pair is larger by the factor. Each panel plots the fractional gap $(T_A - T_B)/(T_{A,0} - T_{B,0})$ against time in units of that pair's own $\tau$, with the dashed prediction $e^{-t/\tau}$; the panels stack on a narrow screen. The readout gives, for each panel, $N = n_A + n_B$, the RMS deviation of the run from the prediction over six relaxation times, and that RMS averaged over sixteen runs from different seeds; then the ratios of successive RMS values, against the square root of the factor. The button reruns all three with new seeds."
+  figure={RelaxationScale}
+  figureProps={{ base: 20, factor: 10, ratio: 3, tA: 4, tB: 1, tasks: ['scatter-shrinks', 'ratio', 'time-units'] }}
+>
+
+<Explain title="Bigger bodies, steadier relaxation" id="size">
+
+<Step fig="fig-1-1b" set={{ base: 20, factor: 10, ratio: 3 }} id="time-units">
+
+**Three sizes, one curve.** Figure 1.1b runs three pairs, each starting at $T_A = 4$ and $T_B = 1$ with B three times A: $20 + 60$, $200 + 600$ and $2000 + 6000$ oscillators, so $N = 80$, $800$ and $8000$. They hold $Q = 140$, $1400$ and $14\,000$ quanta, and their relaxation times are $139.5$, $1399.5$ and $13\,999.5$ steps: counted in steps, the largest pair is a hundred times slower, because each hop moves one quantum out of a hundred times as many. Each panel's time axis is in units of its own $\tau$, and on those axes all three runs follow the same dashed curve $e^{-t/\tau}$. The law has the same shape at every size; only the clock differs. Move the base slider, and the three runs still fall along the one curve.
+
+</Step>
+
+<Step fig="fig-1-1b" set={{ base: 20, factor: 10, ratio: 3 }} id="scatter-shrinks">
+
+**The scatter shrinks.** What does differ is how far a single run strays from the curve. The smallest pair wanders visibly, by about a tenth of the starting gap; the largest hugs the line. The readout measures it as the RMS deviation of the run's fractional gap from $e^{-t/\tau}$ over the whole run, six relaxation times. Over $64$ seeds it is $0.112 \pm 0.004$, $0.0349 \pm 0.0012$ and $0.0107 \pm 0.0004$, and multiplied by $\sqrt N$ it gives $1.00$, $0.99$ and $0.95$: the scatter falls as $N^{-1/2}$, the law of <LessonLink id="0.1" anchor="fit">module 0</LessonLink>. Nothing about a hop got gentler; there are more quanta to average over. Press "New seeds" a few times: the paths change, and the largest pair scatters least every time.
+
+</Step>
+
+<Step fig="fig-1-1b" set={{ base: 20, factor: 4, ratio: 3 }} id="ratio">
+
+**Measure the exponent.** If the scatter falls as $N^{-1/2}$, a pair ten times larger scatters $\sqrt{10} = 3.16$ times less. Read the ratio of the RMS values averaged over sixteen runs, in the readout: that is the one to compare with $\sqrt{10}$. Over $64$ seeds the two ratios come out $3.21$ and $3.27$. A single run's ratio, also in the readout, is a ratio of two noisy numbers, and it scatters widely: in two batches of $256$ seeds, one run in ten gives a ratio below about $2$ and one in ten above about $5$. Press "New seeds" a few times and watch it jump, while the averaged ratio scatters by only about $0.4$. Then move the factor slider. The figure now uses a factor of $4$, where the law predicts a ratio of $2$; the $64$-seed ratios are $2.05$ and $1.91$.
+
+</Step>
+
+<Step fig="fig-1-1b" set={{ base: 20, factor: 10, ratio: 3 }} id="binomial">
+
+**Where the $N^{-1/2}$ comes from.** Long after the relaxation, each of the $Q$ quanta has been moved so many times that it sits on an oscillator chosen at random among all $n_A + n_B$, independently of the others: in A with probability $p = n_A/(n_A + n_B)$. That is the hop rule's stationary law, and it makes $q_A$ binomial. The smallest case shows it: two oscillators a side sharing four quanta visit $q_A = 0, 1, 2, 3, 4$ in the ratio $1 : 4 : 6 : 4 : 1$ (a run of $400\,000$ steps measures $1.02 : 3.99 : 5.96 : 4.00 : 1.03$). So the equilibrium scatter is that of a binomial count, and the gap, a linear function of $q_A$, inherits it:
+
+$$
+\sigma_{q_A} = \sqrt{Q\,p\,(1 - p)} \qquad \sigma_{T_A - T_B} = \frac{\varepsilon}{k_B}\left(\frac{1}{n_A} + \frac{1}{n_B}\right)\sqrt{Q\,p\,(1 - p)}
+$$
+
+For the pair of figure 1.1a that is $0.153$, the jitter seen there (a long run measures $0.155 \pm 0.003$ over eight seeds). For the three pairs here, as a fraction of the starting gap, it is $0.114$, $0.036$ and $0.0114$, falling as $N^{-1/2}$; the RMS over a run is a little smaller, because the scatter builds up from zero at the start.
+
+A real Einstein solid's quanta cannot be told apart, and counting them that way gives a different law: for the same four quanta, $5 : 8 : 9 : 8 : 5$. It peaks at almost the same place and is wider, by a factor $\sqrt{1 + Q/(n_A + n_B)}$ for large bodies, which changes the coefficient and leaves the $N^{-1/2}$ untouched. Module 9 counts that way.
+
+</Step>
+
+</Explain>
+
+<Explain title="What the simulation establishes" id="honesty">
+
+<Step fig="fig-1-1b" set={{ base: 20, factor: 10, ratio: 3 }} id="model-spec">
+
+**The model, specified** in the course's <LessonLink id="0.1" anchor="model-spec">seven fields</LessonLink>:
+
+- **System:** two bodies A and B in thermal contact, Einstein solids of $n_A$ and $n_B$ oscillators, exchanging quanta of one size $\varepsilon$.
+- **Dynamics:** one randomly chosen quantum hops per step: it leaves its body with probability proportional to that body's share of the quanta, and lands on a uniformly random oscillator among both bodies.
+- **Boundary:** the pair is closed and isolated together; the total number of quanta, the total energy, is exactly conserved.
+- **Ensemble:** microcanonical for the pair, with the quanta counted as labelled particles: every placement of the labelled quanta on the oscillators is equally probable, which is the hop rule's own stationary law. Each body's temperature is read off its own quanta by equipartition, $T = q\varepsilon/(nk_B)$.
+- **Ignored:** the physical rate of exchange (time is counted in steps, not seconds), any structure inside a body, and any coupling other than the exchange of quanta.
+- **Valid when:** both bodies are warm enough for equipartition, many quanta per oscillator, and exchange quanta of the same size.
+- **Failure modes:** low temperature, where quantum statistics replace equipartition; unequal quantum sizes; and so few oscillators that a temperature is not yet a macroscopic quantity.
+
+The figures stretch the second field: at one quantum per oscillator, B starts at the edge of the classical regime (a real Einstein solid holding one quantum per oscillator is at $k_BT = \varepsilon/\ln 2 = 1.44\,\varepsilon$, not $\varepsilon$). Inside the model, $T = q\varepsilon/(nk_B)$ is a definition, and everything above holds for it exactly.
+
+</Step>
+
+<Step fig="fig-1-1b" set={{ base: 20, factor: 10, ratio: 3 }} id="does-not-establish">
+
+**Evidence, not proof.** The model shows that one microscopic mechanism, random exchange weighted by occupation, produces Newton's law of cooling exactly on average, with a scatter that vanishes as $N^{-1/2}$. That is a strong hint that the macroscopic law does not depend on microscopic details. It is not a proof that every real contact obeys it, and it says nothing about the conductance $\kappa$ of any real material: heat crosses a table leg by phonons and electrons, and leaves a mug by conduction, convection and radiation, none of which looks like one quantum hopping between two idealized solids. The derivation establishes the exponential from Newton's law; the simulation illustrates and checks it; whether a real mug obeys it is for an experiment to decide, and the laboratory's last part asks you to do one, with a kitchen thermometer and a $\tau$ fitted in minutes rather than in steps.
+
+<Note kind="warn">
+
+The model's dynamics is not the real one. A step is a hop, not a second, and $\tau \approx Q$ steps says how the model's clock runs, not how long a real body takes to cool. Where the two bodies end up, and that the gap closes exponentially and without overshoot, carry over to real bodies; the time scale does not.
+
+</Note>
+
+</Step>
+
+</Explain>
+
+</Spread>
+
+<Page>
+
+<Example id="ex-1-1-1" title="Coffee in a cold mug">
+
+$0.20\,\text{kg}$ of coffee at $90\,{}^\circ\text{C}$, with specific heat $c = 4200\,\text{J/(kg K)}$, is poured into an empty mug of heat capacity $150\,\text{J/K}$ at $20\,{}^\circ\text{C}$. Treat the pair as isolated.
+
+(a) Find the coffee's heat capacity, and the common temperature.
+
+(b) Compare it with the plain average of the two starting temperatures.
+
+<Solution>
+
+**Given:** $C_A = mc$ with $m = 0.20\,\text{kg}$, $T_{A,0} = 90\,{}^\circ\text{C}$; $C_B = 150\,\text{J/K}$, $T_{B,0} = 20\,{}^\circ\text{C}$.
+
+**General law:** energy conservation for an isolated pair with constant heat capacities, $C_A(T_\mathrm{eq} - T_{A,0}) + C_B(T_\mathrm{eq} - T_{B,0}) = 0$.
+
+**Symbolic result:**
+
+$$
+T_\mathrm{eq} = \frac{C_AT_{A,0} + C_BT_{B,0}}{C_A + C_B} \qquad T_{A,0} - T_\mathrm{eq} = \frac{C_B}{C_A + C_B}\,\big(T_{A,0} - T_{B,0}\big)
+$$
+
+**Limit check:** a mug of no heat capacity, $C_B \to 0$, leaves the coffee at $90\,{}^\circ\text{C}$; a mug of enormous capacity, $C_B \to \infty$, brings the coffee down to $20\,{}^\circ\text{C}$. Equal capacities give the plain average. A weighted average of temperatures may use Celsius as well as kelvin, because the weights sum to one and the offset cancels.
+
+**Units:** $(\text{J/K})\cdot{}^\circ\text{C}/(\text{J/K}) = {}^\circ\text{C}$.
+
+**Substitution:** $C_A = 0.20 \times 4200 = 840\,\text{J/K}$; $T_\mathrm{eq} = (840 \times 90 + 150 \times 20)/990 = 78\,600/990 = 79.4\,{}^\circ\text{C}$. The coffee falls by $10.6\,\text{K}$, the mug rises by $59.4\,\text{K}$.
+
+**Result:** (a) $840\,\text{J/K}$; $79.4\,{}^\circ\text{C}$. (b) The plain average is $55\,{}^\circ\text{C}$, far below: the coffee has $5.6$ times the mug's heat capacity, so it moves $5.6$ times less. Warming the mug first is worth doing; pouring into it cold costs the coffee about $11\,\text{K}$.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-1-1-2" title="Counting quanta">
+
+In figure 1.1a body A has $100$ oscillators at $T_A = 4$ and body B has $300$ at $T_B = 1$, in units of $\varepsilon/k_B$.
+
+(a) How many quanta does each hold, and where do the temperatures meet?
+
+(b) How many quanta cross from A to B, net, and by how much does each temperature change?
+
+(c) What is $\tau$, and how much of the starting gap is left, on average, after the figure's run of $6Q$ steps?
+
+<Solution>
+
+**Given:** $n_A = 100$, $n_B = 300$, $T = q\varepsilon/(nk_B)$, so $q_A = 400$ and $q_B = 300$.
+
+**General law:** $Q = q_A + q_B$ is conserved; $C = nk_B$; the weighted average for $T_\mathrm{eq}$; $\langle T_A - T_B\rangle_n = (T_A(0) - T_B(0))(1 - 1/Q)^n$.
+
+**Symbolic result:**
+
+$$
+T_\mathrm{eq} = \frac{Q\varepsilon}{(n_A + n_B)\,k_B} \qquad q_A^\mathrm{eq} = \frac{n_A}{n_A + n_B}\,Q \qquad \tau = \frac{-1}{\ln(1 - 1/Q)}
+$$
+
+**Limit check:** make B enormous, $n_B \to \infty$ at fixed $T_B$: then $T_\mathrm{eq} \to T_B$, and B is a reservoir whose temperature does not move. With $n_A = n_B$ the formula gives the plain average, as in the figure's equal pair.
+
+**Units:** temperatures in units of $\varepsilon/k_B$; quanta and steps are counts.
+
+**Substitution:** (a) $Q = 700$; $T_\mathrm{eq} = 700/400 = 1.75$, the same as $(100 \times 4 + 300 \times 1)/400$. (b) $q_A^\mathrm{eq} = 700/4 = 175$, so $225$ quanta cross net; $T_A$ falls by $225/100 = 2.25$ and $T_B$ rises by $225/300 = 0.75$. (c) $\tau = 699.5$ steps; after $4200$ steps $(1 - 1/700)^{4200} = 0.0025$ of the gap is left, $0.007$ on average.
+
+**Result:** the pair meets at $1.75$, after $225$ quanta have crossed, A moving three times as far as B. After the run the mean gap, $0.007$, is twenty times smaller than the jitter of $0.15$ that a single run keeps at equilibrium: what you see at the end of the run is fluctuation, not relaxation still going on.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-1-1-3" title="Two bodies and a contact">
+
+Two bodies with $C_A = 40\,\text{J/K}$ and $C_B = 120\,\text{J/K}$ touch through a contact of conductance $\kappa = 0.50\,\text{W/K}$, starting with a gap of $60\,\text{K}$.
+
+(a) Find the relaxation time.
+
+(b) How long until the gap is $5\%$ of its initial value?
+
+<Solution>
+
+**Given:** $C_A = 40\,\text{J/K}$, $C_B = 120\,\text{J/K}$, $\kappa = 0.50\,\text{W/K}$, $\Delta T(0) = 60\,\text{K}$.
+
+**General law:** Newton's law of cooling for each body, $C_A\,\mathrm{d}T_A/\mathrm{d}t = \kappa(T_B - T_A)$ and $C_B\,\mathrm{d}T_B/\mathrm{d}t = \kappa(T_A - T_B)$; subtracted, $\mathrm{d}\,\Delta T/\mathrm{d}t = -\Delta T/\tau$.
+
+**Symbolic result:**
+
+$$
+\tau = \frac{C_AC_B}{\kappa\,(C_A + C_B)} \qquad t_{5\%} = \tau\ln 20
+$$
+
+**Limit check:** as $C_B \to \infty$, $\tau \to C_A/\kappa$: only the small body has to change temperature. As $\kappa \to \infty$, $\tau \to 0$, the instant equilibrium no real contact achieves. Doubling both capacities doubles $\tau$.
+
+**Units:** $(\text{J/K})^2/\big((\text{W/K})(\text{J/K})\big) = \text{J/W} = \text{s}$.
+
+**Substitution:** $\tau = 40 \times 120/(0.50 \times 160) = 4800/80 = 60\,\text{s}$. $t_{5\%} = 60 \times \ln 20 = 60 \times 3.00 = 180\,\text{s}$.
+
+**Result:** (a) $\tau = 60\,\text{s}$; (b) three minutes, about three relaxation times, by which the gap is $3\,\text{K}$. With B alone made infinitely large, $\tau$ would be $80\,\text{s}$: a finite partner speeds the approach, because it moves toward A as A moves toward it.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-1-1-4" title="Time of death">
+
+A body is found in a room held at $18\,{}^\circ\text{C}$. Its temperature is $30\,{}^\circ\text{C}$, and an hour later $27\,{}^\circ\text{C}$. Assume it cools by Newton's law toward the room, and that it was at $37\,{}^\circ\text{C}$ at death.
+
+(a) Find $\tau$.
+
+(b) Estimate how long before the first measurement death occurred.
+
+<Solution>
+
+**Given:** the room, $T_\infty = 18\,{}^\circ\text{C}$; gaps above it of $12\,\text{K}$, then $9\,\text{K}$ after $\Delta t = 1\,\text{h}$; $19\,\text{K}$ at death, a time $t^\ast$ before the first reading.
+
+**General law:** with the room as a reservoir, $T(t) - T_\infty = (T_0 - T_\infty)\,e^{-t/\tau}$.
+
+**Symbolic result:**
+
+$$
+\tau = \frac{\Delta t}{\ln(12/9)} \qquad t^\ast = \tau\ln\frac{19}{12}
+$$
+
+**Limit check:** had the first reading been $37\,{}^\circ\text{C}$, the logarithm would be zero and death would be now. A perfectly insulated body, $\tau \to \infty$, would not cool at all and could not be dated this way; a fast cooler would put death closer to the measurement.
+
+**Units:** $\tau$ in hours, since the logarithm is a pure number.
+
+**Substitution:** $\tau = 1/\ln(1.333) = 1/0.288 = 3.48\,\text{h}$. $t^\ast = 3.48 \times \ln(1.583) = 3.48 \times 0.460 = 1.60\,\text{h}$.
+
+**Result:** about $1.6\,\text{h}$, an hour and thirty-six minutes, before the first reading. The estimate is only as good as its assumptions: a body is not a uniform block, $\kappa$ changes with clothing and air flow, and $37\,{}^\circ\text{C}$ varies from person to person.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-1-1-5" title="What the thermometer does to the tea">
+
+A glass thermometer of heat capacity $12\,\text{J/K}$, at $22\,{}^\circ\text{C}$, is put into $30\,\text{g}$ of tea at $70\,{}^\circ\text{C}$ ($c = 4200\,\text{J/(kg K)}$). Ignore every other loss. What does it read once it has come to equilibrium, and how wrong is that?
+
+<Solution>
+
+**Given:** the thermometer, $C_1 = 12\,\text{J/K}$ and $T_1 = 22\,{}^\circ\text{C}$; the tea, $C_2 = 0.030 \times 4200 = 126\,\text{J/K}$, $T_2 = 70\,{}^\circ\text{C}$.
+
+**General law:** by the zeroth law, a thermometer in equilibrium with the tea reads the tea's temperature: the tea's temperature *after* contact. Energy conservation gives that temperature.
+
+**Symbolic result:**
+
+$$
+T_\mathrm{eq} = \frac{C_1T_1 + C_2T_2}{C_1 + C_2} \qquad T_2 - T_\mathrm{eq} = \frac{C_1}{C_1 + C_2}\,\big(T_2 - T_1\big)
+$$
+
+**Limit check:** as $C_1/C_2 \to 0$ the error vanishes: a thermometer is good when it is small beside what it measures. A thermometer already at the tea's temperature disturbs nothing, whatever its size.
+
+**Units:** the fraction is a pure number, so the error is in kelvin.
+
+**Substitution:** $T_\mathrm{eq} = (12 \times 22 + 126 \times 70)/138 = 9084/138 = 65.8\,{}^\circ\text{C}$; error $(12/138) \times 48 = 4.2\,\text{K}$.
+
+**Result:** it reads $65.8\,{}^\circ\text{C}$, $4.2\,\text{K}$ below the tea's temperature before it went in. The reading is not wrong about the tea it is in: the thermometer cooled it. Preheating the thermometer, or measuring a larger volume, makes the disturbance small.
+
+</Solution>
+
+</Example>
+
+<Example id="ex-1-1-6" title="How steady is equilibrium?">
+
+In the model at equilibrium each of the $Q$ quanta sits in A with probability $p = n_A/(n_A + n_B)$, independently of the others.
+
+(a) For the pair of figure 1.1a ($100$ and $300$ oscillators, $Q = 700$), find the standard deviation of $q_A$ and of $T_A$, and the relative fluctuation of $T_A$.
+
+(b) Repeat for bodies of $10^{23}$ and $3 \times 10^{23}$ oscillators at the same starting temperatures.
+
+<Solution>
+
+**Given:** (a) $n_A = 100$, $Q = 700$, $p = 1/4$; (b) $n_A = 10^{23}$, $Q = 7 \times 10^{23}$, $p = 1/4$.
+
+**General law:** $q_A$ is binomial, with mean $pQ$ and variance $Qp(1 - p)$; $T_A = q_A\varepsilon/(n_Ak_B)$.
+
+**Symbolic result:**
+
+$$
+\sigma_{q_A} = \sqrt{Q\,p\,(1 - p)} \qquad \frac{\sigma_{T_A}}{\langle T_A \rangle} = \frac{\sigma_{q_A}}{pQ} = \sqrt{\frac{1 - p}{p\,Q}}
+$$
+
+**Limit check:** as $p \to 1$, A is the whole system and its energy is the conserved total: no fluctuation. As $p \to 0$, A is a small body against a vast reservoir, and the relative fluctuation tends to $1/\sqrt{pQ}$, one over the square root of the quanta A itself holds.
+
+**Units:** $\sigma_{q_A}$ is a count; $\sigma_{T_A}$ is in $\varepsilon/k_B$; the ratio is a pure number.
+
+**Substitution:** (a) $\sigma_{q_A} = \sqrt{700 \times 0.1875} = 11.5$ quanta; $\sigma_{T_A} = 0.115$; relative, $\sqrt{0.75/175} = 0.065$. (b) $\sqrt{0.75/(1.75 \times 10^{23})} = 2.1 \times 10^{-12}$.
+
+**Result:** (a) $T_A$ fluctuates by $6.5\%$ about $1.75$, which is the visible jitter of figure 1.1a. (b) $2 \times 10^{-12}$: for bodies you can hold, the equilibrium temperature is steady to twelve decimal places. Counting the quanta as a real Einstein solid does widens it by $\sqrt{1 + 1.75} = 1.66$, to about $3 \times 10^{-12}$; the conclusion stands.
+
+</Solution>
+
+</Example>
+
+{/* TODO bank */}
+<Check title="Questions on the lesson" ids={[]} />
+
+<Summary title="What we learned">
+
+- **The zeroth law** (equilibrium with a common third body implies equilibrium with each other) is an empirical law, and it is what lets a number, the temperature, label every class of bodies in mutual equilibrium. A thermometer is the third body. A hand is not a thermometer: it reports the rate of heat loss.
+- **Thermal equilibrium is a balance, not a halt.** Energy keeps crossing in both directions; the net flow stops when the temperatures are equal. In the model, quanta cross either way with equal probability exactly when $q_A/n_A = q_B/n_B$.
+- **Where:** energy conservation alone gives $T_\mathrm{eq} = (C_AT_{A,0} + C_BT_{B,0})/(C_A + C_B)$, a weighted average; the larger capacity moves less, and only the ratio matters.
+- **How fast:** Newton's law of cooling, $\dbar Q_A = \kappa(T_B - T_A)\,\mathrm{d}t$, gives $T_A - T_B = (T_A(0) - T_B(0))\,e^{-t/\tau}$ with $\tau = C_AC_B/(\kappa(C_A + C_B))$. Never instant, never past: the gap keeps its sign.
+- **The hop model obeys it exactly on average:** $\langle\Delta q_A\rangle$ is linear in $q_A$, so the mean gap falls as $(1 - 1/Q)^n = e^{-n/\tau}$ with $\tau \approx Q$ steps. Single runs scatter about it by $N^{-1/2}$, the scatter of a binomial count.
+- **What the simulation shows:** that one random microscopic mechanism produces the macroscopic law. Not that every real contact obeys it, and not the value of any real $\kappa$; a step is not a second.
+
+<Revisit id="pred-1-1" />
+
+</Summary>
+
+</Page>
