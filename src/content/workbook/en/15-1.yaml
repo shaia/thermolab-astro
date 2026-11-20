@@ -1,0 +1,431 @@
+# Lesson 15.1 workbook. Problem 10 is ThermoLab's problem 6 (the paramagnet hidden inside the Ising model); problem
+# 04 uses the transfer-matrix correlation length of ThermoLab's advanced section; the rest are new. The Monte Carlo
+# numbers in problems 05, 07 and 09 were measured with thermolab.ising for this workbook (four or sixteen seeds,
+# tau-corrected errors). ThermoLab kept its solutions with the instructor; this platform publishes them, by the
+# author's decision. Energies in units of J, temperature as k_BT/J, field as h/J; take k_B = 1.381e-23 J/K.
+lang: en
+lesson: '15.1'
+practice:
+  - id: W-15.1-01
+    level: basic
+    qualitative: true
+    objectives: [OBJ-15.1-1, OBJ-15.1-6]
+    prompt: >-
+      A student runs a $64 \times 64$ lattice at $k_BT = 1.5\,J$ and $h = 0$, from a random start, for $10^4$ sweeps after burn-in. The time average of $m$ is $-0.987$. She concludes the code has a bug: at $h = 0$ the energy is unchanged by flipping every spin, so $\langle m\rangle = 0$ exactly, at every temperature. Is the code wrong? What does her run measure, and what would show that it is right?
+    answer: >-
+      The code is fine. $\langle m\rangle = 0$ is a statement about the ensemble; a lattice this large below $T_c$ stays on one branch for longer than any run, so its time average is $\pm m_0$. Checks: $|m| = 0.987$ matches Onsager and Yang's $m_0 = 0.9865$, other seeds end on $+0.987$ about as often as on $-0.987$, and an $8 \times 8$ lattice at $k_BT = 2.0\,J$ reverses dozens of times in $10^5$ sweeps.
+    solution:
+      - kind: reasoning
+        text: >-
+          The symmetry argument is right, and it is about the ensemble: every configuration has a flipped twin of the same Boltzmann weight and opposite $m$, so the canonical average over all of them vanishes for every finite $N$.
+      - kind: reasoning
+        text: >-
+          A run is not the ensemble. To reach the other branch the lattice must pass through configurations with a wall across it, which costs an energy of order $2JL$; the waiting time grows exponentially with $L$, and at $L = 64$, $k_BT = 1.5\,J$ it is far longer than $10^4$ sweeps. The run samples one branch only, and its time average is that branch's magnetization: ergodicity is broken.
+      - kind: reasoning
+        text: >-
+          What makes the run trustworthy is agreement with what is known. $|m| = 0.987$ against Onsager and Yang's $m_0(1.5\,J) = 0.9865$; a set of seeds splits between the two signs; and a lattice small enough to reverse, $8 \times 8$, does reverse, and its time average of $m$ drifts toward zero as the run grows.
+      - kind: result
+        text: >-
+          No bug. The run measures the spontaneous magnetization of the branch history chose; zero is the average over the ensemble, which no single large magnet visits.
+
+  - id: W-15.1-02
+    level: basic
+    objectives: [OBJ-15.1-2]
+    prompt: >-
+      A square lattice sits in a field $h = 0.5\,J$ pointing up, at $k_BT = 2.0\,J$. Spin $i$ is up, and three of its four neighbours are up.
+      (a) Find the energy change of flipping it, and its Metropolis acceptance probability.
+      (b) Do the same for the reverse move: spin $i$ down, with the same neighbours, flipping up.
+      (c) Show that the ratio of the two acceptances is the ratio of the Boltzmann weights of the two configurations.
+    answer: >-
+      (a) $\Delta E = 5J$, $A = e^{-2.5} = 0.082$. (b) $\Delta E = -5J$, $A = 1$. (c) $0.082/1 = e^{-5J/(k_BT)} = p_{s'}/p_s$, as detailed balance requires.
+    solution:
+      - kind: given
+        text: >-
+          $s_i = +1$, $\sum_{j} s_j = 3 - 1 = 2$ over the four neighbours, $h = 0.5\,J$, $k_BT = 2.0\,J$.
+      - kind: law
+        text: >-
+          $\Delta E_i = 2s_i\big(J\sum_{j\in\text{nn}(i)} s_j + h\big)$; Metropolis, $A = \min(1, e^{-\Delta E/(k_BT)})$.
+      - kind: manipulation
+        text: >-
+          (a) $\Delta E = 2(+1)(2J + 0.5J) = 5J$, so $A = e^{-5J/(k_BT)}$. (b) The reverse move starts from $s_i = -1$: $\Delta E = 2(-1)(2.5J) = -5J < 0$, so $A = 1$.
+      - kind: formula
+        text: >-
+          $\dfrac{A(s \to s')}{A(s' \to s)} = \dfrac{e^{-5J/(k_BT)}}{1} = e^{-(E_{s'} - E_s)/(k_BT)} = \dfrac{p_{s'}}{p_s}$
+      - kind: limit
+        text: >-
+          At $h = 0$ the same flip costs $4J$ and is accepted with $e^{-2} = 0.135$: the field makes a flip against it rarer, and the reverse flip, with it, stays certain. As $T \to \infty$ both acceptances go to $1$.
+      - kind: units
+        text: >-
+          $\Delta E$ and $k_BT$ are both in units of $J$: the exponent is a pure number.
+      - kind: substitution
+        text: >-
+          $e^{-5/2} = 0.0821$.
+      - kind: result
+        text: >-
+          (a) $5J$, accepted $8\%$ of the time. (b) $-5J$, always accepted. (c) The ratio $0.082$ is $p_{s'}/p_s$, without ever computing $Z$.
+
+  - id: W-15.1-03
+    level: basic
+    objectives: [OBJ-15.1-4]
+    prompt: >-
+      Mean field predicts $k_BT_c = qJ$ on any lattice. The exact transition temperatures are $k_BT_c = 1.519\,J$ on the honeycomb lattice ($q = 3$), $2.269\,J$ on the square lattice ($q = 4$) and $3.641\,J$ on the triangular lattice ($q = 6$); on the simple cubic lattice ($q = 6$), large simulations give $4.512\,J$.
+      (a) By what factor does mean field overestimate $T_c$ on each?
+      (b) What trend do you see, and why?
+      (c) A layered magnet behaves as a square-lattice Ising model with $J = 3.0\cdot10^{-21}\,\text{J}$. Find its transition temperature in kelvin, and mean field's.
+    answer: >-
+      (a) $1.98$, $1.76$, $1.65$ and $1.33$. (b) More neighbours, and more dimensions, make mean field better: the field on a spin is then an average over more spins, and its fluctuations matter less. (c) $493\,\text{K}$; mean field says $869\,\text{K}$.
+    solution:
+      - kind: given
+        text: >-
+          $(q, k_BT_c/J) = (3, 1.519)$, $(4, 2.269)$, $(6, 3.641)$ in two dimensions, $(6, 4.512)$ in three; $J = 3.0\cdot10^{-21}\,\text{J}$.
+      - kind: law
+        text: >-
+          $k_BT_c^\text{MF} = qJ$, so the overestimate is $T_c^\text{MF}/T_c = qJ/(k_BT_c)$.
+      - kind: manipulation
+        text: >-
+          $3/1.519$, $4/2.269$, $6/3.641$, $6/4.512$.
+      - kind: reasoning
+        text: >-
+          Mean field replaces the field of the $q$ neighbours by its average. The more neighbours, the closer their sum is to its average, so the error falls with $q$. At equal $q = 6$ the cubic lattice does better than the triangular one: in three dimensions there are more paths for order to travel around a fluctuation, and fluctuations destroy less of it.
+      - kind: limit
+        text: >-
+          If every spin interacted with every other ($q \to N$, with $J$ scaled as $1/N$), the field on a spin would be a sum of $N$ terms with no fluctuation left, and mean field would be exact. In one dimension, $q = 2$, it is infinitely wrong: it predicts $2J$ where there is no transition at all.
+      - kind: units
+        text: >-
+          $T_c = (k_BT_c/J)\cdot J/k_B$: $\text{J}/(\text{J/K}) = \text{K}$.
+      - kind: substitution
+        text: >-
+          (a) $1.975$, $1.763$, $1.648$, $1.330$. (c) $2.269\cdot3.0\cdot10^{-21}/1.381\cdot10^{-23} = 493\,\text{K}$; mean field, $4\cdot3.0\cdot10^{-21}/1.381\cdot10^{-23} = 869\,\text{K}$.
+      - kind: result
+        text: >-
+          (a) $98\%$, $76\%$, $65\%$ and $33\%$ too high. (b) Mean field improves with more neighbours and more dimensions. (c) $T_c = 493\,\text{K}$; mean field, $869\,\text{K}$.
+
+  - id: W-15.1-04
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-3, OBJ-15.1-6]
+    prompt: >-
+      A student simulates a ring of $20$ spins at $k_BT = 0.2\,J$ and $h = 0$, started all up. In $10^5$ sweeps not a single domain wall appears, and she concludes that a cold enough chain does order, as mean field says it should below $2J$. In the infinite chain the transfer matrix gives the correlation between spins $r$ sites apart as $\langle s_0 s_r\rangle = \tanh^r(J/k_BT) = e^{-r/\xi}$. What does her run show, and what does it not? Support the answer with two numbers: the ring size beyond which a pair of walls lowers the free energy, and the correlation length $\xi$.
+    answer: >-
+      It shows that a $20$-site ring is far shorter than the correlation length at this temperature, so it looks ordered. It does not show long-range order: a pair of walls lowers the free energy on any ring longer than $\sqrt2\,e^{10} \approx 3\cdot10^4$ sites, and $\xi \approx 1.1\cdot10^4$ sites is finite. A longer chain breaks into domains; mean field's transition does not exist.
+    solution:
+      - kind: reasoning
+        text: >-
+          On $20$ sites a pair of walls costs $4J = 20\,k_BT$ and has only $20\cdot19/2 = 190$ placements, a relative weight of $190\,e^{-20} \approx 4\cdot10^{-7}$. A wall-free run is exactly what equilibrium predicts for this ring; it says nothing about a long one.
+      - kind: law
+        text: >-
+          $\Delta F \approx 4J - k_BT\ln(N^2/2)$, negative for $N > \sqrt2\,e^{2J/(k_BT)}$; and $\xi = -1/\ln\tanh(J/k_BT)$.
+      - kind: limit
+        text: >-
+          As $T \to 0$, $\tanh(J/k_BT) \to 1 - 2e^{-2J/(k_BT)}$, so $\xi \approx \tfrac12 e^{2J/(k_BT)}$: enormous, but finite at every $T > 0$. Only at $T = 0$ is the chain ordered.
+      - kind: substitution
+        text: >-
+          $\sqrt2\,e^{10} = 3.1\cdot10^4$ sites; $\tanh 5 = 0.999909$, $\xi = -1/\ln 0.999909 = 1.1\cdot10^4$ sites, as $\tfrac12 e^{10}$ estimates.
+      - kind: result
+        text: >-
+          The run shows order over $20$ sites, which is a fraction $2\cdot10^{-3}$ of $\xi$. On a chain longer than about $10^4$ sites the order is gone at $k_BT = 0.2\,J$, and at every other $T > 0$ on a long enough one: a finite system smaller than its correlation length cannot reveal what the infinite one does.
+
+  - id: W-15.1-05
+    level: mid
+    objectives: [OBJ-15.1-5, OBJ-15.1-6]
+    prompt: >-
+      Four seeds of a $32 \times 32$ lattice, $20\,000$ sweeps per temperature, give on average $\chi' = N\,\text{Var}(|m|)/(k_BT)$ of $3.8$, $10.5$, $18.1$, $16.3$ and $11.5$ at $k_BT = 2.20$, $2.25$, $2.30$, $2.40$ and $2.45\,J$.
+      (a) At $k_BT = 2.35\,J$ the trace of $|m|$ has variance $0.0469$. Find $\chi'$ there.
+      (b) Locate the peak of $\chi'$ by a parabola through the three highest points.
+      (c) The lesson's $16 \times 16$ lattice peaks at $2.416\,J$. Assuming the peak moves as $T_\text{peak} = T_c + a/L$, estimate $T_c$.
+      (d) Why does the peak sit above $T_c$, and why is it finite?
+    answer: >-
+      (a) $20.4$. (b) $k_BT_\text{peak} = 2.343\,J$. (c) $k_BT_c \approx 2.270\,J$, uncertain by about $0.02\,J$, against Onsager's $2.269\,J$. (d) A finite lattice's correlated patches reach its size $L$ a distance of order $1/L$ from $T_c$, and $\xi$ can grow no further: the response stops growing there, and is finite; for $\chi'$ the maximum lands on the high side.
+    solution:
+      - kind: given
+        text: >-
+          $N = 1024$; $\text{Var}(|m|) = 0.0469$ at $k_BT = 2.35\,J$; grid spacing $d = 0.05\,J$; $T_\text{peak}(16) = 2.416\,J/k_B$.
+      - kind: law
+        text: >-
+          $\chi' = N\,\text{Var}(|m|)/(k_BT)$. The vertex of the parabola through three equally spaced points $(T_0 - d, y_-)$, $(T_0, y_0)$, $(T_0 + d, y_+)$ is at $T_0 + \tfrac{d}{2}\,\dfrac{y_- - y_+}{y_- - 2y_0 + y_+}$.
+      - kind: manipulation
+        text: >-
+          Two sizes, two unknowns: $T_c + a/16 = T_{16}$ and $T_c + a/32 = T_{32}$. Subtracting, $a/32 = T_{16} - T_{32}$.
+      - kind: formula
+        text: >-
+          $T_c = 2T_{32} - T_{16}$
+      - kind: limit
+        text: >-
+          If both lattices peaked at the same temperature, that temperature would be $T_c$, and $a = 0$. The extrapolation assumes the exact $\nu = 1$; with a different exponent the answer changes, which is why the result is an estimate and not a measurement of $T_c$.
+      - kind: units
+        text: >-
+          $\text{Var}(|m|)$ is a pure number and $k_BT$ is in units of $J$, so $\chi'$ is in units of $1/J$; all temperatures are in units of $J/k_B$.
+      - kind: substitution
+        text: >-
+          (a) $1024\cdot0.0469/2.35 = 20.4$. (b) $y_- = 18.1$, $y_0 = 20.4$, $y_+ = 16.3$: $2.35 + 0.025\cdot1.8/(-6.4) = 2.343$. (c) $2\cdot2.343 - 2.416 = 2.270$. The peak position from a grid this coarse is uncertain by about $0.01$; the lesson's longer runs put the $L = 32$ peak at $2.329$, which would give $2.242$. Agreement to $0.001$ is partly luck.
+      - kind: reasoning
+        text: >-
+          (d) $\xi \propto |T - T_c|^{-1}$ reaches $L$ within a distance of order $1/L$ of $T_c$. Closer than that, the lattice is one correlated patch and cannot be more so, and the growth of $\chi'$ stops; for $\chi'$ the maximum lands on the high side, at every size in figure 15.1b. The partition function of $1024$ spins is a finite sum, analytic in $T$: every peak it produces is finite and rounded.
+      - kind: result
+        text: >-
+          (a) $\chi' = 20.4$. (b) $2.343\,J$. (c) $T_c \approx 2.27\,J/k_B$, within about $0.02$. (d) The peak is rounded and shifted up by the finite size, as $L^{-1}$; it reaches $T_c$ and diverges only as $L \to \infty$.
+
+  - id: W-15.1-06
+    level: mid
+    qualitative: true
+    objectives: [OBJ-15.1-6]
+    prompt: >-
+      Figure 15.1b shows four lattices from $L = 8$ to $64$. Judge each claim, in a sentence or two.
+      (a) "The $\chi'$ peak of the $64 \times 64$ lattice is the divergence of the susceptibility, caught at last."
+      (b) "The heat capacity peaks near $T_c$, so the energy jumps there, as it does at boiling."
+      (c) "The peaks drift toward $2.269\,J$; a lattice of $10^6 \times 10^6$ spins would show a true, infinite peak."
+      (d) "The autocorrelation time peaks near $T_c$ because there the lattice switches quickly between two phases."
+    answer: >-
+      All four are wrong. (a) The peak is finite, as on any finite lattice; only its growth with $L$ points to a divergence. (b) The transition is continuous: the energy is continuous and only its slope, $c$, peaks; the jump belongs to crossing $h = 0$ below $T_c$. (c) Any finite lattice has an analytic $Z$ and a finite peak; the singularity is a statement about the limit, established by Onsager's derivation. (d) It peaks because correlated patches as large as the lattice take of order $L^2$ sweeps to rearrange: the chain is slowest at $T_c$.
+    solution:
+      - kind: reasoning
+        text: >-
+          (a) On $N$ spins $Z$ is a sum of $2^N$ exponentials, smooth in $T$. The $L = 64$ peak is the tallest of four finite peaks whose heights grow as $L^{1.76}$; that growth, not any one peak, is the evidence for a divergence.
+      - kind: reasoning
+        text: >-
+          (b) The heat capacity is the slope of the energy, $c = \partial e/\partial T$. A peak in the slope is not a jump in the energy: at $h = 0$ the energy passes through $T_c$ continuously, with no latent heat. A jump does occur, in $m$, when $h$ crosses zero below $T_c$: that is the first-order transition, the magnetic version of boiling.
+      - kind: reasoning
+        text: >-
+          (c) A bigger lattice gives a taller, narrower peak closer to $T_c$, still finite. Simulations establish the trend; that the trend ends in a singularity at $N \to \infty$ is proved by derivation.
+      - kind: reasoning
+        text: >-
+          (d) Near $T_c$ the lattice is a patchwork of correlated domains of every size up to $L$. A local rule rearranges them one spin at a time, which takes a time growing as $\xi^z$, $z \approx 2$; the lesson measures $\tau$ from $3$ sweeps at $L = 8$ to $174$ at $L = 64$. Nothing switches quickly there.
+      - kind: result
+        text: >-
+          A finite lattice shows finite, rounded, drifting peaks and a slowing chain; the singularity, and the continuity of the transition, are properties of the infinite system.
+
+  - id: W-15.1-07
+    level: mid
+    objectives: [OBJ-15.1-7]
+    prompt: >-
+      A $16 \times 16$ lattice at $k_BT = 2.35\,J$ is run for $5000$ sweeps after burn-in, recording $|m|$ every sweep. The trace has mean $0.586$, standard deviation $0.233$ and autocorrelation time $\tau = 10.8$ sweeps.
+      (a) Quote the naive and the $\tau$-corrected standard errors of the mean.
+      (b) Sixteen independent runs of the same length give means that scatter with a standard deviation of $0.0125$. Which error bar describes that scatter?
+      (c) How many sweeps would bring the corrected error down to $0.005$?
+    answer: >-
+      (a) Naive $0.0033$; corrected $0.015$. (b) The corrected one: $0.0125$ against $0.0153$ agrees within the $18\%$ uncertainty of a spread estimated from sixteen numbers, while the naive bar is four times smaller than the scatter. (c) About $4.7\cdot10^4$ sweeps.
+    solution:
+      - kind: given
+        text: >-
+          $n = 5000$, $\sigma = 0.233$, $\tau = 10.8$; a target error $\varepsilon = 0.005$.
+      - kind: law
+        text: >-
+          $N_\text{eff} = n/(2\tau)$; standard error $\sigma/\sqrt{N_\text{eff}}$. The relative uncertainty of a standard deviation estimated from $k$ numbers is about $1/\sqrt{2(k-1)}$.
+      - kind: formula
+        text: >-
+          $\sigma_{\bar x} = \sigma\sqrt{\dfrac{2\tau}{n}} \qquad n = 2\tau\left(\dfrac{\sigma}{\varepsilon}\right)^2$
+      - kind: limit
+        text: >-
+          For independent samples, $\tau = \tfrac12$, both formulas reduce to the naive ones. Near $T_c$ on a larger lattice $\tau$ grows as $L^2$, and so does the run needed for the same error bar.
+      - kind: units
+        text: >-
+          $\tau$ and $n$ are both counted in sweeps, so $2\tau/n$ is a pure number; $\sigma$ has the units of $|m|$, none.
+      - kind: substitution
+        text: >-
+          (a) Naive $0.233/\sqrt{5000} = 0.0033$; $N_\text{eff} = 5000/21.6 = 231$, corrected $0.233/\sqrt{231} = 0.0153$, larger by $\sqrt{21.6} = 4.6$. (b) $1/\sqrt{30} = 0.18$; $0.0153/0.0125 = 1.22$, about one such uncertainty. (c) $21.6\cdot(0.233/0.005)^2 = 4.7\cdot10^4$.
+      - kind: reasoning
+        text: >-
+          The seed test decides: the corrected bar predicts the scatter of independent runs; the naive one claims a precision four times better than the runs actually agree to.
+      - kind: result
+        text: >-
+          (a) $\langle|m|\rangle = 0.586 \pm 0.015$, not $\pm 0.003$. (b) The $\tau$-corrected bar. (c) About $47\,000$ sweeps: an error bar falls as $n^{-1/2}$, with $n$ counted in units of $2\tau$.
+
+  - id: W-15.1-08
+    level: bagrut
+    objectives: [OBJ-15.1-4]
+    prompt: >-
+      (a) Solve the mean-field equation at $h = 0$ at $T = 0.9\,T_c^\text{MF}$, and compare with the approximation $m_0 \approx \sqrt{3(1 - T/T_c^\text{MF})}$.
+      (b) From Onsager and Yang's formula, find $m_0$ at the same fraction of the square lattice's own transition, $T = 0.9\,T_c$.
+      (c) How close to its own $T_c$ must each theory be for $m_0$ to fall to $0.5$? What does the comparison say about the exponent $\beta$?
+    answer: >-
+      (a) $m_0 = 0.525$; the approximation gives $0.548$, $4\%$ high. (b) $m_0 = 0.896$. (c) Mean field: $1 - T/T_c = 0.090$. Onsager and Yang: $1 - T/T_c = 7.8\cdot10^{-4}$, over a hundred times closer. A small $\beta$ ($1/8$ against $1/2$) keeps $m_0$ large until very close to $T_c$, then drops it almost vertically.
+    solution:
+      - kind: given
+        text: >-
+          $T/T_c^\text{MF} = 0.9$; $k_BT_c = 2.269\,J$, so $0.9\,T_c$ is $k_BT = 2.042\,J$; target $m_0 = 0.5$.
+      - kind: law
+        text: >-
+          Mean field at $h = 0$, with $k_BT_c^\text{MF} = qJ$: $m = \tanh\!\big(m\,T_c^\text{MF}/T\big)$. Onsager and Yang: $m_0 = \left[1 - \sinh^{-4}(2J/k_BT)\right]^{1/8}$.
+      - kind: manipulation
+        text: >-
+          Both can be inverted for the temperature at which $m_0$ takes a given value. Mean field: $T_c^\text{MF}/T = \operatorname{artanh}(m)/m$. Onsager and Yang: $\sinh^{-4}(2J/k_BT) = 1 - m^8$.
+      - kind: formula
+        text: >-
+          $\dfrac{T}{T_c^\text{MF}} = \dfrac{m}{\operatorname{artanh} m} \qquad \dfrac{2J}{k_BT} = \operatorname{arsinh}\left[(1 - m^8)^{-1/4}\right]$
+      - kind: limit
+        text: >-
+          As $m \to 0$ both give $T \to T_c$: $m/\operatorname{artanh} m \to 1$, and $\operatorname{arsinh} 1 = \ln(1 + \sqrt2)$, Onsager's $2J/(k_BT_c)$. As $m \to 1$ both give $T \to 0$.
+      - kind: units
+        text: >-
+          Every quantity is a ratio of temperatures or a pure number.
+      - kind: substitution
+        text: >-
+          (a) Iterating $m \leftarrow \tanh(m/0.9)$ converges to $0.525$; $\sqrt{0.3} = 0.548$. (b) $\sinh(2/2.042) = 1.144$, $\sinh^{-4} = 0.585$, $(0.415)^{1/8} = 0.896$. (c) Mean field: $0.5/\operatorname{artanh} 0.5 = 0.5/0.549 = 0.910$, so $1 - T/T_c = 0.090$. Onsager and Yang: $(1 - 2^{-8})^{-1/4} = 1.00098$, $\operatorname{arsinh} 1.00098 = 0.88206$, $k_BT = 2.2674\,J$, and $1 - 2.2674/2.2692 = 7.8\cdot10^{-4}$.
+      - kind: result
+        text: >-
+          (a) $0.525$ (the expansion is good to $4\%$ even $10\%$ below $T_c$). (b) $0.896$. (c) $9\%$ below $T_c$ for mean field, $0.08\%$ for the square lattice. Onsager's curve stays near its low-temperature value until just short of $T_c$ and then falls almost vertically: that is what $\beta = 1/8$ means, and why no finite lattice's smooth shoulder can reproduce it.
+
+  - id: W-15.1-09
+    level: bagrut
+    objectives: [OBJ-15.1-2]
+    prompt: >-
+      By mistake, a student's code accepts a proposed flip with probability $\min\left(1, e^{-\Delta E/(2k_BT)}\right)$.
+      (a) Does the chain satisfy detailed balance with respect to some distribution? Which one?
+      (b) At a set $k_BT = 1.5\,J$ on a $32 \times 32$ lattice at $h = 0$, the run gives $\langle|m|\rangle = 0.085$ and $e = -0.818\,J$. What would a correct code give? What has the student actually simulated?
+      (c) Name a check that would have caught the bug before any production run. Would checking that a cold lattice reaches its ground state have caught it?
+    answer: >-
+      (a) Yes: it is the Metropolis rule at temperature $2T$, so it samples $p_s \propto e^{-E_s/(2k_BT)}$. (b) Correct: $\langle|m|\rangle = 0.987$ and $e = -1.951\,J$ (Onsager). The run sampled $k_BT = 3.0\,J$, above $T_c$, where the exact energy is $-0.817\,J$. (c) Compare with an exact anchor, such as Onsager and Yang's $m_0(1.5\,J) = 0.9865$, or the chain's $E/(NJ) = -\tanh(J/k_BT)$. The ground-state test would not: the rule still sends a lattice to its ground state as $T \to 0$.
+    solution:
+      - kind: given
+        text: >-
+          $A(s \to s') = \min\left(1, e^{-\Delta E/(2k_BT)}\right)$ with symmetric proposals; set $k_BT = 1.5\,J$.
+      - kind: law
+        text: >-
+          With symmetric proposals, detailed balance with respect to $p$ requires $A(s \to s')/A(s' \to s) = p_{s'}/p_s$, for every pair.
+      - kind: manipulation
+        text: >-
+          For $\Delta E > 0$ the forward move is accepted with $e^{-\Delta E/(2k_BT)}$ and the reverse with $1$; for $\Delta E \le 0$ the other way round. Either way the ratio is $e^{-\Delta E/(k_B\cdot2T)}$, which is $p_{s'}/p_s$ for $p_s \propto e^{-E_s/(k_B\cdot2T)}$: the Boltzmann distribution at $2T$.
+      - kind: limit
+        text: >-
+          As $T \to 0$, so does $2T$: the buggy chain still freezes into a ground state, so a ground-state test passes. As $T \to \infty$ every rule accepts everything. The bug shows only at intermediate temperatures, which is where the physics is.
+      - kind: units
+        text: >-
+          $\Delta E/(2k_BT)$ is a pure number; $e$ is in units of $J$ per spin.
+      - kind: substitution
+        text: >-
+          Effective $k_BT = 2\cdot1.5\,J = 3.0\,J > 2.269\,J$: disordered. Onsager's exact energy per spin is $-0.817\,J$ at $3.0\,J$ and $-1.951\,J$ at $1.5\,J$, where $m_0 = 0.9865$. The run's $-0.818\,J$ matches the first.
+      - kind: reasoning
+        text: >-
+          A test against an exact result at an intermediate temperature catches it at once: the acceptance table at $k_BT_c$ (worked example 1), Onsager and Yang's $m_0$, or the chain's energy, which ThermoLab's code reproduces within its error bar of $4\cdot10^{-4}$ before its square-lattice results are believed.
+      - kind: result
+        text: >-
+          (a) Detailed balance at $2T$. (b) A correct run gives $\langle|m|\rangle \approx 0.987$, $e \approx -1.951\,J$; the student simulated $k_BT = 3.0\,J$. (c) Test against exact anchors at intermediate $T$; a ground-state test cannot see a rule that is right in ratio but at the wrong temperature.
+
+  - id: W-15.1-10
+    level: bagrut
+    objectives: [OBJ-15.1-1, OBJ-15.1-5]
+    prompt: >-
+      The paramagnet hidden inside the Ising model.
+      (a) Set $J = 0$. Show that the partition function factorizes into module 12's single-spin form, and that $\langle m\rangle = \tanh(h/k_BT)$ exactly.
+      (b) Show that the exact chain magnetization $m = \sinh(h/k_BT)\big/\sqrt{\sinh^2(h/k_BT) + e^{-4J/k_BT}}$ reduces to (a) as $J \to 0$, and that for small $h$ at fixed $J > 0$ it gives $\chi = \partial m/\partial h|_{h=0} = e^{2J/k_BT}/k_BT$. Evaluate $\chi\,k_BT$ at $k_BT = J$. Why does coupling make the chain more susceptible than free spins?
+      (c) For $J = 0$, verify the fluctuation identity $\chi = N\,\text{Var}(m)/(k_BT)$ directly.
+      (d) An $8 \times 8$ lattice at $k_BT = 2.0\,J$, $h = 0$, run for $10^4$ sweeps, reverses its magnetization about four times. Why does the laboratory compute the susceptibility from $|m|$, not from $m$, there?
+    answer: >-
+      (a) $Z = [2\cosh(h/k_BT)]^N$, $\langle m\rangle = \tanh(h/k_BT)$. (b) $\chi\,k_BT = e^2 = 7.4$: correlated neighbours respond together, in blocks about two correlation lengths long. (c) $\text{Var}(m) = [1 - \tanh^2(h/k_BT)]/N$, so $N\,\text{Var}(m)/(k_BT) = \partial\tanh(h/k_BT)/\partial h$. (d) $\text{Var}(m)$ of such a run is dominated by the jumps between $\pm m_0$, about $m_0^2 = 0.83$ if both branches are visited, giving $64\cdot0.83/2 \approx 27$, or much less if none is: it measures how many reversals the run happened to see, not the response.
+    solution:
+      - kind: given
+        text: >-
+          $E = -J\sum_{\langle ij\rangle}s_is_j - h\sum_i s_i$; the exact chain $m(h, T)$; $k_BT = J$ in (b); $N = 64$, $m_0(2.0\,J) = 0.911$ in (d).
+      - kind: law
+        text: >-
+          $Z = \sum_s e^{-E_s/(k_BT)}$; $\langle M\rangle = \partial\ln Z/\partial(h/k_BT)$ and $\text{Var}(M) = \partial\langle M\rangle/\partial(h/k_BT)$.
+      - kind: manipulation
+        text: >-
+          (a) At $J = 0$, $e^{-E_s/(k_BT)} = \prod_i e^{hs_i/(k_BT)}$, and the sum over configurations is a product of $N$ single-spin sums: $Z = [2\cosh(h/k_BT)]^N$, so $\langle M\rangle/N = \tanh(h/k_BT)$. (b) At $J = 0$ the root is $\sqrt{\sinh^2 + 1} = \cosh$, and $m = \tanh(h/k_BT)$. For small $h$ at $J > 0$, $\sinh(h/k_BT) \approx h/k_BT$ and the $\sinh^2$ under the root is negligible against $e^{-4J/k_BT}$: $m \approx (h/k_BT)\,e^{2J/k_BT}$.
+      - kind: manipulation
+        text: >-
+          (c) Independent spins: $\text{Var}(M) = N\,\text{Var}(s) = N(1 - \langle s\rangle^2) = N[1 - \tanh^2(h/k_BT)]$, so $N\,\text{Var}(m)/(k_BT) = [1 - \tanh^2(h/k_BT)]/(k_BT)$, which is $\partial\tanh(h/k_BT)/\partial h$.
+      - kind: formula
+        text: >-
+          $\chi_\text{chain} = \dfrac{e^{2J/k_BT}}{k_BT} \qquad \chi_\text{free} = \dfrac{1 - \tanh^2(h/k_BT)}{k_BT}$
+      - kind: limit
+        text: >-
+          $J \to 0$ gives $\chi = 1/k_BT$, Curie's law for free spins. By the fluctuation identity $\chi\,k_BT = \sum_r\langle s_0s_r\rangle = \sum_r \tanh^{|r|}(J/k_BT) = (1 + \tanh K)/(1 - \tanh K) = e^{2K}$ with $K = J/k_BT$: the same answer, read as the number of spins correlated with a given one. As $T \to 0$ it diverges, and the chain is critical only at $T = 0$.
+      - kind: units
+        text: >-
+          $h/k_BT$ is a pure number and $m$ is per spin, so $\chi$ is in units of $1/J$; $\chi\,k_BT$ is a pure number.
+      - kind: substitution
+        text: >-
+          (b) $e^2 = 7.39$, against $1$ for free spins; $\xi = -1/\ln\tanh 1 = 3.7$ sites. (d) $64\cdot0.911^2/2 = 27$.
+      - kind: reasoning
+        text: >-
+          (d) The identity holds for $m$ at every finite $N$, but only for a run that samples both branches fairly. In $10^4$ sweeps an $8 \times 8$ lattice crosses a handful of times, so $\text{Var}(m)$ depends on how many crossings this run happened to see. $|m|$ is insensitive to which branch the lattice is on, and its variance measures the fluctuations a run does sample well.
+      - kind: result
+        text: >-
+          (a) $\langle m\rangle = \tanh(h/k_BT)$: module 12's paramagnet. (b) $\chi\,k_BT = e^{2J/k_BT} = 7.4$ at $k_BT = J$: neighbours amplify the response. (c) The identity holds exactly for free spins. (d) Below $T_c$ a short run's $\text{Var}(m)$ measures luck; $\chi' = N\,\text{Var}(|m|)/(k_BT)$ measures the lattice.
+challenge:
+  - id: W-15.1-c1
+    stars: 1
+    objectives: [OBJ-15.1-4, OBJ-15.1-3]
+    prompt: >-
+      A spin-1 "spin" $S$ takes three values, $S = -1$, $0$ and $+1$.
+      (a) A single spin-1 in a field has energy $E = -hS$. Find $\langle S\rangle$ at temperature $T$.
+      (b) A chain of spin-1 spins has energy $E = -J\sum_i S_iS_{i+1}$. Use mean field to find the temperature below which it magnetizes spontaneously. Compare with the mean-field result for a chain of $\pm1$ spins, and say what the true answer is.
+      (c) Expand near $T_c^\text{MF}$ to find how the magnetization vanishes. Which exponent $\beta$ does mean field give for spin 1?
+    answer: >-
+      (a) $\langle S\rangle = \dfrac{2\sinh(h/k_BT)}{1 + 2\cosh(h/k_BT)}$. (b) $k_BT_c^\text{MF} = \tfrac23 qJ = \tfrac43 J$, against $2J$ for $\pm1$ spins; the true chain has no transition at any $T > 0$. (c) $m_0 \approx \sqrt{\tfrac83(1 - T/T_c^\text{MF})}$: $\beta = 1/2$ again.
+    solution:
+      - kind: law
+        text: >-
+          A single spin: $Z_1 = \sum_S e^{hS/(k_BT)}$ and $\langle S\rangle = \partial\ln Z_1/\partial(h/k_BT)$. Mean field: each spin sees $h_\text{eff} = qJm$, $q = 2$ on a chain, and consistency requires $m = \langle S\rangle(h_\text{eff})$.
+      - kind: manipulation
+        text: >-
+          (a) With $x = h/k_BT$: $Z_1 = 1 + 2\cosh x$, so $\langle S\rangle = 2\sinh x/(1 + 2\cosh x) \equiv B(x)$. (b) $m = B(qJm/k_BT)$. For small $x$, $B(x) \approx \tfrac23 x - \tfrac19 x^3$, so $m = 0$ is the only solution until the slope at the origin, $\tfrac23 qJ/k_BT$, exceeds $1$: $k_BT_c^\text{MF} = \tfrac23 qJ$.
+      - kind: manipulation
+        text: >-
+          (c) With $a = qJ/k_BT$, the expansion gives $1 = \tfrac23 a - \tfrac19 a^3m^2$, so $m^2 = 9(\tfrac23 a - 1)/a^3 = 9(T_c/T - 1)/a^3$. Near $T_c$, $a = \tfrac32$ and $a^3 = \tfrac{27}{8}$: $m^2 \approx \tfrac83(1 - T/T_c)$.
+      - kind: limit
+        text: >-
+          As $x \to \infty$, $B \to 1$: full alignment. For small $x$, $B \approx \tfrac23 x = \langle S^2\rangle_0\,x$: the zero state carries no moment, so a spin-1 responds less than a $\pm1$ spin, whose $\langle s^2\rangle = 1$, and the mean-field $T_c$ falls by the same factor $\tfrac23$. Numerically, the full equation at $T = 0.975\,T_c$ gives $m = 0.256$ against the expansion's $0.258$.
+      - kind: reasoning
+        text: >-
+          The truth in one dimension is the lesson's: any wall between domains costs a fixed energy (an up–zero bond costs $J$) and gains an entropy of order $k_B\ln N$, so a long enough chain is disordered at every $T > 0$. Equivalently, the $3 \times 3$ transfer matrix $e^{JSS'/k_BT}$ has only positive entries, so its largest eigenvalue is non-degenerate and analytic in $T$: no singularity, no transition.
+      - kind: units
+        text: >-
+          $h/k_BT$ and $qJ/k_BT$ are pure numbers; $T_c$ is in units of $J/k_B$.
+      - kind: substitution
+        text: >-
+          Chain, $q = 2$: $k_BT_c^\text{MF} = \tfrac43 J = 1.33\,J$, against $2J$ for $\pm1$ spins. On the square lattice, $q = 4$, mean field gives $\tfrac83 J = 2.67\,J$ for spin 1.
+      - kind: result
+        text: >-
+          (a) $2\sinh x/(1 + 2\cosh x)$. (b) Mean field: $\tfrac43 J/k_B$; truth: no transition in one dimension. (c) $m_0 \propto (T_c - T)^{1/2}$: the spin's length changes the mean-field $T_c$ but not its exponent, because every mean-field theory reduces to the same cubic expansion.
+    source:
+      name: 'MIT 8.08 Statistical Physics II (OpenCourseWare)'
+      year: 2005
+      problem: 'Problem Set 3, Problem 1'
+      url: 'https://ocw.mit.edu/courses/8-08-statistical-physics-ii-spring-2005/6bb24ee392752a58c4b4c2f2462c72a0_prb3.pdf'
+      verified: '2026-11-20'
+      adapted: true
+
+  - id: W-15.1-c2
+    stars: 2
+    objectives: [OBJ-15.1-2, OBJ-15.1-7]
+    prompt: >-
+      Two Ising spins with energy $E = -Js_1s_2$, at temperature $T$, $h = 0$, have four states, $++$, $+-$, $-+$ and $--$. Each Monte Carlo step picks one of the two spins at random and proposes to flip it, accepting by the Metropolis rule. Write $K = J/k_BT$.
+      (a) Write the $4 \times 4$ transition matrix $P_{ss'}$, the probability of going from $s$ to $s'$ in one step, and verify that the Boltzmann weights are a left eigenvector of it with eigenvalue $1$.
+      (b) Show that $M = s_1 + s_2$, as a function of the state, is a right eigenvector of $P$ with eigenvalue $\lambda = 1 - e^{-2K}$, so that its autocorrelation after $t$ steps is $\lambda^t$. Find the integrated autocorrelation time $\tau = \tfrac12 + \sum_{t\ge1}\lambda^t$, in steps, at $k_BT = J$ and at $k_BT = 0.5\,J$.
+      (c) Now each step, with probability $\tfrac12$, proposes to flip both spins at once instead. Show that the Boltzmann distribution is still stationary, and find the new eigenvalue of $M$ at $k_BT = J$. What happens to the decorrelation of the energy?
+    answer: >-
+      (a) $P = \begin{pmatrix} 1 - e^{-2K} & \tfrac12 e^{-2K} & \tfrac12 e^{-2K} & 0 \\ \tfrac12 & 0 & 0 & \tfrac12 \\ \tfrac12 & 0 & 0 & \tfrac12 \\ 0 & \tfrac12 e^{-2K} & \tfrac12 e^{-2K} & 1 - e^{-2K} \end{pmatrix}$, and $\pi = (e^K, e^{-K}, e^{-K}, e^K)/Z$ satisfies $\pi P = \pi$. (b) $\tau = e^{2K} - \tfrac12$: $6.9$ steps at $k_BT = J$, $54$ at $0.5\,J$. (c) Still stationary; the eigenvalue of $M$ becomes $-\tfrac12 e^{-2K} = -0.068$, so $M$ decorrelates in a single step, while the energy's eigenvalue rises from $-e^{-2K} = -0.135$ to $\tfrac12 - \tfrac12 e^{-2K} = 0.43$: the double flip never changes the energy.
+    solution:
+      - kind: law
+        text: >-
+          $P(s \to s') = \tfrac12 A(s \to s')$ for each of the two single-flip moves, and $P(s \to s) = 1 - \sum_{s' \ne s}P(s \to s')$. Stationarity: $\sum_s \pi_s P_{ss'} = \pi_{s'}$.
+      - kind: manipulation
+        text: >-
+          (a) From $++$ either flip costs $\Delta E = 2J$, accepted with $e^{-2K}$: $P(++ \to +-) = P(++ \to -+) = \tfrac12 e^{-2K}$, and the rest stays. From $+-$ either flip lowers the energy by $2J$ and is accepted: to $++$ or $--$, each with $\tfrac12$. Check the column of $++$: $e^K(1 - e^{-2K}) + e^{-K}\cdot\tfrac12 + e^{-K}\cdot\tfrac12 = e^K$; the column of $+-$: $e^K\cdot\tfrac12e^{-2K} + e^K\cdot\tfrac12e^{-2K} = e^{-K}$. The others follow by symmetry.
+      - kind: manipulation
+        text: >-
+          (b) $M = (2, 0, 0, -2)$. $(PM)_{++} = 2(1 - e^{-2K})$; $(PM)_{+-} = \tfrac12\cdot2 + \tfrac12\cdot(-2) = 0$; and so on: $PM = (1 - e^{-2K})M$. The expected $M$ after $t$ steps is $\lambda^tM_0$, and since $\langle M\rangle = 0$, $\rho(t) = \lambda^t$. Then $\tau = \tfrac12 + \lambda/(1 - \lambda) = e^{2K} - \tfrac12$.
+      - kind: manipulation
+        text: >-
+          (c) The double flip changes no bond, $\Delta E = 0$, and is always accepted; it swaps $++ \leftrightarrow --$ and $+- \leftrightarrow -+$, states of equal weight, so it leaves $\pi$ unchanged, and a mixture of two moves that each leave $\pi$ stationary does too. On $M$ it acts as $-1$: $\lambda_M = \tfrac12(1 - e^{-2K}) - \tfrac12 = -\tfrac12 e^{-2K}$. On the energy, which the single flips alone relax with eigenvalue $-e^{-2K}$, it acts as $+1$: $\lambda_E = -\tfrac12 e^{-2K} + \tfrac12$.
+      - kind: limit
+        text: >-
+          As $T \to \infty$, $\lambda \to 0$ and $\tau \to \tfrac12$: independent samples. As $T \to 0$, $\tau \approx e^{2J/k_BT}$ grows without bound: to reverse $M$ the pair must climb to the anti-aligned state first. This is the two-spin version of a large lattice that never reverses below $T_c$, and the double flip is the two-spin version of a cluster move, which flips an aligned group at once.
+      - kind: units
+        text: >-
+          $K$ is a pure number; $\tau$ is counted in steps (two steps make a sweep of this two-spin lattice).
+      - kind: substitution
+        text: >-
+          $k_BT = J$: $e^{-2} = 0.135$, $\lambda = 0.865$, $\tau = e^2 - 0.5 = 6.9$. $k_BT = 0.5\,J$: $\tau = e^4 - 0.5 = 54$. With double flips at $k_BT = J$: $\lambda_M = -0.068$, $\lambda_E = 0.432$.
+      - kind: result
+        text: >-
+          (a) $\pi P = \pi$: the Metropolis chain samples the Boltzmann distribution. (b) $\tau_M = e^{2J/k_BT} - \tfrac12$, $6.9$ and $54$ steps. (c) The same equilibrium, reached at different speeds for different observables: adding the double flip makes $M$ decorrelate at once and the energy more slowly. The stationary distribution is fixed by detailed balance; the speed is a property of the moves and of what is measured.
+    source:
+      name: 'MIT 8.334 Statistical Mechanics II: Statistical Physics of Fields (OpenCourseWare)'
+      year: 2014
+      problem: 'Problem Set 4, Problem 7 (optional)'
+      url: 'https://ocw.mit.edu/courses/8-334-statistical-mechanics-ii-statistical-physics-of-fields-spring-2014/63a2343dc24d8920e481ae5597183948_MIT8_334S14_pset4.pdf'
+      verified: '2026-11-20'
+      adapted: true

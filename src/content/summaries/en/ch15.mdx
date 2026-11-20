@@ -1,0 +1,58 @@
+---
+lang: en
+chapter: 15
+title: 'Module 15 in one page: the Ising model'
+---
+
+## The big idea
+
+A lattice of up-or-down spins that only care whether their neighbours agree is enough to produce a phase transition. In zero field the energy cannot tell up from down, so the ensemble average of the magnetization is exactly zero for every finite lattice; yet below $T_c$ a large lattice holds one sign for longer than anything can wait, and a tiny field or its own history chooses which. One dimension never orders, mean field orders too easily, and Onsager's exact solution puts the square lattice's transition at $k_BT_c = 2.269\,J$. Monte Carlo makes the rest measurable: detailed balance turns the Boltzmann distribution into a random walk, responses are read off fluctuations, and every number carries an error bar that counts only the independent samples. A finite simulation shows the trend toward a singularity; the singularity itself is a property of the infinite system.
+
+## What to remember
+
+<Formula tex="E_s = -J \sum_{\langle ij \rangle} s_i s_j - h \sum_i s_i \qquad m = \frac{1}{N}\sum_i s_i \qquad m_0 = \lim_{h \to 0^+} \lim_{N \to \infty} \langle m \rangle" label="The model, its order parameter, and spontaneous magnetization (the order of limits is the content)" />
+
+<Formula tex="A(s \to s') = \min\left(1,\, e^{-\Delta E/(k_BT)}\right) \qquad \Delta E_i = 2\,s_i \Big( J \sum_{j \in \text{nn}(i)} s_j + h \Big)" label="Metropolis, from detailed balance, and the cost of one flip" />
+
+<Formula tex="m = \tanh\left(\frac{qJm + h}{k_BT}\right) \qquad k_BT_c^\text{MF} = qJ \qquad k_BT_c = \frac{2J}{\ln(1 + \sqrt2)} \approx 2.269\,J" label="Mean field, and Onsager's exact square lattice: mean field is 76% too high" />
+
+<Formula tex="c = \frac{N\,\text{Var}(e)}{k_BT^2} \qquad \chi = \frac{N\,\text{Var}(m)}{k_BT} \qquad N_\text{eff} = \frac{n}{2\tau}" label="Responses are variances; a correlated trace is worth n/(2τ) independent samples" />
+
+- **Units.** Energies in $J$, temperature as $k_BT/J$, field as $h/J$. For a material, put $J$ and $k_B$ back: $T_c = 2.269\,J/k_B$.
+- **One dimension:** a pair of walls costs $4J$ and gains $k_B\ln(N^2/2)$ of entropy, so no order at any $T > 0$; exactly, $E/(NJ) = -\tanh(J/k_BT)$. See <LessonLink id="15.1" anchor="chain">why a chain cannot order</LessonLink>.
+- **Exponents.** Square lattice: $\beta = 1/8$, $\gamma = 7/4$, $\nu = 1$, $\alpha = 0$ (logarithm). Mean field: $\beta = 1/2$, $\gamma = 1$, $\nu = 1/2$. Real fluids and three-dimensional Ising magnets share $\beta \approx 0.326$: universality.
+- **Below $T_c$ on a finite lattice** use $|m|$: $\chi' = N\,\text{Var}(|m|)/(k_BT)$, whose peak drifts toward $T_c$ as $1/L$ and grows as $L^{7/4}$. See <LessonLink id="15.1" anchor="identities">the fluctuation identities</LessonLink>.
+- **Two transitions on one diagram.** Crossing $T_c$ at $h = 0$ is continuous (no latent heat; $c$ peaks). Crossing $h = 0$ below $T_c$ is first order ($m$ jumps from $+m_0$ to $-m_0$, with metastability and <LessonLink id="15.1" anchor="hysteresis">hysteresis</LessonLink>).
+
+## Common mistakes
+
+- **"Below $T_c$ up and down cancel, so the magnetization is zero."** The ensemble average is zero by symmetry; the magnet is not. A large lattice holds one sign, close to $\pm m_0$, for longer than any run. Watch <LessonLink id="15.1" anchor="ergodicity">a small lattice reverse and a large one never</LessonLink>.
+- **"The system settles fastest at $T_c$, between the phases."** It settles slowest there: the autocorrelation time peaks at $T_c$ and grows as $L^z$, $z \approx 2$. See <LessonLink id="15.1" anchor="slowing">critical slowing down</LessonLink>.
+- **"A Monte Carlo sweep is a slice of real time."** Detailed balance fixes where the chain goes, not how fast; Metropolis and Glauber reach the same equilibrium in different numbers of sweeps. Run <LessonLink id="15.1" anchor="mc-time">the same quench under two rules</LessonLink>.
+- **"A chain orders when it is cold enough."** Mean field says so, at $2J$; the chain disagrees at every $T > 0$, because a wall's energy is fixed and its entropy is not.
+- **"Averaging the neighbours is harmless."** Near $T_c$ the neighbours are correlated over long distances, and mean field discards exactly that: $76\%$ too high a $T_c$, $\beta = 1/2$ instead of $1/8$. Compare <LessonLink id="15.1" anchor="mean-field">mean field with Onsager</LessonLink>.
+- **"$\sigma/\sqrt n$ is the error bar."** Not for correlated samples: the honest error is $\sigma\sqrt{2\tau/n}$, larger by $\sqrt{2\tau}$, and a change of seed shows which one is right. See <LessonLink id="15.1" anchor="error-bars">an honest error bar</LessonLink>.
+- **"A big enough simulation shows the singularity."** On $N$ spins $Z$ is a finite sum, analytic in $T$: every peak is finite and rounded. A simulation shows the trend; the singularity is established by derivation. See <LessonLink id="15.1" anchor="finite">what a finite simulation can show</LessonLink>.
+- **Two different $\beta$.** The critical exponent $\beta$ in $m_0 \propto (T_c - T)^\beta$ has nothing to do with $1/k_BT$.
+- **$N\,\text{Var}(m)$ below $T_c$.** In a finite run it measures how many times the lattice happened to reverse, not the response. Use $|m|$.
+
+## How to solve
+
+1. **Name the model and the units.** Lattice and $q$, $J$, $h$, $T$; work in units of $J$ and convert to kelvin only when a material is asked about.
+2. **For a single flip, count neighbours.** $\Delta E_i = 2s_i(J\sum_j s_j + h)$; on the square lattice at $h = 0$ it is one of $0$, $\pm4J$, $\pm8J$. Then the acceptance, and check that the ratio of forward to backward acceptances is $e^{-\Delta E/k_BT}$.
+3. **For a transition temperature, say which theory.** Mean field: slope of $\tanh$ at the origin equals $1$, $k_BT_c = qJ$. Exact square lattice: $2.269\,J$. One dimension: none.
+4. **For a response, write the variance identity** before the numbers: $c = N\,\text{Var}(e)/(k_BT)^2$ in units of $k_B$, $\chi' = N\,\text{Var}(|m|)/(k_BT)$.
+5. **For an error bar, find $\tau$ first:** $N_\text{eff} = n/(2\tau)$, error $\sigma/\sqrt{N_\text{eff}}$, and a run $n = 2\tau(\sigma/\varepsilon)^2$ for a target $\varepsilon$.
+6. **Check limits:** $T \to 0$ gives the ground state ($m = \pm1$, $E = -2NJ$ on the square lattice); $T \to \infty$ gives random spins; $J \to 0$ gives module 12's paramagnet, $m = \tanh(h/k_BT)$.
+7. **Check against an exact anchor** before believing a simulation: the chain's $-\tanh(J/k_BT)$, Onsager and Yang's $m_0 = [1 - \sinh^{-4}(2J/k_BT)]^{1/8}$.
+
+## Checklist before an exam
+
+- I can write the Ising energy, find the ground state and its energy, and explain why $\langle m\rangle = 0$ at $h = 0$ for every finite lattice.
+- I can say what "spontaneously broken" means, with the two limits in the right order, and why a real magnet still picks a sign.
+- I can derive the Metropolis rule from detailed balance, check it in both cases, and explain why a sweep is not a unit of time.
+- I can give the domain-wall argument for the chain, and say why it fails in two dimensions.
+- I can derive the mean-field equation and $k_BT_c^\text{MF} = qJ$, and state by how much and why it misses Onsager's $2.269\,J$.
+- I can read $c$ and $\chi'$ off a Monte Carlo trace, and estimate $T_c$ from the drift of the $\chi'$ peak with $L$.
+- I can describe hysteresis, finite-size rounding and critical slowing down as measurements, and say what a finite simulation can and cannot prove.
+- I can quote a Monte Carlo mean with a $\tau$-corrected error bar, and explain why a change of seed is the test.
