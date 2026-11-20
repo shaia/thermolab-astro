@@ -199,7 +199,7 @@ questions:
         points: 13
         objectives: [OBJ-15.1-3]
         prompt: >-
-          Now the $L \times L$ square lattice. A domain of reversed spins enclosed by a closed wall of $\ell$ bonds costs $2J\ell$, and the number of closed walls of length $\ell$ through a given bond is at most $3^\ell$. Show that the free energy of such walls is positive for every $\ell$ when $k_BT < 2J/\ln 3$; evaluate this temperature and compare it with Onsager's $T_c$. Explain why this argument permits order in two dimensions but does not prove it, and why it cannot be repeated in one dimension. Check your result in a limit.
+          Now the $L \times L$ square lattice. A domain of reversed spins enclosed by a closed wall of $\ell$ bonds costs $2J\ell$, and the number of closed walls of length $\ell$ through a given bond is at most $3^\ell$. Show that the free energy of such walls is positive for every $\ell$ when $k_BT < 2J/\ln 3$; evaluate this temperature and compare it with Onsager's $T_c$. Explain what this free-energy argument does and does not establish about order in two dimensions, and why it cannot be repeated in one dimension. Check your result in a limit.
         solution:
           - kind: law
             text: >-
@@ -221,7 +221,7 @@ questions:
               $2/\ln 3 = 2/1.099 = 1.82$, so walls cannot win below $k_BT = 1.82\,J$, about $20\%$ below Onsager's $2.269\,J$.
           - kind: result
             text: >-
-              Below $k_BT = 1.82\,J$ every wall costs more free energy than it gains, consistent with Onsager's $T_c = 2.269\,J$ lying above. The bound counts walls generously ($3^\ell$ overcounts closed paths) and only shows that nothing like the one-dimensional catastrophe forbids order; proving order needs more, and the true $T_c$ is higher than the bound. In one dimension the wall's energy does not grow with the system and its entropy does, so the argument fails at every $T > 0$.
+              Below $k_BT = 1.82\,J$ every wall costs more free energy than it gains, consistent with Onsager's $T_c = 2.269\,J$ lying above. The bound counts walls generously ($3^\ell$ overcounts closed paths). As a free-energy estimate it is a heuristic: it shows that nothing like the one-dimensional catastrophe forbids order. Made rigorous (Peierls; Griffiths and Dobrushin), the same counting proves that the lattice orders at low enough $T$; the true $T_c$ is higher than the bound. In one dimension the wall's energy does not grow with the system and its entropy does, so the argument fails at every $T > 0$.
         rubric:
           - text: >-
               $\Delta F \ge \ell(2J - k_BT\ln 3)$, with the point that both terms grow as $\ell$.
@@ -229,7 +229,7 @@ questions:
           - text: >-
               $k_BT = 2J/\ln 3 = 1.82\,J$, below Onsager's $2.269\,J$.
           - text: >-
-              Explains that the bound permits order (no catastrophe) but does not prove it.
+              Explains that the free-energy bound is a heuristic (no catastrophe forbids order), and that the same counting, made rigorous, proves order at low enough $T$.
             weight: 2
           - text: >-
               Explains why one dimension differs: fixed wall energy, entropy growing with $N$.
@@ -276,7 +276,7 @@ questions:
           Use the expansion $m_0 \approx \sqrt{3\left(1 - T/T_c^\text{MF}\right)}$ to estimate the mean-field magnetization at $k_BT = 3.8\,J$.
         answer: 0.387
         unit: ''
-        tolerance: 0.03
+        tolerance: 0.015
         correctFeedback: >-
           $\sqrt{3(1 - 3.8/4)} = \sqrt{0.15} = 0.387$; solving $m = \tanh(4m/3.8)$ exactly gives $0.379$. The true lattice, at $3.8\,J$, is far above $T_c = 2.269\,J$ and has $m_0 = 0$.
         wrongFeedback: >-
@@ -474,7 +474,7 @@ questions:
     title: >-
       Measuring an exponent, and why the answer is biased
     prompt: >-
-      A $64 \times 64$ lattice, run with Metropolis for $10^4$ to $2\cdot10^4$ sweeps per temperature after burn-in, gives $\langle|m|\rangle = 0.957$, $0.911$, $0.785$ and $0.694$ at $k_BT = 1.8$, $2.0$, $2.2$ and $2.25\,J$. Onsager and Yang's exact values are $0.957$, $0.911$, $0.785$ and $0.672$. Take $k_BT_c = 2.2692\,J$. The effective exponent between two temperatures $T_1 < T_2$ is $\beta_\text{eff} = \ln(m_2/m_1)/\ln\left((T_c - T_2)/(T_c - T_1)\right)$.
+      A $32 \times 32$ lattice is run with Metropolis at $k_BT = 1.8$, $2.0$, $2.2$ and $2.25\,J$: at each temperature $64$ independent runs (different seeds), each of $2\cdot10^4$ sweeps after $5000$ sweeps of burn-in. The means over the runs are $\langle|m|\rangle = 0.957$, $0.911$, $0.785$ and $0.699$, with seed-to-seed standard errors (the standard deviation of the $64$ run averages, divided by $\sqrt{64}$) of $0.00002$, $0.00006$, $0.0006$ and $0.0011$. Onsager and Yang's exact values are $0.957$, $0.911$, $0.785$ and $0.672$. Take $k_BT_c = 2.2692\,J$. The effective exponent between two temperatures $T_1 < T_2$ is $\beta_\text{eff} = \ln(m_2/m_1)/\ln\left((T_c - T_2)/(T_c - T_1)\right)$.
     parts:
       - label: a
         type: numeric
@@ -499,36 +499,36 @@ questions:
         objectives: [OBJ-15.1-6]
         prompt: >-
           Find $\beta_\text{eff}$ from the two simulated values closest to $T_c$, at $2.2$ and $2.25\,J$.
-        answer: 0.0961
+        answer: 0.0905
         unit: ''
         tolerance: 0.05
         correctFeedback: >-
-          $\ln(0.694/0.785)/\ln(0.0192/0.0692) = (-0.123)/(-1.283) = 0.096$, also below $1/8$. The exact values at the same two temperatures give $0.121$.
+          $\ln(0.699/0.785)/\ln(0.0192/0.0692) = (-0.116)/(-1.282) = 0.091$, also below $1/8$; the seed-to-seed errors put only $\pm0.0014$ on it. The exact values at the same two temperatures give $0.121$.
         wrongFeedback: >-
-          $T_c - T$ is $0.0692$ and $0.0192$; use the simulated $0.785$ and $0.694$.
+          $T_c - T$ is $0.0692$ and $0.0192$; use the simulated $0.785$ and $0.699$.
         commonWrong:
           - value: 0.121
             feedback: >-
-              That uses the exact $0.672$ at $2.25\,J$. The question asks what the simulation gives, $0.694$.
+              That uses the exact $0.672$ at $2.25\,J$. The question asks what the simulation gives, $0.699$.
       - label: c
         type: numeric
         points: 4
         objectives: [OBJ-15.1-7]
         prompt: >-
-          The $2.25\,J$ point came from $n = 20\,000$ samples with standard deviation $\sigma = 0.088$ and autocorrelation time $\tau = 56$ sweeps. What is its honest standard error?
-        answer: 0.0066
+          Each run at $2.25\,J$ records $n = 20\,000$ samples of $|m|$. Averaged over the $64$ runs, a run's samples have standard deviation $\sigma = 0.154$ and autocorrelation time $\tau = 39$ sweeps (single runs give anywhere from $22$ to $72$). With these values, what is the honest standard error of one run's $\langle|m|\rangle$?
+        answer: 0.0096
         unit: ''
         tolerance: 0.03
         correctFeedback: >-
-          $N_\text{eff} = 20\,000/112 = 179$, so $\sigma/\sqrt{N_\text{eff}} = 0.088/13.4 = 0.0066$. The naive $0.088/\sqrt{20\,000} = 0.0006$ is too small by $\sqrt{112} = 10.6$.
+          $N_\text{eff} = 20\,000/78 = 256$, so $\sigma/\sqrt{N_\text{eff}} = 0.154/16.0 = 0.0096$, and the $64$ run averages do scatter by about that much (their standard deviation is $0.0087$). The naive $0.154/\sqrt{20\,000} = 0.0011$ is too small by $\sqrt{78} = 8.8$.
         wrongFeedback: >-
           $N_\text{eff} = n/(2\tau)$, and the standard error is $\sigma/\sqrt{N_\text{eff}}$.
         commonWrong:
-          - value: 0.000622
+          - value: 0.00109
             feedback: >-
-              That is the naive $\sigma/\sqrt n$, which treats $20\,000$ correlated samples as independent. Near $T_c$ they are worth only $179$.
+              That is the naive $\sigma/\sqrt n$, which treats $20\,000$ correlated samples as independent. Near $T_c$ they are worth only $256$.
             misconception: MC-naive-error-bar
-          - value: 0.00466
+          - value: 0.0068
             feedback: >-
               That uses $N_\text{eff} = n/\tau$; the factor is $2\tau$.
       - label: d
@@ -536,44 +536,47 @@ questions:
         points: 13
         objectives: [OBJ-15.1-6, OBJ-15.1-7]
         prompt: >-
-          Both effective exponents fall below the exact $1/8$, for different reasons. Name the bias that dominates far from $T_c$ and the one that dominates close to it, using the exact values to tell them apart. Is the excess of the $2.25\,J$ point over the exact $0.672$ a statistical fluctuation? What would you change to measure $\beta$ better, and how would you check the result? Check your reasoning in limits.
+          Both effective exponents fall below the exact $1/8$, for different reasons. Name the bias that dominates far from $T_c$ and the one that dominates close to it, using the exact values to tell them apart. Is the excess of the $2.25\,J$ point over the exact $0.672$ a statistical fluctuation? Judge it with the seed-to-seed error, then as if you had only one run, with its honest error from part (c), and say which judgement to trust. What would you change to measure $\beta$ better, and how would you check the result? Check your reasoning in limits.
         solution:
           - kind: law
             text: >-
-              $m_0 \propto (T_c - T)^\beta$ holds only asymptotically, as $T \to T_c$, and only for the infinite lattice; on a lattice of side $L$ the correlation length is capped at $L$, and near $T_c$ the autocorrelation time, and with it the honest error, is largest.
+              $m_0 \propto (T_c - T)^\beta$ holds only asymptotically, as $T \to T_c$, and only for the infinite lattice; on a lattice of side $L$ the correlation length is capped at $L$, and near $T_c$ the autocorrelation time, and with it the honest error of one run, is largest.
           - kind: manipulation
             text: >-
-              Far from $T_c$ the simulation agrees with the exact values to three decimals, and the exact values themselves give $\beta_\text{eff} = 0.088$ between $1.8$ and $2.0\,J$: the bias is in the law, not in the run. The magnetization saturates toward $1$ as $T$ falls, so a pure power law with a constant prefactor does not describe it there (corrections to scaling).
+              Far from $T_c$ the simulation agrees with the exact values to every decimal quoted, and the exact values themselves give the same $\beta_\text{eff}$ between $1.8$ and $2.0\,J$, $0.088$ to more decimals: the bias is in the law, not in the run. The magnetization saturates toward $1$ as $T$ falls, so a pure power law with a constant prefactor does not describe it there (corrections to scaling).
           - kind: manipulation
             text: >-
-              Close to $T_c$ the exact values give $0.121$, almost $1/8$, but the simulated $2.25\,J$ point is $0.694 - 0.672 = 0.022$ too high, $3.3$ honest standard errors: not a fluctuation but a systematic finite-size effect. With $\xi$ approaching $L$, the finite lattice is more ordered than the infinite one ($|m|$ of a finite lattice never falls to zero), which flattens the curve and lowers $\beta_\text{eff}$.
+              Close to $T_c$ the exact values give $0.121$, almost $1/8$. The simulated $2.2\,J$ point agrees with the exact $0.785$, but the $2.25\,J$ point is $0.699 - 0.672 = 0.027$ too high, about $25$ seed-to-seed standard errors: not a fluctuation but a systematic finite-size effect. With $\xi$ approaching $L$, the finite lattice is more ordered than the infinite one ($|m|$ of a finite lattice never falls to zero), which flattens the curve and lowers $\beta_\text{eff}$ to $0.091 \pm 0.0014$.
+          - kind: manipulation
+            text: >-
+              One run could not have settled this. Its honest error, part (c), is $0.0096$, which makes the excess under $3$ standard errors; and that error rests on the run's own estimate of $\tau$, which single runs put anywhere from $22$ to $72$ sweeps, a factor of about $3$, so the error bar itself is uncertain by a factor of about $\sqrt3 = 1.7$. The seed-to-seed error needs no estimate of $\tau$: it is read off the spread of $64$ independent averages. (That it equals the naive error of one run, $0.0011$, is a coincidence: $\sqrt{64} = 8$ happens to be close to $\sqrt{2\tau} = 8.8$.)
           - kind: formula
             text: >-
               $\beta_\text{eff} = \dfrac{\ln(m_2/m_1)}{\ln\left[(T_c - T_2)/(T_c - T_1)\right]} \;\xrightarrow[\;L\,\to\,\infty\;]{\;T_1,\,T_2\,\to\,T_c\;}\; \beta$
           - kind: limit
             text: >-
-              As $T \to T_c$ on the exact curve, $\beta_\text{eff} \to 1/8$: $0.121$ between $2.2$ and $2.25\,J$, $0.124$ between $2.25$ and $2.26\,J$. As $T \to 0$, $m_0 \to 1$ and $\beta_\text{eff} \to 0$: deep in the ordered phase a power law in $T_c - T$ says nothing. As $L \to \infty$ the finite-size excess vanishes.
+              As $T \to T_c$ on the exact curve, $\beta_\text{eff} \to 1/8$: $0.121$ between $2.2$ and $2.25\,J$, $0.124$ between $2.25$ and $2.26\,J$. As $T \to 0$, $m_0 \to 1$ and $\beta_\text{eff} \to 0$: deep in the ordered phase a power law in $T_c - T$ says nothing. As $L \to \infty$ the finite-size excess vanishes; at fixed $L$, adding runs shrinks the seed-to-seed error as the inverse square root of their number but leaves the excess where it is, which is what marks it as systematic.
           - kind: units
             text: >-
               $m$ and $\beta$ are pure numbers; $T_c - T$ is in units of $J/k_B$, and its unit cancels in the ratio.
           - kind: substitution
             text: >-
-              Far: $0.089$ simulated, $0.088$ exact. Near: $0.096$ simulated, $0.121$ exact. Excess at $2.25\,J$: $0.022/0.0066 = 3.3$ standard errors, against a naive error of $0.0006$ that would make it $35$.
+              Far: $0.089$ from the quoted values, which are the exact ones to three decimals; to more decimals both give $0.088$. Near: $0.091 \pm 0.0014$ simulated, $0.121$ exact. Excess at $2.25\,J$: $0.027/0.0011 = 25$ seed-to-seed standard errors; judged from one run, $0.027/0.0096 = 2.8$, with that error itself uncertain by a factor of about $1.7$.
           - kind: result
             text: >-
-              Far from $T_c$ the power law itself fails (saturation, corrections to scaling); close to $T_c$ the finite lattice is rounded, and its points are the most correlated and least certain. The $2.25\,J$ excess is systematic. To do better: use larger lattices, or several sizes and finite-size scaling, with longer runs near $T_c$ and $\tau$-corrected error bars, and check that the fitted exponent survives a change of seed and of the fitting window.
+              Far from $T_c$ the power law itself fails (saturation, corrections to scaling); close to $T_c$ the finite lattice is rounded, and its points are the most correlated and least certain. The $2.25\,J$ excess is systematic, and it is the spread of $64$ independent runs that establishes it: one run's $\tau$-corrected error bar could not. To do better: use larger lattices, or several sizes and finite-size scaling, with longer runs near $T_c$, several seeds per point and $\tau$-corrected error bars, and check that the fitted exponent survives a change of seed and of the fitting window.
         rubric:
           - text: >-
-              Far from $T_c$: the bias is in the power law (saturation, corrections to scaling), shown by the exact values giving the same $0.088$.
+              Far from $T_c$: the bias is in the power law (saturation, corrections to scaling), shown by the exact values giving the same $\beta_\text{eff}$.
             weight: 2
           - text: >-
               Close to $T_c$: finite-size rounding makes $\langle|m|\rangle$ too large and flattens the curve.
             weight: 2
           - text: >-
-              The excess of $0.022$ is about $3$ honest standard errors: systematic, judged with the $\tau$-corrected error, not the naive one.
+              The excess of $0.027$ is about $25$ seed-to-seed standard errors, so systematic; one run's honest error ($0.0096$, under $3$ standard errors, with $\tau$ uncertain by a factor of about $3$) could not have settled it.
             weight: 2
           - text: >-
-              A remedy (larger $L$, finite-size scaling, longer runs near $T_c$) and a check by changing the seed.
+              A remedy (larger $L$, finite-size scaling, longer runs near $T_c$, several seeds per point) and a check by changing the seed.
           - text: >-
               A limit check: $T \to T_c$ ($\beta_\text{eff} \to 1/8$), $T \to 0$ or $L \to \infty$.
 

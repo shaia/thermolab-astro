@@ -159,12 +159,12 @@
 - id: universality
   term: { en: universality, he: אוניברסליות }
   definition:
-    en: Systems with nothing microscopic in common share critical exponents, set only by the dimension of space and the symmetry of the order parameter.
-    he: מערכות שאין ביניהן דבר משותף ברמה המיקרוסקופית חולקות מעריכים קריטיים, שנקבעים רק לפי ממד המרחב והסימטריה של פרמטר הסדר.
+    en: Systems with nothing microscopic in common share critical exponents, set, for short-range interactions, only by the dimension of space and the symmetry of the order parameter.
+    he: מערכות שאין ביניהן דבר משותף ברמה המיקרוסקופית חולקות מעריכים קריטיים, שנקבעים, כשהאינטראקציות קצרות טווח, רק לפי ממד המרחב והסימטריה של פרמטר הסדר.
   lesson: '15.1'
 - id: lattice-gas
   term: { en: lattice gas, he: גז סריג }
   definition:
-    en: 'A fluid as an Ising model: each cell is occupied ($s = +1$) or empty ($s = -1$); the magnetization is the density, the field is the chemical potential.'
-    he: 'זורם כמודל איזינג: כל תא תפוס ($s = +1$) או ריק ($s = -1$); המגנוט הוא הצפיפות, והשדה הוא הפוטנציאל הכימי.'
+    en: 'A fluid as an Ising model: each cell is occupied ($s = +1$) or empty ($s = -1$); the magnetization is the density, the field is the chemical potential measured from its value at coexistence.'
+    he: 'זורם כמודל איזינג: כל תא תפוס ($s = +1$) או ריק ($s = -1$); המגנוט הוא הצפיפות, והשדה הוא הפוטנציאל הכימי הנמדד מערכו בדו-קיום.'
   lesson: '15.1'

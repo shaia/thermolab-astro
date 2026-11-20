@@ -38,22 +38,22 @@ questions:
     qualitative: true
     objectives: [OBJ-15.1-1]
     prompt: >-
-      A single large ferromagnetic sample is cooled in zero field to well below its Curie temperature. A magnetometer measures its magnetization. What does it read?
+      A large square Ising lattice, in a simulation, is cooled in zero field to well below $T_c$ and run for as long as you like. Its magnetization per spin is recorded. What does the record show?
     choices:
       - text: >-
-          Close to $+m_0$ or to $-m_0$, one or the other, held for as long as anyone watches. The canonical average is zero, but the sample does not visit both signs.
+          Close to $+m_0$ or to $-m_0$, one or the other, held for as long as anyone watches. The canonical average is zero, but the lattice does not visit both signs.
         correct: true
         feedback: >-
-          Right. To reverse, the sample must pass through configurations with a wall running all the way across it, whose cost grows with its size, so the time between reversals grows exponentially with $N$. Figure 15.1a shows it: an $8 \times 8$ lattice at $k_BT = 2.0\,J$ reverses dozens of times in $10^5$ sweeps, a $32 \times 32$ lattice never.
+          Right. To reverse, the lattice must pass through configurations with a wall running all the way across it, whose cost grows with its size, so the time between reversals grows exponentially with $N$. Figure 15.1a shows it: an $8 \times 8$ lattice at $k_BT = 2.0\,J$ reverses dozens of times in $10^5$ sweeps, a $32 \times 32$ lattice never.
       - text: >-
           Zero, because up and down are equally probable and cancel.
         feedback: >-
-          That is the ensemble average, $\langle m\rangle = 0$, read as if it were the reading of one sample. The average is over both signs; a macroscopic sample sits on one of them for longer than the age of the universe. This is ergodicity breaking.
+          That is the ensemble average, $\langle m\rangle = 0$, read as if it were the record of one run. The average is over both signs; a large lattice sits on one of them for longer than any run, and a macroscopic one for longer than the age of the universe. This is ergodicity breaking. (A bulk piece of real iron cooled in zero field does read almost zero, but for a different reason: the long-range dipolar forces that the model leaves out split it into domains pointing different ways.)
         misconception: MC-ensemble-cancellation
       - text: >-
-          A value that drifts slowly from $+m_0$ to $-m_0$ and back as the sample equilibrates.
+          A value that drifts slowly from $+m_0$ to $-m_0$ and back as the lattice equilibrates.
         feedback: >-
-          Reversals, when they happen at all, are abrupt crossings between the two signs, as the $8 \times 8$ lattice's trace shows, not a slow drift. For a macroscopic sample they do not happen on any observable time.
+          Reversals, when they happen at all, are abrupt crossings between the two signs, as the $8 \times 8$ lattice's trace shows, not a slow drift. For a large lattice they do not happen on any practical time.
       - text: >-
           Exactly $+1$, since below $T_c$ all the spins align.
         feedback: >-
@@ -98,7 +98,7 @@ questions:
           To reverse, a lattice must pass through configurations with walls running all the way across it. Their cost grows with $L$, so the waiting time between reversals grows exponentially with the size.
         correct: true
         feedback: >-
-          Right. Both lattices are ordered, and in both the ensemble average of $m$ is zero. What differs is how long the chain takes to get from one sign to the other: dozens of reversals in $10^5$ sweeps at $L = 8$, once or twice at most at $L = 16$, and none at $32$.
+          Right. Both lattices are ordered, and in both the ensemble average of $m$ is zero. What differs is how long the chain takes to get from one sign to the other: dozens of reversals in $10^5$ sweeps at $L = 8$, rarely if any at $L = 16$ (none in most runs, a few in some), and none at $32$.
       - text: >-
           The $32 \times 32$ lattice is further below its own transition temperature, which grows with the size.
         feedback: >-
@@ -406,10 +406,10 @@ questions:
       Module 14's van der Waals fluid gave a coexistence curve closing as $(1 - T/T_c)^{1/2}$; measured liquid-gas critical points close with an exponent $\beta \approx 0.32$. What is the best explanation?
     choices:
       - text: >-
-          The van der Waals model is a mean-field theory, and every mean-field theory gives $1/2$. Real fluids share the exponent of the three-dimensional Ising model, $0.326$, because the exponents are set by the dimension and the symmetry of the order parameter, not by the forces.
+          The van der Waals model is a mean-field theory, and every mean-field theory of an ordinary critical point gives $1/2$. Real fluids share the exponent of the three-dimensional Ising model, $0.326$, because with short-range forces the exponents are set by the dimension and the symmetry of the order parameter, not by the details of the forces.
         correct: true
         feedback: >-
-          Right. Through the lattice gas, a fluid **is** an Ising model: occupied and empty cells for up and down, the chemical potential for the field. This is universality.
+          Right. Through the lattice gas, a fluid **is** an Ising model: occupied and empty cells for up and down, the chemical potential, measured from its value at coexistence, for the field. This is universality.
       - text: >-
           Mean field gets the exponent right in principle; $0.32$ comes from impurities and gravity in the experiments.
         feedback: >-
@@ -555,7 +555,7 @@ questions:
           At $2.27\,J$, near $T_c$: the autocorrelation time peaks there, and grows with $L$.
         correct: true
         feedback: >-
-          Right. At $T_c$ the lattice is a patchwork of correlated domains of every size up to $L$, and a local rule rearranges a patch of size $\xi$ in a time growing like $\xi^z$, $z \approx 2$. Figure 15.1b measures about one sweep deep in either phase and $42$ sweeps at $T_c$ for $L = 32$: critical slowing down.
+          Right. At $T_c$ the lattice is a patchwork of correlated domains of every size up to $L$, and a local rule rearranges a patch of size $\xi$ in a time growing like $\xi^z$, $z \approx 2$. ThermoLab's long runs measure about one sweep deep in either phase and $42$ sweeps at $T_c$ for $L = 32$: critical slowing down.
       - text: >-
           At $2.27\,J$ it decorrelates fastest: the system is between phases and neither holds it back.
         feedback: >-
@@ -586,7 +586,7 @@ questions:
     commonWrong:
       - value: 348
         feedback: >-
-          That makes $\tau$ grow linearly with $L$ ($z = 1$). The measured $3.1$, $9.6$, $42$ and $174$ sweeps for $L = 8$ to $64$ roughly quadruple with each doubling.
+          That makes $\tau$ grow linearly with $L$ ($z = 1$). The measured $3.1$, $10.5$, $42$ and $174$ sweeps for $L = 8$ to $64$ roughly quadruple with each doubling.
       - value: 2784
         feedback: >-
           That multiplies by $16$, as if $\tau$ grew as $L^4$. It grows as $L^z$ with $z \approx 2$: a factor of $4$.
@@ -597,7 +597,7 @@ questions:
     qualitative: true
     objectives: [OBJ-15.1-6]
     prompt: >-
-      In figure 15.1c, at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice, the hysteresis loop has area $1.90$, $1.38$ and $1.03$ for $5$, $20$ and $80$ sweeps per field step. At $3.0\,J$ the area is $0.014$ to $0.020$. Which conclusion do these measurements support?
+      In figure 15.1c, at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice, the hysteresis loop has area $1.82$, $1.33$ and $1.08$ for $5$, $20$ and $80$ sweeps per field step. At $3.0\,J$ the area is about $0.01$ ($0.00$ to $0.04$). Which conclusion do these measurements support?
     choices:
       - text: >-
           Below $T_c$ the lattice stays in a metastable state until a reversed domain nucleates; slower sweeping gives nucleation more chances, so the loop narrows. On a finite lattice a slow enough sweep would close it: the loop measures metastability on the time scale of the run.
@@ -615,9 +615,9 @@ questions:
           A sweep is a unit of computation; Glauber's rule would give different areas at the same "rate". The trend with sweeps per step is meaningful, the conversion to seconds is not.
         misconception: MC-mc-is-real-dynamics
       - text: >-
-          At $3.0\,J$ there is a loop as well, too small to see; its area is $0.014$ to $0.020$.
+          At $3.0\,J$ there is a loop as well, too small to see; its area is about $0.01$.
         feedback: >-
-          Areas of $0.01$ to $0.02$ come from the noise of $m$, against $1.0$ to $1.9$ below $T_c$. Above $T_c$ the curve passes through the origin and is the same in both directions.
+          Areas of about $0.01$ come from the noise of $m$, against $1.1$ to $1.8$ below $T_c$. Above $T_c$ the curve passes through the origin and is the same in both directions.
 
   # ---------------------------------------------------------------- OBJ-15.1-7: honest error bars
   - id: Q-15.1-honest-error

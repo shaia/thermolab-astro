@@ -235,7 +235,7 @@ describe('who chooses the direction (item 7)', () => {
       const { m } = simulate(alignedState(L), 2.0, 40000, rng(17, L), { burnIn: 0 });
       return branchFlips(m);
     });
-    // the lesson says a 16 x 16 lattice never reverses in 1e5 sweeps; some seeds see a reversal or two
+    // the lesson: in 1e5 sweeps a 16 x 16 lattice reverses rarely if at all (none in most runs, a few in some)
     expect(flips[0]).toBeGreaterThanOrEqual(5);
     expect(flips[1]).toBeLessThanOrEqual(3);
     expect(flips[1]).toBeLessThan(flips[0] / 3);

@@ -20,8 +20,8 @@
  *                  illusory; below T_c at small |h| the chain stays on one magnetization branch for
  *                  longer than any run; a trace that keeps its burn-in biases every average
  *
- * REDUCED UNITS. Energy in J, temperature k_B T / J, field h / J. Critical behaviour is the one subject
- * where the material constants scale out. At h = 0 the totals are integers.
+ * REDUCED UNITS. Energy in J, temperature k_B T / J, field h / J: with one coupling this is dimensional
+ * analysis (T_c = 2.269 J/k_B still depends on J and the lattice). At h = 0 the totals are integers.
  *
  * CHECKERBOARD. Every neighbour of a black site is white, so with the white sites frozen the black sites
  * do not interact: updating them in one sequential loop is exactly the simultaneous update, and each

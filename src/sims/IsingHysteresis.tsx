@@ -1,6 +1,6 @@
 /**
  * The hysteresis loop (lesson 15.1, figure 15.1c): a lattice at fixed temperature while the field is stepped
- * +1 → −1 → +1 in 81 steps per leg, a fixed number of sweeps at each. Left: the spins. Right: m against h, the
+ * +1 → −1 → +1 in 80 steps per leg (81 field values), a fixed number of sweeps at each. Left: the spins. Right: m against h, the
  * current state as a dot, the running loop as a curve and the previous completed loop kept faintly for
  * comparison. Below T_c the curve does not retrace itself: reversing the magnetization needs a domain of the
  * other sign to nucleate and grow. Above T_c the same sweep retraces itself and the loop area is noise.

@@ -129,7 +129,7 @@ practice:
     level: mid
     objectives: [OBJ-15.1-5, OBJ-15.1-6]
     prompt: >-
-      Four seeds of a $32 \times 32$ lattice, $20\,000$ sweeps per temperature, give on average $\chi' = N\,\text{Var}(|m|)/(k_BT)$ of $3.8$, $10.5$, $18.1$, $16.3$ and $11.5$ at $k_BT = 2.20$, $2.25$, $2.30$, $2.40$ and $2.45\,J$.
+      Four seeds of a $32 \times 32$ lattice, $20\,000$ sweeps per temperature, give on average $\chi' = N\,\text{Var}(|m|)/(k_BT)$ of $4.2$, $10.6$, $18.1$, $16.3$ and $11.5$ at $k_BT = 2.20$, $2.25$, $2.30$, $2.40$ and $2.45\,J$.
       (a) At $k_BT = 2.35\,J$ the trace of $|m|$ has variance $0.0469$. Find $\chi'$ there.
       (b) Locate the peak of $\chi'$ by a parabola through the three highest points.
       (c) The lesson's $16 \times 16$ lattice peaks at $2.416\,J$. Assuming the peak moves as $T_\text{peak} = T_c + a/L$, estimate $T_c$.
@@ -309,7 +309,7 @@ practice:
       (a) Set $J = 0$. Show that the partition function factorizes into module 12's single-spin form, and that $\langle m\rangle = \tanh(h/k_BT)$ exactly.
       (b) Show that the exact chain magnetization $m = \sinh(h/k_BT)\big/\sqrt{\sinh^2(h/k_BT) + e^{-4J/k_BT}}$ reduces to (a) as $J \to 0$, and that for small $h$ at fixed $J > 0$ it gives $\chi = \partial m/\partial h|_{h=0} = e^{2J/k_BT}/k_BT$. Evaluate $\chi\,k_BT$ at $k_BT = J$. Why does coupling make the chain more susceptible than free spins?
       (c) For $J = 0$, verify the fluctuation identity $\chi = N\,\text{Var}(m)/(k_BT)$ directly.
-      (d) An $8 \times 8$ lattice at $k_BT = 2.0\,J$, $h = 0$, run for $10^4$ sweeps, reverses its magnetization about four times. Why does the laboratory compute the susceptibility from $|m|$, not from $m$, there?
+      (d) An $8 \times 8$ lattice at $k_BT = 2.0\,J$, $h = 0$, run for $10^4$ sweeps, reverses its magnetization four or five times on average. Why does the laboratory compute the susceptibility from $|m|$, not from $m$, there?
     answer: >-
       (a) $Z = [2\cosh(h/k_BT)]^N$, $\langle m\rangle = \tanh(h/k_BT)$. (b) $\chi\,k_BT = e^2 = 7.4$: correlated neighbours respond together, in blocks about two correlation lengths long. (c) $\text{Var}(m) = [1 - \tanh^2(h/k_BT)]/N$, so $N\,\text{Var}(m)/(k_BT) = \partial\tanh(h/k_BT)/\partial h$. (d) $\text{Var}(m)$ of such a run is dominated by the jumps between $\pm m_0$, about $m_0^2 = 0.83$ if both branches are visited, giving $64\cdot0.83/2 \approx 27$, or much less if none is: it measures how many reversals the run happened to see, not the response.
     solution:
@@ -378,7 +378,7 @@ challenge:
           Chain, $q = 2$: $k_BT_c^\text{MF} = \tfrac43 J = 1.33\,J$, against $2J$ for $\pm1$ spins. On the square lattice, $q = 4$, mean field gives $\tfrac83 J = 2.67\,J$ for spin 1.
       - kind: result
         text: >-
-          (a) $2\sinh x/(1 + 2\cosh x)$. (b) Mean field: $\tfrac43 J/k_B$; truth: no transition in one dimension. (c) $m_0 \propto (T_c - T)^{1/2}$: the spin's length changes the mean-field $T_c$ but not its exponent, because every mean-field theory reduces to the same cubic expansion.
+          (a) $2\sinh x/(1 + 2\cosh x)$. (b) Mean field: $\tfrac43 J/k_B$; truth: no transition in one dimension. (c) $m_0 \propto (T_c - T)^{1/2}$: the spin's length changes the mean-field $T_c$ but not its exponent, because every mean-field theory of an ordinary critical point reduces to the same cubic expansion.
     source:
       name: 'MIT 8.08 Statistical Physics II (OpenCourseWare)'
       year: 2005

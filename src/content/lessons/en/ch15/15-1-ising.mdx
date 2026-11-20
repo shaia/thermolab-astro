@@ -40,9 +40,9 @@ import Lab from '~/components/Lab.astro';
 
 <Hook title="Who chooses the direction?">
 
-Hold a magnet in a flame and it stops being a magnet. Iron loses its magnetization at $770\,^\circ\text{C}$, its <Term id="curie-temperature">Curie temperature</Term>, and the loss is not a slow fading: just below that temperature the iron is magnetized, just above it is not, and the magnetization goes to zero continuously but with a vertical tangent. Let it cool again and, at the same temperature, the magnetization comes back.
+Hold a magnet in a flame and it stops being a magnet. Iron loses its magnetization at $770\,^\circ\text{C}$, its <Term id="curie-temperature">Curie temperature</Term>, and the loss is not a slow fading: just below that temperature the iron is magnetized, just above it is not, and the magnetization goes to zero continuously but with a vertical tangent. Let it cool again and, at the same temperature, the magnetization comes back, within each of the small regions, the domains, into which the iron divides.
 
-It has to come back pointing *somewhere*. And here is the trouble. The energy of a piece of iron in zero field does not care which way its moments point, as long as neighbours agree: flip every moment in the sample and the energy is exactly what it was. The equations are symmetric between up and down. The sample, cooled through its Curie point, is not: it picks one. Every Boltzmann average of the magnetization is therefore exactly zero, at every temperature, yet the magnet on the bench is magnetized. **Who chooses the direction, and where did the symmetry go?**
+It has to come back pointing *somewhere*. And here is the trouble. The energy of a piece of iron in zero field does not care which way its moments point, as long as neighbours agree: flip every moment in the sample and the energy is exactly what it was. The equations are symmetric between up and down. A domain, cooled through the Curie point, is not: it picks one. Every Boltzmann average of the magnetization is therefore exactly zero, at every temperature, yet every domain is magnetized, and the magnet on the bench, magnetized once in a strong field, keeps a net moment for years: its remanence. **Who chooses the direction, and where did the symmetry go?**
 
 Module 14 left a second question at the same place. Its coexistence curve *ended*: at the critical point the liquid and gas densities merged as $(1 - T/T_c)^{1/2}$, while real fluids merge as $(1 - T/T_c)^{0.32}$, an exponent the van der Waals model cannot produce. This lesson answers both with one model, so simple it fits in a line, and with a computer experiment: the <Term id="ising-model">Ising model</Term> and the <Term id="monte-carlo">Monte Carlo method</Term>. Along the way it asks what a simulation of a few thousand spins can and cannot tell us about a transition that, strictly, only happens in an infinite system.
 
@@ -104,7 +104,7 @@ An $8 \times 8$ lattice at $k_BT = 2.0\,J$, below the transition, started all up
 
 A bond costs $-J$ when its two spins agree and $+J$ when they disagree. The ground state at $h = 0$ has every spin aligned: on the square lattice there are $2N$ bonds, so $E = -2NJ$. There are *two* ground states, all up and all down, with the same energy.
 
-**Units.** This lesson measures energies in units of $J$, temperature as $k_BT/J$ and the field as $h/J$. Critical behaviour is the one subject in the course where the material constants genuinely scale out; that is what universality, below, claims. To quote a number for a material, put $J$ and $k_B$ back: a coupling of $J = 2\cdot10^{-21}\,\text{J}$ puts the square lattice's transition at $2.269\,J/k_B = 329\,\text{K}$.
+**Units.** This lesson measures energies in units of $J$, temperature as $k_BT/J$ and the field as $h/J$. With a single coupling in the model this is dimensional analysis, not physics: $T_c$ still depends on $J$, and on the lattice. What carries over from one material to another is subtler: the critical exponents, which universality, below, says depend on neither. To quote a number for a material, put $J$ and $k_B$ back: a coupling of $J = 2\cdot10^{-21}\,\text{J}$ puts the square lattice's transition at $2.269\,J/k_B = 329\,\text{K}$.
 
 </Step>
 
@@ -140,7 +140,7 @@ The symmetry is <Term id="symmetry-breaking">spontaneously broken</Term> when $m
 
 <Step fig="fig-15-1a" set={{ size: 8, temperature: 2.0, field: 0, start: 'up', rule: 'metropolis' }} id="ergodicity">
 
-**The same story, told in time.** Below the transition a finite lattice in zero field does reverse its magnetization now and then: it must, or the average would not be zero. The $8 \times 8$ lattice in the figure does. But to reverse, a lattice has to pass through configurations with a wall of reversed spins running all the way across it, which costs an energy that grows with $L$, so the waiting time between reversals grows exponentially with the size. At $k_BT = 2.0\,J$ a run of $10^5$ sweeps sees an $8 \times 8$ lattice reverse dozens of times, a $16 \times 16$ lattice once or twice at most, and a $32 \times 32$ lattice never. For a magnet of $10^{20}$ spins the wait exceeds the age of the universe. The ensemble average is zero; the sample, for every practical purpose, is not. This is <Term id="ergodicity-breaking">ergodicity breaking</Term>: the dynamics no longer explores all the states the ensemble averages over.
+**The same story, told in time.** Below the transition a finite lattice in zero field does reverse its magnetization now and then: it must, or the average would not be zero. The $8 \times 8$ lattice in the figure does. But to reverse, a lattice has to pass through configurations with a wall of reversed spins running all the way across it, which costs an energy that grows with $L$, so the waiting time between reversals grows exponentially with the size. At $k_BT = 2.0\,J$ a run of $10^5$ sweeps sees an $8 \times 8$ lattice reverse dozens of times, a $16 \times 16$ lattice rarely, if at all (none in most runs, a few in some), and a $32 \times 32$ lattice never. For a magnet of $10^{20}$ spins the wait exceeds the age of the universe. The ensemble average is zero; the sample, for every practical purpose, is not. This is <Term id="ergodicity-breaking">ergodicity breaking</Term>: the dynamics no longer explores all the states the ensemble averages over.
 
 **Your prediction gets its answer here.** A large lattice cooled far below the transition ends close to $+1$ or to $-1$, and which one is decided by its history. "Up and down cancel" is true of the ensemble, never of the magnet.
 
@@ -206,7 +206,7 @@ $$
 A(s \to s') = \frac{1}{1 + e^{\Delta E/(k_BT)}}
 $$
 
-satisfies detailed balance too, accepts less often than Metropolis, and relaxes more slowly, to the same equilibrium. The figure now runs the same quench under Glauber: compare how many sweeps the energy takes to settle. Measured over eight seeds on a $64 \times 64$ lattice, after $20$ sweeps the energy per spin is $-1.80\,J$ under Metropolis and $-1.68\,J$ under Glauber; in equilibrium at $k_BT = 2.8\,J$ the two agree within their error bars. The order in which sites are visited is another free choice. A sweep is a unit of computation, and no physical constant converts it into seconds. **The chain samples equilibrium; it does not simulate the real magnet's motion.**
+satisfies detailed balance too, accepts less often than Metropolis, and relaxes more slowly, to the same equilibrium. The figure now runs the same quench under Glauber: compare how many sweeps the energy takes to settle. Measured over eight seeds on a $64 \times 64$ lattice, after $20$ sweeps the energy per spin is $-1.80\,J$ under Metropolis and $-1.68\,J$ under Glauber. A separate check, in equilibrium at $k_BT = 2.8\,J$, finds the two rules' energies agreeing within their error bars. The order in which sites are visited is another free choice. A sweep is a unit of computation, and no physical constant converts it into seconds. **The chain samples equilibrium; it does not simulate the real magnet's motion.**
 
 </Step>
 
@@ -238,11 +238,11 @@ The energy is fixed; the entropy grows without bound with $N$. At any $T > 0$ th
 
 <Step fig="fig-15-1b" set={{ panel: 'm', meanField: false }}>
 
-<Formula tex="\frac{E}{NJ} = -\tanh\frac{J}{k_BT} \qquad m = \frac{\sinh(h/k_BT)}{\sqrt{\sinh^2(h/k_BT) + e^{-4J/k_BT}}}" label="The infinite Ising chain, exactly (transfer matrix): no spontaneous magnetization at any T > 0" />
+<Formula tex="\frac{E}{NJ} = -\tanh\frac{J}{k_BT} \qquad m = \frac{\sinh(h/k_BT)}{\sqrt{\sinh^2(h/k_BT) + e^{-4J/k_BT}}}" label="The infinite Ising chain, exactly (transfer matrix): the energy at h = 0, and the magnetization in a field h; no spontaneous magnetization at any T > 0" />
 
 The exact solution confirms it. The magnetization goes to zero as $h \to 0$ at every $T > 0$, and approaches $\pm1$ only as $T \to 0$. These two formulas are the lesson's first exact anchors: ThermoLab's chain reproduces them to within its error bars (a $1024$-site ring at $k_BT = J$ gives $E/(NJ) = -0.76156 \pm 0.00036$ against $-\tanh 1 = -0.76159$) before anything it says about two dimensions is believed.
 
-**Why the argument fails in two dimensions.** A wall that cuts a square lattice in two has a length of at least $L$, so its energy grows like $2JL$. Its entropy grows like $L$ too (a wall is a path, and a path of length $\ell$ can wander in at most $3^\ell$ ways), so energy and entropy now compete on equal terms, and at low enough temperature the energy wins. The argument does not prove that the square lattice orders; it shows that nothing like the one-dimensional catastrophe forbids it. The figure shows that it does: below about $2.3\,J$ every lattice is ordered.
+**Why the argument fails in two dimensions.** A wall that cuts a square lattice in two has a length of at least $L$, so its energy grows like $2JL$. Its entropy grows like $L$ too (a wall is a path, and a path of length $\ell$ can wander in at most $3^\ell$ ways), so energy and entropy now compete on equal terms, and at low enough temperature the energy wins. As a free-energy estimate this is a heuristic: it shows that nothing like the one-dimensional catastrophe forbids order. Made rigorous, the same counting of walls (Peierls in 1936, completed by Griffiths and by Dobrushin in the 1960s) proves that the square lattice orders at low enough temperature. The figure shows that it does: below about $2.2\,J$ every lattice is ordered.
 
 </Step>
 
@@ -262,7 +262,7 @@ $$
 m_0 \approx \sqrt{3\left(1 - \frac{T}{T_c^\text{MF}}\right)}
 $$
 
-The magnetization vanishes as the square root of the distance to $T_c$: exponent $1/2$, the same exponent the van der Waals model gave module 14. That is not a coincidence. Both are mean-field theories, in which every particle or spin feels the average of the others, and every mean-field theory gives $1/2$.
+The magnetization vanishes as the square root of the distance to $T_c$: exponent $1/2$, the same exponent the van der Waals model gave module 14. That is not a coincidence. Both are mean-field theories, in which every particle or spin feels the average of the others, and every mean-field theory of an ordinary critical point gives $1/2$.
 
 </Step>
 
@@ -288,7 +288,7 @@ So mean field overestimates the transition temperature by a factor $4/2.269 = 1.
 
 <Formula tex="c = \frac{N\,\text{Var}(e)}{k_BT^2} \qquad \chi = \frac{\partial\langle m\rangle}{\partial h} = \frac{N\,\text{Var}(m)}{k_BT}" label="Fluctuation identities: e = E/N and m = M/N" />
 
-The first is module 12's $C = \text{Var}(E)/(k_BT^2)$ per spin. The second follows the same way: $h$ enters the Boltzmann weight as $e^{\beta hM}$, so $\langle M\rangle = \partial\ln Z/\partial(\beta h)$, and its derivative is $\text{Var}(M)$. No derivative has to be taken numerically: the response is read off the spontaneous fluctuations.
+The first is module 12's $C = \text{Var}(E)/(k_BT^2)$ per spin. The second follows the same way: with $\beta = 1/(k_BT)$ and $M = Nm$, $h$ enters the Boltzmann weight as $e^{\beta hM}$, so $\langle M\rangle = \partial\ln Z/\partial(\beta h)$, and its derivative is $\text{Var}(M)$. No derivative has to be taken numerically: the response is read off the spontaneous fluctuations.
 
 Below $T_c$ a finite run does not sample the two branches $\pm m$ fairly: it crosses between them rarely, so $\text{Var}(m)$ of a run measures luck. The figure applies the same identity to $|m|$, which a run *can* sample, $\chi' = N\,\text{Var}(|m|)/(k_BT)$. It is the standard estimator for finite lattices, and its peak is all this lesson uses.
 
@@ -302,9 +302,9 @@ $$
 m_0 \propto (T_c - T)^{\beta}, \qquad \chi \propto |T - T_c|^{-\gamma}, \qquad c \propto |T - T_c|^{-\alpha}, \qquad \xi \propto |T - T_c|^{-\nu}
 $$
 
-where $\xi$ is the <Term id="correlation-length">correlation length</Term>, the size of the largest correlated patches. For the square lattice, from Onsager's solution, $\beta = 1/8$, $\gamma = 7/4$, $\nu = 1$, and the heat capacity diverges logarithmically ($\alpha = 0$). Mean field gives $\beta = 1/2$, $\gamma = 1$, $\nu = 1/2$ and a finite jump in $c$.
+where $\xi$ is the <Term id="correlation-length">correlation length</Term>, the size of the largest correlated patches. For the square lattice, from the exact solution (Onsager, Yang, and later work), $\beta = 1/8$, $\gamma = 7/4$, $\nu = 1$, and the heat capacity diverges logarithmically ($\alpha = 0$). Mean field gives $\beta = 1/2$, $\gamma = 1$, $\nu = 1/2$ and a finite jump in $c$.
 
-**Nothing diverges on a finite lattice.** $\xi$ cannot exceed $L$, so every peak in the figure is rounded and finite; its height grows with $L$, and its position drifts toward $T_c$ from above. At full scale (four seeds per size, thousands of sweeps per temperature), ThermoLab's runs put the peak of $\chi'$ at $k_BT = 2.503$, $2.416$, $2.329$ and $2.311\,J$ for $L = 8$, $16$, $32$ and $64$, with heights growing as $L^{1.76}$; the exact exponent is $\gamma/\nu = 7/4$. Extrapolating the positions linearly in $1/L$ gives $T_c = 2.272 \pm 0.009$ leaving out $L = 8$, against Onsager's $2.269$. The singularity at $T_c$ is a property of the limit $N \to \infty$.
+**Nothing diverges on a finite lattice.** $\xi$ cannot exceed $L$, so every peak in the figure is rounded and finite; its height grows with $L$, and its position drifts toward $T_c$ from above. At full scale (four seeds per size, thousands of sweeps per temperature), ThermoLab's runs put the peak of $\chi'$ at $k_BT = 2.503$, $2.416$, $2.329$ and $2.311\,J$ for $L = 8$, $16$, $32$ and $64$, with heights growing as $L^{1.76}$; the exact exponent is $\gamma/\nu = 7/4$. A straight line in $1/L$ through the peaks of $L = 16$, $32$ and $64$ (leaving out $L = 8$) extrapolates to $T_c = 2.268$, against Onsager's $2.269$. The figure's runs are shorter, and its peaks scatter from run to run, most for the smallest lattices: read one run's peaks as estimates good to a few hundredths. The singularity at $T_c$ is a property of the limit $N \to \infty$.
 
 **The transition is continuous.** Crossing $T_c$ at $h = 0$ the energy per spin is continuous (there is no latent heat, unlike module 14's boiling) and the heat capacity peaks instead: switch the figure to the heat-capacity panel. This is a <Term id="continuous-transition">continuous transition</Term>.
 
@@ -312,7 +312,7 @@ where $\xi$ is the <Term id="correlation-length">correlation length</Term>, the 
 
 <Step fig="fig-15-1b" set={{ panel: 'tau', meanField: false }} id="slowing">
 
-**Critical slowing down.** The last panel is the autocorrelation time of $|m|$: how many sweeps the chain takes to forget its state. Deep in either phase it is about one sweep. It peaks *at* $T_c$, and it is higher for every larger lattice. A local rule changes a configuration one spin at a time, and a correlated patch of size $\xi$ takes a time growing like $\xi^z$ to rearrange, with $z \approx 2$ for Metropolis. At $T_c$ on a finite lattice $\xi \approx L$, so the autocorrelation time grows like $L^z$: ThermoLab measures $3.1$, $9.6$, $42$ and $174 \pm 38$ sweeps at $L = 8$, $16$, $32$ and $64$, a fitted $z = 1.96$. The figure's runs are shorter, and its ladder steps across $T_c$ rather than sitting on it, so its peaks read lower and scatter from run to run; what survives is the trend with $L$. This is <Term id="critical-slowing-down">critical slowing down</Term>: the simulation is slowest exactly where the physics is most interesting. A transition is not the place where "nothing holds the system back"; it is the place where everything is correlated with everything else.
+**Critical slowing down.** The last panel is the autocorrelation time of $|m|$: how many sweeps the chain takes to forget its state. Deep in either phase it is about one sweep. It peaks *at* $T_c$, and it is higher for every larger lattice. A local rule changes a configuration one spin at a time, and a correlated patch of size $\xi$ takes a time growing like $\xi^z$ to rearrange, with $z \approx 2.2$ for Metropolis (fits over lattices as small as these give about $2$). At $T_c$ on a finite lattice $\xi \approx L$, so the autocorrelation time grows like $L^z$: ThermoLab's long runs at $T_c$ measure $3.1$, $10.5$, $42$ and $174 \pm 38$ sweeps at $L = 8$, $16$, $32$ and $64$, a fitted $z = 1.94$. The figure's ladder runs are short and do not sit on $T_c$, so its values of $\tau$ scatter from run to run (the $L = 32$ peak lands anywhere from about $35$ to $75$ sweeps) and its peak position wanders, by as much as $0.2\,J/k_B$ for the smallest lattice; what survives is the growth with $L$. This is <Term id="critical-slowing-down">critical slowing down</Term>: the simulation is slowest exactly where the physics is most interesting. A transition is not the place where "nothing holds the system back"; it is the place where everything is correlated with everything else.
 
 </Step>
 
@@ -328,9 +328,9 @@ independent samples, and the standard error of its mean is $\sigma/\sqrt{N_\text
 
 <Step fig="fig-15-1b" set={{ panel: 'm', meanField: false }} id="universality">
 
-**Universality.** Systems with nothing microscopic in common share critical exponents. The liquid–gas critical point of every simple fluid that has been measured (carbon dioxide, xenon, water) has $\beta \approx 0.32$–$0.33$, and so does the demixing point of binary liquid mixtures; both agree with the three-dimensional Ising model, $\beta = 0.326$. Module 14's van der Waals fluid got $1/2$ because it is a mean-field theory, not because fluids differ from magnets. What sets the exponents is the dimension of space and the symmetry of the order parameter (here, a single number with two equivalent signs), and not the forces. This is <Term id="universality">universality</Term>; the theory that explains it, the renormalization group, is beyond this course.
+**Universality.** Systems with nothing microscopic in common share critical exponents. The liquid–gas critical point of every simple fluid that has been measured (carbon dioxide, xenon, water) has $\beta \approx 0.32$–$0.33$, and so does the demixing point of binary liquid mixtures; both agree with the three-dimensional Ising model, $\beta = 0.326$. Module 14's van der Waals fluid got $1/2$ because it is a mean-field theory, not because fluids differ from magnets. What sets the exponents is the dimension of space and the symmetry of the order parameter (here, a single number with two equivalent signs), provided the forces are short-ranged; their details do not matter. This is <Term id="universality">universality</Term>; the theory that explains it, the renormalization group, is beyond this course.
 
-The dictionary between the two problems is direct. Divide a fluid into cells, each occupied by a molecule ($s_i = +1$) or empty ($s_i = -1$), with an attraction between occupied neighbours: that is an Ising model, the <Term id="lattice-gas">lattice gas</Term>. The magnetization is the density measured from its critical value, the field is the chemical potential, the line $h = 0$ below $T_c$ is the coexistence curve, and the jump in $m$ across it is the jump from gas to liquid density.
+The dictionary between the two problems is direct. Divide a fluid into cells, each occupied by a molecule ($s_i = +1$) or empty ($s_i = -1$), with an attraction between occupied neighbours: that is an Ising model, the <Term id="lattice-gas">lattice gas</Term>. The magnetization is the density measured from its critical value, the field is the chemical potential measured from its value at coexistence, the line $h = 0$ below $T_c$ is the coexistence curve, and the jump in $m$ across it is the jump from gas to liquid density.
 
 </Step>
 
@@ -341,7 +341,7 @@ The dictionary between the two problems is direct. Divide a fluid into cells, ea
 <Spread
   fig="fig-15-1c"
   n="15.1c"
-  caption="A square lattice in a field that is stepped from $h = +J$ down to $-J$ and back, in $81$ steps each way, with a fixed number of sweeps at each step, computed live. Left: the spins. Right: the magnetization $m$ against the field $h$; the dot is the current state and the line its history. The previous completed loop stays on the plot, faint, for comparison, labelled with its temperature and sweeps per step. The readout gives the area of the last completed loop."
+  caption="A square lattice in a field that is stepped from $h = +J$ down to $-J$ and back, in $80$ steps each way, with a fixed number of sweeps at each step, computed live. Left: the spins. Right: the magnetization $m$ against the field $h$; the dot is the current state and the line its history. The previous completed loop stays on the plot, faint, for comparison, labelled with its temperature and sweeps per step. The readout gives the area of the last completed loop."
   figure={IsingHysteresis}
   figureProps={{ temperature: 1.5, sweepsPerStep: 20, size: 32, tasks: ['loop', 'slow', 'above'] }}
 >
@@ -358,13 +358,13 @@ Crossing $h = 0$ below $T_c$, the equilibrium magnetization jumps from $+m_0$ to
 
 <Step fig="fig-15-1c" set={{ temperature: 1.5, sweepsPerStep: 80, size: 32 }} id="slow-loop">
 
-**Slower.** Four times as many sweeps per step: the lattice has more chances to nucleate a reversed domain at each field, so it reverses earlier and the loop narrows. Measured at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice over eight seeds, the area of the loop is $1.90 \pm 0.03$, $1.38 \pm 0.03$ and $1.03 \pm 0.04$ for $5$, $20$ and $80$ sweeps per step. It narrows, and it stays open: no sweep slow enough to be practical closes it.
+**Slower.** Four times as many sweeps per step: the lattice has more chances to nucleate a reversed domain at each field, so it reverses earlier and the loop narrows. Measured at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice over $64$ seeds, the area of the loop is $1.82 \pm 0.02$, $1.33 \pm 0.01$ and $1.08 \pm 0.01$ for $5$, $20$ and $80$ sweeps per step. It narrows, and it stays open: no sweep slow enough to be practical closes it.
 
 </Step>
 
 <Step fig="fig-15-1c" set={{ temperature: 3.0, sweepsPerStep: 20, size: 32 }} id="above-loop">
 
-**Above the transition.** At $k_BT = 3.0\,J$ the curve passes through the origin and retraces itself: one smooth curve, the same in both directions, with an area that is only noise ($0.014$ to $0.020$ in the same runs). Above $T_c$ there is no ordered state to be stuck in, and nothing to remember.
+**Above the transition.** At $k_BT = 3.0\,J$ the curve passes through the origin and retraces itself: one smooth curve, the same in both directions, with an area that is only noise (about $0.01$, and never above $0.04$, in the same runs). Above $T_c$ there is no ordered state to be stuck in, and nothing to remember.
 
 </Step>
 
@@ -374,7 +374,7 @@ Crossing $h = 0$ below $T_c$, the equilibrium magnetization jumps from $+m_0$ to
 
 <Note kind="warn">
 
-What the model leaves out. Real magnets have quantum spins, lattice vibrations, long-range dipolar forces, anisotropy, disorder, and walls pinned by defects. Iron's Curie temperature is $1043\,\text{K}$ and nickel's $627\,\text{K}$, and the measured magnetization of both vanishes continuously with a vertical tangent, as the lesson says it must. But neither is a two-dimensional Ising magnet: they are three-dimensional, and their moments can point in any direction. Their measured $\beta$ lies near $0.36$–$0.38$: not the square lattice's $1/8$, not mean field's $1/2$, and not the three-dimensional Ising value $0.326$. Which class a system falls into is decided by its dimension and the symmetry of its order parameter.
+What the model leaves out. Real magnets have quantum spins, lattice vibrations, long-range dipolar forces, anisotropy, disorder, and walls pinned by defects. The dipolar forces are why a bulk magnet cooled in zero field divides into domains of different directions and shows almost no net moment; a permanent magnet keeps one because a strong field once aligned its domains, and pinned walls hold them there. Iron's Curie temperature is $1043\,\text{K}$ and nickel's $627\,\text{K}$, and the measured magnetization of both vanishes continuously with a vertical tangent, as the lesson says it must. But neither is a two-dimensional Ising magnet: they are three-dimensional, and their moments can point in any direction. Their measured $\beta$ lies near $0.36$–$0.38$: not the square lattice's $1/8$, not mean field's $1/2$, and not the three-dimensional Ising value $0.326$. Which class a system falls into is decided by its dimension, the symmetry of its order parameter, and whether its interactions are short-ranged.
 
 </Note>
 
@@ -448,7 +448,7 @@ Solve the mean-field equation for the square lattice at $k_BT = 3J$ and $h = 0$ 
 
 <Solution>
 
-**Given:** $q = 4$, $k_BT = 3J$, $h = 0$, $m_0 = 0.5$ as a starting guess.
+**Given:** $q = 4$, $k_BT = 3J$, $h = 0$, a starting guess $m = 0.5$.
 
 **General law:** $m = \tanh(qJm/k_BT)$, iterated as $m \leftarrow \tanh(qJm/k_BT)$; Onsager's $k_BT_c = 2.269\,J$, with $m_0 = 0$ above it.
 
