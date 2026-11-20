@@ -597,7 +597,7 @@ questions:
     qualitative: true
     objectives: [OBJ-15.1-6]
     prompt: >-
-      In figure 15.1c, at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice, the hysteresis loop has area $2.20$, $1.48$ and $1.18$ for $5$, $20$ and $80$ sweeps per field step. At $3.0\,J$ the area is $0.013$ to $0.021$. Which conclusion do these measurements support?
+      In figure 15.1c, at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice, the hysteresis loop has area $1.90$, $1.38$ and $1.03$ for $5$, $20$ and $80$ sweeps per field step. At $3.0\,J$ the area is $0.014$ to $0.020$. Which conclusion do these measurements support?
     choices:
       - text: >-
           Below $T_c$ the lattice stays in a metastable state until a reversed domain nucleates; slower sweeping gives nucleation more chances, so the loop narrows. On a finite lattice a slow enough sweep would close it: the loop measures metastability on the time scale of the run.
@@ -615,9 +615,9 @@ questions:
           A sweep is a unit of computation; Glauber's rule would give different areas at the same "rate". The trend with sweeps per step is meaningful, the conversion to seconds is not.
         misconception: MC-mc-is-real-dynamics
       - text: >-
-          At $3.0\,J$ there is a loop as well, too small to see; its area is $0.013$ to $0.021$.
+          At $3.0\,J$ there is a loop as well, too small to see; its area is $0.014$ to $0.020$.
         feedback: >-
-          Areas of $0.01$ to $0.02$ come from the noise of $m$, against $1.2$ to $2.2$ below $T_c$. Above $T_c$ the curve passes through the origin and is the same in both directions.
+          Areas of $0.01$ to $0.02$ come from the noise of $m$, against $1.0$ to $1.9$ below $T_c$. Above $T_c$ the curve passes through the origin and is the same in both directions.
 
   # ---------------------------------------------------------------- OBJ-15.1-7: honest error bars
   - id: Q-15.1-honest-error

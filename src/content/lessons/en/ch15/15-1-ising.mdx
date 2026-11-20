@@ -35,7 +35,7 @@ import Lab from '~/components/Lab.astro';
   n="15.1a"
   caption="A square lattice of $L \times L$ spins with periodic edges, computed live: up spins dark, down spins light. Each sweep offers every spin one chance to flip, by the Metropolis rule (or, when chosen, the Glauber rule). On the right, the magnetization per spin $m$ and the energy per spin $E/(NJ)$ against the number of sweeps; below the transition at $h = 0$, the dashed lines are $\pm m_0$, the exact spontaneous magnetization of the infinite lattice. Temperature is $k_BT/J$ and the field $h/J$. Moving the temperature or the field changes them for the running lattice; the other controls restart it."
   figure={IsingLattice}
-  figureProps={{ size: 64, temperature: 1.5, field: 0, start: 'random', rule: 'metropolis', tasks: ['quench', 'hot', 'critical', 'flip', 'glauber'] }}
+  figureProps={{ size: 32, temperature: 1.5, field: 0, start: 'random', rule: 'metropolis', tasks: ['quench', 'hot', 'critical', 'flip', 'glauber'] }}
 >
 
 <Hook title="Who chooses the direction?">
@@ -60,7 +60,7 @@ Module 14 left a second question at the same place. Its coexistence curve *ended
   answer={1}
 >
 
-Check it in figure 15.1a: quench a random lattice to $k_BT = 1.5\,J$, and watch where $m$ ends up. Then restart it, twice.
+Check it in figure 15.1a: quench a random lattice to $k_BT = 1.5\,J$, and watch where $m$ ends up. Then restart it, twice. (Now and then a lattice freezes into two straight bands, one of each sign; restart that one too.)
 
 </Predict>
 
@@ -140,7 +140,7 @@ The symmetry is <Term id="symmetry-breaking">spontaneously broken</Term> when $m
 
 <Step fig="fig-15-1a" set={{ size: 8, temperature: 2.0, field: 0, start: 'up', rule: 'metropolis' }} id="ergodicity">
 
-**The same story, told in time.** Below the transition a finite lattice in zero field does reverse its magnetization now and then: it must, or the average would not be zero. The $8 \times 8$ lattice in the figure does. But to reverse, a lattice has to pass through configurations with a wall of reversed spins running all the way across it, which costs an energy that grows with $L$, so the waiting time between reversals grows exponentially with the size. At $k_BT = 2.0\,J$ a run of $10^5$ sweeps sees an $8 \times 8$ lattice reverse dozens of times, and a $16 \times 16$ or $32 \times 32$ lattice never. For a magnet of $10^{20}$ spins the wait exceeds the age of the universe. The ensemble average is zero; the sample, for every practical purpose, is not. This is <Term id="ergodicity-breaking">ergodicity breaking</Term>: the dynamics no longer explores all the states the ensemble averages over.
+**The same story, told in time.** Below the transition a finite lattice in zero field does reverse its magnetization now and then: it must, or the average would not be zero. The $8 \times 8$ lattice in the figure does. But to reverse, a lattice has to pass through configurations with a wall of reversed spins running all the way across it, which costs an energy that grows with $L$, so the waiting time between reversals grows exponentially with the size. At $k_BT = 2.0\,J$ a run of $10^5$ sweeps sees an $8 \times 8$ lattice reverse dozens of times, a $16 \times 16$ lattice once or twice at most, and a $32 \times 32$ lattice never. For a magnet of $10^{20}$ spins the wait exceeds the age of the universe. The ensemble average is zero; the sample, for every practical purpose, is not. This is <Term id="ergodicity-breaking">ergodicity breaking</Term>: the dynamics no longer explores all the states the ensemble averages over.
 
 **Your prediction gets its answer here.** A large lattice cooled far below the transition ends close to $+1$ or to $-1$, and which one is decided by its history. "Up and down cancel" is true of the ensemble, never of the magnet.
 
@@ -312,7 +312,7 @@ where $\xi$ is the <Term id="correlation-length">correlation length</Term>, the 
 
 <Step fig="fig-15-1b" set={{ panel: 'tau', meanField: false }} id="slowing">
 
-**Critical slowing down.** The last panel is the autocorrelation time of $|m|$: how many sweeps the chain takes to forget its state. Deep in either phase it is about one sweep. It peaks *at* $T_c$, and it is higher for every larger lattice. A local rule changes a configuration one spin at a time, and a correlated patch of size $\xi$ takes a time growing like $\xi^z$ to rearrange, with $z \approx 2$ for Metropolis. At $T_c$ on a finite lattice $\xi \approx L$, so the autocorrelation time grows like $L^z$: ThermoLab measures $3.1$, $9.6$, $42$ and $174 \pm 38$ sweeps at $L = 8$, $16$, $32$ and $64$, a fitted $z = 1.96$. This is <Term id="critical-slowing-down">critical slowing down</Term>: the simulation is slowest exactly where the physics is most interesting. A transition is not the place where "nothing holds the system back"; it is the place where everything is correlated with everything else.
+**Critical slowing down.** The last panel is the autocorrelation time of $|m|$: how many sweeps the chain takes to forget its state. Deep in either phase it is about one sweep. It peaks *at* $T_c$, and it is higher for every larger lattice. A local rule changes a configuration one spin at a time, and a correlated patch of size $\xi$ takes a time growing like $\xi^z$ to rearrange, with $z \approx 2$ for Metropolis. At $T_c$ on a finite lattice $\xi \approx L$, so the autocorrelation time grows like $L^z$: ThermoLab measures $3.1$, $9.6$, $42$ and $174 \pm 38$ sweeps at $L = 8$, $16$, $32$ and $64$, a fitted $z = 1.96$. The figure's runs are shorter, and its ladder steps across $T_c$ rather than sitting on it, so its peaks read lower and scatter from run to run; what survives is the trend with $L$. This is <Term id="critical-slowing-down">critical slowing down</Term>: the simulation is slowest exactly where the physics is most interesting. A transition is not the place where "nothing holds the system back"; it is the place where everything is correlated with everything else.
 
 </Step>
 
@@ -358,13 +358,13 @@ Crossing $h = 0$ below $T_c$, the equilibrium magnetization jumps from $+m_0$ to
 
 <Step fig="fig-15-1c" set={{ temperature: 1.5, sweepsPerStep: 80, size: 32 }} id="slow-loop">
 
-**Slower.** Four times as many sweeps per step: the lattice has more chances to nucleate a reversed domain at each field, so it reverses earlier and the loop narrows. Measured at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice over four seeds, the area of the loop is $2.20 \pm 0.04$, $1.48 \pm 0.02$ and $1.18 \pm 0.04$ for $5$, $20$ and $80$ sweeps per step. It narrows, and it stays open: no sweep slow enough to be practical closes it.
+**Slower.** Four times as many sweeps per step: the lattice has more chances to nucleate a reversed domain at each field, so it reverses earlier and the loop narrows. Measured at $k_BT = 1.5\,J$ on a $32 \times 32$ lattice over eight seeds, the area of the loop is $1.90 \pm 0.03$, $1.38 \pm 0.03$ and $1.03 \pm 0.04$ for $5$, $20$ and $80$ sweeps per step. It narrows, and it stays open: no sweep slow enough to be practical closes it.
 
 </Step>
 
 <Step fig="fig-15-1c" set={{ temperature: 3.0, sweepsPerStep: 20, size: 32 }} id="above-loop">
 
-**Above the transition.** At $k_BT = 3.0\,J$ the curve passes through the origin and retraces itself: one smooth curve, the same in both directions, with an area that is only noise ($0.013$ to $0.021$ in the same runs). Above $T_c$ there is no ordered state to be stuck in, and nothing to remember.
+**Above the transition.** At $k_BT = 3.0\,J$ the curve passes through the origin and retraces itself: one smooth curve, the same in both directions, with an area that is only noise ($0.014$ to $0.020$ in the same runs). Above $T_c$ there is no ordered state to be stuck in, and nothing to remember.
 
 </Step>
 
