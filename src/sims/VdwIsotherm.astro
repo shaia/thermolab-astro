@@ -1,0 +1,7 @@
+---
+/** An isotherm of the van der Waals gas for lesson MDX: <Spread figure={VdwIsotherm} figureProps={{ tr: 0.9, view: 'pv', co2: false, tasks: ['wiggle'] }}>. */
+import VdwIsotherm, { type VdwIsothermProps } from './VdwIsotherm';
+type Props = VdwIsothermProps;
+---
+
+<VdwIsotherm client:visible {...Astro.props} />

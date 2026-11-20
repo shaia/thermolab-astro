@@ -1,0 +1,7 @@
+---
+/** The equation-of-state surface for lesson MDX: <Spread figure={PvtSurface} figureProps={{ morph: 1, legs: false, tasks: ['fold', 'rotate'] }}>. */
+import PvtSurface, { type PvtSurfaceProps } from './PvtSurface';
+type Props = PvtSurfaceProps;
+---
+
+<PvtSurface client:visible {...Astro.props} />

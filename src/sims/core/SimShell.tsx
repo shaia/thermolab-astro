@@ -33,6 +33,8 @@ interface Props {
   onPointerMove?: (e: PointerEvent) => void;
   onPointerUp?: (e: PointerEvent) => void;
   cursor?: string;
+  /** CSS touch-action of the canvas: 'pan-y' lets a vertical swipe scroll the page past a figure that is dragged sideways */
+  touchAction?: string;
 }
 
 export default function SimShell(p: Props) {
@@ -54,7 +56,7 @@ export default function SimShell(p: Props) {
           tabIndex={0}
           role="img"
           aria-label={p.label}
-          style={{ cursor: p.cursor ?? 'default' }}
+          style={{ cursor: p.cursor ?? 'default', ...(p.touchAction ? { touchAction: p.touchAction } : {}) }}
           onKeyDown={p.onKeyDown}
           onPointerDown={p.onPointerDown}
           onPointerMove={p.onPointerMove}
@@ -116,6 +118,7 @@ export function Slider(p: {
   step: number;
   format: (v: number) => string;
   onChange: (v: number) => void;
+  disabled?: boolean;
 }) {
   return (
     <label class="slider">
@@ -128,6 +131,7 @@ export function Slider(p: {
         step={p.step}
         value={p.value}
         aria-valuetext={p.format(p.value)}
+        disabled={p.disabled}
         onInput={(e) => p.onChange(Number((e.target as HTMLInputElement).value))}
       />
       <output class="q">{p.format(p.value)}</output>
