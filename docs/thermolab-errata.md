@@ -150,3 +150,22 @@ when it is.
 - The puzzle (English line 41–43, Hebrew 41): ten thousand walkers' histogram is "the same to a precision you can set
   your watch by … reproducible to three figures". Its width at t = 1000 scatters by 0.6% from seed to seed (31.67,
   scatter 0.19, 8 seeds; 1/√(2N) = 0.7% expected): two figures. Three need about a million walkers.
+- Quiz Q-03-2 (feedback on "About −30", English line 37) and Q-03-7 (feedback on "Growing", line 160): the ensemble
+  mean stays at zero "because walkers who stray right are matched by walkers who stray left". That is the compensation
+  across walkers that Q-03-9's last distractor rejects ("no walker can compensate for another"). The mean is zero
+  because each walker's expected displacement is μ₁t = 0; a finite cloud's mean is not matched to zero but scatters by
+  σ₁√(t/N) (0.57 measured against 0.60 predicted for 2500 walkers at t = 900, 64 seeds).
+- Quiz Q-03-5 (English lines 103–120): "stays far too wide at every n" and "the true variance is t(1+q)/(1−q) = 19t"
+  are long-time statements. At n = 1 the persistent walk is the coin (variance 1), and at q = 0.9 the exact Var(x_n)/n
+  is 1.9 at n = 2, 9.8 at n = 16 and 18.3 at n = 256 (from Var = t(1+q)/(1−q) − 2q(1−q^t)/(1−q)², checked against the
+  direct sum of covariances). "Too wide, and stays too wide as n grows" is what holds; the distance from the Gaussian
+  stalls at 0.35 (n = 16) and 0.31 (n = 256), 8 seeds of 20,000 sums. "Collapse perfectly", for the sums standardised
+  by the true variance, overstates a distance that falls with n (the module's own repair numbers).
+- Quiz Q-03-9: the question asks where a "smooth, reproducible" histogram comes from, and the correct choice gives only
+  the shape (more step sequences end near the middle, and only for coin steps). The reproducibility is the other half:
+  each bar is the mean of N independent yes-or-no draws and scatters by √(f(1 − f)/N) (relative scatter 1.85%
+  measured against 2.0% predicted for f = 0.198, N = 10,000, 64 runs). The port's correct choice names both.
+- Problem set, problem 6(a) (English line 117, Hebrew 114): "show that ⟨r_t²⟩ = 2σ₁²t", under the page's own preamble
+  that steps have mean μ₁, holds only for μ₁ = 0. With x and y steps of mean μ₁ each, ⟨r_t²⟩ = 2σ₁²t + 2μ₁²t²; for
+  the biased step (μ₁ = 0.2, σ₁² = 0.96) at t = 1000 that is 1920 + 80,000. The spread about the mean, which
+  `walker_spread` measures in (b), is what equals 2σ₁²t; state μ₁ = 0, or ask for ⟨|r_t − ⟨r_t⟩|²⟩.
