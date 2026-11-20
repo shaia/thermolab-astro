@@ -63,3 +63,61 @@ when it is.
 - Line 425 says the result "becomes the continuous exponential e^{−n/τ} once Q ≫ 1, with τ = −1/ln(1 − 1/Q) → Q".
   With that τ, (1 − 1/Q)^n = e^{−n/τ} exactly for every Q ≥ 2; only τ ≈ Q − 1/2 needs Q ≫ 1. An imprecision, not
   an error; the port states it correctly.
+
+## Module 02: equations of state
+
+- `data/co2-isotherm-280k.csv` (and its two notebook copies) is hand-built: its own header says "Hand-constructed
+  for this course … this is not a live pull from NIST" and "illustrative", and the page and notebook call it
+  "representative published values". The mislabelling is in the headings and labels: "The NIST CO2 isotherm" (page
+  and notebook Part 5), the legend "NIST (measured)", and the quiz Q-02-4/5 feedback ("NIST CO2 isotherm data").
+  Three of its five stated NIST reference values are wrong (T_c = 304.13 K and P_c = 7.3773 MPa are right). NIST
+  Chemistry WebBook (fluid.cgi, CO₂, 280 K): P_sat = 4.1607 MPa (CSV 4.1663), saturated vapour 121.74 kg/m³ (CSV
+  114.8), saturated liquid 883.58 kg/m³ (CSV 827). So the plateau runs from 361.5 to 49.8 cm³/mol, not 383.4 to
+  53.2. The vapour rows have round Z (0.97, 0.94, 0.90, 0.85, 0.80, 0.75, 0.71); the first two lie 0.2–0.4% below
+  NIST's isotherm at the same molar volume and the other five 1.7–2.9% above (NIST: 0.45248, 0.87907, 1.71725,
+  2.41651, 3.01643, 3.42834 and 3.82865 MPa at the seven volumes; for example 1.2e-3 m³/mol: 1.746 against 1.717
+  MPa; 4.2e-4: 3.935 against 3.829 MPa). The row 5.0e-5 m³/mol at 6.5 MPa is inside NIST's two-phase region (880
+  kg/m³ < 883.58), so it should be 4.16 MPa. The port quotes NIST's isotherm.
+- Explore, alt text of `gases-surface.mp4`: the fold is "a region where the surface is no longer single-valued in
+  pressure for a given volume and temperature". P(v, T) of the van der Waals equation is single-valued everywhere;
+  it is v at given (P, T) that has three values below T_c.
+- Model specification (page, notebook, `gases.py` docstring), *Valid when*: "moderate densities near and above T_c"
+  for the van der Waals sheet. Near T_c is where it is quantitatively worst: Z_c = 3/8 against 0.275 for CO₂ (NIST
+  T_c = 304.1282 K, P_c = 7.3773 MPa, ρ_c = 467.6 kg/m³) and 0.290 for argon, and its v_c = 3b is 1.37 times CO₂'s
+  measured critical volume (128.5 against 94.1 cm³/mol).
+- Quiz Q-02-6 calls the CO₂ constants a_m = 0.3640, b_m = 4.267e-5 "independently published … not fit from its
+  critical point", and finds T_c within 0.1% "even though". Tabulated van der Waals constants are computed from the
+  critical point: T_c = 304.2 K, P_c = 7.41 MPa give a_m = 0.3642, b_m = 4.267e-5 (argon's 0.1355, 3.201e-5 likewise
+  come from 150.87 K, 4.898 MPa). The agreement is circular; only v_c is a test.
+- Quiz Q-02-8's discussion cites "Problem 5(d) on the problem set"; problem 5 has parts (a)–(c).
+- Derive: the van der Waals equation is "not a consequence of the state postulate the way the ideal gas law can be
+  read as one". The state postulate says a surface exists and implies no particular equation, the ideal one
+  included; the page's own box labels the ideal gas law empirical.
+- Advanced: at the Boyle temperature "the two corrections cancel to leading order in 1/v at every density
+  simultaneously". They cancel only in the 1/v term; for van der Waals Z = 1 + b²/v² + … there (Z = 1.005 at
+  v_r = 5, T_r = 27/8). An imprecision.
+- Quiz Q-02-7's correct choice: "any van der Waals substance at a given (T_r, P_r) has the same reduced volume v_r".
+  Below T_c a given (T_r, P_r) on the loop's range has three v_r; the law fixes P_r from (T_r, v_r). An imprecision.
+- Quiz Q-02-8's discussion: the non-monotonic region "cannot exist without both ingredients: setting either a or b to
+  zero removes the critical point entirely", with a described as pulling the pressure down "at larger v". With b = 0
+  and a > 0, (∂P/∂v)_T = −k_BT/v² + 2a/v³ is positive for every v < 2a/(k_BT), at every temperature (numerically,
+  a = 1e-48 Pa m⁶, T = 1000 K: rising up to 1.448e-28 m³ against 2a/(k_BT) = 1.449e-28 m³): attraction alone folds
+  every isotherm and the fold never closes, which is why there is no critical point (T_c = 8a/(27k_Bb) → ∞). Only
+  a = 0 removes the fold. And the attraction wins at intermediate v; at large v both corrections fade, and the slope
+  is the ideal −k_BT/v².
+- Quiz Q-02-1's example of two independent intensive variables is "say P and T". On the condensation plateau they are
+  not independent: NIST's CO₂ at 280 K and 4.1607 MPa has any molar volume from 49.8 to 361.5 cm³/mol. An
+  imprecision; the port's question uses T and v.
+- Problem set, problem 1(d): argon's b = 5.317e-29 m³; from b_m = 3.201e-5 m³/mol it is 5.3154e-29 (with N_A =
+  6.022e23, 5.3155e-29). The "measured" T_c = 150.9 K, P_c = 4.87 MPa are not NIST's 150.687 K, 4.8630 MPa, and the
+  part asks to compare all three computed critical constants with them, though T_c and P_c come back by construction
+  (the constants were made from 150.87 K, 4.898 MPa); only V_c tests the model, as in Q-02-6.
+- Advanced: "At low T, B(T) < 0 — attraction dominates and Z < 1; at high T, B(T) > 0 — excluded volume dominates and
+  Z > 1." The sign of B fixes the sign of Z − 1 only in the dilute limit. Below T_B a van der Waals gas has Z < 1 only
+  for v > b/(1 − T/T_B) and Z > 1 denser (T_r = 1.2: Z returns to 1 at v_r = 0.517). Real nitrogen at 300 K has
+  B of about −4.5 cm³/mol (a fit to NIST's 0.05–1 MPa isotherm gives −4.0 to −4.6, depending on the fit) and
+  Z = 1.057 at 20 MPa. An imprecision.
+- Problem set, problem 5 is tagged OBJ-02-2 (the doubling test) as well as OBJ-02-4. The tag is weak rather than
+  baseless (OBJ-02-2 includes forming per-particle densities, which 5(a)'s per-molecule b loosely touches), but no
+  part asks to classify a quantity as extensive or intensive. The port's version (workbook W-2.1-07) adds one, on b
+  and Nb.

@@ -1,0 +1,104 @@
+# Terms lesson 2.1 introduces. Hebrew spellings, and the spellings rejected, follow ThermoLab's canonical glossary
+# (glossary/terms.yml); "van der Waals equation" joins its "van der Waals" to its "equation of state", as course.ts
+# does. Terms defined by other lessons (pressure, ideal gas law, internal energy: 4.1; temperature, thermal
+# equilibrium: 1.1; partial derivative, epistemic label, model specification: 0.1) are used here through <Term>.
+- id: equation-of-state
+  term: { en: equation of state, he: משוואת מצב }
+  definition:
+    en: The equation of the surface on which a substance's equilibrium states lie, relating $P$, $v$ and $T$; for a dilute gas, $Pv = k_BT$.
+    he: המשוואה של המשטח שעליו נמצאים מצבי שיווי המשקל של חומר, הקושרת את $P$, $v$ ו-$T$; לגז דליל, $Pv = k_BT$.
+  lesson: '2.1'
+- id: state-postulate
+  term: { en: state postulate, he: הנחת המצב }
+  definition:
+    en: The empirical law that, for a simple compressible substance, fixing two independent intensive variables fixes every other equilibrium property, so that all equilibrium states form one surface in $(P, v, T)$.
+    he: החוק האמפירי שלפיו, בחומר דחיס פשוט, קיבוע שני משתנים אינטנסיביים בלתי תלויים מקבע כל תכונת שיווי משקל אחרת, כך שכל מצבי שיווי המשקל מרכיבים משטח אחד במרחב $(P, v, T)$.
+  lesson: '2.1'
+- id: extensive
+  term: { en: extensive, he: אקסטנסיבי }
+  definition:
+    en: Said of a variable that doubles when two identical copies of a system are joined into one, such as $N$, $V$ and $U$.
+    he: נאמר על משתנה שמוכפל כאשר מחברים שני עותקים זהים של מערכת למערכת אחת, כמו $N$, $V$ ו-$U$.
+  lesson: '2.1'
+- id: intensive
+  term: { en: intensive, he: אינטנסיבי }
+  definition:
+    en: Said of a variable that is unchanged when two identical copies of a system are joined into one, such as $P$, $T$ and the volume per particle $v = V/N$.
+    he: נאמר על משתנה שאינו משתנה כאשר מחברים שני עותקים זהים של מערכת למערכת אחת, כמו $P$, $T$ והנפח לחלקיק $v = V/N$.
+  lesson: '2.1'
+- id: isotherm
+  term: { en: isotherm, he: איזותרמה }
+  definition:
+    en: A curve of states at one temperature; on the $P$–$v$ plane, the pressure against the volume per particle at fixed $T$.
+    he: עקומה של מצבים בטמפרטורה אחת; במישור $P$–$v$, הלחץ כפונקציה של הנפח לחלקיק ב-$T$ קבוע.
+  lesson: '2.1'
+- id: van-der-waals-equation
+  term: { en: van der Waals equation, he: משוואת ואן דר ואלס }
+  reject: ['ון דר ואלס', 'וואן דר וואלס']
+  definition:
+    en: The model equation of state $P = k_BT/(v - b) - a/v^2$, which corrects the ideal gas law for the volume $b$ a molecule excludes and for the mutual attraction measured by $a$.
+    he: משוואת המצב המודלית $P = k_BT/(v - b) - a/v^2$, המתקנת את חוק הגזים האידיאליים עבור הנפח $b$ שמולקולה מדירה ועבור המשיכה ההדדית שנמדדת ב-$a$.
+  lesson: '2.1'
+- id: excluded-volume
+  term: { en: excluded volume, he: נפח מודר }
+  reject: ['נפח מוצא', 'נפח נמנע']
+  definition:
+    en: The volume, $b$, that the centres of other molecules cannot enter, counted per molecule; for hard spheres of diameter $d$, $b = \tfrac23\pi d^3$, half the sphere of radius $d$ that each pair excludes.
+    he: הנפח, $b$, שמרכזיהן של מולקולות אחרות אינם יכולים להיכנס אליו, ביחס למולקולה אחת; לכדורים קשיחים בקוטר $d$, $b = \tfrac23\pi d^3$, מחצית הכדור ברדיוס $d$ שכל זוג מדיר.
+  lesson: '2.1'
+- id: critical-point
+  term: { en: critical point, he: נקודה קריטית }
+  definition:
+    en: The state $(v_c, T_c, P_c)$ at which the critical isotherm has zero slope and zero curvature, $(\partial P/\partial v)_T = (\partial^2 P/\partial v^2)_T = 0$; there liquid and vapour become one.
+    he: המצב $(v_c, T_c, P_c)$ שבו לאיזותרמה הקריטית שיפוע אפס ועקמומיות אפס, $(\partial P/\partial v)_T = (\partial^2 P/\partial v^2)_T = 0$; בו הנוזל והאדים הופכים לאחד.
+  lesson: '2.1'
+- id: critical-temperature
+  term: { en: critical temperature, he: טמפרטורה קריטית }
+  definition:
+    en: The temperature $T_c$ of the critical point, above which no pressure liquefies a substance; $k_BT_c = 8a/(27b)$ for a van der Waals gas.
+    he: הטמפרטורה $T_c$ של הנקודה הקריטית, שמעליה שום לחץ אינו מנזל את החומר; $k_BT_c = 8a/(27b)$ בגז ואן דר ואלס.
+  lesson: '2.1'
+- id: supercritical-fluid
+  term: { en: supercritical fluid, he: זורם על-קריטי }
+  reject: ['נוזל על-קריטי', 'פלואיד על-קריטי']
+  definition:
+    en: A substance above its critical temperature and pressure; above $T_c$, at any pressure, compression raises the density smoothly and there is no separate liquid and vapour.
+    he: חומר מעל הטמפרטורה והלחץ הקריטיים שלו; מעל $T_c$, בכל לחץ, דחיסה מעלה את הצפיפות ברציפות ואין נוזל ואדים נפרדים.
+  lesson: '2.1'
+- id: reduced-variables
+  term: { en: reduced variables, he: משתנים מצומצמים }
+  definition:
+    en: Pressure, volume per particle and temperature measured in units of the substance's own critical point, $P_r = P/P_c$, $v_r = v/v_c$, $T_r = T/T_c$.
+    he: לחץ, נפח לחלקיק וטמפרטורה הנמדדים ביחידות של הנקודה הקריטית של החומר עצמו, $P_r = P/P_c$, $v_r = v/v_c$, $T_r = T/T_c$.
+  lesson: '2.1'
+- id: corresponding-states
+  term: { en: law of corresponding states, he: חוק המצבים המתאימים }
+  definition:
+    en: The statement that substances at the same reduced temperature and volume have the same reduced pressure. For van der Waals gases it is a theorem, $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$; for real gases an approximate empirical law.
+    he: הקביעה שחומרים באותם טמפרטורה ונפח מצומצמים נמצאים באותו לחץ מצומצם. בגזי ואן דר ואלס זהו משפט, $P_r = 8T_r/(3v_r - 1) - 3/v_r^2$; בגזים ממשיים זהו חוק אמפירי מקורב.
+  lesson: '2.1'
+- id: compressibility-factor
+  term: { en: compressibility factor, he: מקדם הדחיסות }
+  reject: ['פקטור דחיסות']
+  definition:
+    en: $Z = Pv/(k_BT)$, exactly $1$ for an ideal gas; how far it is from $1$ measures how far a gas is from ideal.
+    he: $Z = Pv/(k_BT)$, השווה בדיוק ל-$1$ בגז אידיאלי; המרחק שלו מ-$1$ מודד את מרחקו של הגז מאידיאליות.
+  lesson: '2.1'
+- id: virial-expansion
+  term: { en: virial expansion, he: פיתוח הוויריאל }
+  definition:
+    en: The compressibility factor as a power series in the density, $Z = 1 + B(T)/v + C(T)/v^2 + \cdots$; $B(T) = b - a/(k_BT)$ for a van der Waals gas.
+    he: מקדם הדחיסות כטור חזקות בצפיפות, $Z = 1 + B(T)/v + C(T)/v^2 + \cdots$; $B(T) = b - a/(k_BT)$ בגז ואן דר ואלס.
+  lesson: '2.1'
+- id: boyle-temperature
+  term: { en: Boyle temperature, he: טמפרטורת בויל }
+  definition:
+    en: The temperature at which the second virial coefficient vanishes, so that $Z$ departs from $1$ only at second order in the density; $k_BT_B = a/b = \tfrac{27}{8}k_BT_c$ for a van der Waals gas.
+    he: הטמפרטורה שבה מקדם הוויריאל השני מתאפס, כך ש-$Z$ סוטה מ-$1$ רק בסדר שני בצפיפות; $k_BT_B = a/b = \tfrac{27}{8}k_BT_c$ בגז ואן דר ואלס.
+  lesson: '2.1'
+- id: saturation-pressure
+  term: { en: saturation pressure, he: לחץ רוויה }
+  definition:
+    en: The one pressure, set by the temperature, at which a substance's liquid and vapour coexist; compressed at fixed temperature below $T_c$, a vapour holds this pressure while it condenses.
+    he: הלחץ היחיד, הנקבע לפי הטמפרטורה, שבו הנוזל והאדים של חומר מתקיימים יחד; כשאדים נדחסים בטמפרטורה קבועה מתחת ל-$T_c$, הם שומרים על הלחץ הזה בזמן שהם מתעבים.
+  lesson: '2.1'
