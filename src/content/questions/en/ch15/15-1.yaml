@@ -211,7 +211,7 @@ questions:
         feedback: >-
           Halving every acceptance leaves the ratio $A(\Delta E)/A(-\Delta E)$ unchanged, so detailed balance still holds. The chain samples the right distribution and needs about twice as many sweeps.
       - text: >-
-          Metropolis, with the sites visited in a fixed order (a chessboard, then row by row) rather than at random.
+          Metropolis, with the sites visited in a fixed order (a chessboard, or row by row) rather than at random.
         feedback: >-
           Each single-site update satisfies detailed balance and so leaves the Boltzmann distribution unchanged; so does any sequence of them. The order of visits is a free choice that changes the speed, not the destination.
 
