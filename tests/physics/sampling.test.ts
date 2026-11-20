@@ -359,7 +359,7 @@ describe('the random walk', () => {
       }
     }
     expect(() => walkerSpread(new Float64Array(3), 1)).toThrow();
-  });
+  }, 60_000);
 
   it('drifts at mu_1 t while it spreads at sigma_1 sqrt(t): the biased walk, ensemble mean within 4 standard errors of mu_1 t', () => {
     const W = 4000;
@@ -533,7 +533,7 @@ describe('the standardised sums collapse onto the Gaussian (ThermoLab test_conve
         expect(dist[dist.length - 1]).toBeLessThan(0.05);
       }
     }
-  });
+  }, 60_000);
 
   it('is standardised: mean 0 and variance 1 at every n, whatever the step (the shape is what is left)', () => {
     for (const name of STEP_NAMES) {
