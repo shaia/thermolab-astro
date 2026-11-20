@@ -20,7 +20,7 @@ What the ports find wrong in ThermoLab is collected in [docs/thermolab-errata.md
 | Module | Lesson | Status |
 |---|---|---|
 | 00 Orientation: how many makes a law | 0.1 | done |
-| 01 Thermal equilibrium | 1.1 | in progress |
+| 01 Thermal equilibrium | 1.1 | done |
 | 02 Equations of state | 2.1 | |
 | 03 Probability and emergence | 3.1 | |
 | 04 Pressure | 4.1 | done (pilot, #1, #3) |
