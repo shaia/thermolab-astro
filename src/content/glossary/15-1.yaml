@@ -1,0 +1,170 @@
+# Terms lesson 15.1 introduces. Hebrew spellings, and the spellings rejected, follow ThermoLab's canonical glossary (glossary/terms.yml).
+- id: ising-model
+  term: { en: Ising model, he: מודל איזינג }
+  definition:
+    en: Spins $s_i = \pm1$ on a lattice with energy $E = -J\sum_{\langle ij\rangle} s_is_j - h\sum_i s_i$; the simplest system with a phase transition.
+    he: ספינים $s_i = \pm1$ על סריג, עם אנרגיה $E = -J\sum_{\langle ij\rangle} s_is_j - h\sum_i s_i$; המערכת הפשוטה ביותר שיש בה מעבר פאזה.
+  reject: ['מודל אייזינג']
+  lesson: '15.1'
+- id: order-parameter
+  term: { en: order parameter, he: פרמטר סדר }
+  definition:
+    en: A quantity that is zero in the disordered phase and nonzero in the ordered one, and changes sign under the symmetry the order breaks; for the Ising model, the magnetization per spin $m$.
+    he: גודל שמתאפס בפאזה הלא מסודרת ושונה מאפס בפאזה המסודרת, ומחליף סימן תחת הסימטריה שהסדר שובר; במודל איזינג, המגנוט לספין $m$.
+  lesson: '15.1'
+- id: symmetry-breaking
+  term: { en: spontaneous symmetry breaking, he: שבירת סימטריה ספונטנית }
+  definition:
+    en: A state with less symmetry than the energy that governs it. The Ising energy at $h = 0$ is unchanged by flipping every spin, yet below $T_c$ a large lattice holds one sign.
+    he: מצב שיש בו פחות סימטריה מאשר באנרגיה שקובעת אותו. אנרגיית איזינג ב-$h = 0$ אינה משתנה כשהופכים כל ספין, ובכל זאת מתחת ל-$T_c$ סריג גדול מחזיק בסימן אחד.
+  lesson: '15.1'
+- id: spontaneous-magnetization
+  term: { en: spontaneous magnetization, he: מגנוט ספונטני }
+  definition:
+    en: The magnetization that survives with no field, $m_0 = \lim_{h\to0^+}\lim_{N\to\infty}\langle m\rangle$; the order of the limits matters.
+    he: המגנוט שנשאר בלי שדה, $m_0 = \lim_{h\to0^+}\lim_{N\to\infty}\langle m\rangle$; סדר הגבולות קובע.
+  lesson: '15.1'
+- id: magnetic-domain
+  term: { en: magnetic domain, he: תחום מגנטי }
+  definition:
+    en: A region in which the spins share one sign, bounded by domain walls.
+    he: אזור שבו לכל הספינים אותו סימן, ושקירות תחום מקיפים אותו.
+  lesson: '15.1'
+- id: domain-wall
+  term: { en: domain wall, he: קיר תחום }
+  definition:
+    en: The boundary between domains of opposite sign. Each broken bond along it costs $2J$.
+    he: הגבול בין תחומים בעלי סימנים הפוכים. כל קשר שבור לאורכו עולה $2J$.
+  reject: ['דופן תחום']
+  lesson: '15.1'
+- id: curie-temperature
+  term: { en: Curie temperature, he: טמפרטורת קירי }
+  definition:
+    en: The temperature above which a ferromagnet loses its spontaneous magnetization; $1043\,\text{K}$ for iron.
+    he: הטמפרטורה שמעליה פרומגנט מאבד את המגנוט הספונטני שלו; $1043\,\text{K}$ בברזל.
+  reject: ['טמפרטורת קורי']
+  lesson: '15.1'
+- id: monte-carlo
+  term: { en: Monte Carlo method, he: שיטת מונטה קרלו }
+  definition:
+    en: Computing averages by sampling random configurations with the right probabilities instead of summing over all of them.
+    he: חישוב ממוצעים על ידי דגימת קונפיגורציות אקראיות בהסתברויות הנכונות, במקום סכימה על כולן.
+  reject: ['מונטה-קרלו']
+  lesson: '15.1'
+- id: markov-chain
+  term: { en: Markov chain, he: שרשרת מרקוב }
+  definition:
+    en: A random walk whose next step depends only on where it is now, not on how it got there.
+    he: הילוך אקראי שהצעד הבא שלו תלוי רק במקום שבו הוא נמצא עכשיו, ולא בדרך שבה הגיע אליו.
+  lesson: '15.1'
+- id: detailed-balance
+  term: { en: detailed balance, he: איזון מפורט }
+  definition:
+    en: The condition $p_s P(s\to s') = p_{s'} P(s'\to s)$ for every pair of states. It makes $p$ a stationary distribution of the chain.
+    he: התנאי $p_s P(s\to s') = p_{s'} P(s'\to s)$ לכל זוג מצבים. הוא הופך את $p$ להתפלגות סטציונרית של השרשרת.
+  lesson: '15.1'
+- id: metropolis
+  term: { en: Metropolis rule, he: כלל מטרופוליס }
+  definition:
+    en: Propose a flip; accept it with probability $\min(1, e^{-\Delta E/(k_BT)})$. Every move that lowers the energy is accepted.
+    he: מציעים היפוך ומקבלים אותו בהסתברות $\min(1, e^{-\Delta E/(k_BT)})$. כל מהלך שמוריד את האנרגיה מתקבל.
+  lesson: '15.1'
+- id: glauber-rule
+  term: { en: Glauber rule, he: כלל גלאובר }
+  definition:
+    en: The acceptance probability $1/(1 + e^{\Delta E/(k_BT)})$. It satisfies detailed balance like Metropolis, accepts less often, and reaches the same equilibrium more slowly.
+    he: הסתברות הקבלה $1/(1 + e^{\Delta E/(k_BT)})$. היא מקיימת איזון מפורט כמו מטרופוליס, מקבלת לעתים רחוקות יותר, ומגיעה לאותו שיווי משקל לאט יותר.
+  lesson: '15.1'
+- id: mc-sweep
+  term: { en: sweep, he: סריקה }
+  definition:
+    en: 'One flip attempt for every spin of the lattice: a unit of computation, not of physical time.'
+    he: 'ניסיון היפוך אחד לכל ספין בסריג: יחידה של חישוב, לא של זמן פיזיקלי.'
+  lesson: '15.1'
+- id: quench
+  term: { en: quench, he: צינון חטוף }
+  definition:
+    en: A sudden drop of temperature, faster than the system can follow; the lattice is left to order from a disordered start.
+    he: ירידה פתאומית בטמפרטורה, מהירה יותר מכפי שהמערכת יכולה לעקוב אחריה; את הסריג משאירים להסתדר ממצב התחלה לא מסודר.
+  lesson: '15.1'
+- id: coarsening
+  term: { en: coarsening, he: הגסה }
+  definition:
+    en: The growth of domains after a quench, small ones shrinking and large ones growing, because every wall costs energy.
+    he: 'גדילת התחומים אחרי צינון חטוף: הקטנים מתכווצים והגדולים גדלים, כי כל קיר עולה אנרגיה.'
+  lesson: '15.1'
+- id: ergodicity-breaking
+  term: { en: ergodicity breaking, he: שבירת ארגודיות }
+  definition:
+    en: The dynamics no longer visits all the states the ensemble averages over within any practical time; below $T_c$ a large lattice keeps one sign of $m$.
+    he: הדינמיקה כבר אינה מבקרת, בשום זמן מעשי, בכל המצבים שהצבר ממצע עליהם; מתחת ל-$T_c$ סריג גדול שומר על סימן אחד של $m$.
+  lesson: '15.1'
+- id: mean-field
+  term: { en: mean-field approximation, he: קירוב השדה הממוצע }
+  definition:
+    en: Replacing each neighbour of a spin by its average, so that every spin feels the field $qJm + h$; it neglects the correlations that dominate near $T_c$.
+    he: החלפת כל שכן של ספין בממוצע שלו, כך שכל ספין מרגיש את השדה $qJm + h$; הקירוב מזניח את המתאמים ששולטים ליד $T_c$.
+  lesson: '15.1'
+- id: susceptibility
+  term: { en: susceptibility, he: סוספטיביליות }
+  definition:
+    en: The response of the magnetization to the field, $\chi = \partial\langle m\rangle/\partial h = N\,\mathrm{Var}(m)/(k_BT)$.
+    he: התגובה של המגנוט לשדה, $\chi = \partial\langle m\rangle/\partial h = N\,\mathrm{Var}(m)/(k_BT)$.
+  reject: ['סוסצפטיביליות', 'סוספטיבליות']
+  lesson: '15.1'
+- id: critical-exponent
+  term: { en: critical exponent, he: מעריך קריטי }
+  definition:
+    en: The power with which a quantity vanishes or diverges at $T_c$, such as $m_0 \propto (T_c - T)^\beta$.
+    he: החזקה שבה גודל מתאפס או מתבדר ב-$T_c$, כמו $m_0 \propto (T_c - T)^\beta$.
+  lesson: '15.1'
+- id: correlation-length
+  term: { en: correlation length, he: אורך מתאם }
+  definition:
+    en: The size $\xi$ of the largest correlated patches of spins; it diverges at $T_c$ and cannot exceed the lattice.
+    he: הגודל $\xi$ של כתמי הספינים המתואמים הגדולים ביותר; הוא מתבדר ב-$T_c$ ואינו יכול לעלות על גודל הסריג.
+  reject: ['אורך קורלציה']
+  lesson: '15.1'
+- id: autocorrelation-time
+  term: { en: autocorrelation time, he: זמן מתאם עצמי }
+  definition:
+    en: How many samples a chain takes to forget its past, $\tau = \tfrac12 + \sum_{t\ge1}\rho(t)$; a trace of $n$ samples holds about $n/(2\tau)$ independent ones.
+    he: כמה דגימות שרשרת צריכה כדי לשכוח את עברה, $\tau = \tfrac12 + \sum_{t\ge1}\rho(t)$; עקבה של $n$ דגימות מכילה בערך $n/(2\tau)$ דגימות בלתי תלויות.
+  reject: ['זמן אוטוקורלציה']
+  lesson: '15.1'
+- id: critical-slowing-down
+  term: { en: critical slowing down, he: האטה קריטית }
+  definition:
+    en: The growth of the autocorrelation time near $T_c$, as $L^z$ with $z \approx 2$ for local update rules.
+    he: הגדילה של זמן המתאם העצמי ליד $T_c$, כמו $L^z$ עם $z \approx 2$ בכללי עדכון מקומיים.
+  lesson: '15.1'
+- id: first-order-transition
+  term: { en: first-order transition, he: מעבר מסדר ראשון }
+  definition:
+    en: A transition with a jump in the order parameter, metastable states and hysteresis; in the Ising model, crossing $h = 0$ below $T_c$.
+    he: מעבר שבו פרמטר הסדר קופץ, ויש בו מצבים מטא-יציבים והיסטרזיס; במודל איזינג, חציית $h = 0$ מתחת ל-$T_c$.
+  lesson: '15.1'
+- id: continuous-transition
+  term: { en: continuous transition, he: מעבר רציף }
+  definition:
+    en: A transition with no jump and no latent heat, where the order parameter goes continuously to zero and responses diverge; in the Ising model, crossing $T_c$ at $h = 0$.
+    he: מעבר בלי קפיצה ובלי חום כמוס, שבו פרמטר הסדר יורד ברציפות לאפס והתגובות מתבדרות; במודל איזינג, חציית $T_c$ ב-$h = 0$.
+  lesson: '15.1'
+- id: hysteresis
+  term: { en: hysteresis, he: היסטרזיס }
+  definition:
+    en: 'A response that depends on the history: below $T_c$ the magnetization lags a swept field, and the curve does not retrace itself.'
+    he: 'תגובה שתלויה בהיסטוריה: מתחת ל-$T_c$ המגנוט מפגר אחרי שדה נסרק, והעקומה אינה חוזרת על עצמה.'
+  lesson: '15.1'
+- id: universality
+  term: { en: universality, he: אוניברסליות }
+  definition:
+    en: Systems with nothing microscopic in common share critical exponents, set, for short-range interactions, only by the dimension of space and the symmetry of the order parameter.
+    he: מערכות שאין ביניהן דבר משותף ברמה המיקרוסקופית חולקות מעריכים קריטיים, שנקבעים, כשהאינטראקציות קצרות טווח, רק לפי ממד המרחב והסימטריה של פרמטר הסדר.
+  lesson: '15.1'
+- id: lattice-gas
+  term: { en: lattice gas, he: גז סריג }
+  definition:
+    en: 'A fluid as an Ising model: each cell is occupied ($s = +1$) or empty ($s = -1$); the magnetization is the density, the field is the chemical potential measured from its value at coexistence.'
+    he: 'זורם כמודל איזינג: כל תא תפוס ($s = +1$) או ריק ($s = -1$); המגנוט הוא הצפיפות, והשדה הוא הפוטנציאל הכימי הנמדד מערכו בדו-קיום.'
+  lesson: '15.1'

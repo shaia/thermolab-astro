@@ -1,0 +1,7 @@
+---
+/** The Ising lattice, live, for lesson MDX: <Spread figure={IsingLattice} figureProps={{ size: 64, temperature: 1.5, tasks: ['quench'] }}>. */
+import IsingLattice, { type IsingLatticeProps } from './IsingLattice';
+type Props = IsingLatticeProps;
+---
+
+<IsingLattice client:visible {...Astro.props} />

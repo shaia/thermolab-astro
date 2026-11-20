@@ -5,10 +5,22 @@
  */
 
 import { expect, test, type Page } from '@playwright/test';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { hydrated, overflow } from './helpers';
 
-const PAGES = ['practice/ch4/', 'test/ch4/', 'me/', 'formulas/', 'glossary/', 'summary/ch4/', 'search/', 'workbook/4-1/'];
+const PAGES = [
+  'practice/ch4/', 'test/ch4/', 'summary/ch4/', 'workbook/4-1/',
+  'practice/ch15/', 'test/ch15/', 'summary/ch15/', 'workbook/15-1/',
+  'me/', 'formulas/', 'glossary/', 'search/',
+];
+
+/** How many times `re` occurs across the files of `dir` (recursively): the counts the pages must show. */
+const occurrences = (dir: string, re: RegExp): number =>
+  readdirSync(dir, { withFileTypes: true }).reduce((n, e) => {
+    const path = `${dir}/${e.name}`;
+    if (e.isDirectory()) return n + occurrences(path, re);
+    return /\.(ya?ml|mdx)$/.test(e.name) ? n + (readFileSync(path, 'utf8').match(re) ?? []).length : n;
+  }, 0);
 
 const errorsOf = (page: Page) => {
   const errors: string[] = [];
@@ -90,14 +102,14 @@ for (const lang of ['en', 'he'] as const) {
 test('the glossary lists every term, alphabetical in each language', async ({ page }) => {
   for (const lang of ['en', 'he']) {
     await page.goto(`/${lang}/glossary/`);
-    await expect(page.locator('[data-term]')).toHaveCount(10);
+    await expect(page.locator('[data-term]')).toHaveCount(occurrences('src/content/glossary', /^- id:/gm));
   }
 });
 
 test('the formula sheet collects the lesson’s formula cards', async ({ page }) => {
   for (const lang of ['en', 'he']) {
     await page.goto(`/${lang}/formulas/`);
-    await expect(page.locator('.formula-card')).toHaveCount(2);
+    await expect(page.locator('.formula-card')).toHaveCount(occurrences(`src/content/lessons/${lang}`, /<Formula\b/g));
   }
 });
 

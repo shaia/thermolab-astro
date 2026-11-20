@@ -1,0 +1,7 @@
+---
+/** The temperature sweep for lesson MDX: <Spread figure={IsingSweep} figureProps={{ panel: 'chi', tasks: ['peaks'] }}>. */
+import IsingSweep, { type IsingSweepProps } from './IsingSweep';
+type Props = IsingSweepProps;
+---
+
+<IsingSweep client:visible {...Astro.props} />

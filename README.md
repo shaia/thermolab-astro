@@ -2,8 +2,13 @@
 
 A pilot of moving [ThermoLab](../thermolab) (thermodynamics and statistical mechanics, English and
 Hebrew, built with MyST) onto the Astro "living book" platform of the newer courses. It is a fork of
-unimech at `35e18fb`, carrying one module, **04: the microscopic origin of pressure**, rewritten for the
-platform in both languages, with live figures in place of the rendered videos.
+unimech at `35e18fb`, carrying two modules rewritten for the platform in both languages, with live
+figures in place of the rendered videos:
+
+- **04: the microscopic origin of pressure**, the first pilot: the smallest module, chosen to build the
+  bilingual platform on.
+- **15: phase transitions and the Ising model**, the second: three times larger, with Monte Carlo live
+  figures, chosen to measure what a hard module costs. See [the second pilot](#the-second-pilot-module-15).
 
 The question it answers is what a full migration would cost; see [what the pilot measured](#what-the-pilot-measured).
 
@@ -122,3 +127,58 @@ claims the lesson makes:
   astronomical number of impacts, which is a different count, and its jitter does depend on the
   temperature and the mass. The lesson now separates the two. ThermoLab's module 04 still conflates
   them.
+
+## The second pilot: module 15
+
+Module 15 is ThermoLab's Ising module: 8,972 words of English against module 04's 2,709, three videos
+and a finite-size plot, a Python Monte Carlo library, and seven objectives. It is lesson 15.1 here.
+
+**What was built**, per language unless noted, with module 04 for comparison:
+
+| | Module 04 | Module 15 |
+|---|---|---|
+| Lesson (spreads, steps, six worked examples) | 419 lines | 575 lines, 25 steps over 3 spreads |
+| Physics port + tests (once) | 263 + 140 | 554 + 422 ([src/physics/ising.ts](src/physics/ising.ts)) |
+| Live figures (once) | 2 figures, 571 lines | 3 figures, 1,227 lines, plus a worker and helpers (185) |
+| Question bank | 12 questions, 309 lines | 28 questions, 724 lines |
+| Review problems | 4, 416 lines | 6, 694 lines |
+| Workbook | 296 lines | 431 lines |
+| Glossary terms / misconceptions | 10 / 5 | 27 / 7 |
+
+In all, the branch adds about 7,900 lines in 30 files.
+
+**The figures.** [IsingLattice](src/sims/IsingLattice.tsx) runs a live lattice of up to 128×128 spins
+(Metropolis or Glauber, temperature and field adjustable while it runs). [IsingSweep](src/sims/IsingSweep.tsx)
+cools lattices of side 8 to 64 through 41 temperatures in four Web Workers, about 8 s on a laptop, and
+plots ⟨|m|⟩ against Onsager and Yang, the susceptibility, the heat capacity and the autocorrelation time.
+[IsingHysteresis](src/sims/IsingHysteresis.tsx) sweeps the field around a loop. The physics runs at
+about 100 million spin updates a second in Node.
+
+**What it measured.**
+
+- **A Monte Carlo module costs about 2.5 times module 04 in code, and 1.7 times in content.** The physics,
+  its tests and the figures, done once per module, grew from about 970 lines to about 2,430. The content
+  (lesson, banks, workbook, summary), written twice, grew from about 1,500 lines per language to about
+  2,500, for a source three times as long: the lesson condenses, the problems do not.
+- **The platform's standards cost content again.** Seven objectives need at least 21 questions; ThermoLab
+  had 10, so 18 were written, in both languages. That accounts for most of the question-bank growth.
+- **Time.** About an hour and a half of wall-clock time, from branch to reviewed content, with up to four
+  agents working in parallel (figures, question banks, workbook, translations); about 2.4 million agent
+  tokens, a third of them in the two reviews and their fixes. Module 04 took far longer, but it also
+  built the bilingual platform.
+- **The reviews are not optional.** As with module 04, an independent physics review and a Hebrew review
+  each found real errors in content that had passed every automated check. The physics review found
+  three, and the Hebrew review six places where the Hebrew said something else than the English.
+- **The port is a check on the original.** Running ThermoLab's own claims against two implementations
+  (its Python library and the TypeScript port) found these errors in ThermoLab's module 15, all fixed here
+  and not yet in ThermoLab:
+  - the hysteresis loop areas, quoted as 2.20, 1.48 and 1.18, are 1.82, 1.33 and 1.08 (64 seeds; the
+    Python library agrees);
+  - quiz question Q-15-6 uses a variance, 0.0049 at 2.5 J, that no run produces (it is about 0.060);
+  - a 16×16 lattice at 2.0 J does sometimes reverse in 10⁵ sweeps; the autocorrelation time at T_c for
+    L = 16 is 10.5 sweeps, not 9.6; the extrapolated T_c from the quoted peaks is 2.268, not 2.272;
+  - a bulk magnet cooled in zero field breaks into domains, so it is not magnetized as the hook said;
+    the Peierls argument, made rigorous, does prove that the square lattice orders;
+  - worked example 3's sixth iterate is 0.762, not 0.763.
+- **And on the platform.** The seeded generator the platform inherited from unimech, mulberry32, biased the
+  Ising chain's energy by six standard errors over 48 seeds. Every figure now uses sfc32.

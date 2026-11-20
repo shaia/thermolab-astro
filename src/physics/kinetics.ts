@@ -27,16 +27,38 @@ export const ARGON_MASS = 39.948 * AMU;
 
 /* ------------------------------------------------------------------ random numbers */
 
-/** A seeded uniform generator on [0, 1): mulberry32. Same seed, same gas, on every machine. */
+/**
+ * A seeded uniform generator on [0, 1): sfc32 (Chris Doty-Humphrey's Small Fast Chaotic generator, 128-bit
+ * state), its state filled by splitmix32 from the integer seed. Same seed, same stream, on every machine.
+ *
+ * Not mulberry32, which this replaced: it biased the Ising chain measurably (1024-site ring at k_BT = J,
+ * Glauber, 48 seeds × 40 000 sweeps: E/(NJ) = −0.76140 ± 0.00003 against the exact −tanh 1 = −0.76159).
+ */
 export function uniform(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  let x = seed >>> 0;
+  const splitmix32 = () => {
+    x = (x + 0x9e3779b9) >>> 0;
+    let z = x;
+    z = Math.imul(z ^ (z >>> 16), 0x85ebca6b);
+    z = Math.imul(z ^ (z >>> 13), 0xc2b2ae35);
+    return (z ^ (z >>> 16)) >>> 0;
   };
+  let a = splitmix32();
+  let b = splitmix32();
+  let c = splitmix32();
+  let d = splitmix32();
+  const next = () => {
+    const t = (((a + b) >>> 0) + d) >>> 0;
+    d = (d + 1) >>> 0;
+    a = b ^ (b >>> 9);
+    b = (c + (c << 3)) >>> 0;
+    c = ((c << 21) | (c >>> 11)) >>> 0;
+    c = (c + t) >>> 0;
+    return t;
+  };
+  // The customary warm-up: the first outputs still carry the structure of the seeding.
+  for (let i = 0; i < 12; i++) next();
+  return () => next() / 4294967296;
 }
 
 /** Standard normal deviates from a uniform source, by Box–Muller (both values used). */
